@@ -1,0 +1,24 @@
+# Ignora l'ambiente virtuale
+venv/*
+
+# Ignora i file di configurazione di PyCharm/IntelliJ IDEA
+.idea/
+
+# Ignora file compilati di Python
+__pycache__/
+*.py[cod]
+
+# Ignora file di log
+*.log
+
+# Ignora file di configurazione specifici di sistema
+*.env
+.DS_Store
+
+# Ignora database SQLite (se usato)
+*.sqlite3
+
+# Ignora altri file temporanei o di cache
+*.swp
+*.swo
+*.tmp
