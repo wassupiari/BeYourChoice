@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <title>Header</title>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel = "stylesheet">
-    <link rel="stylesheet" href="../public/css/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
     <header class="main-header">
         <div class="container">
-            <div class="logo"><img src="../../public/img/Logo.png" width="130"></div>
+            <div class="logo"><img src="{{ url_for('static', filename='img/Logo.png') }}" width="130"></div>
             <div class="navigation">
                 <a href="">
                     <i class="fas fa-user"></i>

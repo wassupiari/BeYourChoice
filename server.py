@@ -1,7 +1,7 @@
 from flask import Flask, render_template
 
 # Crea l'applicazione Flask
-app = Flask(__name__, template_folder='app/templates', static_folder='app/public')
+app = Flask(__name__, template_folder='app/templates', static_folder='public')
 
 
 # Definisci una route per la homepage
