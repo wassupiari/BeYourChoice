@@ -1,16 +1,23 @@
 from pymongo import MongoClient
 from pymongo.errors import ServerSelectionTimeoutError
 
+
 class DatabaseManager:
-    def __init__(self, uri="mongodb+srv://rcione3:rcione3@beyourchoice.yqzo6.mongodb.net/", db_name="BeYourChoice"):
+    def __init__(self,  db_name="BeYourChoice;"):
         """
         Inizializza la connessione al database MongoDB.
-        :param uri: URI di connessione a MongoDB.
         :param db_name: Nome del database.
         """
+
         try:
-            self.client = MongoClient(uri, serverSelectionTimeoutMS=5000)  # Timeout di 5 secondi
+            # Crea la stringa URI per la connessione
+            uri = f"mongodb+srv://rcione3:rcione3@beyourchoice.yqzo6.mongodb.net/?retryWrites=true&w=majority"
+
+            # Crea il client con parametri per TLS
+            self.client = MongoClient(uri, tls=True, tlsInsecure=True,
+                                      serverSelectionTimeoutMS=5000)  # Timeout di 5 secondi
             self.db = self.client[db_name]
+
             # Controlla la connessione
             self.client.server_info()  # Genera un'eccezione se la connessione fallisce
             print(f"Connesso con successo al database '{db_name}'")
@@ -39,3 +46,5 @@ class DatabaseManager:
             print("Connessione al database chiusa")
         else:
             print("Nessuna connessione attiva da chiudere")
+
+
