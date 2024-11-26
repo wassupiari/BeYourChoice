@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Classe</title>
+    <title>Inserimento Studente</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styleClasse.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
@@ -14,12 +14,11 @@
     <main class="main-container">
         <!-- Contenitore centrale -->
         <div class="classe-container">
-            <h1>Classe</h1>
+            <h1></h1>
 
             <!-- Barra di ricerca -->
             <div class="search-container">
                 <input type="text" placeholder="Cerca studente" class="search-bar">
-                <button class="add-student-button">Aggiungi manualmente studente</button>
             </div>
 
             <!-- Tabella studenti -->
@@ -41,7 +40,7 @@
                     </tr>
                     {% else %}
                     <tr>
-                        <td colspan="3">Nessuno studente trovato per questa classe.</td>
+                        <td colspan="3">Nessuno studente trovato.</td>
                     </tr>
                     {% endfor %}
                 </tbody>

@@ -61,3 +61,25 @@ class ClasseVirtualeControl:
             print(f"Errore generale: {e}")
             return {"error": "Si è verificato un errore nel recupero degli studenti."}
 
+
+    def mostra_studenti_istituto(self, scuola_appartenenza):
+        """
+        Recupera gli studenti della classe e prepara i dati per il rendering.
+
+        Args:
+            ID_Classe (int): L'ID della classe virtuale.
+
+        Returns:
+            list[dict]: Lista di studenti con Nome, Cognome e Data di Nascita.
+        """
+        try:
+            studenti = self.model.mostra_studenti_istituto(scuola_appartenenza)  # Chiama il metodo per recuperare gli studenti
+            print(f"Studente recuperati: {len(studenti)}")
+            return studenti
+        except ValueError as e:
+            print(f"Errore: {e}")
+            return {"error": str(e)}
+        except Exception as e:
+            print(f"Errore generale: {e}")
+            return {"error": "Si è verificato un errore nel recupero degli studenti."}
+

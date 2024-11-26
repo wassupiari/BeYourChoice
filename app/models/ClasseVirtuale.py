@@ -215,3 +215,45 @@ class ClasseVirtuale:
         except Exception as e:
             print(f"Errore durante il recupero degli studenti: {e}")  # Aggiunto per debugging
             raise
+
+    def mostra_studenti_istituto(self, scuola_appartenenza):
+        print("ciao2")
+        """
+        Recupera gli studenti di una classe specifica.
+
+        Args:
+            ID_Classe (int): L'ID della classe virtuale.
+
+        Returns:
+            list[dict]: Lista di studenti con Nome, Cognome e Data di Nascita.
+        """
+        try:
+            print(f"Recupero gli studenti per la classe con ID: {scuola_appartenenza}")  # Aggiunto per debugging
+            studente_collection = self.db_manager.get_collection("Studente")
+            studenti = list(studente_collection.find({
+                "SdA": scuola_appartenenza,
+                "$or": [{"ID_Classe": {"$exists": False}}, {"ID_Classe": None}]
+            }))
+
+            # Esegui la query per recuperare gli studenti della classe
+
+            # Verifica se la query restituisce risultati
+            if not studenti:
+                print(f"Nessun studente trovato per la scuola:  {scuola_appartenenza}")  # Aggiunto per debugging
+                raise ValueError(f"Nessuno studente trovato per la scuola: {scuola_appartenenza}")
+
+            # Logga il numero di studenti trovati
+            print(f"Numero di studenti trovati: {len(studenti)}")  # Aggiunto per debugging
+
+            studenti_istituto = []
+            for studente in studenti:
+                studenti_istituto.append({
+                    "Nome": studente["Nome"],
+                    "Cognome": studente["Cognome"],
+                    "Data_Nascita": studente["Data_Nascita"]
+                })
+
+            return studenti_istituto
+        except Exception as e:
+            print(f"Errore durante il recupero degli studenti: {e}")  # Aggiunto per debugging
+            raise
