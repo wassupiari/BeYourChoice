@@ -22,22 +22,27 @@ class Studente:
             print(f"Errore nel recupero della classifica: {e}")
             return []
 
-    def get_punteggio_personale(self, email_utente):
+    def get_punteggio_personale(self, cf_studente):
         """
-        Recupera i punteggi personali dell'utente.
-        :param email_utente: Email dell'utente.
-        :return: Un dizionario con i punteggi.
+        Calcola il punteggio personale dello studente sommando tutti i Punteggio_Scenario.
+        :param cf_studente: Codice fiscale dello studente.
+        :return: Il punteggio totale dello studente.
         """
         try:
-            collection = self.db_manager.get_collection("Studente")
-            utente = collection.find_one(
-                {"Email": email_utente},
-                {"_id": 0, "PunteggioQuiz": 1, "PunteggioScenari": 1}
-            )
-            return utente or {"PunteggioQuiz": 0, "PunteggioScenari": 0}
+            collection = self.db_manager.get_collection("Scenario")
+
+            # Esegui l'aggregazione per sommare i punteggi
+            result = collection.aggregate([
+                {"$match": {"CF_Studente": cf_studente}},  # Filtra gli scenari dello studente
+                {"$group": {"_id": "$CF_Studente", "PunteggioTotale": {"$sum": "$Punteggio_Scenario"}}}
+            ])
+
+            # Recupera il risultato
+            punteggio = next(result, None)
+            return punteggio["PunteggioTotale"] if punteggio else 0
         except Exception as e:
-            print(f"Errore nel recupero del punteggio personale: {e}")
-            return {"PunteggioQuiz": 0, "PunteggioScenari": 0}
+            print(f"Errore nel calcolo del punteggio personale: {e}")
+            return 0
 
     def close_connection(self):
         self.db_manager.close_connection()

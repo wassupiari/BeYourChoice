@@ -11,8 +11,8 @@ def dashboard():
     Visualizza la dashboard per un utente specifico.
     """
     # Ottieni i parametri dalla query string
-    email_utente = request.args.get("email", "utente@example.com")
-    id_classe = int(request.args.get("id_classe", 101))
+    cf_studente = request.args.get("cf_studente", "RSSMRA80A01H501Z")
+    id_classe = int(request.args.get("ID_classe", 101))
 
     # Usa il controller per ottenere i dati
-    return DashboardController.mostra_dashboard(id_classe, email_utente)
+    return DashboardController.mostra_dashboard(cf_studente, id_classe)

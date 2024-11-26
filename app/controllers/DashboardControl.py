@@ -3,15 +3,18 @@ from app.models.Studente import Studente
 
 class DashboardController:
     @staticmethod
-    def mostra_dashboard(id_classe, email_utente):
+    def mostra_dashboard(cf_studente, id_classe):
         """
-        Recupera i dati per la dashboard e li passa alla vista.
+        Mostra la dashboard per un determinato utente e classe.
+        :param cf_studente: Codice fiscale dello studente.
+        :param id_classe: ID della classe.
+        :return: Il rendering della vista 'dashboard.html'.
         """
         model = Studente()
 
         # Recupera dati dal modello
         classifica = model.get_classifica_classe(id_classe)
-        punteggio_personale = model.get_punteggio_personale(email_utente)
+        punteggio_personale = model.get_punteggio_personale(cf_studente)
 
         # Chiude la connessione
         model.close_connection()
