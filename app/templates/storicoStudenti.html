@@ -2,44 +2,54 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title><!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>BeYourChoice Dashboard</title>
-        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/styledashboarddoc.css') }}">
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-    </head>
-    <body>
-        {% include 'header.html' %}
-        <div class="container">
-            <!-- Dashboard principale -->
-            <div class="dashboard tall-box ">
-                <h2>Storico dello studente</h2>
-                <ul>
-                    {% for quiz in storico.Quiz %}
-                        <li>{{ quiz.Argomento }} <span>{{ quiz.Punteggio }}</span></li>
-                    {% endfor %}
-                    {% for scenario in storico.Scenari %}
-                        <li>{{ scenario.Titolo }}  <span>{{ scenario.Punteggio }}</span></li>
-                    {% endfor %}
-                </ul>
-            </div>
-            <!-- Sidebar -->
-            <aside class="sidebar">
-            <ul>
-                <a href="" class="link"><i class="fa-solid fa-users-rectangle"></i><br>
-                    <span>Gestione classe</span>
-                </a>
-            </ul>
-</aside>
-        </div>
-    </body>
-</html>
-</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storico dello Studente</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styledashboarddoc.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
+    {% include 'header.html' %}
+    <div class="container">
+        <!-- Storico dello studente -->
+        <div class="dashboard tall-box">
+            <h2>Storico dello Studente</h2>
 
+            <!-- Storico Quiz -->
+            <h3>Quiz Svolti</h3>
+            <ul>
+                {% for quiz in storico.Quiz %}
+                    <li>
+                        <strong>{{ quiz.Argomento }}</strong>
+                        <span class="score">{{ quiz.Punteggio }} punti</span>
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <!-- Storico Scenari -->
+            <h3>Scenari Svolti</h3>
+            <ul>
+                {% for scenario in storico.Scenari %}
+                    <li>
+                        <strong>{{ scenario.Titolo }}</strong>
+                        <span class="score">{{ scenario.Punteggio }} punti</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <ul>
+                <li>
+                    <a href="{{ url_for('dashboardDocente.dashboard', id_docente=1001) }}" class="link">
+                        <i class="fa-solid fa-users-rectangle"></i>
+                        <br>
+                        <span>Gestione Classe</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+    </div>
 </body>
 </html>

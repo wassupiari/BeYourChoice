@@ -24,7 +24,7 @@
                 <h2>Classifica della classe</h2>
                 <ul>
                     {% for studente in classifica %}
-                        <li>{{ loop.index }}. {{ studente.Nome }} {{ studente.Cognome }} - <span>{{ studente.PunteggioTotale }}</span></li>
+                        <li>{{ loop.index }}. {{ studente.Nome }} {{ studente.Cognome }}  <span>{{ studente.PunteggioTotale }}</span></li>
                     {% endfor %}
                 </ul>
             </div>
@@ -34,10 +34,10 @@
                 <h2>Storico Personale</h2>
                 <ul>
                     {% for quiz in storico.Quiz %}
-                        <li>{{ quiz.Argomento }} <span>{{ quiz.Punteggio }}</span></li>
+                        <li>Quiz: {{ quiz.Argomento }} <span>{{ quiz.Punteggio }}</span></li>
                     {% endfor %}
                     {% for scenario in storico.Scenari %}
-                        <li>{{ scenario.Titolo }}  <span>{{ scenario.Punteggio }}</span></li>
+                        <li>Scenario: {{ scenario.Titolo }}  <span>{{ scenario.Punteggio }}</span></li>
                     {% endfor %}
                 </ul>
             </div>

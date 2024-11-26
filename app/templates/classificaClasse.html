@@ -1,32 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>BeYourChoice Dashboard</title>
-        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/styledashboarddoc.css') }}">
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-    </head>
-    <body>
-        {% include 'header.html' %}
-        <div class="container">
-            <!-- Dashboard principale -->
-            <div class="dashboard tall-box ">
-                <h2>Classifica della classe</h2>
-                <ul>
-                    {% for studente in classifica %}
-                        <a href=""> <li>{{ loop.index }}. {{ studente.Nome }} {{ studente.Cognome }} - <span>{{ studente.PunteggioTotale }}</span></li></a>
-                    {% endfor %}
-                </ul>
-            </div>
-            <!-- Sidebar -->
-            <aside class="sidebar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classifica della Classe</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styledashboarddoc.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    {% include 'header.html' %}
+    <div class="container">
+        <!-- Classifica principale -->
+        <div class="dashboard tall-box">
+            <h2>Classifica della Classe</h2>
             <ul>
-                <a href="" class="link"><i class="fa-solid fa-users-rectangle"></i><br>
-                    <span>Gestione classe</span>
-                </a>
+                {% for studente in classifica %}
+                    <li>
+                        <a href="{{ url_for('dashboardDocente.storico_studente', cf_studente=studente.CF) }}">
+                            <strong>{{ loop.index }}.</strong> {{ studente.Nome }} {{ studente.Cognome }}
+                        </a>
+                        <span>{{ studente.PunteggioTotale }} punti</span>
+                    </li>
+                {% endfor %}
             </ul>
-</aside>
         </div>
-    </body>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <ul>
+                <li>
+                    <a href="{{ url_for('dashboardDocente.dashboard', id_docente=1001) }}" class="link">
+                        <i class="fa-solid fa-users-rectangle"></i>
+                        <br>
+                        <span>Gestione Classe</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+    </div>
+</body>
 </html>

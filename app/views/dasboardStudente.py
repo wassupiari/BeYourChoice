@@ -6,7 +6,7 @@ dashboard_bp = Blueprint('dashboard', __name__, template_folder='../templates')
 
 # Rotta per la dashboard
 @dashboard_bp.route('/dashboard')
-def dashboard():
+def dashboardStudente():
     """
     Visualizza la dashboard per un utente specifico.
     """

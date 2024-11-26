@@ -14,27 +14,18 @@
             <div class="dashboard">
                 <h2>Classifica di tutte le classi</h2>
                 <ul>
+                         {% for classe in classi %}
                     <li>
-                        <span><strong>1 Classe A 95</strong></span>
+                        <span><strong>{{ classe.Nome_Classe }}</strong></span>
                         <span>
-                            <button class="button">Gestione Classe</button>
-                            <button class="button">Classifica Classe</button>
+                            <button class="button"><a href="{{ url_for('dashboardDocente.classifica_classe', id_classe=classe.ID_Classe) }}" >Classifica Classe</a></button>
+                            <button class="button">Gestione classe</button>
+
+
                         </span>
                     </li>
-                    <li>
-                        <span><strong>2 Classe B 90</strong></span>
-                        <span>
-                            <button class="button">Gestione Classe</button>
-                            <button class="button">Classifica Classe</button>
-                        </span>
-                    </li>
-                    <li>
-                        <span><strong>3 Classe C 85</strong></span>
-                        <span>
-                            <button class="button">Gestione Classe</button>
-                            <button class="button">Classifica Classe</button>
-                        </span>
-                    </li>
+                {% endfor %}
+
                 </ul>
             </div>
 
