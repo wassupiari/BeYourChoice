@@ -3,10 +3,14 @@ import re
 
 from pymongo import MongoClient
 
+from databaseManager import DatabaseManager
+
+
 class ClasseVirtuale:
     def __init__(self, db_url="mongodb+srv://rcione3:rcione3@beyourchoice.yqzo6.mongodb.net/", db_name="BeYourChoice"):
         self.client = MongoClient(db_url)
         self.db = self.client[db_name]
+        self.db_manager = DatabaseManager();
         self.materiali = self.db.materiali
         self.upload_folder = "uploads"
 
