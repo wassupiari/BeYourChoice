@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Creazione Classe Virtuale</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleCCV.css') }}">
+</head>
+<body>
+    <!-- Inclusione dell'header -->
+    {% include 'header.html' %}
+
+    <!-- Contenuto principale -->
+    <main>
+        <div class="form-container">
+            <h1>Creazione classe virtuale</h1>
+            <form action="#" method="post">
+                <label for="nome-classe">Nome Classe</label>
+                <input type="text" id="nome-classe" name="nome-classe" required>
+
+                <label for="descrizione">Descrizione</label>
+                <textarea id="descrizione" name="descrizione" rows="5" required></textarea>
+
+                <button type="button" class="annulla">Annulla</button>
+                <button type="submit" class="salva">Salva</button>
+            </form>
+        </div>
+    </main>
+</body>
+</html>
