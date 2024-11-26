@@ -73,16 +73,16 @@ button {
 }
 
 button.annulla {
-    background-color: #f44336;
+    background-color: #d75a3d;
     color: #ffffff;
 }
 
 button.annulla:hover {
-    background-color: #d32f2f;
+    background-color: #0056b3;
 }
 
 button.salva {
-    background-color: #007bff;
+    background-color: #d75a3d;
     color: #ffffff;
 }
 
