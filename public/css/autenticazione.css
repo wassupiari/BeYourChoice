@@ -1,0 +1,94 @@
+/* Stile generale */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #f4f4f9;
+    overflow: hidden;
+}
+
+/* Riga celeste centrale */
+.blue-line {
+    position: absolute;
+    width: 100%;
+    height: 80px;
+    background-color: #d6e6f2;
+    top: 50%;
+    transform: translateY(-50%); /* Posizionamento esattamente al centro verticale */
+    z-index: 0;
+}
+
+/* Contenitore principale */
+.container {
+    position: right;
+    width: 70%;
+    max-width: 1000px;
+    height: 600px;
+    background: url('img/libri.jpeg');
+    background-size: cover;
+    /*background-position: right;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /*overflow: hidden;*/
+    z-index: 1; /* Sopra la riga celeste */
+}
+
+/* Box del modulo */
+.form-box {
+    position: relative;
+    z-index: 2; /* Modulo sopra tutto */
+    background: rgba(255, 255, 255, 0.95); /* Sfondo bianco semi-trasparente */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+}
+
+/* Titolo del modulo */
+.form-box h1 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+/* Stile per il modulo */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+form input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+form button {
+    padding: 10px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #555;
+}
