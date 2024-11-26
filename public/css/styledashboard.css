@@ -11,7 +11,7 @@ body {
 
 .dashboard {
   padding: 20px;
-  flex: 1; /* Assicura che la sezione prenda tutto lo spazio disponibile */
+  flex: 1;
 }
 
 .section {
@@ -22,38 +22,49 @@ body {
 }
 
 .box {
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 15px;
-  position: relative; /* Necessario per posizionare il titolo sopra la linea */
-  flex: 1;
-  height: 10%;
+  border: 2px solid #000; /* Bordo della box simile a un fieldset */
+  border-radius: 8px; /* Angoli arrotondati */
+  padding: 20px 20px 15px 20px; /* Padding con maggiore spazio sopra */
+  position: relative;
+  flex: 1; /* Box flessibile */
+  height:  250px;
   margin: 10px;
+  background-color: #fff;
 }
-
-.box.tall-box {
-  height: calc(100vh - 250px); /* Rende i box alti quanto la pagina meno header e margini */
+.box height{
+  border: 2px solid #000; /* Bordo della box simile a un fieldset */
+  border-radius: 8px; /* Angoli arrotondati */
+  padding: 20px 20px 15px 20px; /* Padding con maggiore spazio sopra */
+  position: relative;
+  flex: 1; /* Box flessibile */
+  height: calc(100vh - 250px); /* Altezza dinamica per riempire la pagina */
+  margin: 10px;
+  background-color: #fff;
 }
 
 .box.half-width {
-  flex: 2; /* Raddoppia la larghezza di questa box */
+  flex: 2; /* Box più largo */
 }
 
-.box h2 {
+.box-title {
   position: absolute;
-  top: -12px; /* Posiziona il titolo sopra il bordo */
-  left: 10px;
-  background: white; /* Sfondo per coprire il bordo */
-  padding: 0 10px;
+  top: -15px; /* Titolo sopra il bordo */
+  left: 20px; /* Posizionamento orizzontale */
+  padding: 0 10px; /* Padding interno */
+  background: #fff; /* Sfondo bianco */
   font-size: 18px;
-  color: #333;
+  color: #000;
   font-weight: bold;
+  border: 2px solid #000; /* Bordo superiore */
+  border-radius: 4px;
+  width: calc(100% - 40px); /* Larghezza del titolo pari alla larghezza della box */
+  text-align: center; /* Allinea il testo al centro */
 }
 
 .box ul {
-  list-style: none;
+  list-style: none; /* Nessun marker per gli elementi della lista */
   padding: 0;
-  margin-top: 20px; /* Lascia spazio sotto il titolo */
+  margin-top: 25px; /* Distanza dal titolo */
 }
 
 .box li {
