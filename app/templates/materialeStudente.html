@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>materiale Studente</title>
+     <link rel="stylesheet" href="{{ url_for('static', filename='css/stylematerialedidattico.css') }}">
+</head>
+<body>
+{% include 'header.html'%}
+<main>
+        {% if materiali %}
+            <div class="materiale-container">
+                {% for materiale in materiali %}
+                 <div class="materiale">
+                {% if materiale['Tipo'] == 'video' %}
+                <img src="/static/icons/video-icon.png" alt="Icona Video">
+                {% elif materiale['Tipo'] == 'documento' %}
+                <img src="/static/icons/document-icon.png" alt="Icona Documento">
+                {% else %}
+                <img src="/static/icons/file-icon.png" alt="Icona Generica">
+                {% endif %}
+                <h3>{{ materiale['Titolo'] }}</h3>
+                <p>{{ materiale['Descrizione'] }}</p>
+                <a href="{{ materiale['File_Path'] }}" target="_blank">Apri</a>
+                     </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="empty-message">Nessun file presente.</p>
+        {% endif %}
+    </main>
+</body>
+</html>
+

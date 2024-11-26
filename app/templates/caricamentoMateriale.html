@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caricamento Materiale Didattico</title>
+    <link rel="stylesheet" href="/static/stylematerialedidattico.css">
+</head>
+{% include 'header.html'%}
+<body>
+    <header>
+        <h1>Caricamento Materiale Didattico</h1>
+    </header>
+    <main>
+        <form action="{{ url_for('carica_materiale') }}" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="titolo">Titolo del Materiale:</label>
+                <input type="text" id="titolo" name="titolo" placeholder="Inserisci il titolo del materiale" required>
+            </div>
+            <div class="form-group">
+                <label for="descrizione">Descrizione:</label>
+                <textarea id="descrizione" name="descrizione" placeholder="Inserisci una breve descrizione" rows="4" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="tipo">Tipo:</label>
+                <select id="tipo" name="tipo" required>
+                    <option value="documento">Documento</option>
+                    <option value="video">Video</option>
+                    <option value="altro">Altro</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="file">Seleziona il file:</label>
+                <input type="file" id="file" name="file" required>
+            </div>
+            <button type="submit">Carica</button>
+        </form>
+    </main>
+</body>
+</html>

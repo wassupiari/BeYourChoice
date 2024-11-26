@@ -1,0 +1,39 @@
+
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Materiale Studente</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/stylematerialedidattico.css') }}">
+</head>
+<body>
+    {% include 'header.html' %}
+
+    <main>
+        {% if materiali %}
+            <div class="materiali-lista">
+                {% for materiale in materiali %}
+                    <div class="materiale-item">
+                        <h3>{{ materiale['Titolo'] }}</h3>
+                        <p>{{ materiale['Descrizione'] }}</p>
+                        <p><strong>Tipo:</strong> {{ materiale['Tipo'] }}</p>
+                        <div class="azioni">
+                            <!-- Visualizza il materiale con il link corretto -->
+                            <a href="{{ url_for('serve_file', filename=materiale['File_Path'].split('/')[-1]) }}" target="_blank" class="btn">Visualizza</a>
+
+                            <!-- Modifica il materiale -->
+                            <a href="{{ url_for('modifica_materiale', id=materiale['ID_MaterialeDidattico']) }}" class="btn">Modifica</a>
+
+                            <!-- Rimuovi il materiale -->
+                            <a href="{{ url_for('rimuovi_materiale', id=materiale['ID_MaterialeDidattico']) }}" class="btn btn-danger" onclick="return confirm('Sei sicuro di voler eliminare questo materiale?');">Rimuovi</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="empty-message">Nessun materiale presente.</p>
+        {% endif %}
+    </main>
+</body>
+</html>
