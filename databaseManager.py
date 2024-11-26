@@ -1,28 +1,36 @@
+from dotenv import load_dotenv
+import os
 from pymongo import MongoClient
 from pymongo.errors import ServerSelectionTimeoutError
 
+# Carica le variabili d'ambiente dal file .env
+load_dotenv()
 
 class DatabaseManager:
-    def __init__(self,  db_name="BeYourChoice;"):
+    def __init__(self, db_name="BeYourChoice"):
         """
         Inizializza la connessione al database MongoDB.
         :param db_name: Nome del database.
         """
-
         try:
-            # Crea la stringa URI per la connessione
-            uri = f"mongodb+srv://rcione3:rcione3@beyourchoice.yqzo6.mongodb.net/?retryWrites=true&w=majority"
+            # Ottieni l'URI dal file .env
+            uri = os.getenv("MONGO_URI")
+            if not uri:
+                raise ValueError("URI MongoDB non definito. Assicurati che la variabile MONGO_URI sia presente nel file .env.")
 
             # Crea il client con parametri per TLS
-            self.client = MongoClient(uri, tls=True, tlsInsecure=True,
-                                      serverSelectionTimeoutMS=5000)  # Timeout di 5 secondi
+            self.client = MongoClient(uri, tls=True, tlsAllowInvalidCertificates=True, serverSelectionTimeoutMS=5000)
             self.db = self.client[db_name]
 
-            # Controlla la connessione
+            # Test della connessione
             self.client.server_info()  # Genera un'eccezione se la connessione fallisce
             print(f"Connesso con successo al database '{db_name}'")
         except ServerSelectionTimeoutError as e:
             print(f"Errore di connessione a MongoDB: {e}")
+            self.client = None
+            self.db = None
+        except ValueError as e:
+            print(f"Errore: {e}")
             self.client = None
             self.db = None
 
@@ -46,5 +54,3 @@ class DatabaseManager:
             print("Connessione al database chiusa")
         else:
             print("Nessuna connessione attiva da chiudere")
-
-
