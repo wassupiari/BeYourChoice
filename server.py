@@ -9,9 +9,9 @@ app.register_blueprint(views, url_prefix='/')  # Il prefisso '/' è opzionale, p
 # Definisci una route per la homepage
 @app.route('/')
 @app.route('/home')
-
 def home():
     return render_template('creazioneCV.html')
+
 
 # Avvio del server
 if __name__ == "__main__":

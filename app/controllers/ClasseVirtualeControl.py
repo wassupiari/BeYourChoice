@@ -1,7 +1,6 @@
 from app.models.ClasseVirtuale import ClasseVirtuale
 
 
-
 class ClasseVirtualeControl:
     def __init__(self):
         self.model = ClasseVirtuale()
@@ -33,7 +32,7 @@ class ClasseVirtualeControl:
         Rimuove uno studente da una classe virtuale.
         """
         try:
-            messaggio = self.model.rimozioneClasseStudente(IdClasse,IdStudente)
+            messaggio = self.model.rimozioneClasseStudente(IdClasse, IdStudente)
             print(messaggio)
         except ValueError as e:
             print(f"Errore: {e}")
