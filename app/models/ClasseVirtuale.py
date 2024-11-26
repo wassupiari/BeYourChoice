@@ -1,13 +1,16 @@
 import os
 import re
-from ftplib import print_line
 
 from pymongo import MongoClient
+
+from databaseManager import DatabaseManager
+
 
 class ClasseVirtuale:
     def __init__(self, db_url="mongodb+srv://rcione3:rcione3@beyourchoice.yqzo6.mongodb.net/", db_name="BeYourChoice"):
         self.client = MongoClient(db_url)
         self.db = self.client[db_name]
+        self.db_manager = DatabaseManager();
         self.classi = self.db.classi
         self.upload_folder = "uploads"
 
@@ -29,7 +32,7 @@ class ClasseVirtuale:
         def __init__(self):
             # Simulazione di un database come un dizionario
             self.classi_virtuali = {}
-            self.auto_increment_id = 1 # Simula un campo auto-incremento per gli ID delle classi
+            self.auto_increment_id = 1  # Simula un campo auto-incremento per gli ID delle classi
 
     def creazioneClasseVirtuale(self, NomeClasse, Descrizione):
         """
@@ -55,22 +58,15 @@ class ClasseVirtuale:
             raise ValueError("Lunghezza della descrizione della classe virtuale non corretta.")
         if not re.match(r"^[^§]{2,255}$", Descrizione):
             raise ValueError("Formato della descrizione della classe virtuale non corretto.")
-        print("ciao")
 
-        IdClasse = self.auto_increment_id
-        self.classi_virtuali[IdClasse] = {
-            "id_classe": IdClasse,
+        # Creazione della classe virtuale
+        id_classe = self.auto_increment_id
+        self.classi_virtuali[id_classe] = {
+            "id_classe": id_classe,
             "nome": NomeClasse,
             "descrizione": Descrizione,
             "studenti": []
         }
-
-        print("ciao")
-        if not self.classi_virtuali:
-            print("Ciao")
-        else:
-            print("Classi Virtuali dopo la creazione:")
-            print(self.classi_virtuali)
 
         # Incrementa l'ID per la prossima classe
         self.auto_increment_id += 1
