@@ -40,12 +40,24 @@ class ClasseVirtualeControl:
             print(f"Errore: {e}")
             raise
 
-    def mostra_classe(ID_Classe):
-        model = ClasseVirtuale()
-        classe =  model.get_mostra_classe(ID_Classe)
-        model.close_connection()
-        return render_template(
-            "classeDocente.html", classe = classe
-        )
+    def mostra_classe(self, ID_Classe):
+        """
+        Recupera gli studenti della classe e prepara i dati per il rendering.
 
+        Args:
+            ID_Classe (int): L'ID della classe virtuale.
+
+        Returns:
+            list[dict]: Lista di studenti con Nome, Cognome e Data di Nascita.
+        """
+        try:
+            studenti = self.model.mostra_classe(ID_Classe)  # Chiama il metodo per recuperare gli studenti
+            print(f"Studente recuperati: {len(studenti)}")
+            return studenti
+        except ValueError as e:
+            print(f"Errore: {e}")
+            return {"error": str(e)}
+        except Exception as e:
+            print(f"Errore generale: {e}")
+            return {"error": "Si è verificato un errore nel recupero degli studenti."}
 
