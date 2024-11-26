@@ -12,7 +12,7 @@ app.register_blueprint(views, url_prefix='/')  # Il prefisso '/' è opzionale, p
 @app.route('/')
 @app.route('/home')
 def home():
-    return render_template('classeDocente.html')
+    return render_template('creazioneCV.html')
 
 
 # Avvio del server
