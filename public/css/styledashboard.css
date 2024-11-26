@@ -1,42 +1,66 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
+
 body {
-      font-family: sans-serif;
-      margin: 0;
-    }
+  font-family: 'Open Sans', sans-serif;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
 
-    .section {
-      display: flex;
-      justify-content: space-between;
-      gap: 20px;
-      flex-wrap: wrap; /* Gestisce il wrapping per schermi piccoli */
-    }
+.dashboard {
+  padding: 20px;
+  flex: 1; /* Assicura che la sezione prenda tutto lo spazio disponibile */
+}
 
-    .box {
-      border: 1px solid #ccc;
-      padding: 15px;
-      border-radius: 5px;
-      flex: 1; /* Rende le box flessibili */
-      min-height: 100%;
-      margin: 10px;
-    }
+.section {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
 
-    .box.half-width {
-      flex: 2; /* Raddoppia la larghezza di questa box */
-    }
+.box {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 15px;
+  position: relative; /* Necessario per posizionare il titolo sopra la linea */
+  flex: 1;
+  height: 10%;
+  margin: 10px;
+}
 
-    .box h2 {
-      margin-bottom: 10px;
-    }
+.box.tall-box {
+  height: calc(100vh - 250px); /* Rende i box alti quanto la pagina meno header e margini */
+}
 
-    .box ul {
-      list-style: none;
-      padding: 0;
-    }
+.box.half-width {
+  flex: 2; /* Raddoppia la larghezza di questa box */
+}
 
-    .box li {
-      margin-bottom: 5px;
-    }
+.box h2 {
+  position: absolute;
+  top: -12px; /* Posiziona il titolo sopra il bordo */
+  left: 10px;
+  background: white; /* Sfondo per coprire il bordo */
+  padding: 0 10px;
+  font-size: 18px;
+  color: #333;
+  font-weight: bold;
+}
 
-    .box li span {
-      font-weight: bold;
-    }
+.box ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 20px; /* Lascia spazio sotto il titolo */
+}
+
+.box li {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.box li span {
+  font-weight: bold;
+}
