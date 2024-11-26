@@ -184,32 +184,36 @@ class ClasseVirtuale:
         return f"Studente con ID '{IdStudente}' rimosso con successo dalla classe '{IdClasse}'."
 
     def mostra_classe(self, IdClasse):
+        IdClasse = 101
         """
-        Mostra tutti gli studenti di una classe virtuale.
+        Mostra tutti gli studenti di una classe specifica.
 
         Args:
             IdClasse (int): L'ID della classe virtuale.
 
         Returns:
-            str: Elenco degli studenti della classe o messaggio di errore.
+            str: Elenco degli studenti con Nome, Cognome e Data di Nascita.
 
         Raises:
-            ValueError: Se la classe virtuale non esiste.
+            ValueError: Se la classe non contiene studenti.
         """
-        # Recupera la collezione 'ClasseVirtuale'
-        collection = self.db_manager.get_collection('ClasseVirtuale')
+        # Recupera la collezione 'Studente'
+        collection = self.db_manager.get_collection('Studente')
 
-        # Verifica se la classe esiste
-        classe = collection.find_one({'ID_Classe': IdClasse})
-        if not classe:
-            raise ValueError(f"Errore: Classe con ID '{IdClasse}' non trovata.")
+        # Query per ottenere gli studenti della classe specificata
+        studenti = collection.find({'ID_Classe': IdClasse})
 
-        # Recupera la lista degli studenti
-        studenti = classe.get("studenti", [])
+        # Formatta il risultato in una stringa leggibile
+        risultato = []
+        for studente in studenti:
+            risultato.append(
+                f"Nome: {studente.get('Nome', 'N/A')}, Cognome: {studente.get('Cognome', 'N/A')}, "
+                f"Data di Nascita: {studente.get('Data_Nascita', 'N/A')}"
+            )
 
-        # Mostra gli studenti o un messaggio se la lista è vuota
-        if studenti:
-            elenco_studenti = "\n".join(f"- Studente ID: {studente}" for studente in studenti)
-            return f"Elenco degli studenti della classe '{IdClasse}':\n{elenco_studenti}"
+        if risultato:
+            return f"Elenco degli studenti della classe {IdClasse}:\n" + "\n".join(risultato)
         else:
-            return f"Nessuno studente iscritto alla classe '{IdClasse}'."
+            return f"Nessuno studente trovato nella classe con ID {IdClasse}."
+
+
