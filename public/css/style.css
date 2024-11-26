@@ -5,8 +5,8 @@ body {
 }
 
 .main-header {
-    padding: 20px;
-    background-color: #deeaf6;
+    padding: 8px 20px 0 20px;
+    background-color: #ffffff;
     border-bottom: 1px solid #ddd;
 }
 .container {
@@ -16,6 +16,8 @@ body {
 }
 
 .logo {
+    margin-top: auto;
+    margin-bottom: auto;
     font-size: 24px;
     font-weight: 700;
 }
@@ -30,26 +32,40 @@ body {
 .nav-link {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
     text-decoration: none;
-    color: #333;
+    color: #333333;
     font-weight: bold;
-    font-size: 14px;
+    font-size: 18px;
     transition: color 0.3s ease;
+    line-height: 1.2;
 }
 
 .nav-link i {
-    font-size: 24px;
-    margin-bottom: 5px;
-    color: #333;
+    font-size: 22px;
+    margin: 0;
+    line-height: 1;
+}
+
+.nav-link span {
+    margin-top: 0px;
 }
 
 .nav-link:hover {
-    color: #0078d4; )
+    color: #000000; )
 }
 
 .nav-link:hover i {
-    color: #0078d4;
+    color: #000000;
+}
+a
+{
+    color: #333333;
+}
+a:hover
+{
+    color: #000000;
 }
 
 .user-info {
