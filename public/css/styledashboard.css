@@ -1,0 +1,41 @@
+   body {
+      font-family: sans-serif;
+      margin: 0;
+    }
+
+    .section {
+      display: flex;
+      justify-content: space-between; /* Allinea le box orizzontalmente */
+      gap: 20px; /* Spaziatura tra le box */
+      flex-wrap: wrap; /* Gestisce il wrapping per schermi piccoli */
+    }
+
+    .box {
+      border: 1px solid #ccc;
+      padding: 15px;
+      border-radius: 5px;
+      flex: 1; /* Rende le box flessibili */
+      min-height: 100%;
+      margin: 10px;
+    }
+
+    .box.half-width {
+      flex: 2; /* Raddoppia la larghezza di questa box */
+    }
+
+    .box h2 {
+      margin-bottom: 10px;
+    }
+
+    .box ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .box li {
+      margin-bottom: 5px;
+    }
+
+    .box li span {
+      font-weight: bold;
+    }
