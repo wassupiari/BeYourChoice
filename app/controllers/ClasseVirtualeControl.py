@@ -1,6 +1,7 @@
 from app.models.ClasseVirtuale import ClasseVirtuale
 
 
+
 class ClasseVirtualeControl:
     def __init__(self):
         self.model = ClasseVirtuale()

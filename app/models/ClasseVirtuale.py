@@ -5,7 +5,6 @@ from pymongo import MongoClient
 
 from databaseManager import DatabaseManager
 
-
 class ClasseVirtuale:
     def __init__(self, db_url="mongodb+srv://rcione3:rcione3@beyourchoice.yqzo6.mongodb.net/", db_name="BeYourChoice"):
         self.client = MongoClient(db_url)
