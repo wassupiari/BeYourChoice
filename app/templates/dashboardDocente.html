@@ -5,24 +5,47 @@
         <title>BeYourChoice Dashboard</title>
         <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/styledashboarddoc.css') }}">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     </head>
     <body>
-    {% include 'header.html' %}
-        <div class="dashboard">
-        <h2>Punteggio Personale</h2>
-        <ul>
-        <h2>Class Ranking</h2>
-              <th>Class</th>
-              <th>Ranking Position</th>
-              <th>Total Score</th>
-              <td>Class A</td>
-              <td>1</td>
-              <td>95</td>
-              <td>Class B</td>
-              <td>2</td>
-              <td>90</td>
-        <button class="button">Gestione Classe</button>
-        <button class="button">Crea Classe Virtuale</button>
-      </div>
+        {% include 'header.html' %}
+        <div class="container">
+            <!-- Dashboard principale -->
+            <div class="dashboard">
+                <h2>Classifica Classe</h2>
+                <ul>
+                    <li>
+                        <span><strong>1 Classe A 95</strong></span>
+                        <span>
+                            <button class="button">Gestione Classe</button>
+                            <button class="button">Classifica Classe</button>
+                        </span>
+                    </li>
+                    <li>
+                        <span><strong>2 Classe B 90</strong></span>
+                        <span>
+                            <button class="button">Gestione Classe</button>
+                            <button class="button">Classifica Classe</button>
+                        </span>
+                    </li>
+                    <li>
+                        <span><strong>3 Classe C 85</strong></span>
+                        <span>
+                            <button class="button">Gestione Classe</button>
+                            <button class="button">Classifica Classe</button>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+            <ul>
+                <a href="" class="link"><i class="fas fa-circle-plus"></i><br>
+                    <span>Crea Classe Virtuale</span>
+                </a>
+            </ul>
+</aside>
+        </div>
     </body>
 </html>

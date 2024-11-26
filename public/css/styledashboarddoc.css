@@ -15,29 +15,94 @@
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    width: 80%;
   }
+  ul {
+  list-style: none; /* Nessun marker per gli elementi della lista */
+  padding: 0;
+  margin-top: 25px; /* Distanza dal titolo */
+}
+  li {
+  margin-bottom: 10px;
+  font-size: 20px;
+  display: flex; /* Usato per allineare gli elementi */
+  justify-content: space-between; /* Distribuisce gli elementi tra sinistra e destra */
+}
+  .box li span {
+  font-weight: bold;
+  text-align: right; /* Allinea a destra solo il testo in grassetto */
+  width: 50%; /* Controlla la larghezza per l'allineamento */
+}
 
-  .table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-
-  .table th,
-  .table td {
-    padding: 10px;
-    border: 1px solid #ccc;
-    text-align: left;
-  }
-
-  .table th {
-    background-color: #f2f2f2;
-  }
+.box li span + span {
+  text-align: left; /* Allinea a sinistra il testo che non è in grassetto */
+}
 
   .button {
     padding: 10px 20px;
-    background-color: #4CAF50;
+    background-color: #d75a3d;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
   }
+  button:hover {
+    background-color: #b94b32;
+}
+
+/* Barra laterale */
+.sidebar {
+    width: 200px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    height: 74vh;
+    overflow-y: auto;
+}
+
+.sidebar ul li {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.sidebar ul li i {
+    margin-top: 10px;
+    margin-right: 10px;
+    color: #000000;
+    line-height: 1;
+
+}
+
+.sidebar ul li:hover {
+    background-color: #e9ecef;
+    border-radius: 4px;
+}
+.sidebar span {
+    margin-top: 2px;
+}
+.link {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    color: #333333;
+    font-weight: bold;
+    font-size: 16px;
+    transition: color 0.3s ease;
+    line-height: 1.2;
+}
