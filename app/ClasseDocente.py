@@ -1,17 +1,16 @@
-from flask import Blueprint, request
-from app.controllers.ClasseVirtualeControl import ClasseVirtuale
+from flask import Blueprint, request, render_template
+from app.controllers.ClasseVirtualeControl import ClasseVirtualeControl
 
 # Crea il blueprint
-dashboard_bp = Blueprint('classedocente', __name__, template_folder='../templates')
+classDocente = Blueprint('ClasseDocente', __name__, template_folder='../templates')
 
-# Rotta per la dashboard
-@dashboard_bp.route('/classedocente')
-def classedocente():
+@classDocente.route('/ClasseDocente')
+def ClasseDocente():
     """
-    Visualizza la dashboard per un utente specifico.
+    Visualizza gli studenti di una classe specifica.
     """
     # Ottieni i parametri dalla query string
-    id_classe = int(request.args.get("ID_classe", 101))
+    ID_Classe = int(request.args.get("ID_Classe", 101))
 
-    # Usa il controller per ottenere i dati
-    return ClasseVirtuale.mostra_classe(id_classe)
+    # Passa i dati al template
+    return ClasseVirtualeControl.mostra_classe(ID_Classe)

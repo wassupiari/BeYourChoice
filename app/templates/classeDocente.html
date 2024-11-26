@@ -33,10 +33,10 @@
                 </thead>
                 <tbody>
                     <!-- Esempio di riga. Verrà popolato dinamicamente -->
-                    {% for studente in studenti %}
+                    {% for studente in classe %}
                     <tr>
                         <td>
-                        {{ loop.index }}. {{ studente.Nome }} {{ studente.Cognome }} - <span>{{ studente.Data_Nascita }}
+                        <span>{{ loop.index }}. {{ studente.Nome }} {{ studente.Cognome }} - {{ studente.Data_Nascita }}</span>
                         </td>
                         <td><i class="fas fa-user"></i></td>
                     </tr>
