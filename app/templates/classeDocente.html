@@ -33,7 +33,7 @@
                 </thead>
                 <tbody>
                     <!-- Esempio di riga. Verrà popolato dinamicamente -->
-                    {% for studente in studenti %}
+                    {% for studente in mostraclasse %}
                     <tr>
                         <td>
                         {{ loop.index }}. {{ studente.Nome }} {{ studente.Cognome }} - <span>{{ studente.Data_Nascita }}
