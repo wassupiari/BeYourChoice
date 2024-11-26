@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>BeYourChoice Dashboard</title>
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/styledashboarddoc.css') }}">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    </head>
+    <body>
+        {% include 'header.html' %}
+        <div class="container">
+            <!-- Dashboard principale -->
+            <div class="dashboard tall-box ">
+                <h2>Classifica della classe</h2>
+                <ul>
+                    {% for studente in classifica %}
+                        <a href=""> <li>{{ loop.index }}. {{ studente.Nome }} {{ studente.Cognome }} - <span>{{ studente.PunteggioTotale }}</span></li></a>
+                    {% endfor %}
+                </ul>
+            </div>
+            <!-- Sidebar -->
+            <aside class="sidebar">
+            <ul>
+                <a href="" class="link"><i class="fa-solid fa-users-rectangle"></i><br>
+                    <span>Gestione classe</span>
+                </a>
+            </ul>
+</aside>
+        </div>
+    </body>
+</html>

@@ -33,7 +33,7 @@ body {
 }
 
 .box.tall-box {
-  height: calc(100vh - 250px); /* Altezza dinamica */
+  height: calc(100vh - 2%); /* Altezza dinamica */
 }
 
 .box.half-width {

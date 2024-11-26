@@ -17,6 +17,9 @@
     border-radius: 5px;
     width: 80%;
   }
+  .dashboard.tall-box {
+  height: calc(100vh - 250px); /* Altezza dinamica */
+}
   ul {
   list-style: none; /* Nessun marker per gli elementi della lista */
   padding: 0;
@@ -52,6 +55,7 @@
 
 /* Barra laterale */
 .sidebar {
+    height: calc(100vh - 2%); /* Altezza dinamica */
     width: 200px;
     background-color: #ffffff;
     border: 1px solid #ddd;
@@ -79,12 +83,10 @@
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.sidebar ul li i {
-    margin-top: 10px;
-    margin-right: 10px;
-    color: #000000;
+i {
+    font-size: 24px;
+    margin-top: 15%;
     line-height: 1;
-
 }
 
 .sidebar ul li:hover {
