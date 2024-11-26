@@ -12,10 +12,15 @@ class DashboardController:
         """
         model = Studente()
 
-        # Recupera dati dal modello
+        # Recupera i punteggi
         classifica = model.get_classifica_classe(id_classe)
-        punteggio_personale = model.get_punteggio_personale(cf_studente)
+        punteggio_scenario = model.get_punteggio_personale(cf_studente)  # Punteggio dagli scenari
+        punteggio_quiz = model.get_punteggio_quiz(cf_studente)  # Punteggio dai quiz
 
+        # Totale generale
+        punteggio_totale = punteggio_scenario + punteggio_quiz
+
+        storico = model.get_storico(cf_studente)
         # Chiude la connessione
         model.close_connection()
 
@@ -23,5 +28,8 @@ class DashboardController:
         return render_template(
             "dashboardStudente.html",
             classifica=classifica,
-            punteggio_personale=punteggio_personale
+            punteggio_scenario=punteggio_scenario,
+            punteggio_quiz=punteggio_quiz,
+            punteggio_totale=punteggio_totale,
+            storico = storico
         )
