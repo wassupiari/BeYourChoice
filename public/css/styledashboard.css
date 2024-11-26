@@ -27,31 +27,32 @@ body {
   padding: 20px 20px 15px 20px; /* Padding con maggiore spazio sopra */
   position: relative;
   flex: 1; /* Box flessibile */
-  height:  250px;
+  height: 250px;
   margin: 10px;
   background-color: #fff;
 }
+
 .box.tall-box {
   height: calc(100vh - 250px); /* Altezza dinamica */
 }
 
 .box.half-width {
-  flex: 2; /* Box più largo */
+  flex: 1.5;
 }
 
 .box-title {
   position: absolute;
-  top: -15px; /* Titolo sopra il bordo */
-  left: 20px; /* Posizionamento orizzontale */
-  padding: 0 10px; /* Padding interno */
-  background: #fff; /* Sfondo bianco */
+  top: -15px;
+  left: 20px;
+  padding: 0 10px;
+  background: #fff;
   font-size: 18px;
   color: #000;
   font-weight: bold;
-  border: 2px solid #000; /* Bordo superiore */
+  border: 2px solid #000;
   border-radius: 4px;
-  width: calc(100% - 40px); /* Larghezza del titolo pari alla larghezza della box */
-  text-align: center; /* Allinea il testo al centro */
+  width: calc(100% - 40px);
+  text-align: center;
 }
 
 .box ul {
@@ -63,8 +64,16 @@ body {
 .box li {
   margin-bottom: 10px;
   font-size: 16px;
+  display: flex; /* Usato per allineare gli elementi */
+  justify-content: space-between; /* Distribuisce gli elementi tra sinistra e destra */
 }
 
 .box li span {
   font-weight: bold;
+  text-align: right; /* Allinea a destra solo il testo in grassetto */
+  width: 50%; /* Controlla la larghezza per l'allineamento */
+}
+
+.box li span + span {
+  text-align: left; /* Allinea a sinistra il testo che non è in grassetto */
 }

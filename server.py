@@ -8,9 +8,9 @@ app = Flask(__name__, template_folder='app/templates', static_folder='public')
 @app.route('/')
 @app.route('/home')
 def home():
-    return render_template('dashboardStudente.html')
+    return render_template('dashboardDocente.html')
 
-app.register_blueprint(dashboard_bp)
+#app.register_blueprint(dashboard_bp)
 # Avvio del server
 if __name__ == "__main__":
     app.run(debug=True)
