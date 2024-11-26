@@ -6,26 +6,36 @@ from pymongo import MongoClient
 from databaseManager import DatabaseManager
 
 class ClasseVirtuale:
-    def __init__(self, db_url="mongodb+srv://rcione3:rcione3@beyourchoice.yqzo6.mongodb.net/", db_name="BeYourChoice"):
-        self.client = MongoClient(db_url)
-        self.db = self.client[db_name]
-        self.db_manager = DatabaseManager();
-        self.classi = self.db.classi
-        self.upload_folder = "uploads"
+    def __init__(self):
+        self.db_manager = DatabaseManager()
+        self.auto_increment_id = self.get_next_auto_increment_id()
 
         # Creazione della cartella per i file caricati, se non esiste
-        if not os.path.exists(self.upload_folder):
-            os.makedirs(self.upload_folder)
+        #if not os.path.exists(self.upload_folder):
+         #   os.makedirs(self.upload_folder)
 
-    def __del__(self):
-        """Chiude la connessione al database quando l'oggetto viene distrutto."""
-        self.close_connection()
+    def get_next_auto_increment_id(self):
+        """
+        Ottiene il prossimo ID auto-incrementale per la classe virtuale.
+        """
+        counter_collection = self.db_manager.get_collection('counters')
+        counter = counter_collection.find_one_and_update(
+            {'_id': 'ClasseVirtuale'},
+            {'$inc': {'sequence_value': 1}},
+            upsert=True,
+            return_document=True
+        )
+        return counter['sequence_value']
 
-    def close_connection(self):
-        """Chiude la connessione al database."""
-        if self.client:
-            self.client.close()
-            print("Connessione al database chiusa")
+   #def __del__(self):
+        #"""Chiude la connessione al database quando l'oggetto viene distrutto."""
+        #self.close_connection()
+
+    #def close_connection(self):
+    #    """Chiude la connessione al database."""
+     #   if self.client:
+    #        self.client.close()
+     #       print("Connessione al database chiusa")
 
     class ClasseVirtuale:
         def __init__(self):
@@ -59,17 +69,20 @@ class ClasseVirtuale:
             raise ValueError("Formato della descrizione della classe virtuale non corretto.")
 
         # Creazione della classe virtuale
-        id_classe = self.auto_increment_id
-        self.classi_virtuali[id_classe] = {
-            "id_classe": id_classe,
-            "nome": NomeClasse,
-            "descrizione": Descrizione,
-            "studenti": []
+        collection = self.db_manager.get_collection('ClasseVirtuale')
+        ID_Classe = self.auto_increment_id  # Usa l'ID auto-incrementale
+        documento = {
+            'ID_Classe': ID_Classe,
+            'Nome_Classe': NomeClasse,
+            'Descrizione': Descrizione
         }
+
+        # Inserisci il documento nella collezione
+        collection.insert_one(documento)
 
         # Incrementa l'ID per la prossima classe
         self.auto_increment_id += 1
-        return "Classe virtuale creata"
+        return "Classe virtuale creata con successo"
 
     def inserimentoClasseStudente(self, IdClasse, IdStudente):
         """
