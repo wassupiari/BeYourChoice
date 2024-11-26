@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Header</title>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel = "stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleheader.css') }}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
@@ -17,7 +17,7 @@
                     <span>Profilo</span>
                 </a>
                 <a href="" class="nav-link">
-                    <i class="fas fa-chart-line"></i><br>
+                    <i class="fas fa-cubes"></i><br>
                     <span>Dashboard</span>
                 </a>
                 <a href="" class="nav-link">
@@ -30,7 +30,7 @@
                 </a>
             </div>
             <div class="user-info">
-                <span>Ciao, <strong>{NomeUtente}</strong></span>
+                <span>Ciao, <strong>{}</strong></span>
                 <button class="logout-button">Logout</button>
             </div>
         </div>
