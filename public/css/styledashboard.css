@@ -31,15 +31,8 @@ body {
   margin: 10px;
   background-color: #fff;
 }
-.box height{
-  border: 2px solid #000; /* Bordo della box simile a un fieldset */
-  border-radius: 8px; /* Angoli arrotondati */
-  padding: 20px 20px 15px 20px; /* Padding con maggiore spazio sopra */
-  position: relative;
-  flex: 1; /* Box flessibile */
-  height: calc(100vh - 250px); /* Altezza dinamica per riempire la pagina */
-  margin: 10px;
-  background-color: #fff;
+.box.tall-box {
+  height: calc(100vh - 250px); /* Altezza dinamica */
 }
 
 .box.half-width {

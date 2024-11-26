@@ -20,21 +20,20 @@
             </div>
 
             <!-- Classifica della classe -->
-            <div class="box height half-width">
+            <div class="box tall-box half-width">
                 <h2>Classifica della classe</h2>
                 <ul>
-                    <li>1. Mario Rossi</li>
-                    <li>2. Luca Bianchi</li>
-                    <li>3. Anna Verdi</li>
+                    {% for studente in classifica %}
+                        <li>{{ loop.index }}. {{ studente.Nome }} {{ studente.Cognome }}</li>
+                        {%endfor%}
                 </ul>
             </div>
 
             <!-- Storico Personale -->
-            <div class="box height">
+            <div class="box tall-box">
                 <h2>Storico Personale</h2>
                 <ul>
-                    <li>Quiz completato il 10/10/2023</li>
-                    <li>Scenario virtuale completato il 12/10/2023</li>
+                    <li>Punteggio Totale: <span>{{ punteggio_personale }}</span></li>
                 </ul>
             </div>
         </div>
