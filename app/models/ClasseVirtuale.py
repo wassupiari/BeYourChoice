@@ -38,12 +38,6 @@ class ClasseVirtuale:
     #        self.client.close()
     #       print("Connessione al database chiusa")
 
-    class ClasseVirtuale:
-        def __init__(self):
-            # Simulazione di un database come un dizionario
-            self.classi_virtuali = {}
-            self.auto_increment_id = 1  # Simula un campo auto-incremento per gli ID delle classi
-
     def visualizza_tutti_studenti(self):
         """
         Recupera tutti gli studenti dal database e restituisce i dati completi,
@@ -183,36 +177,41 @@ class ClasseVirtuale:
 
         return f"Studente con ID '{IdStudente}' rimosso con successo dalla classe '{IdClasse}'."
 
-    def mostra_classe(self, IdClasse):
-        print("ciao")
-
+    def mostra_classe(self, ID_Classe):
+        print("ciao2")
         """
         Recupera gli studenti di una classe specifica.
 
         Args:
-            IdClasse (int): L'ID della classe virtuale.
+            ID_Classe (int): L'ID della classe virtuale.
 
         Returns:
             list[dict]: Lista di studenti con Nome, Cognome e Data di Nascita.
-
-        Raises:
-            ValueError: Se la classe non contiene studenti.
         """
-        # Recupera la collezione 'Studente'
         try:
+            print(f"Recupero gli studenti per la classe con ID: {ID_Classe}")  # Aggiunto per debugging
             studente_collection = self.db_manager.get_collection("Studente")
-            studenti = list(
-                studente_collection.find({"ID_Classe": ID_Classe})
-            )
+
+            # Esegui la query per recuperare gli studenti della classe
+            studenti = list(studente_collection.find({"ID_Classe": ID_Classe}))
+
+            # Verifica se la query restituisce risultati
+            if not studenti:
+                print(f"Nessun studente trovato per la classe con ID {ID_Classe}")  # Aggiunto per debugging
+                raise ValueError(f"Nessuno studente trovato per la classe con ID {ID_Classe}")
+
+            # Logga il numero di studenti trovati
+            print(f"Numero di studenti trovati: {len(studenti)}")  # Aggiunto per debugging
+
             mostraclasse = []
             for studente in studenti:
                 mostraclasse.append({
                     "Nome": studente["Nome"],
                     "Cognome": studente["Cognome"],
-                    "Data Nascita": studente["DataNascita"]
+                    "Data_Nascita": studente["Data_Nascita"]
                 })
 
-        except ValueError as e:
-            print(f"Errore: {e}")
+            return mostraclasse
+        except Exception as e:
+            print(f"Errore durante il recupero degli studenti: {e}")  # Aggiunto per debugging
             raise
-        return mostraclasse

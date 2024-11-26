@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -32,13 +33,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Esempio di riga. Verrà popolato dinamicamente -->
+                    <!-- Iterazione degli studenti -->
                     {% for studente in classe %}
                     <tr>
-                        <td>
-                        <span>{{ loop.index }}. {{ studente.Nome }} {{ studente.Cognome }} - {{ studente.Data_Nascita }}</span>
-                        </td>
-                        <td><i class="fas fa-user"></i></td>
+                        <td>{{ studente.Nome }}</td>
+                        <td>{{ studente.Cognome }}</td>
+                        <td>{{ studente.Data_Nascita }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="3">Nessuno studente trovato per questa classe.</td>
                     </tr>
                     {% endfor %}
                 </tbody>

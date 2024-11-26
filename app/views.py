@@ -19,16 +19,3 @@ def creazione_classe():
             return render_template('creazioneCV.html', error=str(e))
     return render_template('creazioneCV.html')
 
-
-classDocente = Blueprint('classeDocente', __name__, template_folder='../templates')
-
-@classDocente.route('/classeDocente')
-def classeDocente():
-    """
-    Visualizza gli studenti di una classe specifica.
-    """
-    # Ottieni i parametri dalla query string
-    ID_Classe = int(request.args.get("ID_Classe", 101))
-
-    # Passa i dati al template
-    return ClasseVirtualeControl.mostra_classe(ID_Classe)
