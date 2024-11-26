@@ -1,3 +1,5 @@
+from flask import render_template
+
 from app.models.ClasseVirtuale import ClasseVirtuale
 
 
@@ -38,13 +40,12 @@ class ClasseVirtualeControl:
             print(f"Errore: {e}")
             raise
 
-    def mostra_classe(self, IdClasse):
-        """
-        Mostra tutti gli studenti di una classe virtuale.
-        """
-        try:
-            messaggio = self.model.mostra_classe(IdClasse)
-            print(messaggio)
-        except ValueError as e:
-            print(f"Errore: {e}")
-            raise
+    def mostra_classe(ID_Classe):
+        model = ClasseVirtuale()
+        classe =  model.get_mostra_classe(ID_Classe)
+        model.close_connection()
+        return render_template(
+            "classeDocente.html", classe = classe
+        )
+
+

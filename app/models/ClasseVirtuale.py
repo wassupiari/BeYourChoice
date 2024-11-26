@@ -184,36 +184,35 @@ class ClasseVirtuale:
         return f"Studente con ID '{IdStudente}' rimosso con successo dalla classe '{IdClasse}'."
 
     def mostra_classe(self, IdClasse):
-        IdClasse = 101
+        print("ciao")
+
         """
-        Mostra tutti gli studenti di una classe specifica.
+        Recupera gli studenti di una classe specifica.
 
         Args:
             IdClasse (int): L'ID della classe virtuale.
 
         Returns:
-            str: Elenco degli studenti con Nome, Cognome e Data di Nascita.
+            list[dict]: Lista di studenti con Nome, Cognome e Data di Nascita.
 
         Raises:
             ValueError: Se la classe non contiene studenti.
         """
         # Recupera la collezione 'Studente'
-        collection = self.db_manager.get_collection('Studente')
-
-        # Query per ottenere gli studenti della classe specificata
-        studenti = collection.find({'ID_Classe': IdClasse})
-
-        # Formatta il risultato in una stringa leggibile
-        risultato = []
-        for studente in studenti:
-            risultato.append(
-                f"Nome: {studente.get('Nome', 'N/A')}, Cognome: {studente.get('Cognome', 'N/A')}, "
-                f"Data di Nascita: {studente.get('Data_Nascita', 'N/A')}"
+        try:
+            studente_collection = self.db_manager.get_collection("Studente")
+            studenti = list(
+                studente_collection.find({"ID_Classe": ID_Classe})
             )
+            mostraclasse = []
+            for studente in studenti:
+                mostraclasse.append({
+                    "Nome": studente["Nome"],
+                    "Cognome": studente["Cognome"],
+                    "Data Nascita": studente["DataNascita"]
+                })
 
-        if risultato:
-            return f"Elenco degli studenti della classe {IdClasse}:\n" + "\n".join(risultato)
-        else:
-            return f"Nessuno studente trovato nella classe con ID {IdClasse}."
-
-
+        except ValueError as e:
+            print(f"Errore: {e}")
+            raise
+        return mostraclasse
