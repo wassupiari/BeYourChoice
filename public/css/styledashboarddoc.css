@@ -4,18 +4,21 @@
     font-family: 'Open Sans', sans-serif;
     margin: 0;
     padding: 0;
-    min-height: 100vh;
     display: flex;
     flex-direction: column;
+  background-color: #ffffff;
   }
 
 
   .dashboard {
     margin: 20px;
-    padding: 20px;
+    margin-top: 0.7%;
+    padding: 1.5%;
     border: 1px solid #ccc;
     border-radius: 5px;
     width: 80%;
+    background-color: #e5e5e5;
+    box-shadow: 0 4px 6px rgba(215, 90, 61);
   }
   .dashboard.tall-box {
   height: calc(100vh - 250px); /* Altezza dinamica */
@@ -31,13 +34,13 @@
   display: flex; /* Usato per allineare gli elementi */
   justify-content: space-between; /* Distribuisce gli elementi tra sinistra e destra */
 }
-  .box li span {
+  .dashboard li span {
   font-weight: bold;
   text-align: right; /* Allinea a destra solo il testo in grassetto */
   width: 50%; /* Controlla la larghezza per l'allineamento */
 }
 
-.box li span + span {
+.dashboard li span + span {
   text-align: left; /* Allinea a sinistra il testo che non è in grassetto */
 }
 
@@ -55,19 +58,23 @@
 
 /* Barra laterale */
 .sidebar {
-    height: calc(100vh - 2%); /* Altezza dinamica */
-    width: 200px;
-    background-color: #ffffff;
+    position: absolute; /* Posiziona rispetto all'elemento contenitore */
+    top: 2%; /* Altezza dell'header, regolabile se necessario */
+    right: 0.25%;
+    z-index: 100; /* Assicurati che sia sopra il contenuto sottostante */
+    height: 190px;
+    width: 190px;
+    background-color: 	#ffffff;
     border: 1px solid #ddd;
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(215, 90, 61);
     padding: 10px;
 }
 
 .sidebar ul {
     list-style: none;
     padding: 0;
-    margin: 0;
+    margin: 30px 0px 30px 25px;
     height: 74vh;
     overflow-y: auto;
 }
@@ -87,11 +94,10 @@ i {
     font-size: 24px;
     margin-top: 15%;
     line-height: 1;
+    color: #333333;
 }
-
-.sidebar ul li:hover {
-    background-color: #e9ecef;
-    border-radius: 4px;
+i:hover {
+    color: #000000;
 }
 .sidebar span {
     margin-top: 2px;
@@ -107,4 +113,21 @@ i {
     font-size: 16px;
     transition: color 0.3s ease;
     line-height: 1.2;
+}
+a
+{
+    color: #000000;
+    text-decoration: none;
+}
+.pulsante
+{
+    color: #ffffff;
+    text-decoration: none;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        height: auto; /* Ridimensiona per schermi piccoli */
+        width: 100%; /* Larghezza completa */
+    }
 }

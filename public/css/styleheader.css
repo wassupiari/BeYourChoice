@@ -4,28 +4,40 @@ body {
 }
 
 .main-header {
-    background-color: #ffffff;
+    background-color: 	#ffffff;
     border-bottom: 1px solid #ddd;
     height: 2%;
+    box-shadow: 0 4px 6px rgba(215, 90, 61);
 }
 .container {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative; /* Assicura il posizionamento relativo per gestire meglio il centro */
 }
 
 .logo {
-    margin: 20px 0 5px 5px;
-    font-size: 24px;
-    font-weight: 700;
+    margin: 0.7% 1% 0.1% 5%;
+    flex: 1; /* Assicura che la logo occupi spazio */
 }
 
 .navigation {
     display: flex;
-    gap: 30px;
-    justify-content: center;
+    gap: 30px; /* Distanza uniforme tra i link */
+    justify-content: center; /* Allinea i link al centro */
     align-items: center;
+    flex: 2; /* Assegna più spazio alla navigazione rispetto agli altri elementi */
 }
+
+.user-info {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* Allinea tutto a destra */
+    gap: 10px;
+    margin-right: 3%; /* Aggiunge ulteriore spazio verso il bordo destro */
+    flex: 1; /* Mantiene equilibrio tra logo e navigation */
+}
+
 
 .nav-link {
     display: flex;
@@ -41,7 +53,7 @@ body {
 }
 
 .nav-link i {
-    font-size: 14px;
+    font-size: 25px;
     margin: 0;
     line-height: 1;
 }
@@ -55,7 +67,7 @@ body {
 }
 
 .nav-link:hover i {
-    color: #000000;
+    color: #d75a3d;
 }
 a
 {
@@ -66,15 +78,9 @@ a:hover
     color: #000000;
 }
 
-.user-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
 .logout-button {
     padding: 5px 10px;
-    margin-right: 15%;
+    margin-right: 5%;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -89,3 +95,9 @@ a:hover
 }
 
 
+@media (max-width: 768px) {
+    .sidebar {
+        height: auto; /* Ridimensiona per schermi piccoli */
+        width: 100%; /* Larghezza completa */
+    }
+}

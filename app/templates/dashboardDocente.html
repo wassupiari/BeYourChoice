@@ -11,17 +11,15 @@
         {% include 'header.html' %}
         <div class="container">
             <!-- Dashboard principale -->
-            <div class="dashboard">
+            <div class="dashboard tall-box">
                 <h2>Classifica di tutte le classi</h2>
                 <ul>
                          {% for classe in classi %}
                     <li>
-                        <span><strong>{{ classe.Nome_Classe }}</strong></span>
+                        <strong>{{ classe.Nome_Classe }}</strong>
                         <span>
-                            <button class="button"><a href="{{ url_for('dashboardDocente.classifica_classe', id_classe=classe.ID_Classe) }}" >Classifica Classe</a></button>
-                            <button class="button">Gestione classe</button>
-
-
+                            <button class="button"><a class="pulsante" href="{{ url_for('dashboardDocente.classifica_classe', id_classe=classe.ID_Classe) }}" >Classifica Classe</a></button>
+                            <button class="button"><a class="pulsante">Gestione classe</a></button>
                         </span>
                     </li>
                 {% endfor %}
@@ -36,7 +34,7 @@
                     <span>Crea Classe Virtuale</span>
                 </a>
             </ul>
-</aside>
+            </aside>
         </div>
     </body>
 </html>
