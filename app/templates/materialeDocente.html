@@ -33,6 +33,9 @@
         {% else %}
             <p class="empty-message">Nessun materiale presente.</p>
         {% endif %}
+        <div class="aggiungi-materiale">
+            <a href="{{ url_for('carica_materiale') }}" class="btn-aggiungi">Aggiungi Materiale Didattico</a>
+        </div>
     </main>
 </body>
 </html>

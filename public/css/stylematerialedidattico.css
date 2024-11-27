@@ -138,3 +138,29 @@ main h2 {
     border-radius: 8px;
     border: 1px dashed #ddd;
 }
+/* Contenitore per il pulsante di aggiunta materiale */
+.aggiungi-materiale {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Stile del pulsante di aggiunta materiale */
+.btn-aggiungi {
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background-color: #ff9800; /* Arancione */
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Effetto hover per il pulsante */
+.btn-aggiungi:hover {
+    background-color: #e68a00;
+    transform: scale(1.05);
+}
