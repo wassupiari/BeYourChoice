@@ -3,14 +3,14 @@ body {
     font-family: 'Open Sans', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #ffffff; modificami questo css in base alla pagina nuova
+    background-color: #ffffff;
     color: #333;
     line-height: 1.6;
 }
 
 /* Contenitore del modulo */
 .form-container {
-    max-width: 600px;
+    max-width: 500px;
     margin: 50px auto;
     background: #deeaf6;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);

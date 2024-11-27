@@ -19,34 +19,39 @@
             <!-- Barra di ricerca -->
             <div class="search-container">
                 <input type="text" placeholder="Cerca studente" class="search-bar">
-                <button class="add-student-button">Aggiungi manualmente studente</button>
+                <a href="{{ url_for ('inserimentostudente.Inserimento_Studente')}}">
+                    <button class="add-student-button">Aggiungi manualmente studente</button></a>
             </div>
 
             <!-- Tabella studenti -->
+            <div class="table-wrapper">
             <table class="student-table">
                 <thead>
                     <tr>
                         <th>Nome</th>
                         <th>Cognome</th>
                         <th>Data di nascita</th>
+                        <th></th> <!-- Colonna per i pulsanti -->
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Iterazione degli studenti -->
+                      <!-- Iterazione degli studenti -->
                     {% for studente in classe %}
                     <tr>
                         <td>{{ studente.Nome }}</td>
                         <td>{{ studente.Cognome }}</td>
                         <td>{{ studente.Data_Nascita }}</td>
-                    </tr>
-                    {% else %}
-                    <tr>
-                        <td colspan="3">Nessuno studente trovato per questa classe.</td>
+                        <td class="action-cell">
+                            <button class="delete-button">
+                                <i class="fas fa-user-minus"></i>
+                            </button>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
+    </div>
 
         <!-- Barra laterale -->
 <aside class="sidebar">
@@ -63,7 +68,7 @@
         <span>Scenari</span>
     </div>
     <div class="sidebar-item">
-        <i class="fas fa-trophy"></i>
+        <i class="fas fa-trophy-alt"></i>
         <span>Achievement</span>
     </div>
 </aside>

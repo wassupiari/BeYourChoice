@@ -9,10 +9,13 @@ body {
     line-height: 1.6;
 }
 
-/* Contenitore principale */
+/* Contenitore principale con altezza limitata */
 .main-container {
     display: flex;
-    margin: 20px;
+    margin: 10px;
+    padding: 10px;
+    height: 700px; /* Imposta un'altezza fissa per il contenitore principale */
+    overflow-y: auto; /* Aggiunge lo scrolling verticale se il contenuto è troppo alto */
 }
 
 /* Contenitore della classe */
@@ -24,6 +27,7 @@ body {
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow-y: auto; /* Lo scrolling verticale è attivato nel contenitore centrale */
 }
 
 /* Titolo della pagina */
@@ -81,11 +85,12 @@ h1 {
 
 /* Tabella studenti */
 .student-table {
-    width: 100%;
-    border-collapse: collapse;
+    width: 100%; /* Puoi impostare una larghezza fissa se preferisci, ad esempio 80% */
+    max-width: 90%; /* Impostiamo un limite massimo per la larghezza */
     margin-top: 10px;
+    border-collapse: collapse;
+    table-layout: fixed; /* Fissa il layout per una disposizione uniforme */
 }
-
 .student-table th,
 .student-table td {
     border: 1px solid #ddd;
@@ -102,9 +107,32 @@ h1 {
     background-color: #ffffff;
 }
 
+/* Pulsante di eliminazione con icona rotonda */
+.delete-button {
+    padding: 10px; /* Dimensione del pulsante */
+    background-color: #000000; /* Colore rosso per il pulsante */
+    color: #ffffff; /* Colore dell'icona */
+    font-size: 18px; /* Dimensione dell'icona */
+    border: none; /* Rimuove il bordo */
+    border-radius: 50%; /* Rende il pulsante rotondo */
+    cursor: pointer; /* Cambia il cursore su pointer */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Aggiunge un'ombra sottile */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Effetti al passaggio del mouse */
+}
+
+.delete-button i {
+    margin: 0; /* Rimuove il margine */
+}
+
+.delete-button:hover {
+    transform: scale(1.1); /* Leggero ingrandimento */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Ombra più marcata su hover */
+}
+
+
 /* Barra laterale */
 .sidebar {
-    width: 120px; /* Larghezza fissa della sidebar */
+    width: 160px; /* Larghezza fissa della sidebar */
     display: flex;
     flex-direction: column; /* Disposizione verticale */
     align-items: center; /* Centrare i contenuti */
@@ -113,17 +141,17 @@ h1 {
 
 /* Quadrati della barra laterale */
 .sidebar-item {
-    width: 80px; /* Larghezza dei quadrati */
-    height: 80px; /* Altezza dei quadrati */
+    width: 165px; /* Larghezza dei quadrati */
+    height: 165px; /* Altezza dei quadrati */
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
-    font-size: 12px; /* Testo più piccolo */
+    font-size: 18px; /* Testo più piccolo */
     font-weight: bold;
-    color: #333; /* Colore del testo */
-    border: 1px solid #ddd; /* Bordi visibili */
+    color: #000000; /* Colore del testo */
+    border: 1px solid #ccc; /* Bordi visibili */
     border-radius: 8px; /* Leggera arrotondatura degli angoli */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Effetto ombra */
     cursor: pointer;
@@ -131,12 +159,40 @@ h1 {
 }
 
 .sidebar-item i {
-    font-size: 16px; /* Dimensione delle icone  */
-    margin-bottom: 5px; /* Spazio tra l'icona e il testo */
-    color: #007bff; /* Colore delle icone */
+    font-size: 40px; /* Dimensione delle icone  */
+    margin-bottom: 10px; /* Spazio tra l'icona e il testo */
+    color: #000000; /* Colore delle icone */
 }
 
 .sidebar-item:hover {
+    transform: scale(1.05); /* Leggero ingrandimento al passaggio del mouse */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Ombra più intensa su hover */
+    background-color: #d75a3d;
+    color: #ffffff;
+}
+
+.sidebar-item:hover i {
+    color: #ffffff; /* Colore delle icone su hover */
+}
+
+.action-cell {
+    text-align: center;
+    width: 50px; /* Dimensione fissa per allineare meglio */
+}
+
+.add-button {
+    background-color: #ffffff; /* Colore verde */
+    color: black;
+    padding: 5px 10px;
+    font-size: 20px;
+    cursor: pointer;
+    border: 1px solid #ccc; /* Bordi visibili */
+    border-radius: 8px; /* Leggera arrotondatura degli angoli */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Effetto ombra */
+    transition: box-shadow 0.3s ease, transform 0.3s ease; /* Effetti al passaggio del mouse */
+}
+
+.add-button:hover {
     transform: scale(1.05); /* Leggero ingrandimento al passaggio del mouse */
     box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Ombra più intensa su hover */
 }

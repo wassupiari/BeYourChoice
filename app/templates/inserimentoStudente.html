@@ -22,9 +22,11 @@
             </div>
 
             <!-- Tabella studenti -->
+            <!-- Tabella studenti -->
             <table class="student-table">
                 <thead>
                     <tr>
+                        <th></th> <!-- Colonna per il pulsante "+" -->
                         <th>Nome</th>
                         <th>Cognome</th>
                         <th>Data di nascita</th>
@@ -34,13 +36,18 @@
                     <!-- Iterazione degli studenti -->
                     {% for studente in classe %}
                     <tr>
+                        <td class="action-cell">
+                            <button class="add-button">
+                                <i class="fas fa-user-plus"></i>
+                            </button>
+                        </td>
                         <td>{{ studente.Nome }}</td>
                         <td>{{ studente.Cognome }}</td>
                         <td>{{ studente.Data_Nascita }}</td>
                     </tr>
                     {% else %}
                     <tr>
-                        <td colspan="3">Nessuno studente trovato.</td>
+                        <td colspan="4">Nessuno studente trovato.</td>
                     </tr>
                     {% endfor %}
                 </tbody>
