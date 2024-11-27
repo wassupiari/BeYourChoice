@@ -28,12 +28,13 @@
 
         <!-- Tabella studenti -->
         <div class="table-wrapper">
-            <table class="student-table">
+            <table class="student-table" style="width:100%">
                 <thead>
                 <tr>
-                    <th>Nome</th>
-                    <th>Cognome</th>
-                    <th>Data di nascita</th>
+                    <th style="width:5%">#</th>
+                    <th style="width:30%">Nome</th>
+                    <th style="width:30%">Cognome</th>
+                    <th style="width:40%">Data di nascita</th>
                     <th></th> <!-- Colonna per i pulsanti -->
                 </tr>
                 </thead>
@@ -41,6 +42,7 @@
                 <!-- Iterazione degli studenti -->
                 {% for studente in classe %}
                 <tr>
+                    <td>{{ loop.index }}</td>
                     <td>{{ studente.Nome }}</td>
                     <td>{{ studente.Cognome }}</td>
                     <td>{{ studente.Data_Nascita }}</td>
@@ -48,7 +50,7 @@
                     <td class="action-cell">
                         <!-- Pulsante di rimozione -->
                         <button class="delete-button" onclick="rimuoviStudente('{{ studente._id }}')">
-                            <i class="fas fa-user-minus"></i> Rimuovi
+                            <i class="fas fa-user-times"></i>
                         </button>
 
                     </td>

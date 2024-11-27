@@ -48,39 +48,42 @@ h1 {
 }
 
 .search-bar {
-    width: 70%;
+    width: calc(90% - 160px);
     padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
     font-size: 1rem;
     background-color: #ffffff;
-    box-sizing: border-box;
+    border: 1px solid #ccc; /* Bordi visibili */
+    border-radius: 8px; /* Leggera arrotondatura degli angoli */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .search-bar:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 4px rgba(0, 123, 255, 0.3);
-    background-color: #ffffff;
+    outline: none;
+    box-shadow: 0 6px 12px rgba(215, 90, 61, 0.5);
+    background-color: #fff;
 }
 
 /* Bottone per aggiungere studenti */
 .add-student-button {
+    margin-left: 10px;
     padding: 10px 15px; /* Dimensioni del bottone */
     background-color: #ffffff; /* Sfondo bianco */
     color: #333; /* Colore del testo */
     font-size: 1rem; /* Dimensione del testo */
     font-weight: 600; /* Testo semi-grassetto */
-    border: 1px solid #000; /* Bordo nero sottile */
-    border-radius: 4px; /* Arrotondamento degli angoli */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombra minima */
-    cursor: pointer; /* Cambia il cursore su pointer */
-    transition: box-shadow 0.3s ease, transform 0.3s ease; /* Effetti al passaggio del mouse */
+    border: 1px solid #ccc; /* Bordi visibili */
+    border-radius: 8px; /* Leggera arrotondatura degli angoli */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Effetto ombra */
+    cursor: pointer;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .add-student-button:hover {
     transform: scale(1.05); /* Leggero ingrandimento al passaggio del mouse */
     box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Ombra più pronunciata su hover */
+    background-color: #d75a3d;
+    color: #ffffff;
 }
 
 /* Tabella studenti */
@@ -88,31 +91,32 @@ h1 {
     width: 100%; /* Puoi impostare una larghezza fissa se preferisci, ad esempio 80% */
     max-width: 90%; /* Impostiamo un limite massimo per la larghezza */
     margin-top: 10px;
-    border-collapse: collapse;
+    border-collapse: 1 px solid black;
+    border-radius: 10px;
     table-layout: fixed; /* Fissa il layout per una disposizione uniforme */
 }
 .student-table th,
 .student-table td {
     border: 1px solid #ddd;
+    border-radius: 10px;
     padding: 10px;
     text-align: left;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
 }
 
 .student-table th {
     background-color: #ffffff;
-    color: #333;
+    color: #000000;
 }
 
-.student-table tr:nth-child(even) {
-    background-color: #ffffff;
-}
 
 /* Pulsante di eliminazione con icona rotonda */
 .delete-button {
     padding: 10px; /* Dimensione del pulsante */
-    background-color: #000000; /* Colore rosso per il pulsante */
-    color: #ffffff; /* Colore dell'icona */
-    font-size: 18px; /* Dimensione dell'icona */
+    background-color: #ffffff; /* Colore rosso per il pulsante */
+    color: #000000; /* Colore dell'icona */
+    font-size: 20px; /* Dimensione dell'icona */
     border: none; /* Rimuove il bordo */
     border-radius: 50%; /* Rende il pulsante rotondo */
     cursor: pointer; /* Cambia il cursore su pointer */
@@ -127,6 +131,8 @@ h1 {
 .delete-button:hover {
     transform: scale(1.1); /* Leggero ingrandimento */
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Ombra più marcata su hover */
+    background-color: #d75a3d;
+    color: #ffffff;
 }
 
 
@@ -150,6 +156,7 @@ h1 {
     text-align: center;
     font-size: 18px; /* Testo più piccolo */
     font-weight: bold;
+    background-color: #deeaf6;
     color: #000000; /* Colore del testo */
     border: 1px solid #ccc; /* Bordi visibili */
     border-radius: 8px; /* Leggera arrotondatura degli angoli */
@@ -181,18 +188,42 @@ h1 {
 }
 
 .add-button {
-    background-color: #ffffff; /* Colore verde */
-    color: black;
-    padding: 5px 10px;
-    font-size: 20px;
-    cursor: pointer;
-    border: 1px solid #ccc; /* Bordi visibili */
-    border-radius: 8px; /* Leggera arrotondatura degli angoli */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Effetto ombra */
-    transition: box-shadow 0.3s ease, transform 0.3s ease; /* Effetti al passaggio del mouse */
+    padding: 10px; /* Dimensione del pulsante */
+    background-color: #ffffff; /* Colore rosso per il pulsante */
+    color: #000000; /* Colore dell'icona */
+    font-size: 20px; /* Dimensione dell'icona */
+    border: none; /* Rimuove il bordo */
+    border-radius: 50%; /* Rende il pulsante rotondo */
+    cursor: pointer; /* Cambia il cursore su pointer */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Aggiunge un'ombra sottile */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Effetti al passaggio del mouse */
 }
 
 .add-button:hover {
+    transform: scale(1.1); /* Leggero ingrandimento */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Ombra più marcata su hover */
+    background-color: #d75a3d;
+    color: #ffffff;
+}
+
+/* Stile del pulsante "Annulla" */
+.cancel-button {
+    margin-left: 10px;
+    padding: 10px 15px; /* Dimensioni del bottone */
+    background-color: #ffffff; /* Sfondo bianco */
+    color: #333; /* Colore del testo */
+    font-size: 1rem; /* Dimensione del testo */
+    font-weight: 600; /* Testo semi-grassetto */
+    border: 1px solid #ccc; /* Bordi visibili */
+    border-radius: 8px; /* Leggera arrotondatura degli angoli */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Effetto ombra */
+    cursor: pointer;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.cancel-button:hover {
     transform: scale(1.05); /* Leggero ingrandimento al passaggio del mouse */
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Ombra più intensa su hover */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Ombra più pronunciata su hover */
+    background-color: #d75a3d;
+    color: #ffffff;
 }
