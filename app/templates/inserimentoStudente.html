@@ -14,11 +14,14 @@
     <main class="main-container">
         <!-- Contenitore centrale -->
         <div class="classe-container">
-            <h1></h1>
+            <h1>Inserimento studenti</h1>
 
             <!-- Barra di ricerca -->
             <div class="search-container">
                 <input type="text" placeholder="Cerca studente" class="search-bar">
+                <a href="{{ url_for ('classedocente.Classe_Docente')}}">
+                <button class="cancel-button">Annulla</button>
+                    </a>
             </div>
 
             <!-- Tabella studenti -->
