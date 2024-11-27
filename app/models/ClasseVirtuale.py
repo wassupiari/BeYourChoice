@@ -1,5 +1,6 @@
 import os
 import re
+from bson import ObjectId
 
 from pymongo import MongoClient
 
@@ -208,7 +209,8 @@ class ClasseVirtuale:
                 mostraclasse.append({
                     "Nome": studente["Nome"],
                     "Cognome": studente["Cognome"],
-                    "Data_Nascita": studente["Data_Nascita"]
+                    "Data_Nascita": studente["Data_Nascita"],
+                    "_id": studente["_id"]
                 })
 
             return mostraclasse
@@ -256,4 +258,27 @@ class ClasseVirtuale:
             return studenti_istituto
         except Exception as e:
             print(f"Errore durante il recupero degli studenti: {e}")  # Aggiunto per debugging
+            raise
+
+
+    def rimuovi_studente(self, studente_id):
+        """
+        Imposta il campo ID_Classe dello studente a null.
+
+        Args:
+            studente_id (str): ID dello studente da rimuovere.
+
+        Raises:
+            Exception: In caso di errore durante l'aggiornamento.
+        """
+        try:
+            studente_collection = self.db_manager.get_collection("Studente")
+            result = studente_collection.update_one(
+                {"_id": ObjectId(studente_id)},  # Filtra per l'ID dello studente
+                {"$set": {"ID_Classe": None}}  # Imposta ID_Classe a null
+            )
+            if result.modified_count == 0:
+                raise Exception("Nessuna modifica effettuata. Verifica l'ID dello studente.")
+        except Exception as e:
+            print(f"Errore nel modello: {e}")
             raise

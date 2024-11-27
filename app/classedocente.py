@@ -1,4 +1,4 @@
-from flask import Blueprint, request, render_template
+from flask import *
 from app.controllers.ClasseVirtualeControl import ClasseVirtualeControl
 
 # Crea il blueprint
@@ -26,3 +26,22 @@ def Classe_Docente():
 
     except Exception as e:
         return render_template("errore.html", messaggio=f"Errore: {str(e)}")
+
+
+@classedocente.route('/rimuovi-studente', methods=['POST'])
+def rimuovi_studente():
+    try:
+        # Ottieni l'ID dello studente dalla richiesta
+        data = request.get_json()
+        studente_id = data.get('studente_id')
+
+        if not studente_id:
+            return jsonify({'error': 'ID studente mancante'}), 400
+
+        # Chiama il metodo per rimuovere lo studente
+        result = classe_virtuale_control.rimuovi_studente(studente_id)
+
+        # Se il risultato è positivo, invia una risposta di successo
+        return jsonify({'success': True}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500

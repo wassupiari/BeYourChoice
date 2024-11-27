@@ -61,7 +61,6 @@ class ClasseVirtualeControl:
             print(f"Errore generale: {e}")
             return {"error": "Si è verificato un errore nel recupero degli studenti."}
 
-
     def mostra_studenti_istituto(self, scuola_appartenenza):
         """
         Recupera gli studenti della classe e prepara i dati per il rendering.
@@ -73,7 +72,8 @@ class ClasseVirtualeControl:
             list[dict]: Lista di studenti con Nome, Cognome e Data di Nascita.
         """
         try:
-            studenti = self.model.mostra_studenti_istituto(scuola_appartenenza)  # Chiama il metodo per recuperare gli studenti
+            studenti = self.model.mostra_studenti_istituto(
+                scuola_appartenenza)  # Chiama il metodo per recuperare gli studenti
             print(f"Studente recuperati: {len(studenti)}")
             return studenti
         except ValueError as e:
@@ -83,3 +83,20 @@ class ClasseVirtualeControl:
             print(f"Errore generale: {e}")
             return {"error": "Si è verificato un errore nel recupero degli studenti."}
 
+    def rimuovi_studente(self, studente_id):
+
+        """
+        Rimuove uno studente dalla classe impostando ID_Classe a null.
+
+        Args:
+            studente_id (str): ID dello studente da rimuovere.
+
+        Returns:
+            bool: True se la rimozione ha successo, False altrimenti.
+        """
+        try:
+            self.model.rimuovi_studente(studente_id)
+            return True
+        except Exception as e:
+            print(f"Errore nel controller: {e}")
+            return False
