@@ -48,7 +48,7 @@ main h2 {
     height: 200px; /* Altezza fissa */
     padding: 15px;
     border-radius: 8px;
-    border: 1px solid #ddd;
+    border: 4px solid #ddd;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -107,16 +107,17 @@ main h2 {
 
 .btn:first-child:hover {
     background-color: #218838;
+    transform: scale(1.10);
 }
 
 /* Pulsante di modifica */
 .btn:nth-child(2) {
     background-color: #ffc107;
-    color: black;
 }
 
 .btn:nth-child(2):hover {
     background-color: #e0a800;
+    transform: scale(1.10);
 }
 
 /* Pulsante di rimozione */
@@ -126,6 +127,7 @@ main h2 {
 
 .btn-danger:hover {
     background-color: #c82333;
+    transform: scale(1.10);
 }
 
 /* Messaggio vuoto */
@@ -144,6 +146,7 @@ main h2 {
     margin-top: 20px;
 }
 
+
 /* Stile del pulsante di aggiunta materiale */
 .btn-aggiungi {
     display: inline-block;
@@ -153,7 +156,7 @@ main h2 {
     font-size: 16px;
     font-weight: bold;
     color: white;
-    background-color: #ff9800; /* Arancione */
+    background-color: #d75a3d; /* Arancione */
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
@@ -161,6 +164,8 @@ main h2 {
 
 /* Effetto hover per il pulsante */
 .btn-aggiungi:hover {
-    background-color: #e68a00;
-    transform: scale(1.05);
+    background-color: #d75a3d;
+    color: white;
+    transform: scale(1.10);
 }
+

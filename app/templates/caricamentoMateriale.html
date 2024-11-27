@@ -4,14 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Caricamento Materiale Didattico</title>
-    <link rel="stylesheet" href="/static/stylematerialedidattico.css">
+     <link rel="stylesheet" href="{{ url_for('static', filename='css/stylecaricamentomateriale.css') }}">
 </head>
 {% include 'header.html'%}
 <body>
-    <header>
-        <h1>Caricamento Materiale Didattico</h1>
-    </header>
-    <main>
+ <main>
+       <div class="h2">
+        <h2>Caricamento Materiale Didattico</h2>
+         </div>
+
         <form action="{{ url_for('carica_materiale') }}" method="POST" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="titolo">Titolo del Materiale:</label>
