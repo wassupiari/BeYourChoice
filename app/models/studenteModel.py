@@ -10,7 +10,8 @@ class StudenteModel:
     def aggiungi_studente(self, studente_dict):
         studente_collection = self.db_manager.get_collection("Studente")
         # Cifra la password prima di salvarla
-        studente_dict['password'] = bcrypt.hashpw(studente_dict['password'].encode('utf-8'), bcrypt.gensalt())
+        hash = bcrypt.hashpw(studente_dict['password'].encode('utf-8'), bcrypt.gensalt())
+        studente_dict['password'] = hash
         studente_collection.insert_one(studente_dict)
         print("Studente aggiunto con successo!")
 

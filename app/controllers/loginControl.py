@@ -1,11 +1,10 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, session, redirect, url_for
 from app.models.studenteModel import StudenteModel
 import bcrypt
-import re
+import re, os
 
 # Crea un Blueprint per la gestione del login
 login_bp = Blueprint('login', __name__)
-
 
 
 # Crea una rotta per il login
@@ -19,9 +18,11 @@ def login_studente():
         email_regex = r"^[A-z0-9._%+-]+@[A-z0-9.-]+\.[A-z]{2,4}$"
         password_regex = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=])[A-Za-z\d@#$%^&+=]{8,20}$"
 
+        # Controllo formato email
         if not re.match(email_regex, email):
             return jsonify({"error": "Formato email non valido!"}), 400
 
+            # Controllo della password (minimo 8 caratteri)
         if not re.match(password_regex, password):
             return jsonify({"error": "Formato password non valido!"}), 400
 
@@ -34,6 +35,7 @@ def login_studente():
         if studente:
             # Verifica se la password fornita corrisponde a quella nel database
             if bcrypt.checkpw(password.encode('utf-8'), studente['password']):
+                session['email'] = email
                 return jsonify({"message": "Login effettuato con successo!"})
             else:
                 return jsonify({"error": "Password errata!"}), 401
@@ -42,3 +44,21 @@ def login_studente():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+# Route per ottenere i dati della sessione
+@login_bp.route('/profile', methods=['POST'])
+def profile():
+    if 'email' in session:
+        email = session['email']
+        return f'Profilo di {email}'
+    else:
+        return redirect(url_for('login.home'))
+
+# Route per terminare la sessione (logout)
+@login_bp.route('/logout', methods=['POST'])
+def logout():
+    if 'email' in session:
+        session.pop('email', None)
+        return jsonify({"message": "Logout effettuato con successo!"}), 200
+    else:
+        return jsonify({"error": "Nessuna sessione attiva o utente già disconnesso!"}), 401
