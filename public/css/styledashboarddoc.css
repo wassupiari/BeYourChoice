@@ -1,133 +1,130 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
-
-  body {
-    font-family: 'Open Sans', sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-  background-color: #ffffff;
-  }
-
-
-  .dashboard {
-    margin: 20px;
-    margin-top: 0.7%;
-    padding: 1.5%;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 80%;
-    background-color: #e5e5e5;
-    box-shadow: 0 4px 6px rgba(215, 90, 61);
-  }
-  .dashboard.tall-box {
-  height: calc(100vh - 250px); /* Altezza dinamica */
+/* Contenitore principale per dashboard e sidebar */
+.main-content {
+  display: flex;
+  flex: 1; /* Fa sì che il contenitore occupi tutto lo spazio rimanente sotto l'header */
+  margin: 0 20px; /* Margini orizzontali */
+  margin-top: 20px; /* Margine superiore per separarlo dall'header */
+  justify-content: space-between;
+  align-items: flex-start;
 }
-  ul {
-  list-style: none; /* Nessun marker per gli elementi della lista */
+
+/* Dashboard */
+.dashboard {
+  flex: 0.80; /* Occupa il restante spazio lasciato dalla sidebar */
+  padding: 1.5%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #e5e5e5;
+  box-shadow: 0 4px 6px rgba(215, 90, 61, 0.3);
+  height: calc(100vh - 220px); /* Altezza dinamica: 100vh meno l'header */
+  margin-right: 20px; /* Spazio tra dashboard e sidebar */
+  margin-left: 20px;
+    margin-top: 30px;
+}
+
+ul {
+  list-style: none;
   padding: 0;
-  margin-top: 25px; /* Distanza dal titolo */
+  margin-top: 25px;
 }
-  li {
+
+li {
   margin-bottom: 10px;
   font-size: 20px;
-  display: flex; /* Usato per allineare gli elementi */
-  justify-content: space-between; /* Distribuisce gli elementi tra sinistra e destra */
+  display: flex;
+  justify-content: space-between;
 }
-  .dashboard li span {
+
+.dashboard li span {
   font-weight: bold;
-  text-align: right; /* Allinea a destra solo il testo in grassetto */
-  width: 50%; /* Controlla la larghezza per l'allineamento */
+  text-align: right;
+  width: 50%;
 }
 
 .dashboard li span + span {
-  text-align: left; /* Allinea a sinistra il testo che non è in grassetto */
+  text-align: left;
 }
 
-  .button {
-    padding: 10px 20px;
-    background-color: #d75a3d;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  button:hover {
-    background-color: #b94b32;
+.button {
+  padding: 10px 20px;
+  background-color: #d75a3d;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-/* Barra laterale */
+button:hover {
+  background-color: #b94b32;
+}
+
+/* Sidebar (lasciata invariata) */
 .sidebar {
-    position: absolute; /* Posiziona rispetto all'elemento contenitore */
-    top: 2%; /* Altezza dell'header, regolabile se necessario */
-    right: 0.25%;
-    z-index: 100; /* Assicurati che sia sopra il contenuto sottostante */
-    height: 190px;
-    width: 190px;
-    background-color: 	#ffffff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(215, 90, 61);
-    padding: 10px;
+  position: absolute;
+  top: 20%;
+  right: 1%;
+  z-index: 100;
+  height: 160px;
+  width: 160px;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(215, 90, 61);
+  padding: 10px;
 }
 
 .sidebar ul {
-    list-style: none;
-    padding: 0;
-    margin: 30px 0px 30px 25px;
-    height: 74vh;
-    overflow-y: auto;
+  list-style: none;
+  padding: 0;
+  margin: 30px 0px 30px 25px;
+  height: 74vh;
+  overflow-y: auto;
 }
 
 .sidebar ul li {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    font-size: 16px;
-    font-weight: 600;
-    color: #333;
-    cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 i {
-    font-size: 24px;
-    margin-top: 15%;
-    line-height: 1;
-    color: #333333;
-}
-i:hover {
-    color: #000000;
-}
-.sidebar span {
-    margin-top: 2px;
-}
-.link {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-decoration: none;
-    color: #333333;
-    font-weight: bold;
-    font-size: 16px;
-    transition: color 0.3s ease;
-    line-height: 1.2;
-}
-a
-{
-    color: #000000;
-    text-decoration: none;
-}
-.pulsante
-{
-    color: #ffffff;
-    text-decoration: none;
+  font-size: 24px;
+  margin-top: 15%;
+  line-height: 1;
+  color: #333333;
 }
 
-@media (max-width: 768px) {
-    .sidebar {
-        height: auto; /* Ridimensiona per schermi piccoli */
-        width: 100%; /* Larghezza completa */
-    }
+i:hover {
+  color: #000000;
+}
+
+.sidebar span {
+  margin-top: 2px;
+}
+
+.link {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  color: #333333;
+  font-weight: bold;
+  font-size: 16px;
+  transition: color 0.3s ease;
+}
+
+a {
+  color: #000000;
+  text-decoration: none;
+}
+
+.pulsante {
+  color: #ffffff;
+  text-decoration: none;
 }
