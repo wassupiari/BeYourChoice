@@ -188,20 +188,22 @@ h1 {
 }
 
 .add-button {
-    background-color: #ffffff; /* Colore verde */
-    color: black;
-    padding: 5px 10px;
-    font-size: 20px;
-    cursor: pointer;
-    border: 1px solid #ccc; /* Bordi visibili */
-    border-radius: 8px; /* Leggera arrotondatura degli angoli */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Effetto ombra */
-    transition: box-shadow 0.3s ease, transform 0.3s ease; /* Effetti al passaggio del mouse */
+    padding: 10px; /* Dimensione del pulsante */
+    background-color: #ffffff; /* Colore rosso per il pulsante */
+    color: #000000; /* Colore dell'icona */
+    font-size: 20px; /* Dimensione dell'icona */
+    border: none; /* Rimuove il bordo */
+    border-radius: 50%; /* Rende il pulsante rotondo */
+    cursor: pointer; /* Cambia il cursore su pointer */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Aggiunge un'ombra sottile */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Effetti al passaggio del mouse */
 }
 
 .add-button:hover {
-    transform: scale(1.05); /* Leggero ingrandimento al passaggio del mouse */
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Ombra più intensa su hover */
+    transform: scale(1.1); /* Leggero ingrandimento */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Ombra più marcata su hover */
+    background-color: #d75a3d;
+    color: #ffffff;
 }
 
 /* Stile del pulsante "Annulla" */

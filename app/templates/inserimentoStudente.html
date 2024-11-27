@@ -26,27 +26,29 @@
 
             <!-- Tabella studenti -->
             <!-- Tabella studenti -->
-            <table class="student-table">
+            <table class="student-table" style="width:100%">
                 <thead>
                     <tr>
-                        <th></th> <!-- Colonna per il pulsante "+" -->
-                        <th>Nome</th>
-                        <th>Cognome</th>
-                        <th>Data di nascita</th>
+                        <th style="width:5%">#</th>
+                        <th style="width:30%">Nome </th>
+                        <th style="width:30%">Cognome</th>
+                        <th style="width:40%">Data di nascita</th> <!-- Colonna per il pulsante "+" -->
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     <!-- Iterazione degli studenti -->
                     {% for studente in classe %}
                     <tr>
-                        <td class="action-cell">
-                            <button class="add-button">
-                                <i class="fas fa-user-plus"></i>
-                            </button>
-                        </td>
+                        <td>{{ loop.index }}</td>
                         <td>{{ studente.Nome }}</td>
                         <td>{{ studente.Cognome }}</td>
                         <td>{{ studente.Data_Nascita }}</td>
+                        <td class="action-cell">
+                            <button class="add-button">
+                                <i class="fas fa-user-check"></i>
+                            </button>
+                        </td>
                     </tr>
                     {% else %}
                     <tr>
