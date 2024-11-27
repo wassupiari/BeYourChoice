@@ -59,8 +59,8 @@ h1 {
 }
 
 .search-bar:focus {
-    border-color: #fff;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    outline: none;
+    box-shadow: 0 6px 12px rgba(215, 90, 61, 0.5);
     background-color: #fff;
 }
 
