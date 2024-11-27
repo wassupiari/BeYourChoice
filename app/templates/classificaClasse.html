@@ -10,34 +10,36 @@
 </head>
 <body>
     {% include 'header.html' %}
-    <div class="container">
+    <div class="main-content">
         <!-- Classifica principale -->
-        <div class="dashboard tall-box">
+        <div class="dashboard">
+            <h2>Classifica della Classe</h2>
             <ul>
-            <li><h3>Classifica della classe</h3>
-                <span><h3>Punteggio</h3></span>
-            </li>
+                <li>
+                    <h3>Nome Studente</h3>
+                    <span><h3>Punteggio</h3></span>
+                </li>
                 {% for studente in classifica %}
-                    <li>
-                       <a href="{{ url_for('dashboardDocente.storico_studente', cf_studente=studente.CF) }}">
-                            <strong>{{ loop.index }}.</strong> {{ studente.Nome }} {{ studente.Cognome }}
-                        </a>
-                        <span>{{ studente.PunteggioTotale }}</span>
-                    </li>
+                <li>
+                    <a href="{{ url_for('dashboardDocente.storico_studente', cf_studente=studente.CF) }}">
+                        <strong>{{ loop.index }}.</strong> {{ studente.Nome }} {{ studente.Cognome }}
+                    </a>
+                    <span>{{ studente.PunteggioTotale }}</span>
+                </li>
                 {% endfor %}
             </ul>
         </div>
 
         <!-- Sidebar -->
-            <aside class="sidebar">
-        <div class="sidebar-item">
-            <a href="{{ url_for('dashboardDocente.dashboard', id_docente=1001) }}" class="link">
-                <i class="fa-solid fa-users-rectangle"></i>
-                <br>
-                <span>Gestione Classe</span>
-            </a>
-        </div>
-    </aside>
+        <aside class="sidebar">
+            <div class="sidebar-item">
+                <a href="{{ url_for('dashboardDocente.dashboard', id_docente=1001) }}" class="link">
+                    <i class="fa-solid fa-users-rectangle"></i>
+                    <br>
+                    <span>Gestione Classe</span>
+                </a>
+            </div>
+        </aside>
     </div>
 </body>
 </html>

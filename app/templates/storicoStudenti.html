@@ -10,48 +10,50 @@
 </head>
 <body>
     {% include 'header.html' %}
-    <div class="container">
+    <div class="main-content">
         <!-- Storico dello studente -->
-        <div class="dashboard tall-box">
+        <div class="dashboard">
             <h2>Storico dello Studente</h2>
-            <ul>
-            <!-- Storico Quiz -->
-            <li><h3>Quiz Svolti</h3>
-                <span><h3>Punteggio</h3></span>
-            </li>
 
+            <!-- Storico Quiz -->
+            <ul>
+                <li>
+                    <h3>Quiz Svolti</h3>
+                    <span><h3>Punteggio</h3></span>
+                </li>
                 {% for quiz in storico.Quiz %}
-                    <li>
-                        {{ quiz.Argomento }}
-                        <span ><strong>{{ quiz.Punteggio }}</strong></span>
-                    </li>
+                <li>
+                    {{ quiz.Argomento }}
+                    <span><strong>{{ quiz.Punteggio }}</strong></span>
+                </li>
                 {% endfor %}
             </ul>
-            <ul>
+
             <!-- Storico Scenari -->
-            <li><h3>Scenari Svolti</h3><span></span>
-
-            </li>
-
+            <ul>
+                <li>
+                    <h3>Scenari Svolti</h3>
+                    <span></span>
+                </li>
                 {% for scenario in storico.Scenari %}
-                    <li>
-                        {{ scenario.Titolo }}
-                        <span><strong>{{ scenario.Punteggio }}</strong></span>
-                    </li>
+                <li>
+                    {{ scenario.Titolo }}
+                    <span><strong>{{ scenario.Punteggio }}</strong></span>
+                </li>
                 {% endfor %}
             </ul>
         </div>
 
         <!-- Sidebar -->
         <aside class="sidebar">
-        <div class="sidebar-item">
-            <a href="{{ url_for('dashboardDocente.dashboard', id_docente=1001) }}" class="link">
-                <i class="fa-solid fa-users-rectangle"></i>
-                <br>
-                <span>Gestione Classe</span>
-            </a>
-        </div>
-    </aside>
+            <div class="sidebar-item">
+                <a href="{{ url_for('dashboardDocente.dashboard', id_docente=1001) }}" class="link">
+                    <i class="fa-solid fa-users-rectangle"></i>
+                    <br>
+                    <span>Gestione Classe</span>
+                </a>
+            </div>
+        </aside>
     </div>
 </body>
 </html>
