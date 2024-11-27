@@ -13,14 +13,16 @@
     <div class="container">
         <!-- Classifica principale -->
         <div class="dashboard tall-box">
-            <h2>Classifica della Classe</h2>
             <ul>
+            <li><h3>Classifica della classe</h3>
+                <span><h3>Punteggio</h3></span>
+            </li>
                 {% for studente in classifica %}
                     <li>
-                        <a href="{{ url_for('dashboardDocente.storico_studente', cf_studente=studente.CF) }}">
+                       <a href="{{ url_for('dashboardDocente.storico_studente', cf_studente=studente.CF) }}">
                             <strong>{{ loop.index }}.</strong> {{ studente.Nome }} {{ studente.Cognome }}
                         </a>
-                        <span>{{ studente.PunteggioTotale }} punti</span>
+                        <span>{{ studente.PunteggioTotale }}</span>
                     </li>
                 {% endfor %}
             </ul>

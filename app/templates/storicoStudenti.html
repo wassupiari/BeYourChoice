@@ -14,25 +14,29 @@
         <!-- Storico dello studente -->
         <div class="dashboard tall-box">
             <h2>Storico dello Studente</h2>
-
-            <!-- Storico Quiz -->
-            <h3>Quiz Svolti</h3>
             <ul>
+            <!-- Storico Quiz -->
+            <li><h3>Quiz Svolti</h3>
+                <span><h3>Punteggio</h3></span>
+            </li>
+
                 {% for quiz in storico.Quiz %}
                     <li>
-                        <strong>{{ quiz.Argomento }}</strong>
-                        <span class="score">{{ quiz.Punteggio }} punti</span>
+                        {{ quiz.Argomento }}
+                        <span ><strong>{{ quiz.Punteggio }}</strong></span>
                     </li>
                 {% endfor %}
             </ul>
-
-            <!-- Storico Scenari -->
-            <h3>Scenari Svolti</h3>
             <ul>
+            <!-- Storico Scenari -->
+            <li><h3>Scenari Svolti</h3><span></span>
+
+            </li>
+
                 {% for scenario in storico.Scenari %}
                     <li>
-                        <strong>{{ scenario.Titolo }}</strong>
-                        <span class="score">{{ scenario.Punteggio }} punti</span>
+                        {{ scenario.Titolo }}
+                        <span><strong>{{ scenario.Punteggio }}</strong></span>
                     </li>
                 {% endfor %}
             </ul>
