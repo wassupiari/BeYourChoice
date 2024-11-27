@@ -19,7 +19,7 @@
                         <p><strong>Tipo:</strong> {{ materiale['Tipo'] }}</p>
                         <div class="azioni">
                             <!-- Visualizza il materiale con il link corretto -->
-                            <a href="{{ url_for('serve_file', filename=materiale['File_Path'].split('/')[-1]) }}" target="_blank" class="btn">Visualizza</a>
+                            <a href="{{ uploaded_file', filename=materiale.File_Path.split('/')[-1]) }}" target="_blank" class="btn">Visualizza</a>
 
                             <!-- Modifica il materiale -->
                             <a href="{{ url_for('modifica_materiale', materiale_id=materiale['_id']) }}" class="btn">Modifica</a>
