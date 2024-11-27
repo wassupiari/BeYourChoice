@@ -252,14 +252,14 @@ class ClasseVirtuale:
                 studenti_istituto.append({
                     "Nome": studente["Nome"],
                     "Cognome": studente["Cognome"],
-                    "Data_Nascita": studente["Data_Nascita"]
+                    "Data_Nascita": studente["Data_Nascita"],
+                    "_id": studente["_id"]
                 })
 
             return studenti_istituto
         except Exception as e:
             print(f"Errore durante il recupero degli studenti: {e}")  # Aggiunto per debugging
             raise
-
 
     def rimuovi_studente(self, studente_id):
         """
@@ -282,3 +282,36 @@ class ClasseVirtuale:
         except Exception as e:
             print(f"Errore nel modello: {e}")
             raise
+
+    from bson import ObjectId
+
+    def aggiungi_studente(self, studente_id, classe_id):
+        """
+        Aggiunge uno studente alla classe, impostando l'ID della classe nel documento dello studente.
+
+        Args:
+            studente_id (str): L'ID dello studente.
+            classe_id (str): L'ID della classe alla quale associare lo studente.
+
+        Returns:
+            bool: Se l'operazione è riuscita o meno.
+        """
+        try:
+            # Recupera la collezione 'Studenti'
+            studente_collection = self.db_manager.get_collection("Studente")
+            # Filtra per l'ID dello studente e aggiungi l'ID della classe
+            result = studente_collection.update_one(
+                {"_id": ObjectId(studente_id)},  # Filtra per l'ID dello studente
+                {"$set": {"ID_Classe": classe_id}}  # Imposta l'ID della classe
+            )
+
+            # Verifica se l'operazione è stata eseguita correttamente
+            if result.modified_count > 0:
+                return True
+            else:
+                print(f"Errore: Nessuna modifica effettuata per lo studente con ID '{studente_id}'.")
+                return False
+
+        except Exception as e:
+            print(f"Errore durante l'aggiunta dello studente alla classe: {e}")
+            return False

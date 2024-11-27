@@ -100,3 +100,21 @@ class ClasseVirtualeControl:
         except Exception as e:
             print(f"Errore nel controller: {e}")
             return False
+
+    def aggiungi_studente(self, studente_id, classe_id):
+
+        """
+        Rimuove uno studente dalla classe impostando ID_Classe a null.
+
+        Args:
+            studente_id (str): ID dello studente da rimuovere.
+
+        Returns:
+            bool: True se la rimozione ha successo, False altrimenti.
+        """
+        try:
+            self.model.aggiungi_studente(studente_id,classe_id)
+            return True
+        except Exception as e:
+            print(f"Errore nel controller: {e}")
+            return False
