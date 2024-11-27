@@ -1,20 +1,40 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, send_from_directory
 from app.controllers.MaterialeControl import MaterialeControl
 from databaseManager import DatabaseManager
+import os
 
-# Inizializza l'applicazione Flask
-app = Flask(__name__)
-app.secret_key = 'your_secret_key'  # Sostituisci con una chiave segreta più sicura
+app = Flask(__name__, template_folder='app/templates', static_folder='public')
+app.secret_key = 'your_secret_key'
 
-# Inizializza DatabaseManager e MaterialeControl
 db_manager = DatabaseManager()
 materiale_control = MaterialeControl(db_manager)
 
-@app.route('/materiale')
-def visualizza_materiale():
-    """Visualizza tutti i materiali."""
+
+@app.route('/')
+def index():
+    """Pagina iniziale che reindirizza a una pagina con i materiali."""
+    return redirect(url_for('visualizza_materiale_docente'))
+
+
+@app.route('/materiale/docente')
+def visualizza_materiale_docente():
+    """Visualizza i materiali per docenti."""
     materiali = materiale_control.view_all_materials()
-    return render_template('materiale.html', materiali=materiali)
+    return render_template('materialeDocente.html', materiali=materiali)
+
+
+@app.route('/serve_file/<filename>')
+def serve_file(filename):
+    """Serve file dalla cartella uploads"""
+    return send_from_directory('static/uploads', filename)
+
+
+@app.route('/materiale/studente')
+def visualizza_materiale_studente():
+    """Visualizza i materiali per studenti."""
+    materiali = materiale_control.view_all_materials()
+    return render_template('materialeStudente.html', materiali=materiali)
+
 
 @app.route('/carica', methods=['GET', 'POST'])
 def carica_materiale():
@@ -25,16 +45,15 @@ def carica_materiale():
         tipo = request.form['tipo']
         file = request.files['file']
 
-        # Salva il file sul server
         filepath = f'static/uploads/{file.filename}'
         file.save(filepath)
 
-        # Salva i dettagli nel database
         materiale_control.upload_material(titolo, descrizione, filepath, tipo)
         flash("Materiale caricato con successo!", "success")
-        return redirect(url_for('visualizza_materiale'))
+        return redirect(url_for('visualizza_materiale_docente'))
 
-    return render_template('caricamento_materiale.html')
+    return render_template('caricamentoMateriale.html')
+
 
 @app.route('/modifica/<materiale_id>', methods=['GET', 'POST'])
 def modifica_materiale(materiale_id):
@@ -53,17 +72,19 @@ def modifica_materiale(materiale_id):
 
         materiale_control.edit_material(materiale_id, updated_data)
         flash("Materiale modificato con successo!", "success")
-        return redirect(url_for('visualizza_materiale'))
+        return redirect(url_for('visualizza_materiale_docente'))
 
     materiale = materiale_control.view_material({"_id": materiale_id})
-    return render_template('modifica_materiale.html', materiale=materiale)
+    return render_template('modificaMateriale.html', materiale=materiale)
+
 
 @app.route('/rimuovi/<materiale_id>')
 def rimuovi_materiale(materiale_id):
     """Rimuove un materiale esistente."""
     materiale_control.delete_material(materiale_id)
     flash("Materiale rimosso con successo!", "success")
-    return redirect(url_for('visualizza_materiale'))
+    return redirect(url_for('visualizza_materiale_docente'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)  # Avvia l'app in modalità debug

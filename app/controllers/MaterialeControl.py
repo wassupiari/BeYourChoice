@@ -1,41 +1,45 @@
-from app.models.MaterialeModel import MaterialeModel
+from bson import ObjectId
 
 
 class MaterialeControl:
     def __init__(self, db_manager):
-        """
-        Inizializza il controllore per il materiale didattico.
+        self.db = db_manager
 
-        :param db_manager: Connessione al database.
-        """
-        self.model = MaterialeModel(db_manager)
+    def view_all_materials(self):
+        """Restituisce tutti i materiali didattici dal database."""
+        materiali = list(self.db.MaterialeDidattico.find())
+        print(f"Debug: Materiali recuperati - {materiali}")
+        return materiali
 
     def upload_material(self, titolo, descrizione, filepath, tipo):
-        """
-        Carica un nuovo materiale nel sistema.
-
-        :param titolo: Titolo del materiale.
-        :param descrizione: Descrizione del materiale.
-        :param filepath: Percorso del file.
-        :param tipo: Tipo di materiale (documento, video, altro).
-        :return: ID del materiale caricato.
-        """
-        material_data = {
+        """Carica un nuovo materiale didattico nel database."""
+        new_material = {
             "Titolo": titolo,
             "Descrizione": descrizione,
             "File_Path": filepath,
-            "Tipo": tipo
+            "Tipo": tipo,
+            "ID_MaterialeDidattico": self.get_next_id()
         }
-        return self.model.upload_material(material_data)
+        self.db.MaterialeDidattico.insert_one(new_material)
 
-    def view_all_materials(self):
-        """Visualizza tutti i materiali."""
-        return self.model.view_material()
+    def edit_material(self, material_id, updated_data):
+        """Modifica un materiale didattico esistente."""
+        self.db.MaterialeDidattico.update_one(
+            {"_id": ObjectId(material_id)},
+            {"$set": updated_data}
+        )
 
-    def edit_material(self, materiale_id, updated_data):
-        """Modifica i dettagli di un materiale esistente."""
-        return self.model.update_material(materiale_id, updated_data)
+    def delete_material(self, material_id):
+        """Elimina un materiale didattico dal database."""
+        self.db.MaterialeDidattico.delete_one({"_id": ObjectId(material_id)})
 
-    def delete_material(self, materiale_id):
-        """Rimuove un materiale dal sistema."""
-        return self.model.delete_material(materiale_id)
+    def view_material(self, filter_criteria):
+        """Restituisce un materiale didattico specifico secondo i criteri di filtro."""
+        return self.db.MaterialeDidattico.find_one(filter_criteria)
+
+    def get_next_id(self):
+        """Restituisce l'ID_MaterialeDidattico successivo disponibile."""
+        last_material = self.db.MaterialeDidattico.find().sort("ID_MaterialeDidattico", -1).limit(1)
+        if last_material.count() > 0:
+            return last_material[0]["ID_MaterialeDidattico"] + 1
+        return 1

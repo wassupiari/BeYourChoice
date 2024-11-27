@@ -1,10 +1,9 @@
-
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Materiale Studente</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Materiale Docente</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/stylematerialedidattico.css') }}">
 </head>
 <body>
@@ -23,10 +22,10 @@
                             <a href="{{ url_for('serve_file', filename=materiale['File_Path'].split('/')[-1]) }}" target="_blank" class="btn">Visualizza</a>
 
                             <!-- Modifica il materiale -->
-                            <a href="{{ url_for('modifica_materiale', id=materiale['ID_MaterialeDidattico']) }}" class="btn">Modifica</a>
+                            <a href="{{ url_for('modifica_materiale', materiale_id=materiale['_id']) }}" class="btn">Modifica</a>
 
                             <!-- Rimuovi il materiale -->
-                            <a href="{{ url_for('rimuovi_materiale', id=materiale['ID_MaterialeDidattico']) }}" class="btn btn-danger" onclick="return confirm('Sei sicuro di voler eliminare questo materiale?');">Rimuovi</a>
+                            <a href="{{ url_for('rimuovi_materiale', materiale_id=materiale['_id']) }}" class="btn btn-danger" onclick="return confirm('Sei sicuro di voler eliminare questo materiale?');">Rimuovi</a>
                         </div>
                     </div>
                 {% endfor %}

@@ -1,10 +1,11 @@
 from dotenv import load_dotenv
 import os
 from pymongo import MongoClient
-from pymongo.errors import ServerSelectionTimeoutError
+from pymongo.errors import ServerSelectionTimeoutError, NetworkTimeout, ConfigurationError
 
-# Carica le variabili d'ambiente dal file .env
+# Caricamento delle variabili d'ambiente dal file .env
 load_dotenv()
+
 
 class DatabaseManager:
     def __init__(self, db_name="BeYourChoice"):
@@ -16,31 +17,45 @@ class DatabaseManager:
             # Ottieni l'URI dal file .env
             uri = os.getenv("MONGO_URI")
             if not uri:
-                raise ValueError("URI MongoDB non definito. Assicurati che la variabile MONGO_URI sia presente nel file .env.")
+                raise ValueError(
+                    "URI MongoDB non definito. Assicurati che la variabile MONGO_URI sia presente nel file .env."
+                )
 
-            # Crea il client con parametri per TLS
-            self.client = MongoClient(uri, tls=True, tlsAllowInvalidCertificates=True, serverSelectionTimeoutMS=5000)
+            # Crea il client con l'URI inclusa la configurazione SSL
+            self.client = MongoClient(uri, serverSelectionTimeoutMS=5000)
             self.db = self.client[db_name]
 
-            # Test della connessione
-            self.client.server_info()  # Genera un'eccezione se la connessione fallisce
-            print(f"Connesso con successo al database '{db_name}'")
-        except ServerSelectionTimeoutError as e:
-            print(f"Errore di connessione a MongoDB: {e}")
-            self.client = None
-            self.db = None
+            # Testa la connessione
+            self.client.server_info()  # Solleva un'eccezione se la connessione fallisce
+            print(f"Connessione al database '{db_name}' riuscita")
         except ValueError as e:
             print(f"Errore: {e}")
             self.client = None
             self.db = None
+        except ServerSelectionTimeoutError as e:
+            print(f"Errore di timeout di connessione a MongoDB: {e}")
+            self.client = None
+            self.db = None
+        except (NetworkTimeout, ConfigurationError) as e:
+            print(f"Errore di connessione/configurazione a MongoDB: {e}")
+            self.client = None
+            self.db = None
+        except Exception as e:
+            print(f"Si è verificato un errore inatteso: {e}")
+            self.client = None
+            self.db = None
+
+    @property
+    def MaterialeDidattico(self):
+        return self.db['MaterialeDidattico']
 
     def get_collection(self, collection_name):
         """
-        Restituisce una collezione del database.
+        Restituisce una collezione dal database.
         :param collection_name: Nome della collezione.
         :return: La collezione MongoDB.
         """
-        if self.db is not None:  # Controlla esplicitamente se self.db è diverso da None
+        if self.db is not None:
             return self.db[collection_name]
         else:
             raise Exception("Database non connesso")
@@ -54,3 +69,50 @@ class DatabaseManager:
             print("Connessione al database chiusa")
         else:
             print("Nessuna connessione attiva da chiudere")
+
+    def insert_document(self, collection_name, document):
+        collection = self.get_collection(collection_name)
+        return collection.insert_one(document)
+
+    def find_document(self, collection_name, query):
+        collection = self.get_collection(collection_name)
+        return collection.find_one(query)
+
+    def update_document(self, collection_name, query, new_values):
+        collection = self.get_collection(collection_name)
+        return collection.update_one(query, {"$set": new_values})
+
+    def delete_document(self, collection_name, query):
+        collection = self.get_collection(collection_name)
+        return collection.delete_one(query)
+
+    def count_documents(self, collection_name, query):
+        collection = self.get_collection(collection_name)
+        return collection.count_documents(query)
+
+
+# Esempio di utilizzo:
+if __name__ == "__main__":
+    db_manager = DatabaseManager()
+
+    # Inserimento di un documento di test
+    document = {"nome": "Test", "valore": 123}
+    result = db_manager.insert_document("test_collection", document)
+    print(f"Documento inserito con ID: {result.inserted_id}")
+
+    # Ricerca di un documento di test
+    result = db_manager.find_document("test_collection", {"nome": "Test"})
+    print(f"Documento trovato: {result}")
+
+    # Aggiornamento di un documento di test
+    db_manager.update_document("test_collection", {"nome": "Test"}, {"valore": 456})
+    result = db_manager.find_document("test_collection", {"nome": "Test"})
+    print(f"Documento aggiornato: {result}")
+
+    # Cancellazione di un documento di test
+    db_manager.delete_document("test_collection", {"nome": "Test"})
+    result = db_manager.find_document("test_collection", {"nome": "Test"})
+    print(f"Documento dopo la cancellazione: {result}")
+
+    # Chiusura della connessione al database
+    db_manager.close_connection()
