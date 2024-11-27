@@ -85,6 +85,13 @@ main h2 {
     display: flex;
     justify-content: space-between;
     margin-top: 10px;
+
+}
+/* Se c'è solo un pulsante, centrarlo */
+.azioni .btn:only-child {
+    margin: 0 auto; /* Centra orizzontalmente */
+    display: block; /* Assicura che il pulsante occupi solo lo spazio necessario */
+    text-align: center;
 }
 
 /* Pulsanti generali */
@@ -103,6 +110,7 @@ main h2 {
 /* Pulsante di visualizzazione */
 .btn:first-child {
     background-color: #28a745;
+
 }
 
 .btn:first-child:hover {
