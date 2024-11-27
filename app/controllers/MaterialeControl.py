@@ -40,6 +40,7 @@ class MaterialeControl:
     def get_next_id(self):
         """Restituisce l'ID_MaterialeDidattico successivo disponibile."""
         last_material = self.db.MaterialeDidattico.find().sort("ID_MaterialeDidattico", -1).limit(1)
-        if last_material.count() > 0:
-            return last_material[0]["ID_MaterialeDidattico"] + 1
+        last_material_list = list(last_material)  # Converti il cursore in una lista per ottenere i risultati
+        if len(last_material_list) > 0:
+            return last_material_list[0]["ID_MaterialeDidattico"] + 1
         return 1
