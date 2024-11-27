@@ -19,6 +19,9 @@
         <!-- Barra di ricerca -->
         <div class="search-container">
             <input type="text" placeholder="Cerca studente" class="search-bar">
+            <a href="{{ url_for ('classedocente.Classe_Docente')}}">
+                <button class="annulla-button">Annulla</button>
+            </a>
         </div>
 
         <!-- Tabella studenti -->
@@ -26,10 +29,10 @@
         <table class="student-table">
             <thead>
             <tr>
-                <th></th> <!-- Colonna per il pulsante "+" -->
-                <th>Nome</th>
-                <th>Cognome</th>
-                <th>Data di nascita</th>
+                <th style="width:5%"></th> <!-- Colonna per il pulsante "+" -->
+                <th style="width:30%">Nome</th>
+                <th style="width:30%">Cognome</th>
+                <th style="width:40%">Data di nascita</th>
             </tr>
             </thead>
             <tbody>
@@ -37,14 +40,16 @@
             {% for studente in classe %}
 
             <tr>
+
+                <td>{{ loop.index }}</td>
+                <td>{{ studente.Nome }}</td>
+                <td>{{ studente.Cognome }}</td>
+                <td>{{ studente.Data_Nascita }}</td>
                 <td class="action-cell">
                     <button class="add-button" onclick="aggiungiStudente('{{ studente._id }}')">
                         <i class="fas fa-user-plus"></i>
                     </button>
                 </td>
-                <td>{{ studente.Nome }}</td>
-                <td>{{ studente.Cognome }}</td>
-                <td>{{ studente.Data_Nascita }}</td>
             </tr>
             {% else %}
             <tr>

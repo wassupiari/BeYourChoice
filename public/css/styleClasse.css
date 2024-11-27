@@ -86,6 +86,27 @@ h1 {
     color: #ffffff;
 }
 
+.annulla-button {
+    margin-left: 10px;
+    padding: 10px 15px; /* Dimensioni del bottone */
+    background-color: #ffffff; /* Sfondo bianco */
+    color: #333; /* Colore del testo */
+    font-size: 1rem; /* Dimensione del testo */
+    font-weight: 600; /* Testo semi-grassetto */
+    border: 1px solid #ccc; /* Bordi visibili */
+    border-radius: 8px; /* Leggera arrotondatura degli angoli */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Effetto ombra */
+    cursor: pointer;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.annulla-button:hover {
+    transform: scale(1.05); /* Leggero ingrandimento al passaggio del mouse */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Ombra più pronunciata su hover */
+    background-color: #d75a3d;
+    color: #ffffff;
+}
+
 /* Tabella studenti */
 .student-table {
     width: 100%; /* Puoi impostare una larghezza fissa se preferisci, ad esempio 80% */
