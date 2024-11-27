@@ -1,10 +1,12 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, send_from_directory
+from flask import Flask, render_template, request, redirect, url_for, flash, send_from_directory, send_file, abort
 from app.controllers.MaterialeControl import MaterialeControl
 from databaseManager import DatabaseManager
 import os
 
 app = Flask(__name__, template_folder='app/templates', static_folder='public')
 app.secret_key = 'your_secret_key'
+UPLOAD_FOLDER = 'public/uploads'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 db_manager = DatabaseManager()
 materiale_control = MaterialeControl(db_manager)
@@ -23,11 +25,18 @@ def visualizza_materiale_docente():
     return render_template('materialeDocente.html', materiali=materiali)
 
 
-@app.route('/serve_file/<filename>')
+@app.route('/serve_file/<path:filename>')
 def serve_file(filename):
-    """Serve file dalla cartella uploads"""
-    return send_from_directory('static/uploads', filename)
-
+    # Considera di costruire il percorso del file in un modo sicuro
+    try:
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        if os.path.exists(filepath):
+            return send_file(filepath)
+        else:
+            abort(404)
+    except Exception as e:
+        print(f"Errore nel servizio del file: {e}")
+        abort(404)
 
 @app.route('/materiale/studente')
 def visualizza_materiale_studente():
@@ -45,7 +54,7 @@ def carica_materiale():
         tipo = request.form['tipo']
         file = request.files['file']
 
-        filepath = f'static/uploads/{file.filename}'
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
         file.save(filepath)
 
         materiale_control.upload_material(titolo, descrizione, filepath, tipo)
@@ -66,7 +75,7 @@ def modifica_materiale(materiale_id):
         }
         if 'file' in request.files and request.files['file'].filename:
             file = request.files['file']
-            filepath = f'static/uploads/{file.filename}'
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
             file.save(filepath)
             updated_data['File_Path'] = filepath
 
@@ -85,6 +94,10 @@ def rimuovi_materiale(materiale_id):
     flash("Materiale rimosso con successo!", "success")
     return redirect(url_for('visualizza_materiale_docente'))
 
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 if __name__ == '__main__':
     app.run(debug=True)  # Avvia l'app in modalità debug
