@@ -148,9 +148,9 @@ h1 {
     justify-content: center;
     align-items: center;
     text-align: center;
-    font-size: 15px; /* Testo più piccolo */
+    font-size: 18px; /* Testo più piccolo */
     font-weight: bold;
-    color: #333; /* Colore del testo */
+    color: #000000; /* Colore del testo */
     border: 1px solid #ccc; /* Bordi visibili */
     border-radius: 8px; /* Leggera arrotondatura degli angoli */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Effetto ombra */
@@ -159,12 +159,40 @@ h1 {
 }
 
 .sidebar-item i {
-    font-size: 30px; /* Dimensione delle icone  */
+    font-size: 40px; /* Dimensione delle icone  */
     margin-bottom: 10px; /* Spazio tra l'icona e il testo */
-    color: #007bff; /* Colore delle icone */
+    color: #000000; /* Colore delle icone */
 }
 
 .sidebar-item:hover {
+    transform: scale(1.05); /* Leggero ingrandimento al passaggio del mouse */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Ombra più intensa su hover */
+    background-color: #d75a3d;
+    color: #ffffff;
+}
+
+.sidebar-item:hover i {
+    color: #ffffff; /* Colore delle icone su hover */
+}
+
+.action-cell {
+    text-align: center;
+    width: 50px; /* Dimensione fissa per allineare meglio */
+}
+
+.add-button {
+    background-color: #ffffff; /* Colore verde */
+    color: black;
+    padding: 5px 10px;
+    font-size: 20px;
+    cursor: pointer;
+    border: 1px solid #ccc; /* Bordi visibili */
+    border-radius: 8px; /* Leggera arrotondatura degli angoli */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Effetto ombra */
+    transition: box-shadow 0.3s ease, transform 0.3s ease; /* Effetti al passaggio del mouse */
+}
+
+.add-button:hover {
     transform: scale(1.05); /* Leggero ingrandimento al passaggio del mouse */
     box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Ombra più intensa su hover */
 }

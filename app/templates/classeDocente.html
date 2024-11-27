@@ -19,7 +19,8 @@
             <!-- Barra di ricerca -->
             <div class="search-container">
                 <input type="text" placeholder="Cerca studente" class="search-bar">
-                <button class="add-student-button">Aggiungi manualmente studente</button>
+                <a href="{{ url_for ('inserimentostudente.Inserimento_Studente')}}">
+                    <button class="add-student-button">Aggiungi manualmente studente</button></a>
             </div>
 
             <!-- Tabella studenti -->
@@ -34,7 +35,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Iterazione degli studenti -->
+                      <!-- Iterazione degli studenti -->
                     {% for studente in classe %}
                     <tr>
                         <td>{{ studente.Nome }}</td>
@@ -67,7 +68,7 @@
         <span>Scenari</span>
     </div>
     <div class="sidebar-item">
-        <i class="fas fa-trophy"></i>
+        <i class="fas fa-trophy-alt"></i>
         <span>Achievement</span>
     </div>
 </aside>
