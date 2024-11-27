@@ -44,16 +44,14 @@
 
         <!-- Sidebar -->
         <aside class="sidebar">
-            <ul>
-                <li>
-                    <a href="{{ url_for('dashboardDocente.dashboard', id_docente=1001) }}" class="link">
-                        <i class="fa-solid fa-users-rectangle"></i>
-                        <br>
-                        <span>Gestione Classe</span>
-                    </a>
-                </li>
-            </ul>
-        </aside>
+        <div class="sidebar-item">
+            <a href="{{ url_for('dashboardDocente.dashboard', id_docente=1001) }}" class="link">
+                <i class="fa-solid fa-users-rectangle"></i>
+                <br>
+                <span>Gestione Classe</span>
+            </a>
+        </div>
+    </aside>
     </div>
 </body>
 </html>

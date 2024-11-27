@@ -1,27 +1,24 @@
-/* Contenitore principale per dashboard e sidebar */
+/* Layout principale */
 .main-content {
   display: flex;
-  flex: 1; /* Fa sì che il contenitore occupi tutto lo spazio rimanente sotto l'header */
-  margin: 0 20px; /* Margini orizzontali */
-  margin-top: 20px; /* Margine superiore per separarlo dall'header */
-  justify-content: space-between;
-  align-items: flex-start;
+  flex-direction: row; /* Disposizione orizzontale: dashboard a sinistra, sidebar a destra */
+  gap: 20px; /* Spazio tra dashboard e sidebar */
+  margin: 20px; /* Margine attorno all'intero contenitore */
+  align-items: flex-start; /* Allinea in alto la dashboard e la sidebar */
 }
 
 /* Dashboard */
 .dashboard {
-  flex: 0.80; /* Occupa il restante spazio lasciato dalla sidebar */
+  flex: 1; /* Occupa tutto lo spazio disponibile a sinistra */
   padding: 1.5%;
   border: 1px solid #ccc;
   border-radius: 5px;
   background-color: #e5e5e5;
   box-shadow: 0 4px 6px rgba(215, 90, 61, 0.3);
-  height: calc(100vh - 220px); /* Altezza dinamica: 100vh meno l'header */
-  margin-right: 20px; /* Spazio tra dashboard e sidebar */
-  margin-left: 20px;
-    margin-top: 30px;
+  height: calc(100vh - 160px); /* Altezza dinamica considerando header e margini */
 }
 
+/* Lista e pulsanti */
 ul {
   list-style: none;
   padding: 0;
@@ -58,67 +55,55 @@ button:hover {
   background-color: #b94b32;
 }
 
-/* Sidebar (lasciata invariata) */
+/* Sidebar */
 .sidebar {
-  position: absolute;
-  top: 20%;
-  right: 1%;
-  z-index: 100;
-  height: 160px;
-  width: 160px;
-  background-color: #ffffff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(215, 90, 61);
-  padding: 10px;
-}
-
-.sidebar ul {
-  list-style: none;
-  padding: 0;
-  margin: 30px 0px 30px 25px;
-  height: 74vh;
-  overflow-y: auto;
-}
-
-.sidebar ul li {
+  width: 160px; /* Larghezza fissa della sidebar */
   display: flex;
+  flex-direction: column;
   align-items: center;
-  padding: 10px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #333;
-  cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  gap: 10px; /* Spazio tra i quadrati */
+  position: sticky; /* Fissa la posizione della sidebar mentre si scrolla */
+  top: 20px; /* Margine dall'alto per evitare sovrapposizioni con l'header */
 }
 
-i {
-  font-size: 24px;
-  margin-top: 15%;
-  line-height: 1;
-  color: #333333;
-}
-
-i:hover {
-  color: #000000;
-}
-
-.sidebar span {
-  margin-top: 2px;
-}
-
-.link {
+/* Quadrati della barra laterale */
+.sidebar-item {
+  width: 165px; /* Larghezza dei quadrati */
+  height: 165px; /* Altezza dei quadrati */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  text-decoration: none;
-  color: #333333;
+  text-align: center;
+  font-size: 18px; /* Testo più piccolo */
   font-weight: bold;
-  font-size: 16px;
-  transition: color 0.3s ease;
+  background-color: #deeaf6;
+  color: #000000; /* Colore del testo */
+  border: 1px solid #ccc; /* Bordi visibili */
+  border-radius: 8px; /* Leggera arrotondatura degli angoli */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Effetto ombra */
+  cursor: pointer;
+  transition: box-shadow 0.3s ease, transform 0.3s ease; /* Effetti al passaggio del mouse */
 }
 
+.sidebar-item i {
+  font-size: 40px; /* Dimensione delle icone  */
+  margin-bottom: 10px; /* Spazio tra l'icona e il testo */
+  color: #000000; /* Colore delle icone */
+}
+
+.sidebar-item:hover {
+  transform: scale(1.05); /* Leggero ingrandimento al passaggio del mouse */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Ombra più intensa su hover */
+  background-color: #d75a3d;
+  color: #ffffff;
+}
+
+.sidebar-item:hover i {
+  color: #ffffff; /* Colore delle icone su hover */
+}
+
+/* Link */
 a {
   color: #000000;
   text-decoration: none;
