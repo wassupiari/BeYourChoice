@@ -8,7 +8,7 @@ load_dotenv()
 
 
 class DatabaseManager:
-    def __init__(self, db_name="BeYourChoice"):
+    def __init__(self, db_name="BeYourChoice;"):
         """
         Inizializza la connessione al database MongoDB.
         :param db_name: Nome del database.
