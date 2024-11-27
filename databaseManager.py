@@ -90,6 +90,11 @@ class DatabaseManager:
         collection = self.get_collection(collection_name)
         return collection.count_documents(query)
 
+    def get_all_materials(self):
+        return list(self.collection.find())
+
+    def update_material(self, materiale_id, updated_data):
+        self.collection.update_one({'_id': materiale_id}, {'$set': updated_data})
 
 # Esempio di utilizzo:
 if __name__ == "__main__":

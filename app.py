@@ -22,21 +22,19 @@ def index():
 def visualizza_materiale_docente():
     """Visualizza i materiali per docenti."""
     materiali = materiale_control.view_all_materials()
+    # Print materiale paths for debugging
+    print("Debug: Materiali recuperati - ", materiali)
     return render_template('materialeDocente.html', materiali=materiali)
 
 
 @app.route('/serve_file/<path:filename>')
-def serve_file(filename):
-    # Considera di costruire il percorso del file in un modo sicuro
-    try:
-        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        if os.path.exists(filepath):
-            return send_file(filepath)
-        else:
-            abort(404)
-    except Exception as e:
-        print(f"Errore nel servizio del file: {e}")
+def serve_file(filename: str):
+    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    if os.path.exists(filepath):
+        return send_file(filepath)
+    else:
         abort(404)
+
 
 @app.route('/materiale/studente')
 def visualizza_materiale_studente():
@@ -54,8 +52,8 @@ def carica_materiale():
         tipo = request.form['tipo']
         file = request.files['file']
 
-        filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-        file.save(filepath)
+        filepath = file.filename  # Salva solo il nome del file
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], file.filename))
 
         materiale_control.upload_material(titolo, descrizione, filepath, tipo)
         flash("Materiale caricato con successo!", "success")
@@ -95,9 +93,20 @@ def rimuovi_materiale(materiale_id):
     return redirect(url_for('visualizza_materiale_docente'))
 
 
-@app.route('/uploads/<filename>')
+@app.route('/public/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+
+@app.cli.command("migrate_paths")
+def migrate_paths():
+    materiali = db_manager.get_all_materials()
+    for materiale in materiali:
+        if os.path.isabs(materiale['File_Path']):
+            materiale['File_Path'] = os.path.basename(materiale['File_Path'])
+            db_manager.update_material(materiale['_id'], {'File_Path': materiale['File_Path']})
+    print('Migrazione completata.')
+
 
 if __name__ == '__main__':
     app.run(debug=True)  # Avvia l'app in modalità debug
