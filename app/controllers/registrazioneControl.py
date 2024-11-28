@@ -1,5 +1,5 @@
 import re
-from flask import Blueprint, request, jsonify, redirect, url_for
+from flask import Blueprint, request, jsonify, redirect, url_for, session
 from app.models.studenteModel import StudenteModel  # Assumendo che StudenteModel gestisca entrambi
 from app.models.docenteModel import DocenteModel
 
@@ -54,10 +54,10 @@ def registra():
 
         if not codice_univoco is None:
             if not re.match(codiceUnivoco_regex, codice_univoco):
-                return redirect(url_for('login', error='formatoCU'))
+                return redirect(url_for('ho', error='formatoCU'))
 
         # Differenzia la registrazione: studente o docente
-        if codice_univoco:  # Se è presente, registra come docente
+        if codice_univoco is not 'student':  # Se è presente, registra come docente
             docente_dict = {
                 "nome": nome,
                 "cognome": cognome,
@@ -69,8 +69,19 @@ def registra():
                 "codice_univoco": codice_univoco
             }
 
+            # Stampa i dettagli del docente TEST
+            print("Dettagli del docente:")
+            print("Nome:", docente_dict["nome"])
+            print("Cognome:", docente_dict["cognome"])
+            print("SDA:", docente_dict["sda"])
+            print("Email:", docente_dict["email"])
+            print("Codice Fiscale:", docente_dict["cf"])
+            print("Data di Nascita:", docente_dict["data_nascita"])
+            print("Password:", docente_dict["password"])  #
+
             docente_model = DocenteModel()
             docente_model.aggiungi_docente(docente_dict)
+            session['email'] = email
             return redirect(url_for('home'))
         else:  # Altrimenti, registra come studente
             studente_dict = {

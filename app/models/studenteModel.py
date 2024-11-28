@@ -19,3 +19,11 @@ class StudenteModel:
         # Cerca uno studente per email
         studente_collection = self.db_manager.get_collection("Studente")
         return studente_collection.find_one({"email": email})
+
+    def trova_cf_per_email(self, email):
+        # Cerca lo studente tramite email e restituisce il codice fiscale
+        studente = self.trova_studente(
+            email)  # Usa la function che hai già definito per trovare lo studente tramite email
+        if studente:
+            return studente.get("cf")  # Restituisce il codice fiscale (cf) se esiste
+        return None  # Se lo studente non viene trovato o non ha il codice fiscale

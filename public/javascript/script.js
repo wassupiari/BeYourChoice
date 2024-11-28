@@ -99,8 +99,8 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
             // Nascondi il campo "Codice Univoco" se lo switch è attivo
             cu.style.display = "none";
-            cu.value = "";
-             cu.required = false;// Cancella il valore per evitare invii non validi
+            cu.value = "student";
+            cu.required = false;// Cancella il valore per evitare invii non validi
         }
     }
 
