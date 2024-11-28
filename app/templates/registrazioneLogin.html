@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modulo di Registrazione</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/autenticazione.css') }}">
+</head>
+<body>
+    <div class="container" id="container">
+      <div class="sign-up">
+        <form id="registrazioneForm" action="/register" method="POST">
+          <h1>Crea un account</h1>
+            <div class="switch-toggle">
+                <input class="switch-toggle-checkbox" type="checkbox" id="pricing-plan-switch" />
+                <label class="switch-toggle-label" for="pricing-plan-switch">
+                    <span>Studente</span>
+                    <span>Docente</span>
+                </label>
+            </div>
+          <input type="text" name="nome" id="nome" placeholder="Inserisci il tuo Nome" required>
+                <input type="text" name="cognome" id="cognome" placeholder="Inserisci il tuo Cognome" required>
+                <input type="text" name="sda" id="sda" placeholder="Inserisci il tuo Scuola di Appartenenza" required>
+                <input type="email" name="email" placeholder="Inserisci la tua Email" required>
+                <input type="text" name="cf" id="cf" placeholder="Inserisci il tuo Codice Fiscale" required>
+                <input type="date" name="data-nascita" id="data" required>
+                <input type="password" name="password" id="password" placeholder="Inserisci la tua Password" required>
+                <input type="text" name="cu" id="cu" placeholder="Inserisci il tuo Codice Univoco" required>
+
+          <button type="submit">INVIA</button>
+        </form>
+      </div>
+      <div class="sign-in">
+        <form action="/login" method="POST">
+          <h1>ACCEDI</h1>
+          <input type="text" name="email" placeholder="Email" />
+          <input type="password" name="password" placeholder="Password" />
+          <button >ACCEDI</button>
+        </form>
+      </div>
+      <div class="toogle-container" style="background-image: url('{{ url_for('static', filename='img/6.png') }}');">
+        <div class="toogle">
+          <div class="toogle-panel toogle-left">
+            <h1>BENTORNATO!</h1>
+            <p>Se sei già registrato</p>
+            <button2 class="hidden" id="login">ACCEDI</button2>
+          </div>
+          <div class="toogle-panel toogle-right">
+            <h1>BENVENUTO!</h1>
+            <p>Se non hai ancora un account</p>
+            <button2 class="hidden" id="register">REGISTRATI</button2>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="{{ url_for('static', filename='javascript/script.js') }}"></script>
+  </body>
+</html>
