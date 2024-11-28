@@ -13,6 +13,7 @@
         <h2>Caricamento Materiale Didattico</h2>
     </div>
 
+    <div class="error-message">
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             <ul class="flashes">
@@ -22,7 +23,7 @@
             </ul>
         {% endif %}
     {% endwith %}
-
+    </div>
     <form action="{{ url_for('carica_materiale') }}" method="POST" enctype="multipart/form-data">
         <div class="form-group">
             <label for="titolo">Titolo del Materiale:</label>
