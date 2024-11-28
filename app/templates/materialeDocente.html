@@ -10,6 +10,19 @@
     {% include 'header.html' %}
 
     <main>
+        <h2>MATERIALE DIDATTICO</h2>
+
+        <div class="error-message">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flashes">
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    </div>
 
         {% if materiali %}
             <div class="materiali-lista">
@@ -34,4 +47,3 @@
         </div>
     </main>
 </body>
-</html>

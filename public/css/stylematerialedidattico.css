@@ -28,7 +28,7 @@ main {
 /* Titolo della pagina */
 main h2 {
     font-size: 24px;
-    color: #333;
+    color: #d75a3d;
     margin-bottom: 20px;
     text-align: center;
 }
@@ -177,3 +177,21 @@ main h2 {
     transform: scale(1.10);
 }
 
+.error-message {
+    font-size: 18px;
+    color: green;
+    margin-top: 5px;
+}
+
+.flashes {
+       list-style-type: none;
+       padding: 0;
+}
+
+.flashes li.error {
+       color: green;
+}
+
+.flashes li.success {
+       color: green;
+}
