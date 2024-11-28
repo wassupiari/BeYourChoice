@@ -1,5 +1,8 @@
 from flask import Flask, render_template
 
+from app.views.inserimentostudente import inserimentostudente
+from app.views.classedocente import classedocente
+from app.views.views import views
 # Crea l'applicazione Flask
 app = Flask(__name__, template_folder='app/templates', static_folder="public")  # Imposta il percorso dei template
 app.register_blueprint(classedocente, url_prefix='/')  # Usa '/' o un altro prefisso a tua scelta
