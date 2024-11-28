@@ -1,3 +1,4 @@
+from bson import ObjectId
 from dotenv import load_dotenv
 import os
 from pymongo import MongoClient
@@ -24,6 +25,7 @@ class DatabaseManager:
             # Crea il client con l'URI inclusa la configurazione SSL
             self.client = MongoClient(uri, serverSelectionTimeoutMS=5000)
             self.db = self.client[db_name]
+            self.collection = self.db['MaterialeDidattico']
 
             # Testa la connessione
             self.client.server_info()  # Solleva un'eccezione se la connessione fallisce
@@ -82,6 +84,14 @@ class DatabaseManager:
         collection = self.get_collection(collection_name)
         return collection.delete_one(query)
 
+    def delete_material(self, material_id):
+        # Elimina il documento con l'ID fornito
+        result = self.collection.delete_one({'_id': ObjectId(material_id)})
+        if result.deleted_count == 1:
+            return True
+        else:
+            return False
+
     def count_documents(self, collection_name, query):
         collection = self.get_collection(collection_name)
         return collection.count_documents(query)
@@ -90,6 +100,12 @@ class DatabaseManager:
         materials = list(self.get_collection('MaterialeDidattico').find())
         print(f"Materiali nel database: {materials}")
         return materials
+
+    def get_material(self, query):
+        return self.collection.find_one(query)
+
+    def get_material_by_id(self, material_id):
+        return self.collection.find_one({'_id': material_id})
 
     def update_material(self, materiale_id, updated_data):
         self.get_collection('MaterialeDidattico').update_one({'_id': materiale_id}, {'$set': updated_data})
