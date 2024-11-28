@@ -67,7 +67,8 @@ h1 {
 /* Bottone per aggiungere studenti */
 .add-student-button {
     margin-left: 10px;
-    padding: 10px 15px; /* Dimensioni del bottone */
+    margin-right: 130px;
+    padding: 10px 25px; /* Dimensioni del bottone */
     background-color: #ffffff; /* Sfondo bianco */
     color: #333; /* Colore del testo */
     font-size: 1rem; /* Dimensione del testo */
@@ -88,7 +89,8 @@ h1 {
 
 .annulla-button {
     margin-left: 10px;
-    padding: 10px 15px; /* Dimensioni del bottone */
+    margin-right: 130px;
+    padding: 10px 25px; /* Dimensioni del bottone */
     background-color: #ffffff; /* Sfondo bianco */
     color: #333; /* Colore del testo */
     font-size: 1rem; /* Dimensione del testo */
