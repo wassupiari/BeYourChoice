@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash, sen
 from app.controllers.MaterialeControl import MaterialeControl
 from databaseManager import DatabaseManager
 import os
+from bson import ObjectId  # Assicurati di aver importato ObjectId correttamente
 
 app = Flask(__name__, template_folder='app/templates', static_folder='public')
 app.secret_key = 'your_secret_key'
@@ -65,24 +66,47 @@ def carica_materiale():
 @app.route('/modifica/<materiale_id>', methods=['GET', 'POST'])
 def modifica_materiale(materiale_id):
     """Modifica un materiale esistente."""
+    try:
+        material_id_obj = ObjectId(materiale_id)
+    except Exception as e:
+        print(f"Errore durante la conversione dell'ID: {e}")
+        flash("ID del materiale non valido.", "error")
+        return redirect(url_for('visualizza_materiale_docente'))
+
+    materiale = materiale_control.view_material({"_id": material_id_obj})
+
+    if materiale is None:
+        print(f"Debug: Materiale non trovato per ID - {material_id_obj}")
+        flash("Materiale non trovato.", "error")
+        return redirect(url_for('visualizza_materiale_docente'))
+
     if request.method == 'POST':
         updated_data = {
             "Titolo": request.form['titolo'],
             "Descrizione": request.form['descrizione'],
-            "Tipo": request.form['tipo'],
         }
-        if 'file' in request.files and request.files['file'].filename:
-            file = request.files['file']
-            filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-            file.save(filepath)
-            updated_data['File_Path'] = filepath
 
-        materiale_control.edit_material(materiale_id, updated_data)
+        if materiale['Tipo'] == 'txt':
+            # Modifica il contenuto del file di tipo txt
+            contenuto = request.form.get('contenuto', '')
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], materiale['File_Path'])
+            print(f"Debug: Percorso del file txt - {file_path}")  # Debug
+            with open(file_path, 'w') as f:
+                f.write(contenuto)
+
+        materiale_control.edit_material(material_id_obj, updated_data)
         flash("Materiale modificato con successo!", "success")
         return redirect(url_for('visualizza_materiale_docente'))
 
-    materiale = materiale_control.view_material({"_id": materiale_id})
-    return render_template('modificaMateriale.html', materiale=materiale)
+    if materiale['Tipo'] == 'txt':
+        # Leggi il contenuto del file di tipo txt
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], materiale['File_Path'])
+        with open(file_path, 'r') as f:
+            contenuto = f.read()
+    else:
+        contenuto = None
+
+    return render_template('modificaMateriale.html', materiale=materiale, contenuto=contenuto)
 
 
 @app.route('/rimuovi/<materiale_id>')
