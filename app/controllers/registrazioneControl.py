@@ -84,14 +84,15 @@ def registra():
             }
 
             studente_model = StudenteModel()
-            stud = studente_model.trova_studente(email)
+            '''stud = studente_model.trova_studente(email)
             stud2 = studente_model.trova_studente(cf)
             if stud is not None and stud2 is not None:
                 studente_model.aggiungi_studente(studente_dict)
                 return redirect(url_for('home'))
             else:
-                return redirect(url_for('login', error='AlreadyRegistered'))
-
+                return redirect(url_for('login', error='AlreadyRegistered'))'''
+            studente_model.aggiungi_studente(studente_dict)
+            return redirect(url_for('home'))
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500

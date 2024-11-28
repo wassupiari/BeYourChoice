@@ -144,6 +144,10 @@ window.onload = function() {
     }
     else if (urlParams.get('error') === 'AlreadyRegistered') {
         alert("Utente già registrato. Riprova.");
+        const url = new URL(window.location.href);
+        url.searchParams.delete('error');  // Rimuove il parametro 'error'
+        window.history.replaceState({}, '', url);  // Aggiorna la URL senza il parametro
+        window.location.replace('/login');  // Reindirizza alla pagina di login
     }
 
 };
