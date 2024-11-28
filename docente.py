@@ -44,7 +44,7 @@ def visualizza_materiale_studente():
 
 
 def is_title_valid(title):
-    return bool(re.match(r'^[A-Za-z0-9]{2,20}$', title))
+    return bool(re.match(r'^[A-Za-z0-9 ]{2,20}$', title))
 
 
 def is_description_valid(description):
