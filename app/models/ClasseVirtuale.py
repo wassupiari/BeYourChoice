@@ -181,7 +181,7 @@ class ClasseVirtuale:
     def mostra_classe(self, ID_Classe):
         print("ciao2")
         """
-        Recupera gli studenti di una classe specifica.
+        Recupera gli studenti di una classe specifica in ordine alfabetico.
 
         Args:
             ID_Classe (int): L'ID della classe virtuale.
@@ -193,8 +193,10 @@ class ClasseVirtuale:
             print(f"Recupero gli studenti per la classe con ID: {ID_Classe}")  # Aggiunto per debugging
             studente_collection = self.db_manager.get_collection("Studente")
 
-            # Esegui la query per recuperare gli studenti della classe
-            studenti = list(studente_collection.find({"ID_Classe": ID_Classe}))
+            # Esegui la query per recuperare gli studenti della classe e ordina per 'Cognome' e 'Nome'
+            studenti = list(
+                studente_collection.find({"ID_Classe": ID_Classe}).sort([("Nome", 1), ("Cognome", 1)])
+            )
 
             # Verifica se la query restituisce risultati
             if not studenti:
@@ -219,46 +221,49 @@ class ClasseVirtuale:
             raise
 
     def mostra_studenti_istituto(self, scuola_appartenenza):
-        print("ciao2")
         """
-        Recupera gli studenti di una classe specifica.
+        Recupera gli studenti di un istituto specifico che non sono assegnati a una classe,
+        ordinati alfabeticamente per Cognome e Nome.
 
         Args:
-            ID_Classe (int): L'ID della classe virtuale.
+            scuola_appartenenza (str): La scuola di appartenenza (SdA).
 
         Returns:
             list[dict]: Lista di studenti con Nome, Cognome e Data di Nascita.
         """
         try:
-            print(f"Recupero gli studenti per la classe con ID: {scuola_appartenenza}")  # Aggiunto per debugging
+            print(f"Recupero gli studenti per l'istituto: {scuola_appartenenza}")  # Debug
             studente_collection = self.db_manager.get_collection("Studente")
-            studenti = list(studente_collection.find({
-                "SdA": scuola_appartenenza,
-                "$or": [{"ID_Classe": {"$exists": False}}, {"ID_Classe": None}]
-            }))
 
-            # Esegui la query per recuperare gli studenti della classe
+            # Query per recuperare studenti dell'istituto non assegnati a una classe
+            studenti = list(
+                studente_collection.find({
+                    "SdA": scuola_appartenenza,
+                    "$or": [{"ID_Classe": {"$exists": False}}, {"ID_Classe": None}]
+                }).sort([("Nome", 1), ("Cognome", 1)])  # Ordina per Cognome e Nome
+            )
 
-            # Verifica se la query restituisce risultati
+            # Verifica se ci sono risultati
             if not studenti:
-                print(f"Nessun studente trovato per la scuola:  {scuola_appartenenza}")  # Aggiunto per debugging
+                print(f"Nessun studente trovato per la scuola: {scuola_appartenenza}")  # Debug
                 raise ValueError(f"Nessuno studente trovato per la scuola: {scuola_appartenenza}")
 
-            # Logga il numero di studenti trovati
-            print(f"Numero di studenti trovati: {len(studenti)}")  # Aggiunto per debugging
+            # Log del numero di studenti trovati
+            print(f"Numero di studenti trovati: {len(studenti)}")  # Debug
 
+            # Formatta i dati per il ritorno
             studenti_istituto = []
             for studente in studenti:
                 studenti_istituto.append({
-                    "Nome": studente["Nome"],
-                    "Cognome": studente["Cognome"],
-                    "Data_Nascita": studente["Data_Nascita"],
-                    "_id": studente["_id"]
+                    "Nome": studente.get("Nome", "N/A"),
+                    "Cognome": studente.get("Cognome", "N/A"),
+                    "Data_Nascita": studente.get("Data_Nascita", "N/A"),
+                    "_id": str(studente["_id"])  # Converti ObjectId in stringa
                 })
 
             return studenti_istituto
         except Exception as e:
-            print(f"Errore durante il recupero degli studenti: {e}")  # Aggiunto per debugging
+            print(f"Errore durante il recupero degli studenti: {e}")  # Debug
             raise
 
     def rimuovi_studente(self, studente_id):
