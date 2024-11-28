@@ -45,10 +45,6 @@ class DatabaseManager:
             self.client = None
             self.db = None
 
-    @property
-    def MaterialeDidattico(self):
-        return self.db['MaterialeDidattico']
-
     def get_collection(self, collection_name):
         """
         Restituisce una collezione dal database.
@@ -91,33 +87,9 @@ class DatabaseManager:
         return collection.count_documents(query)
 
     def get_all_materials(self):
-        return list(self.collection.find())
+        materials = list(self.get_collection('MaterialeDidattico').find())
+        print(f"Materiali nel database: {materials}")
+        return materials
 
     def update_material(self, materiale_id, updated_data):
-        self.collection.update_one({'_id': materiale_id}, {'$set': updated_data})
-
-# Esempio di utilizzo:
-if __name__ == "__main__":
-    db_manager = DatabaseManager()
-
-    # Inserimento di un documento di test
-    document = {"nome": "Test", "valore": 123}
-    result = db_manager.insert_document("test_collection", document)
-    print(f"Documento inserito con ID: {result.inserted_id}")
-
-    # Ricerca di un documento di test
-    result = db_manager.find_document("test_collection", {"nome": "Test"})
-    print(f"Documento trovato: {result}")
-
-    # Aggiornamento di un documento di test
-    db_manager.update_document("test_collection", {"nome": "Test"}, {"valore": 456})
-    result = db_manager.find_document("test_collection", {"nome": "Test"})
-    print(f"Documento aggiornato: {result}")
-
-    # Cancellazione di un documento di test
-    db_manager.delete_document("test_collection", {"nome": "Test"})
-    result = db_manager.find_document("test_collection", {"nome": "Test"})
-    print(f"Documento dopo la cancellazione: {result}")
-
-    # Chiusura della connessione al database
-    db_manager.close_connection()
+        self.get_collection('MaterialeDidattico').update_one({'_id': materiale_id}, {'$set': updated_data})

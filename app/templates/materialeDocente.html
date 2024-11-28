@@ -18,13 +18,8 @@
                         <p>{{ materiale['Descrizione'] }}</p>
                         <p><strong>Tipo:</strong> {{ materiale['Tipo'] }}</p>
                         <div class="azioni">
-                            <!-- Visualizza il materiale con il link corretto -->
-                            <a href="{{ url_for('uploaded_file', filename=materiale.File_Path) }}" target="_blank" class="btn">Visualizza</a>
-
-                            <!-- Modifica il materiale -->
+                            <a href="{{ url_for('serve_file', filename=materiale['File_Path']) }}" target="_blank" class="btn">Visualizza</a>
                             <a href="{{ url_for('modifica_materiale', materiale_id=materiale['_id']) }}" class="btn">Modifica</a>
-
-                            <!-- Rimuovi il materiale -->
                             <a href="{{ url_for('rimuovi_materiale', materiale_id=materiale['_id']) }}" class="btn btn-danger" onclick="return confirm('Sei sicuro di voler eliminare questo materiale?');">Rimuovi</a>
                         </div>
                     </div>
