@@ -1,5 +1,3 @@
-from flask import render_template
-
 from app.models.ClasseVirtuale import ClasseVirtuale
 
 

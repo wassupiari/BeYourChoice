@@ -7,7 +7,7 @@ classedocente = Blueprint('classedocente', __name__, template_folder='../templat
 classe_virtuale_control = ClasseVirtualeControl()
 
 
-@classedocente.route('/', methods=['GET', 'POST'])
+@classedocente.route('/classe', methods=['GET', 'POST'])
 def Classe_Docente():
     print("La route /ClasseDocente è stata chiamata!")  # Debug
     try:

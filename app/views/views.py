@@ -7,7 +7,7 @@ views = Blueprint('views', __name__)
 classe_control = ClasseVirtualeControl()
 
 
-@views.route('/creazione-classe', methods=['GET', 'POST'])
+@views.route('creazione-classe', methods=['GET', 'POST'])
 def creazione_classe():
     if request.method == 'POST':
         nome_classe = request.form['nome-classe']

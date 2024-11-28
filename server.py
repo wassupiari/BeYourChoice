@@ -1,5 +1,7 @@
 from flask import Flask, render_template
 
+from app.views.dasboardDocente import dashboardDocente_bp
+from app.views.dasboardStudente import dashboard_bp
 from app.views.inserimentostudente import inserimentostudente
 from app.views.classedocente import classedocente
 from app.views.views import views
@@ -10,12 +12,11 @@ app.register_blueprint(inserimentostudente, url_prefix='/inserimentostudente')  
 app.register_blueprint(views, url_prefix='/')  # Il prefisso '/' è opzionale, puoi scegliere uno diverso
 
 
-
+app.register_blueprint(dashboard_bp)
+app.register_blueprint(dashboardDocente_bp)
 # Definisci una route per la homepage
-@app.route('/')
-@app.route('/home')
-def home():
-    return render_template('classeDocente.html')
+
+
 
 
 # Avvio del server
