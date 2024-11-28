@@ -44,14 +44,10 @@
 <body>
     <div class="logout-container">
         <h1>Sei sicuro di voler uscire?</h1>
-        <button onclick="logout()">Logout</button>
+        <form action="/logout" method="POST">
+        <button type="submit">Logout</button>
+        </form>
     </div>
 
-    <script>
-        function logout() {
-            // Reindirizza alla pagina di logout
-            window.location.href = "/logout"; // Modifica il percorso "/logout" in base alla tua applicazione
-        }
-    </script>
 </body>
 </html>
