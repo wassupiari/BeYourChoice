@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, send_from_directory, send_file, abort
+from flask import Flask, render_template, request, redirect, url_for, flash, send_file, abort, send_from_directory
 from app.controllers.MaterialeControl import MaterialeControl
 from databaseManager import DatabaseManager
 import os
@@ -112,7 +112,32 @@ def modifica_materiale(materiale_id):
 @app.route('/rimuovi/<materiale_id>')
 def rimuovi_materiale(materiale_id):
     """Rimuove un materiale esistente."""
-    materiale_control.delete_material(materiale_id)
+    try:
+        material_id_obj = ObjectId(materiale_id)
+    except Exception as e:
+        print(f"Errore durante la conversione dell'ID: {e}")
+        flash("ID del materiale non valido.", "error")
+        return redirect(url_for('visualizza_materiale_docente'))
+
+    materiale = materiale_control.delete_material(material_id_obj)
+
+    if materiale is None:
+        flash("Materiale non trovato.", "error")
+        return redirect(url_for('visualizza_materiale_docente'))
+
+    # Percorso del file da eliminare
+    file_path = os.path.join(app.config['UPLOAD_FOLDER'], materiale['File_Path'])
+
+    try:
+        if os.path.exists(file_path):
+            os.remove(file_path)
+            print(f"File {file_path} eliminato.")
+        else:
+            print(f"File {file_path} non trovato.")
+    except Exception as e:
+        print(f"Errore durante l'eliminazione del file: {e}")
+        flash("Errore durante l'eliminazione del file associato.", "error")
+
     flash("Materiale rimosso con successo!", "success")
     return redirect(url_for('visualizza_materiale_docente'))
 
@@ -133,4 +158,6 @@ def migrate_paths():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)  # Avvia l'app in modalità debug
+    print("Debug: Avvio del server Flask")
+    app.run(debug=True)
+    print("Debug: Server Flask avviato")
