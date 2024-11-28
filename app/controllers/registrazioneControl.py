@@ -57,7 +57,7 @@ def registra():
                 return redirect(url_for('login', error='formatoCU'))
 
         # Differenzia la registrazione: studente o docente
-        if codice_univoco is not '':  # Se è presente, registra come docente
+        if codice_univoco != '':  # Se è presente, registra come docente
             docente_dict = {
                 "nome": nome,
                 "cognome": cognome,
