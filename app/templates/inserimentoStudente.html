@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inserimento Studente</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleClasse.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+<!-- Inclusione dell'header -->
+{% include 'header.html' %}
+
+<main class="main-container">
+    <!-- Contenitore centrale -->
+    <div class="classe-container">
+        <h1>Aggiungi studenti</h1>
+
+        <!-- Barra di ricerca -->
+        <div class="search-container">
+            <input type="text" placeholder="Cerca studente" class="search-bar">
+            <a href="{{ url_for ('classedocente.Classe_Docente')}}">
+                <button class="annulla-button">Annulla</button>
+            </a>
+        </div>
+
+        <!-- Tabella studenti -->
+        <!-- Tabella studenti -->
+        <table class="student-table">
+            <thead>
+            <tr>
+                <th style="width:2%">#</th> <!-- Colonna per la numeroazione "+" -->
+                <th style="width:30%">Nome</th>
+                <th style="width:30%">Cognome</th>
+                <th style="width:40%">Data di nascita</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Iterazione degli studenti -->
+            {% for studente in classe %}
+
+            <tr>
+
+                <td>{{ loop.index }}</td>
+                <td>{{ studente.Nome }}</td>
+                <td>{{ studente.Cognome }}</td>
+                <td>{{ studente.Data_Nascita }}</td>
+                <td class="action-cell">
+                    <button class="add-button" onclick="aggiungiStudente('{{ studente._id }}')">
+                        <i class="fas fa-user-plus"></i>
+                    </button>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4">Nessuno studente trovato.</td>
+            </tr>
+
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Barra laterale -->
+    <aside class="sidebar">
+        <div class="sidebar-item">
+            <i class="fas fa-file-alt"></i>
+            <span>Materiale didattico</span>
+        </div>
+        <div class="sidebar-item">
+            <i class="fas fa-question-circle"></i>
+            <span>Quiz</span>
+        </div>
+        <div class="sidebar-item">
+            <i class="fas fa-globe"></i>
+            <span>Scenari</span>
+        </div>
+        <div class="sidebar-item">
+            <i class="fas fa-trophy"></i>
+            <span>Achievement</span>
+        </div>
+    </aside>
+</main>
+
+
+</body>
+<script>
+    function aggiungiStudente(studenteId) {
+       const classeId = 101;  // Sostituisci con l'ID della classe desiderata
+
+       fetch('/aggiungi-studente', {
+           method: 'POST',
+           headers: {
+               'Content-Type': 'application/json',
+           },
+           body: JSON.stringify({
+               studente_id: studenteId,
+               classe_id: classeId  // Passa anche l'ID della classe
+           }),
+       })
+       .then(response => response.json())
+       .then(data => {
+           if (data.success) {
+               alert('Studente aggiunto alla classe con successo!');
+               location.reload(); // Ricarica la pagina per aggiornare la tabella
+           } else {
+               alert(`Errore: ${data.error}`);
+           }
+       })
+       .catch(error => {
+           console.error('Errore:', error);
+           alert('Errore nell\'aggiunta dello studente alla classe.');
+       });
+   }
+</script>
+</html>
