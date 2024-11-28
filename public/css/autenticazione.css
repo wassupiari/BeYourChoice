@@ -1,6 +1,6 @@
 /* Stile generale */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'open-sans', sans-serif;
     margin: 0;
     padding: 0;
     height: 100vh;
@@ -12,83 +12,322 @@ body {
     overflow: hidden;
 }
 
-/* Riga celeste centrale */
-.blue-line {
-    position: absolute;
-    width: 100%;
-    height: 80px;
-    background-color: #d6e6f2;
-    top: 50%;
-    transform: translateY(-50%); /* Posizionamento esattamente al centro verticale */
-    z-index: 0;
-}
 
-/* Contenitore principale */
 .container {
-    position: right;
-    width: 70%;
-    max-width: 1000px;
-    height: 600px;
-    background: url('img/libri.jpeg');
-    background-size: cover;
-    /*background-position: right;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    /*overflow: hidden;*/
-    z-index: 1; /* Sopra la riga celeste */
+  background-color: #fff;
+  border-radius: 150px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+  position: relative;
+  overflow: hidden;
+  width: 60%;
+  height: 600px;
+  max-width: 100%;
+  min-height: 480px;
+  border-radius: 0;
 }
 
-/* Box del modulo */
-.form-box {
-    position: relative;
-    z-index: 2; /* Modulo sopra tutto */
-    background: rgba(255, 255, 255, 0.95); /* Sfondo bianco semi-trasparente */
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: 90%;
-    max-width: 400px;
-    text-align: center;
+.container p {
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.3px;
+  margin: 20px 0;
 }
 
-/* Titolo del modulo */
-.form-box h1 {
-    margin-bottom: 20px;
-    font-size: 24px;
-    color: #333;
+
+.container span {
+  font-size: 12px;
 }
 
-/* Stile per il modulo */
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+.container a {
+  color: #333;
+  font-size: 13px;
+  text-decoration: none;
+  margin: 15px 0 10px;
+}
+.container button {
+  background-color:  #d75a3d;
+  color: #fff;
+  padding: 10px 45px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-top: 10px;
+  cursor: pointer;
 }
 
-form input {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
+.container button.hidden {
+  background-color: transparent;
+  border-color: #fff;
 }
 
-form button {
-    padding: 10px;
-    background-color: #333;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
+.container form {
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0 40px;
+  height: 100%;
 }
 
-form button:hover {
-    background-color: #555;
+.container input {
+  background-color: #eee;
+  border: none;
+  margin: 8px 0;
+  padding: 10px 15px;
+  font-size: 13px;
+  border-radius: 8px;
+  width: 100%;
+  outline: none;
+}
+
+.sign-up, .sign-in {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  transition: all 0.6s ease-in-out;
+}
+
+.sign-in {
+  left: 0;
+  width: 50%;
+  z-index: 2;
+}
+
+.container.active .sign-in {
+  transform: translateX(100%);
+}
+
+.sign-up {
+  left: 0;
+  width: 50%;
+  z-index: 1;
+  opacity: 0;
+}
+
+.container.active .sign-up {
+  transform: translateX(100%);
+  opacity: 1;
+  z-index: 5;
+  animation: move 0.6s;
+}
+
+@keyframes move {
+  0%, 49.99%{
+    opacity: 0;
+    z-index: 1;
+  }
+   50%, 100%{
+    opacity: 1;
+    z-index: 5;
+  }
+}
+
+.toogle-container {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 0;
+  z-index: 1000;
+  transition: all 0.6s ease-in-out;
+
+  background-size: cover; /* Adatta l'immagine al contenitore*/
+  background-position: center; /* Centra l'immagine*/
+  background-repeat: no-repeat; /* Evita che l'immagine venga ripetuta*/
+}
+
+.container.active .toogle-container {
+  transform: translateX(-100%);
+  /*border-radius: 0;*/
+
+}
+
+.toogle {
+  height: 100%;
+  color: #fff;
+  position: relative;
+  left: -100%;
+  width: 200%;
+  transform: translateX(0);
+  transition: all 0.6s ease-in-out;
+  border-radius: 0;
+  /*border-radius: 0;*/
+}
+
+.container.active .toogle {
+  transform: translateX(50%);
+  /*border-radius: 0;*/
+}
+
+.toogle-panel {
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 0 30px;
+  text-align: center;
+  top: 0;
+  transform: translateX(0);
+  transition: all 0.6s ease-in-out;
+  /*border-radius: 0;
+  justify-content: flex-end;*/
+}
+
+.toogle-left {
+  transform: translateX(-200%);
+  /*border-radius: 0;*/
+}
+
+.container.active .toogle-left {
+  transform: translateX(0);
+  margin-left: -50px;
+}
+
+.toogle-right {
+  right: 0;
+  transform: translateX(0);
+}
+
+.container.active .toogle-right {
+  transform: translateX(200%);
+}
+
+/*scritta*/
+.toogle-panel h1 {
+    font-size: 2rem; /* Dimensione del titolo */
+    font-weight: bold; /* Grassetto */
+    color: #000; /* Colore del testo */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7); /* Ombreggiatura nera */
+    text-align: center; /* Allinea il testo al centro */
+    /*margin: 0; /* Rimuove margini extra */
+    margin-top: 390px;
+    margin-left: 50px;
+}
+
+.toogle-panel p {
+    font-size: 1rem; /* Dimensione del paragrafo */
+    font-weight: bold; /* Peso del font normale */
+    color: #000; /* Colore del testo */
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7); /* Ombreggiatura nera più leggera */
+    text-align: center; /* Allinea il paragrafo al centro */
+    margin: 10px 0; /* Spazio sopra e sotto il paragrafo */
+    margin-top:-10px;
+    margin-left: 50px;
+}
+
+.container button2 {
+  background-color:  #d75a3d;
+  color: #000;
+  padding: 10px 45px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-top: 10px;
+  cursor: pointer;
+  margin-top: 0px;
+  margin-left: 50px;
+}
+
+.container button2.hidden {
+  background-color: transparent;
+  border-color: #000;
+}
+
+
+/*switch*/
+.switch-toggle {
+	--width: 260px;
+	--height: 50px;
+	--offset: 2px;
+	--radius: 4px;
+	position: relative;
+	width: var(--width);
+	height: var(--height);
+	padding: var(--offset);
+	background:  rgba(227, 229, 232, 0.5);
+	border-radius: var(--radius);
+	font-size: 16px;
+	font-weight: 500;
+	line-height: normal;
+	font-style: normal;
+
+	input[type="checkbox"] {
+		cursor: pointer;
+		position: absolute;
+		inset: 0;
+		appearance: none;
+		z-index: 2;
+		background:  rgba(0, 0, 0, 0);
+
+
+		&:checked {
+		    background:  rgba(0, 0, 0, 0);
+			+ label.switch-toggle-label {
+				&:before {
+					translate: 100% 0;
+				}
+				span {
+					&:nth-child(1) {
+						color:  #000;
+					}
+					&:nth-child(2) {
+						color:  #ffff;
+						font-weight: 800;
+					}
+				}
+			}
+		}
+
+		& + label.switch-toggle-label {
+			position: absolute;
+			inset: var(--offset, 0);
+			padding: 10px 0;
+			display: block;
+			user-select: none;
+			pointer-events: none;
+			display: grid;
+			gap: 2px;
+			grid-auto-flow: column;
+			grid-auto-columns: 1fr;
+			place-items: center;
+			z-index: 3;
+
+			&:before {
+				content: "";
+				position: absolute;
+				width: 50%;
+				inset: 0;
+				background: #d75a3d;
+				border-radius: calc(var(--radius) - var(--offset));
+				box-shadow: 0px 10px 20px 0px rgba(16, 39, 68, 0.1);;
+				translate: 0 0;
+				transition: translate 250ms cubic-bezier(0.93, 0.26, 0.07, 0.69);
+			}
+
+			span {
+				position: relative;
+				transition: 200ms linear;
+
+				&:nth-child(1) {
+					color: #fff;
+					font-weight: 800;
+				}
+
+				&:nth-child(2) {
+					color: #000;
+					font-weight: 800;
+				}
+			}
+		}
+	}
 }

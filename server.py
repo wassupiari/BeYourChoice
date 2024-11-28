@@ -8,7 +8,7 @@ app = Flask(__name__, template_folder='app/templates', static_folder='public')
 @app.route('/')
 @app.route('/home')
 def home():
-    return render_template('registrazione.html')
+    return render_template('registrazioneLogin.html')
 
 # Avvio del server
 if __name__ == "__main__":
