@@ -37,7 +37,7 @@ main h2 {
 .materiali-lista {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
+    gap: 93px;
      justify-content: center;
 }
 
