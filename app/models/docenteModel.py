@@ -42,3 +42,12 @@ class DocenteModel:
         """
         docente_collection = self.db_manager.get_collection("Docente")
         docente_collection.delete_one({"codice_univoc": codice_univoc})
+
+    def get_codice_univoco_by_email(self, email):
+        """
+        Ottiene il codice univoco di un docente a partire dall'email.
+        """
+        docente = self.trova_docente(email)  # Trova il docente tramite email
+        if docente:
+            return docente.get("codice_univoco")  # Restituisce il codice univoco se presente
+        return None  # Restituisce None se il docente non esiste o non ha un codice univoco

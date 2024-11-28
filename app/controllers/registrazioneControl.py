@@ -28,7 +28,7 @@ def registra():
         cf_regex = r"^[A-Z]{6}[0-9]{2}[A-EHLMPR-T][0-9]{2}[A-Z0-9]{4}[A-Z]$"
         data_nascita_regex = r"^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$"
         password_regex = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s])[A-Za-z\d!@#$%^&*()\-_=+\[\]{};:,.<>?/\\|~]{8,20}$"
-        codice_univoco_regex = r"^\d{6,6}$"
+        codiceunivoco_regex = r"^\d{6,6}$"
 
         # Controlli generali
         if not re.match(email_regex, email):
@@ -53,11 +53,11 @@ def registra():
             return redirect(url_for('login', error='formatoPassword'))
 
         if not codice_univoco is None:
-            if not re.match(codiceUnivoco_regex, codice_univoco):
-                return redirect(url_for('ho', error='formatoCU'))
+            if not re.match(codiceunivoco_regex, codice_univoco):
+                return redirect(url_for('login', error='formatoCU'))
 
         # Differenzia la registrazione: studente o docente
-        if codice_univoco is not 'student':  # Se è presente, registra come docente
+        if codice_univoco is not '':  # Se è presente, registra come docente
             docente_dict = {
                 "nome": nome,
                 "cognome": cognome,
@@ -68,16 +68,6 @@ def registra():
                 "password": password,
                 "codice_univoco": codice_univoco
             }
-
-            # Stampa i dettagli del docente TEST
-            print("Dettagli del docente:")
-            print("Nome:", docente_dict["nome"])
-            print("Cognome:", docente_dict["cognome"])
-            print("SDA:", docente_dict["sda"])
-            print("Email:", docente_dict["email"])
-            print("Codice Fiscale:", docente_dict["cf"])
-            print("Data di Nascita:", docente_dict["data_nascita"])
-            print("Password:", docente_dict["password"])  #
 
             docente_model = DocenteModel()
             docente_model.aggiungi_docente(docente_dict)

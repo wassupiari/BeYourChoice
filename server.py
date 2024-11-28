@@ -1,8 +1,4 @@
 from flask import Flask, render_template, session, redirect, url_for
-
-from app.controllers.loginControl import login_bp
-from app.controllers.registrazioneControl import registrazione_bp
-from flask import Flask, render_template, session
 import os
 from app.controllers.loginControl import login_bp, logout
 from app.controllers.registrazioneControl import registrazione_bp
@@ -14,7 +10,7 @@ from app.views.views import views
 from app.models.studenteModel import StudenteModel
 from app.models.docenteModel import DocenteModel
 from app.models.Attivita import Attivita
-import os
+
 
 # Crea l'applicazione Flask
 app = Flask(__name__, template_folder='app/templates', static_folder="public")  # Imposta il percorso dei template
@@ -32,7 +28,7 @@ app.register_blueprint(dashboardDocente_bp)
 @app.route('/home')
 def home():
     if 'email' not in session:
-        return redirect(url_for('login'))
+        return redirect(url_for('login.login'))
 
     else:
         logged_in = 'email' in session
@@ -46,21 +42,10 @@ def home():
         stud=studenteModel.trova_studente(email)
         doc=docenteModel.trova_docente(email)
         model = Attivita()
-
         if stud is not None: return render_template('dashboardStudente.html', logged_in=logged_in, storico=model.get_storico(studenteModel.trova_cf_per_email(email)))
-        if doc is not None: return render_template('dashboardDocente.html', logged_in=logged_in)
+        if doc is not None: return render_template('dashboardDocente.html', logged_in=logged_in, id_docente=docenteModel.get_codice_univoco_by_email(email))
 
-@app.route('/login')
-def login():
-    return render_template('registrazioneLogin.html')
 
-@app.route('/register')
-def register():
-    return render_template('registrazioneLogin.html')
-
-@app.route('/logout')
-def logout():
-    return render_template('logout.html')
 
 app.register_blueprint(login_bp)
 app.register_blueprint(registrazione_bp)

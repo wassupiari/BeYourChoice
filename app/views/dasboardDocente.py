@@ -1,11 +1,13 @@
 from flask import Blueprint, request
 from app.controllers.DashboardControl import DashboardController
+from app.controllers.loginControl import teacher_required
 
 # Crea il blueprint
 dashboardDocente_bp = Blueprint('dashboardDocente', __name__, template_folder='../templates')
 
 # Rotta per la dashboard
 @dashboardDocente_bp.route('/dashboardDocente')
+@teacher_required
 def dashboard():
     """
     Visualizza la dashboard per un utente specifico.
@@ -18,12 +20,14 @@ def dashboard():
     return DashboardController.mostra_dasboardDocente(id_docente)
 
 @dashboardDocente_bp.route('/classificaClasse/<int:id_classe>')
+@teacher_required
 def classifica_classe(id_classe):
     """
     Visualizza la classifica di una specifica classe.
     """
     return DashboardController.mostra_classifica_classe(id_classe)
 @dashboardDocente_bp.route('/storicoStudente/<string:cf_studente>')
+@teacher_required
 def storico_studente(cf_studente):
     """
     Visualizza lo storico di tutte le attività svolte da uno studente specifico.

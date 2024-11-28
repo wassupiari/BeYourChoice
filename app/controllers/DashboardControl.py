@@ -1,4 +1,6 @@
 from flask import render_template
+
+from app.controllers.loginControl import student_required, teacher_required
 from app.models.Attivita import Attivita
 
 class DashboardController:
