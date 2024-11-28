@@ -3,7 +3,6 @@ import os
 from app.controllers.loginControl import login_bp, logout
 from app.controllers.registrazioneControl import registrazione_bp
 
-
 # Crea l'applicazione Flask
 app = Flask(__name__, template_folder='app/templates', static_folder='public')
 
@@ -19,15 +18,15 @@ def home():
 
 @app.route('/login')
 def login():
-    return render_template('login.html')
+    return render_template('registrazioneLogin.html')
 
 @app.route('/register')
 def register():
-    return render_template('registrazione.html')
+    return render_template('registrazioneLogin.html')
 
 @app.route('/logout')
 def logout():
-    return render_template('logoutprova.html')
+    return render_template('logout.html')
 
 app.register_blueprint(login_bp)
 app.register_blueprint(registrazione_bp)

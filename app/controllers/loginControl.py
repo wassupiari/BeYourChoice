@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, session, redirect, url_for
+from flask import Blueprint, request, jsonify, session, redirect, url_for, flash
 from app.models.studenteModel import StudenteModel
 import bcrypt
 import re, os
@@ -20,11 +20,11 @@ def login_studente():
 
         # Controllo formato email
         if not re.match(email_regex, email):
-            return jsonify({"error": "Formato email non valido!"}), 400
+            return redirect(url_for('login', error='password'))
 
             # Controllo della password (minimo 8 caratteri)
         if not re.match(password_regex, password):
-            return jsonify({"error": "Formato password non valido!"}), 400
+            return redirect(url_for('login', error='password'))
 
         # Crea un'istanza del modello StudenteModel per interagire con il database
         studente_model = StudenteModel()
@@ -36,11 +36,9 @@ def login_studente():
             # Verifica se la password fornita corrisponde a quella nel database
             if bcrypt.checkpw(password.encode('utf-8'), studente['password']):
                 session['email'] = email
-                return jsonify({"message": "Login effettuato con successo!"})
+                return redirect(url_for('home'))
             else:
-                return jsonify({"error": "Password errata!"}), 401
-        else:
-            return jsonify({"error": "Utente non trovato!"}), 404
+                return redirect(url_for('login', error='password'))
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -59,6 +57,6 @@ def profile():
 def logout():
     if 'email' in session:
         session.pop('email', None)
-        return jsonify({"message": "Logout effettuato con successo!"}), 200
+        return redirect(url_for('home'))
     else:
         return jsonify({"error": "Nessuna sessione attiva o utente già disconnesso!"}), 401

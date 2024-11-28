@@ -9,7 +9,7 @@
 <body>
     <div class="container" id="container">
       <div class="sign-up">
-        <form id="registrazioneForm">
+        <form id="registrazioneForm" action="/register" method="POST">
           <h1>Crea un account</h1>
             <div class="switch-toggle">
                 <input class="switch-toggle-checkbox" type="checkbox" id="pricing-plan-switch" />
@@ -27,14 +27,14 @@
                 <input type="password" name="password" id="password" placeholder="Inserisci la tua Password" required>
                 <input type="text" name="cu" id="cu" placeholder="Inserisci il tuo Codice Univoco" required>
 
-          <button>INVIA</button>
+          <button type="submit">INVIA</button>
         </form>
       </div>
       <div class="sign-in">
-        <form>
+        <form action="/login" method="POST">
           <h1>ACCEDI</h1>
-          <input type="text" placeholder="Email" />
-          <input type="password" placeholder="Password" />
+          <input type="text" name="email" placeholder="Email" />
+          <input type="password" name="password" placeholder="Password" />
           <button >ACCEDI</button>
         </form>
       </div>

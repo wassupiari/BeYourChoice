@@ -95,10 +95,12 @@ document.addEventListener("DOMContentLoaded", () => {
         if (switchToggle.checked) {
             // Mostra il campo "Codice Univoco" se lo switch è disattivo
             cu.style.display = "block";
+            cu.required = true;
         } else {
             // Nascondi il campo "Codice Univoco" se lo switch è attivo
             cu.style.display = "none";
-            cu.value = ""; // Cancella il valore per evitare invii non validi
+            cu.value = "";
+             cu.required = false;// Cancella il valore per evitare invii non validi
         }
     }
 
@@ -108,3 +110,42 @@ document.addEventListener("DOMContentLoaded", () => {
     // Esegui il controllo iniziale per impostare lo stato corretto
     toggleCodiceUnivoco();
 });
+
+window.onload = function() {
+    // Verifica se l'URL contiene il parametro "error=password"
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('error') === 'password') {
+        // Mostra il pop-up
+        alert("Credenziali errate. Riprova.");
+    }
+    if (urlParams.get('error') === 'formatoEmail') {
+        alert("Il formato dell'email è errato. Riprova.");
+    }
+    else if (urlParams.get('error') === 'formatoNome') {
+        alert("Il formato del nome è errato. Riprova.");
+    }
+    else if (urlParams.get('error') === 'formatoCognome') {
+        alert("Il formato del cognome è errato. Riprova.");
+    }
+    else if (urlParams.get('error') === 'formatoSDA') {
+        alert("Il formato del codice SDA è errato. Riprova.");
+    }
+    else if (urlParams.get('error') === 'formatocf') {
+        alert("Il formato del codice fiscale è errato. Riprova.");
+    }
+    else if (urlParams.get('error') === 'formatoDataNascita') {
+        alert("Il formato della data di nascita è errato. Riprova.");
+    }
+    else if (urlParams.get('error') === 'formatoPassword') {
+        alert("Il formato della password è errato. Riprova.");
+    }
+    else if (urlParams.get('error') === 'formatoCU') {
+        alert("Il formato del codice univoco è errato. Riprova.");
+    }
+    else if (urlParams.get('error') === 'AlreadyRegistered') {
+        alert("Utente già registrato. Riprova.");
+    }
+
+};
+
+
