@@ -28,7 +28,7 @@ def registra():
         cf_regex = r"^[A-Z]{6}[0-9]{2}[A-EHLMPR-T][0-9]{2}[A-Z0-9]{4}[A-Z]$"
         data_nascita_regex = r"^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$"
         password_regex = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s])[A-Za-z\d!@#$%^&*()\-_=+\[\]{};:,.<>?/\\|~]{8,20}$"
-        codiceUnivoco_regex = r"^\d{6,6}$"
+        codice_univoco_regex = r"^\d{6,6}$"
 
         # Controlli generali
         if not re.match(email_regex, email):
