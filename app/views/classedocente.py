@@ -27,6 +27,25 @@ def Classe_Docente():
     except Exception as e:
         return render_template("errore.html", messaggio=f"Errore: {str(e)}")
 
+@classedocente.route('/classestudente', methods=['GET', 'POST'])
+def Classe_Studente():
+    print("La route /ClasseStudente è stata chiamata!")  # Debug
+    try:
+        # Ottieni l'ID della classe dalla query string (se non è presente, usa 101 come default)
+        ID_Classe = int(request.args.get("ID_Classe", 101))
+        print(f"ID_Classe ricevuto: {ID_Classe}")  # Aggiunto per debugging
+
+        # Usa il controller per ottenere i dati degli studenti
+        dati_classe = classe_virtuale_control.mostra_classe(ID_Classe)
+        print(f"Dati classe ricevuti: {dati_classe}")  # Aggiunto per debugging
+        if "error" in dati_classe:
+            return render_template("errore.html", messaggio=dati_classe["error"])
+
+            # Passa i dati al template classeDocente.html
+        return render_template("classeStudente.html", classe=dati_classe)
+
+    except Exception as e:
+        return render_template("errore.html", messaggio=f"Errore: {str(e)}")
 
 @classedocente.route('/rimuovi-studente', methods=['POST'])
 def rimuovi_studente():

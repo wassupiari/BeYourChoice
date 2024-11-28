@@ -1,7 +1,4 @@
-from flask import Flask, render_template, session
-import os
-from app.controllers.loginControl import login_bp, logout
-from app.controllers.registrazioneControl import registrazione_bp
+from flask import Flask, render_template
 
 from app.views.dasboardDocente import dashboardDocente_bp
 from app.views.dasboardStudente import dashboard_bp
