@@ -77,7 +77,6 @@ def aggiungi_studente():
         studente_id = data.get('studente_id')
         classe_id = int(data.get('classe_id'))  # Conversione esplicita a intero
 
-
         if not studente_id or not classe_id:
             return jsonify({'error': 'ID dello studente o della classe non forniti'}), 400
 
