@@ -1,10 +1,11 @@
+import os
+import re
 from bson import ObjectId
 from flask import Flask, render_template, request, redirect, url_for, flash, send_file, abort, send_from_directory
 from databaseManager import DatabaseManager
 from app.models.MaterialeModel import MaterialeModel
 from app.controllers.MaterialeControl import MaterialeControl
-import os
-import re
+import uuid  # Per generare ID unici
 
 app = Flask(__name__, template_folder='app/templates', static_folder='public')
 app.secret_key = 'your_secret_key'
@@ -67,30 +68,25 @@ def carica_materiale():
         tipo = request.form['tipo']
         file = request.files['file']
 
-        # Validazione titolo
         if not is_title_valid(titolo):
             flash("Il titolo non è valido. Deve essere tra 2 e 20 caratteri e contenere solo lettere e numeri.",
                   "error")
             return redirect(request.url)
 
-        # Validazione descrizione
         if not is_description_valid(descrizione):
             flash("La descrizione deve avere una lunghezza tra i 2 e i 255 caratteri.", "error")
             return redirect(request.url)
 
-        # Validazione tipo di file
         if not is_file_type_valid(file.filename):
             flash("Il tipo di file non è valido. Ammessi: docx, pdf, jpeg, png, txt, jpg, mp4.", "error")
             return redirect(request.url)
 
-        # Controlla che il tipo selezionato corrisponda all'estensione del file
         file_extension = file.filename.rsplit('.', 1)[1].lower()
         if tipo != file_extension:
             flash("Il tipo di file selezionato non corrisponde all'estensione del file. Seleziona il tipo corretto.",
                   "error")
             return redirect(request.url)
 
-        # Validazione dimensione del file
         if not is_file_size_valid(file):
             flash(f"La dimensione del file non deve superare i {MAX_FILE_SIZE_MB} MB.", "error")
             return redirect(request.url)
@@ -98,12 +94,15 @@ def carica_materiale():
         filepath = file.filename
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filepath))
 
-        nuovo_materiale = MaterialeModel(titolo, descrizione, filepath, tipo)
+        id_MaterialeDidattico = uuid.uuid4().hex
+
+        nuovo_materiale = MaterialeModel(id_MaterialeDidattico, titolo, descrizione, filepath, tipo)
         materiale_control.upload_material(nuovo_materiale)
         flash("Materiale caricato con successo!", "success")
         return redirect(url_for('visualizza_materiale_docente'))
 
     return render_template('caricamentoMateriale.html')
+
 
 @app.route('/modifica/<materiale_id>', methods=['GET', 'POST'])
 def modifica_materiale(materiale_id):
@@ -123,38 +122,33 @@ def modifica_materiale(materiale_id):
         titolo = request.form['titolo']
         descrizione = request.form['descrizione']
 
-        # Validazione del titolo
         if not is_title_valid(titolo):
             flash("Il titolo non è valido. Deve essere tra 2 e 20 caratteri e contenere solo lettere e numeri.",
                   "error")
             return redirect(request.url)
 
-        # Validazione della descrizione
         if not is_description_valid(descrizione):
             flash("La descrizione deve avere una lunghezza tra i 2 e i 255 caratteri.", "error")
             return redirect(request.url)
 
         file = request.files.get('file', None)
         if file:
-            # Validazione del tipo di file
             if not is_file_type_valid(file.filename):
                 flash("Il tipo di file non è valido. Ammessi: docx, pdf, jpeg, png, txt, jpg, mp4.", "error")
                 return redirect(request.url)
 
-            # Validazione della dimensione del file
             if not is_file_size_valid(file):
                 flash(f"La dimensione del file non deve superare i {MAX_FILE_SIZE_MB} MB.", "error")
                 return redirect(request.url)
 
             filepath = file.filename
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filepath))
-            # Aggiornare anche il percorso del file nel database
             materiale['File_Path'] = filepath
 
         updated_data = {
             "Titolo": titolo,
             "Descrizione": descrizione,
-            "File_Path": materiale.get('File_Path')  # Aggiorna se cambiato
+            "File_Path": materiale.get('File_Path')
         }
 
         materiale_control.edit_material(material_id_obj, updated_data)
