@@ -17,10 +17,11 @@
             <ul>
                 {% for classe in classi %}
                 <li>
-                    <strong>{{ classe.Nome_Classe }}</strong>
+                    <td style="width:2%" ><strong>{{ loop.index }}</strong></td>
+                    <strong class="text-left">{{ classe.Nome_Classe }}</strong>
                     <span>
                         <a class="pulsante" href="{{ url_for('dashboardDocente.classifica_classe', id_classe=classe.ID_Classe) }}">
-                            <button class="button">Classifica Classe</button>
+                            <button class="button">Classifica</button>
                         </a>
                         <a class="pulsante">
                             <button class="button">Gestione classe</button>
