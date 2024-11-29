@@ -13,9 +13,10 @@
   padding: 1.5%;
   border: 1px solid #ccc;
   border-radius: 5px;
-  background-color: #e5e5e5;
+  background-color: #ffffff;
   box-shadow: 0 4px 6px rgba(215, 90, 61, 0.3);
   height: calc(100vh - 210px); /* Altezza dinamica considerando header e margini */
+  overflow-y: auto;
 }
 
 /* Lista e pulsanti */
@@ -45,15 +46,23 @@ li {
 
 .button {
   padding: 10px 20px;
-  background-color: #d75a3d;
-  color: white;
+  background-color: #f9f4f1;
+  color: #000000;
+  font-weight: 600;
   border: none;
   border-radius: 5px;
+  border: 1px solid #ccc; /* Bordi visibili */
+  border-radius: 8px; /* Leggera arrotondatura degli angoli */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Effetto ombra */
   cursor: pointer;
+  transition: box-shadow 0.3s ease, transform 0.3s ease; /* Effetti al passaggio del mouse */
 }
 
 button:hover {
-  background-color: #b94b32;
+  background-color: #d75a3d;
+  color: #ffffff;
+  transform: scale(1.05); /* Leggero ingrandimento al passaggio del mouse */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Ombra più intensa su hover */
 }
 
 /* Sidebar */
@@ -78,7 +87,7 @@ button:hover {
   text-align: center;
   font-size: 18px; /* Testo più piccolo */
   font-weight: bold;
-  background-color: #deeaf6;
+  background-color: #ffffff;
   color: #000000; /* Colore del testo */
   border: 1px solid #ccc; /* Bordi visibili */
   border-radius: 8px; /* Leggera arrotondatura degli angoli */
@@ -113,4 +122,10 @@ a {
 .pulsante {
   color: #ffffff;
   text-decoration: none;
+}
+
+.text-left {
+    text-align: left;
+    margin-left: 1px;
+    width: 45%;
 }

@@ -12,7 +12,7 @@ body {
 .form-container {
     max-width: 500px;
     margin: 50px auto;
-    background: #e5e5e5;
+    background: #ffffff;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
     border-radius: 8px;
     padding: 20px 30px;
@@ -47,16 +47,16 @@ textarea {
     border-radius: 5px;
     margin-bottom: 20px;
     box-sizing: border-box;
-    background-color: #f9f9f9;
+    background-color: #f9f4f1;
     resize: none;
 }
 
 input:focus,
 textarea:focus {
-    border-color: #007bff;
+
     outline: none;
-    background-color: #ffffff;
-    box-shadow: 0 0 4px rgba(0, 123, 255, 0.3);
+    background-color: #f9f4f1;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
 }
 
 /* Stile dei bottoni */
@@ -76,8 +76,8 @@ button {
 }
 
 button.annulla {
-    background-color: #deeaf6;
-    color: #000000;
+    background-color: #000000;
+    color: #ffffff;
 }
 
 button.annulla:hover {
@@ -88,8 +88,8 @@ button.annulla:hover {
 }
 
 button.salva {
-    background-color: #deeaf6;
-    color: #000000;
+    background-color: #000000;
+    color: #ffffff;
 }
 
 button.salva:hover {
