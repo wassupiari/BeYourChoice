@@ -50,3 +50,22 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
+window.onload = function() {
+    // Verifica se l'URL contiene il parametro "error=password"
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('error') === 'DatiObbligatori') {
+        // Mostra il pop-up
+        alert("Tutti i campi sono obbligatori. Riprova.");
+    }
+    if (urlParams.get('error') === 'formatoTitolo') {
+        alert("Il formato del titolo è errato. Riprova.");
+    }
+    else if (urlParams.get('error') === 'formatoDescrizione') {
+        alert("Il formato della descrizione è errato. Riprova.");
+    }
+    else if (urlParams.get('error') === 'argomentoNonValido') {
+        alert("L'argomento non è valido. Riprova.");
+    }
+};
+
+
