@@ -181,17 +181,21 @@ main h2 {
     font-size: 18px;
     color: green;
     margin-top: 5px;
+    text-align: center;
 }
 
 .flashes {
        list-style-type: none;
        padding: 0;
+
 }
 
 .flashes li.error {
        color: green;
+
 }
 
 .flashes li.success {
        color: green;
+
 }

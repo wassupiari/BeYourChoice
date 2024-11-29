@@ -12,7 +12,8 @@
 <main>
     <h2>Modifica Materiale Didattico</h2>
 
-       {% with messages = get_flashed_messages(with_categories=true) %}
+      <div class="error-message">
+        {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
         <div class="flashes">
           {% for category, message in messages %}
@@ -21,6 +22,7 @@
         </div>
       {% endif %}
     {% endwith %}
+    </div>
 
     {% if materiale %}
         <form action="{{ url_for('modifica_materiale', materiale_id=materiale['_id']) }}" method="POST" enctype="multipart/form-data">

@@ -109,3 +109,19 @@ button[type="submit"]:hover {
     color:white;
 }
 
+.error-message {
+    font-size: 18px;
+    color: red;
+    margin-top: 5px;
+}
+.flashes {
+       list-style-type: none;
+       padding: 0;
+   }
+   .flashes li.error {
+       color: red;
+   }
+   .flashes li.success {
+       color: green;
+   }
+
