@@ -8,7 +8,7 @@ app = Flask(__name__, template_folder='app/templates', static_folder='public')
 @app.route('/')
 @app.route('/home')
 def home():
-    return render_template('header.html')
+    return render_template('scenarioVirtuale.html')
 
 # Avvio del server
 if __name__ == "__main__":
