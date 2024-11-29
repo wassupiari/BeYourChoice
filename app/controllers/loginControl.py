@@ -88,7 +88,7 @@ def login():
                 session['email'] = email
                 session['session_token'] = session_token
                 flash("Login effettuato con successo", "success")
-                return redirect(url_for('dashboardDocente.dashboard'))  # Reindirizza al dashboard dopo il login
+                return redirect(url_for('dashboardStudente.dashboard'))  # Reindirizza al dashboard dopo il login
 
             else:
                 flash("Password errata", "error")
