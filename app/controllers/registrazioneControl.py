@@ -7,6 +7,12 @@ from app.models.docenteModel import DocenteModel
 registrazione_bp = Blueprint('registrazione', __name__)
 
 # Crea una rotta per la registrazione
+
+
+
+
+
+
 @registrazione_bp.route('/register', methods=['POST'])
 def registra():
     try:
@@ -18,7 +24,7 @@ def registra():
         cf = request.form['cf']
         data_nascita = request.form['data-nascita']
         password = request.form['password']
-        codice_univoco = request.form.get('codice_univoco')  # Questo campo potrebbe non esistere
+        codice_univoco = request.form.get('codice_univoco', '').strip()  # Aggiunta verifica del campo
 
         # Regex comuni
         email_regex = r"^[A-z0-9._%+-]+@[A-z0-9.-]+\.[A-z]{2,4}$"
@@ -56,8 +62,8 @@ def registra():
             if not re.match(codiceunivoco_regex, codice_univoco):
                 return redirect(url_for('login', error='formatoCU'))
 
-        # Differenzia la registrazione: studente o docente
-        if codice_univoco != '':  # Se è presente, registra come docente
+        # Registrazione come docente o studente
+        if codice_univoco:  # Se presente, registra come docente
             docente_dict = {
                 "nome": nome,
                 "cognome": cognome,
@@ -85,14 +91,8 @@ def registra():
             }
 
             studente_model = StudenteModel()
-            '''stud = studente_model.trova_studente(email)
-            stud2 = studente_model.trova_studente(cf)
-            if stud is not None and stud2 is not None:
-                studente_model.aggiungi_studente(studente_dict)
-                return redirect(url_for('home'))
-            else:
-                return redirect(url_for('login', error='AlreadyRegistered'))'''
             studente_model.aggiungi_studente(studente_dict)
+            session['email'] = email
             return redirect(url_for('home'))
 
     except Exception as e:
