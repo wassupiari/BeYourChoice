@@ -69,8 +69,8 @@ h1 {
     margin-left: 10px;
     margin-right: 130px;
     padding: 10px 25px; /* Dimensioni del bottone */
-    background-color: #000000; /* Sfondo bianco */
-    color: #ffffff; /* Colore del testo */
+    background-color: #ffffff; /* Sfondo bianco */
+    color: #000000; /* Colore del testo */
     font-size: 1rem; /* Dimensione del testo */
     font-weight: 600; /* Testo semi-grassetto */
     border: 1px solid #ccc; /* Bordi visibili */
