@@ -5,12 +5,12 @@ class ClasseVirtualeControl:
     def __init__(self):
         self.model = ClasseVirtuale()
 
-    def creazioneClasseVirtuale(self, NomeClasse, Descrizione):
+    def creazioneClasseVirtuale(self, NomeClasse, Descrizione, ID_Docente):
         """
         Crea una nuova classe virtuale.
         """
         try:
-            messaggio = self.model.creazioneClasseVirtuale(NomeClasse, Descrizione)
+            messaggio = self.model.creazioneClasseVirtuale(NomeClasse, Descrizione, ID_Docente)
             print(messaggio)
         except ValueError as e:
             print(f"Errore: {e}")

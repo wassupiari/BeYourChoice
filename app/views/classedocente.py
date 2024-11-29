@@ -2,7 +2,7 @@ from flask import *
 from app.controllers.ClasseVirtualeControl import ClasseVirtualeControl
 
 # Crea il blueprint
-classedocente = Blueprint('classedocente', __name__, template_folder='../templates')
+classedocente = Blueprint('classedocente', __name__)
 # Configura il database manager
 classe_virtuale_control = ClasseVirtualeControl()
 

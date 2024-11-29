@@ -89,10 +89,10 @@ def registra():
                 "data_nascita": data_nascita,
                 "password": password
             }
-
             studente_model = StudenteModel()
             studente_model.aggiungi_studente(studente_dict)
             session['email'] = email
+
             return redirect(url_for('home'))
 
     except Exception as e:
