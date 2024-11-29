@@ -99,7 +99,7 @@ def login():
             if bcrypt.checkpw(password.encode('utf-8'), docente['password']):
                 docente_scuola_appartenenza = docente.get("sda")
                 docente_codice_univoco = docente.get("codice_univoco")
-
+                nome_profilo = docente.get("nome")
                 if not docente_scuola_appartenenza or not docente_codice_univoco:
                     flash("Dati incompleti per il docente", "error")
                     return redirect(url_for('login.login'))
@@ -109,6 +109,7 @@ def login():
                 session['session_token'] = session_token
                 session['SdA'] = docente_scuola_appartenenza
                 session['CU'] = docente_codice_univoco
+                session['Nome'] = nome_profilo
 
                 flash("Login effettuato con successo", "success")
                 return redirect(url_for('dashboardDocente.dashboard'))  # Reindirizza al dashboard dopo il login

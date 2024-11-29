@@ -33,7 +33,7 @@
                 </a>
             </nav>
             <div class="user-info">
-                <span>Ciao, <strong>{}</strong></span>
+                <span>Ciao, <strong>{{ session['Nome'] }}</strong></span>
                 <a href="{{ url_for('login.login') }}" class="nav-link">
                     <i class="fa-solid fa-arrow-right-from-bracket"></i><br>
                     <span>Logout</span>
