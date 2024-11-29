@@ -13,11 +13,13 @@
         <!-- ScenarioVirtuale principale -->
         <div class="scenario">
             <h2>Creazione scenario virtuale</h2>
-              <form>
+              <form id="formScenario" action="/scenario" method="POST">
                 <span>Titolo</span>
-                  <input type="text" placeholder="Inserisci titolo scenario virtuale" />
+                  <input type="text" name="titolo" placeholder="Inserisci titolo scenario virtuale" />
                 <span>Descrizione</span>
-                  <textarea placeholder="Descrivi lo scenario virtuale in dettaglio..."></textarea>
+                <textarea name="descrizione" placeholder="Descrivi lo scenario virtuale in dettaglio..."></textarea>
+                <input type="hidden" name="argomento" id="selectedArgomento" />
+                <button type="submit">INVIA</button>
               </form>
 
           <!--Carosello-->

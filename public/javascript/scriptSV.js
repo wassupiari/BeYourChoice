@@ -14,3 +14,39 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+document.addEventListener("DOMContentLoaded", function() {
+    const carouselItems = document.querySelectorAll('.carousel-item');
+    let selectedArgomento = '';  // Variabile per memorizzare l'argomento selezionato
+
+    // Gestione della selezione nel carousel
+    carouselItems.forEach((item) => {
+        item.addEventListener('click', () => {
+            // Ottieni il titolo del carousel selezionato
+            selectedArgomento = item.querySelector('.carousel-item__details--title').innerText;
+
+            // Aggiorna il campo nascosto del form
+            document.getElementById('selectedArgomento').value = selectedArgomento;
+        });
+    });
+
+    // Gestione dell'invio del form
+    document.getElementById('scenarioForm').addEventListener('submit', async (event) => {
+        event.preventDefault();  // Previene il comportamento predefinito del form
+
+        // Crea un oggetto FormData con i dati del form
+        const formData = new FormData(event.target);
+
+        // Invia i dati al server tramite fetch (POST)
+        const response = await fetch('/scenario', {
+            method: 'POST',
+            body: formData
+        });
+
+        const result = await response.json();  // Converte la risposta del server in JSON
+
+        // Mostra il messaggio di risposta del server
+        document.getElementById('response').innerText = result.message || result.error;
+    });
+});
+
