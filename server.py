@@ -35,7 +35,7 @@ def home():
         email = session.get('email')
         if email is None or email == '':
             # Se l'email non è presente nella sessione, reindirizza al login
-            return redirect(url_for('login'))
+            return redirect(url_for('login.login'))
 
         studenteModel = StudenteModel()
         docenteModel = DocenteModel()
