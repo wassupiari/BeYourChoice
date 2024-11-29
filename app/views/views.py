@@ -14,7 +14,7 @@ def creazione_classe():
         descrizione = request.form['descrizione']
         try:
             classe_control.creazioneClasseVirtuale(nome_classe, descrizione)
-            return redirect(url_for('views.creazione_classe'))  # Torna alla stessa pagina
+            return redirect(url_for('home'))  # Torna alla stessa pagina
         except Exception as e:
             return render_template('creazioneCV.html', error=str(e))
     return render_template('creazioneCV.html')
