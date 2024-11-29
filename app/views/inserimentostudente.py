@@ -1,6 +1,6 @@
 from token import STRING
 
-from flask import Blueprint, request, render_template
+from flask import Blueprint, request, render_template, session
 from app.controllers.ClasseVirtualeControl import ClasseVirtualeControl
 
 # Crea il blueprint
@@ -14,10 +14,10 @@ def Inserimento_Studente():
     print("La route /InserimentoStudente stata chiamata!")  # Debug
     try:
         # Ottieni l'ID della classe dalla query string (se non è presente, usa 101 come default)
-        scuola_appartenenza = request.args.get("SdA", "Liceo Scientifico Galileo Galilei")
+        scuola_appartenenza = session.get('SdA')
         print(f"Sda ricevuto: {scuola_appartenenza}")  # Aggiunto per debugging
 
-        # Usa il controller per ottenere i dati degli studenti
+        # Usa il controller per ottenere i dati degli studentiErrore nell'aggiunta dello studente alla classe.
         dati_classe = classe_virtuale_control.mostra_studenti_istituto(scuola_appartenenza)
         print(f"Dati classe ricevuti: {dati_classe}")  # Aggiunto per debugging
         if "error" in dati_classe:

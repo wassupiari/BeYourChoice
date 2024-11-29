@@ -19,9 +19,11 @@
         <!-- Barra di ricerca -->
         <div class="search-container">
             <input type="text" placeholder="Cerca studente" class="search-bar">
-            <a href="{{ url_for ('classedocente.Classe_Docente')}}">
+            <a href="{{ url_for('classedocente.Classe_Docente', ID_Classe=session['ID_Classe']) }}">
                 <button class="annulla-button">Annulla</button>
             </a>
+
+
         </div>
 
         <!-- Tabella studenti -->
@@ -46,7 +48,7 @@
                 <td>{{ studente.Cognome }}</td>
                 <td>{{ studente.Data_Nascita }}</td>
                 <td class="action-cell">
-                    <button class="add-button" onclick="aggiungiStudente('{{ studente._id }}')">
+                        <button class="add-button" onclick="aggiungiStudente('{{ studente._id }}', '{{ session['ID_Classe'] }}')">Aggiungi Studente</button>
                         <i class="fas fa-user-plus"></i>
                     </button>
                 </td>
@@ -85,32 +87,33 @@
 
 </body>
 <script>
-    function aggiungiStudente(studenteId) {
-       const classeId = 101;  // Sostituisci con l'ID della classe desiderata
+    function aggiungiStudente(studenteId, classeId) {
+    fetch('/classedocente/aggiungi-studente', {
 
-       fetch('/aggiungi-studente', {
-           method: 'POST',
-           headers: {
-               'Content-Type': 'application/json',
-           },
-           body: JSON.stringify({
-               studente_id: studenteId,
-               classe_id: classeId  // Passa anche l'ID della classe
-           }),
-       })
-       .then(response => response.json())
-       .then(data => {
-           if (data.success) {
-               alert('Studente aggiunto alla classe con successo!');
-               location.reload(); // Ricarica la pagina per aggiornare la tabella
-           } else {
-               alert(`Errore: ${data.error}`);
-           }
-       })
-       .catch(error => {
-           console.error('Errore:', error);
-           alert('Errore nell\'aggiunta dello studente alla classe.');
-       });
-   }
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            studente_id: studenteId,
+            classe_id: classeId
+        }),
+    })
+
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Studente aggiunto con successo!');
+            location.reload();
+        } else {
+            alert(`Errore: ${data.error}`);
+        }
+    })
+    .catch(error => {
+        console.error('Errore:', error);
+        alert('Errore nell\'aggiunta dello studente.');
+    });
+}
+
 </script>
 </html>
