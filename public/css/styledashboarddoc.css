@@ -34,6 +34,7 @@ li {
 
 .dashboard li span {
   font-weight: bold;
+  color: #000000;
   text-align: right;
   width: 50%;
 }

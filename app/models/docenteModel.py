@@ -28,20 +28,20 @@ class DocenteModel:
         Trova un docente in base al codice univoco.
         """
         docente_collection = self.db_manager.get_collection("Docente")
-        return docente_collection.find_one({"codice_univoc": codice_univoc})
+        return docente_collection.find_one({"codice_univoco": codice_univoc})
 
     def aggiorna_docente(self, docente_dict, codice_univoc):
         """
         Aggiorna le informazioni di un docente.
         """
-        self.collection.update_one({"codice_univoc": codice_univoc}, {"$set": docente_dict})
+        self.collection.update_one({"codice_univoco": codice_univoc}, {"$set": docente_dict})
 
     def elimina_docente(self, codice_univoc):
         """
         Elimina un docente dal database.
         """
         docente_collection = self.db_manager.get_collection("Docente")
-        docente_collection.delete_one({"codice_univoc": codice_univoc})
+        docente_collection.delete_one({"codice_univoco": codice_univoc})
 
     def get_codice_univoco_by_email(self, email):
         """
