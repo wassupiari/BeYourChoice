@@ -106,9 +106,6 @@ def login():
                 docente_scuola_appartenenza = docente.get("sda")
                 docente_codice_univoco = docente.get("codice_univoco")
                 nome_profilo = docente.get("nome")
-                if not docente_scuola_appartenenza or not docente_codice_univoco:
-                    flash("Dati incompleti per il docente", "error")
-                    return redirect(url_for('login.login'))
 
                 session_token = str(uuid.uuid4())
                 session['email'] = email
