@@ -62,6 +62,15 @@ def registra():
             if not re.match(codiceunivoco_regex, codice_univoco):
                 return redirect(url_for('login', error='formatoCU'))
 
+        # Controllo se l'account esiste già
+        docente_model = DocenteModel()
+        if not (docente_model.trova_docente(email)) is None:
+            return redirect(url_for('login.login', error='alreadyRegistered'))
+
+        studente_model = StudenteModel()
+        if not (studente_model.trova_studente(email)) is None:
+            return redirect(url_for('login.login', error='alreadyRegistered'))
+
         # Registrazione come docente o studente
         if codice_univoco:  # Se presente, registra come docente
             docente_dict = {
@@ -75,7 +84,6 @@ def registra():
                 "codice_univoco": codice_univoco
             }
 
-            docente_model = DocenteModel()
             docente_model.aggiungi_docente(docente_dict)
             session['email'] = email
             return redirect(url_for('home'))
@@ -90,7 +98,6 @@ def registra():
                 "password": password
             }
 
-            studente_model = StudenteModel()
             studente_model.aggiungi_studente(studente_dict)
             session['email'] = email
             return redirect(url_for('home'))

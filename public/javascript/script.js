@@ -142,7 +142,7 @@ window.onload = function() {
     else if (urlParams.get('error') === 'formatoCU') {
         alert("Il formato del codice univoco è errato. Riprova.");
     }
-    else if (urlParams.get('error') === 'AlreadyRegistered') {
+    else if (urlParams.get('error') === 'alreadyRegistered') {
         alert("Utente già registrato. Riprova.");
         const url = new URL(window.location.href);
         url.searchParams.delete('error');  // Rimuove il parametro 'error'
