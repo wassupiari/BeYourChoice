@@ -80,6 +80,7 @@ body {
 
 .sidebar {
     width: 160px; /* Larghezza fissa della sidebar */
+    flex-shrink: 0;
     display: flex;
     flex-direction: column; /* Disposizione verticale */
     align-items: center; /* Centrare i contenuti */
