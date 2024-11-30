@@ -66,7 +66,7 @@ class ClasseVirtuale:
         else:
             return "Nessuno studente trovato nel database."
 
-    def creazioneClasseVirtuale(self, NomeClasse, Descrizione):
+    def creazioneClasseVirtuale(self, NomeClasse, Descrizione, ID_Docente):
         """
         Crea una nuova classe virtuale, con verifica del formato e lunghezza per nome e descrizione.
 
@@ -97,7 +97,8 @@ class ClasseVirtuale:
         documento = {
             'ID_Classe': ID_Classe,
             'Nome_Classe': NomeClasse,
-            'Descrizione': Descrizione
+            'Descrizione': Descrizione,
+            'ID_Docente' : ID_Docente
         }
 
         # Inserisci il documento nella collezione

@@ -84,6 +84,7 @@ def registra():
                 "codice_univoco": codice_univoco
             }
 
+            docente_model = DocenteModel()
             docente_model.aggiungi_docente(docente_dict)
             session['email'] = email
             return redirect(url_for('home'))

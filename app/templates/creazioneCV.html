@@ -6,29 +6,31 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styleCCV.css') }}">
 </head>
 <body>
-    <!-- Inclusione dell'header -->
-    {% include 'header.html' %}
+<!-- Inclusione dell'header -->
+{% include 'header.html' %}
 
-    <!-- Contenuto principale -->
-    <main>
-        <div class="form-container">
-            <h1>Creazione classe virtuale</h1>
+<!-- Contenuto principale -->
+<main>
+    <div class="form-container">
+        <h1>Creazione classe virtuale</h1>
 
-<form action="/creazione-classe" method="post">
-                <label for="nome-classe">Nome Classe</label>
-                <input type="text" id="nome-classe" name="nome-classe" required>
+        <form action="{{ url_for('views.creazione_classe') }}" method="POST">
+            <label for="nome-classe">Nome Classe</label>
+            <input type="text" id="nome-classe" name="nome-classe" required>
 
-                <label for="descrizione">Descrizione</label>
-                <textarea id="descrizione" name="descrizione" rows="5" required></textarea>
+            <label for="descrizione">Descrizione</label>
+            <textarea id="descrizione" name="descrizione" rows="5" required></textarea>
 
-                <a href="{{ url_for('dashboardDocente.dashboard') }}">
-                <button type="button" class="annulla">Annulla</button>
-                </a>
-                <a href="{{ url_for('dashboardDocente.dashboard') }}">
-                <button type="submit" class="salva">Salva</button>
-                </a>
-            </form>
-        </div>
-    </main>
+            <!-- Pulsante per annullare -->
+            <button type="button" class="annulla"
+                    onclick="window.location.href='{{ url_for('dashboardDocente.dashboard') }}'">
+                Annulla
+            </button>
+
+            <!-- Pulsante per salvare -->
+            <button type="submit" class="salva">Salva</button>
+        </form>
+    </div>
+</main>
 </body>
 </html>

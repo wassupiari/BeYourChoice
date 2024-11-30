@@ -31,7 +31,6 @@ def student_required(f):
 
     return decorated_function
 
-
 # Decoratore per proteggere le rotte dei docenti
 def teacher_required(f):
     @wraps(f)
@@ -48,6 +47,7 @@ def teacher_required(f):
             flash("Accesso negato: questa area è riservata ai docenti", "error")
             return redirect(url_for('home'))  # Redirige l'utente alla home
 
+        print("Docente trovato:", docente)  # Aggiungi una stampa di debug per vedere se il docente è trovato
         return f(*args, **kwargs)
 
     return decorated_function
@@ -56,11 +56,9 @@ def teacher_required(f):
 @login_bp.route('/login', methods=['GET', 'POST'])
 def login():
     try:
-        # Se la richiesta è un GET, renderizza il template di login (registrazioneLogin.html)
         if request.method == 'GET':
             return render_template('registrazioneLogin.html')  # Template di login
 
-        # Recupera i dati dal form HTML
         email = request.form['email']
         password = request.form['password']
 
@@ -77,48 +75,45 @@ def login():
             flash("Password non valida", "error")
             return redirect(url_for('login.login'))
 
-        # Crea un'istanza del modello StudenteModel per interagire con il database
         studente_model = StudenteModel()
         docente_model = DocenteModel()
 
-        # Cerca lo studente con l'email fornita
         studente = studente_model.trova_studente(email)
         docente = docente_model.trova_docente(email)
 
-        # Se lo studente esiste
-        if studente is not None:
-            # Verifica se la password fornita corrisponde a quella nel database
+        if studente:
+            # Verifica la password per lo studente
             if bcrypt.checkpw(password.encode('utf-8'), studente['password']):
-                # Crea un session token unico
                 session_token = str(uuid.uuid4())
                 session['email'] = email
-                session['session_token'] = session_token  # Memorizza il session_token
-
-                # Se un session_token è già presente per l'utente, invalidalo (per evitare più sessioni)
-                if 'session_token' in session:
-                    session.pop('session_token', None)  # Rimuove il vecchio session_token
-
+                session['session_token'] = session_token
                 flash("Login effettuato con successo", "success")
-                return redirect(url_for('home'))
+                return redirect(url_for('dashboardStudente.dashboard'))  # Reindirizza al dashboard dopo il login
+
             else:
                 flash("Password errata", "error")
                 return redirect(url_for('login.login'))
 
-        # Se il docente esiste
-        elif docente is not None:
-            # Verifica se la password fornita corrisponde a quella nel database
+        elif docente:
+            # Verifica la password per il docente
             if bcrypt.checkpw(password.encode('utf-8'), docente['password']):
-                # Crea un session token unico
+                docente_scuola_appartenenza = docente.get("sda")
+                docente_codice_univoco = docente.get("codice_univoco")
+                nome_profilo = docente.get("nome")
+                if not docente_scuola_appartenenza or not docente_codice_univoco:
+                    flash("Dati incompleti per il docente", "error")
+                    return redirect(url_for('login.login'))
+
                 session_token = str(uuid.uuid4())
                 session['email'] = email
-                session['session_token'] = session_token  # Memorizza il session_token
-
-                # Se un session_token è già presente per l'utente, invalidalo (per evitare più sessioni)
-                if 'session_token' in session:
-                    session.pop('session_token', None)  # Rimuove il vecchio session_token
+                session['session_token'] = session_token
+                session['SdA'] = docente_scuola_appartenenza
+                session['CU'] = docente_codice_univoco
+                session['Nome'] = nome_profilo
 
                 flash("Login effettuato con successo", "success")
-                return redirect(url_for('home'))
+                return redirect(url_for('dashboardDocente.dashboard'))  # Reindirizza al dashboard dopo il login
+
             else:
                 flash("Password errata", "error")
                 return redirect(url_for('login.login'))
@@ -130,6 +125,7 @@ def login():
     except Exception as e:
         flash(f"Errore interno: {str(e)}", "error")
         return jsonify({"error": str(e)}), 500
+
 
 # Route per terminare la sessione (logout)
 @login_bp.route('/logout', methods=['POST'])

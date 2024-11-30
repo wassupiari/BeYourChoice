@@ -1,46 +1,53 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, session, render_template
 from app.controllers.DashboardControl import DashboardController
 from app.models.docenteModel import DocenteModel
 from app.controllers.loginControl import teacher_required
 
 # Crea il blueprint per la dashboard del docente
-dashboardDocente_bp = Blueprint('dashboardDocente', __name__, template_folder='../templates')
-
+dashboardDocente = Blueprint('dashboardDocente', __name__, template_folder='../templates')
+print("entrooooo")
 # Rotta per la dashboard del docente
-@dashboardDocente_bp.route('/dashboardDocente', methods=['GET'])
-@teacher_required
+@dashboardDocente.route('/dashboardDocente', methods=['GET'])
+@teacher_required  # Usa il decoratore per proteggere la rotta
 def dashboard():
+    print("aaaaaaa")
     """
     Visualizza la dashboard per il docente autenticato.
     """
-    docente_model = DocenteModel()
-
-    # Recupera l'email del docente dalla sessione o dalla query string
-    email = request.args.get("email", None)
+    # Verifica se la sessione contiene l'email
+    email = session.get('email')
     if not email:
         return "Email del docente non fornita", 400
 
-    # Recupera il codice univoco del docente utilizzando l'email
-    codice_univoco = docente_model.get_codice_univoco_by_email(email)
+    # Recupera il codice univoco del docente dalla sessione
+    codice_univoco = session.get('CU')
     if not codice_univoco:
-        return "Docente non trovato", 404
+        return "Codice univoco del docente non trovato", 404
 
-    # Usa il controller per ottenere i dati della dashboard
+    # Recupera i dati necessari per il template (ad esempio, la lista delle classi)
+    docente_model = DocenteModel()
+
+    # Esegui ulteriori operazioni necessarie per preparare i dati
+    # Per esempio, recuperare le classi gestite dal docente
+
+    # Rendi il template con i dati necessari
     return DashboardController.mostra_dasboardDocente(codice_univoco)
 
 
+
 # Rotta per la classifica di una classe specifica
-@dashboardDocente_bp.route('/classificaClasse/<int:id_classe>', methods=['GET'])
+@dashboardDocente.route('/classificaClasse/<int:id_classe>', methods=['GET'])
 @teacher_required
 def classifica_classe(id_classe):
     """
     Visualizza la classifica di una specifica classe gestita dal docente.
     """
+
     return DashboardController.mostra_classifica_classe(id_classe)
 
 
 # Rotta per lo storico delle attività di uno studente specifico
-@dashboardDocente_bp.route('/storicoStudente/<string:cf_studente>', methods=['GET'])
+@dashboardDocente.route('/storicoStudente/<string:cf_studente>', methods=['GET'])
 @teacher_required
 def storico_studente(cf_studente):
     """

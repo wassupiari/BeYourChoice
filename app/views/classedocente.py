@@ -2,24 +2,27 @@ from flask import *
 from app.controllers.ClasseVirtualeControl import ClasseVirtualeControl
 
 # Crea il blueprint
-classedocente = Blueprint('classedocente', __name__, template_folder='../templates')
+classedocente = Blueprint('classedocente', __name__)
 # Configura il database manager
 classe_virtuale_control = ClasseVirtualeControl()
 
 
-@classedocente.route('/classe', methods=['GET', 'POST'])
-def Classe_Docente():
+@classedocente.route('/classe/<int:ID_Classe>', methods=['GET', 'POST'])
+def Classe_Docente(ID_Classe):
+    # Assumendo che l'ID_Classe sia passato come parametro o derivato da un'altra fonte
+    session['ID_Classe'] = ID_Classe
+
     print("La route /ClasseDocente è stata chiamata!")  # Debug
+    session['ID_Classe'] = ID_Classe
     try:
         # Ottieni l'ID della classe dalla query string (se non è presente, usa 101 come default)
-        ID_Classe = int(request.args.get("ID_Classe", 101))
         print(f"ID_Classe ricevuto: {ID_Classe}")  # Aggiunto per debugging
 
         # Usa il controller per ottenere i dati degli studenti
         dati_classe = classe_virtuale_control.mostra_classe(ID_Classe)
         print(f"Dati classe ricevuti: {dati_classe}")  # Aggiunto per debugging
         if "error" in dati_classe:
-            return render_template("errore.html", messaggio=dati_classe["error"])
+            return render_template("classeDocente.html")
 
             # Passa i dati al template classeDocente.html
         return render_template("classeDocente.html", classe=dati_classe)
@@ -72,7 +75,7 @@ def aggiungi_studente():
         # Ottieni i dati dallo studente dalla richiesta
         data = request.get_json()  # Dati inviati come JSON
         studente_id = data.get('studente_id')
-        classe_id = data.get('classe_id')
+        classe_id = int(data.get('classe_id'))  # Conversione esplicita a intero
 
         if not studente_id or not classe_id:
             return jsonify({'error': 'ID dello studente o della classe non forniti'}), 400

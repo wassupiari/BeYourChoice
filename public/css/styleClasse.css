@@ -23,7 +23,7 @@ body {
     flex: 1;
     margin-right: 20px;
     padding: 20px;
-    background-color: #deeaf6;
+    background-color: #ffffff;
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -51,7 +51,7 @@ h1 {
     width: calc(90% - 160px);
     padding: 10px;
     font-size: 1rem;
-    background-color: #ffffff;
+    background-color: #f9f4f1;
     border: 1px solid #ccc; /* Bordi visibili */
     border-radius: 8px; /* Leggera arrotondatura degli angoli */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -70,7 +70,7 @@ h1 {
     margin-right: 130px;
     padding: 10px 25px; /* Dimensioni del bottone */
     background-color: #ffffff; /* Sfondo bianco */
-    color: #333; /* Colore del testo */
+    color: #000000; /* Colore del testo */
     font-size: 1rem; /* Dimensione del testo */
     font-weight: 600; /* Testo semi-grassetto */
     border: 1px solid #ccc; /* Bordi visibili */
@@ -125,11 +125,11 @@ h1 {
     padding: 10px;
     text-align: left;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    background-color: #ffffff;
+    background-color: #f9f4f1;
 }
 
 .student-table th {
-    background-color: #ffffff;
+    background-color: #f9f4f1;
     color: #000000;
 }
 
@@ -179,7 +179,7 @@ h1 {
     text-align: center;
     font-size: 18px; /* Testo più piccolo */
     font-weight: bold;
-    background-color: #deeaf6;
+    background-color: #ffffff;
     color: #000000; /* Colore del testo */
     border: 1px solid #ccc; /* Bordi visibili */
     border-radius: 8px; /* Leggera arrotondatura degli angoli */
