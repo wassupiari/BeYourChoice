@@ -24,11 +24,10 @@ app.register_blueprint(dashboard_bp)
 app.register_blueprint(dashboardDocente)
 # Definisci una route per la homepage
 @app.route('/')
-@app.route('/dashboardDocente')
+@app.route('/home')
 def home():
     if 'email' not in session:
         return redirect(url_for('login.login'))
-
     else:
         logged_in = 'email' in session
         email = session.get('email')

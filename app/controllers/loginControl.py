@@ -68,12 +68,12 @@ def login():
         # Controllo formato email
         if not re.match(email_regex, email):
             flash("Formato email non valido", "error")
-            return redirect(url_for('login.login'))
+            return redirect(url_for('login.login', error='formatoEmail'))
 
         # Controllo della password (minimo 8 caratteri)
         if not re.match(password_regex, password):
             flash("Password non valida", "error")
-            return redirect(url_for('login.login'))
+            return redirect(url_for('login.login', error='formatoPassword'))
 
         studente_model = StudenteModel()
         docente_model = DocenteModel()
@@ -94,21 +94,21 @@ def login():
                 session['ID_Classe'] = id_classe
                 session['Nome'] = nome_studete
                 flash("Login effettuato con successo", "success")
-                return redirect(url_for('dashboard.dashboardStudente'))  # Reindirizza al dashboard dopo il login
+                return redirect(url_for('home'))  # Reindirizza al dashboard dopo il login
 
             else:
                 flash("Password errata", "error")
-                return redirect(url_for('login.login'))
+                return redirect(url_for('login.login', error='passwordErrata'))
 
         elif docente:
             # Verifica la password per il docente
             if bcrypt.checkpw(password.encode('utf-8'), docente['password']):
-                docente_scuola_appartenenza = docente.get("sda")
+                docente_scuola_appartenenza = docente.get("SdA")
                 docente_codice_univoco = docente.get("codice_univoco")
                 nome_profilo = docente.get("nome")
                 if not docente_scuola_appartenenza or not docente_codice_univoco:
                     flash("Dati incompleti per il docente", "error")
-                    return redirect(url_for('login.login'))
+                    return redirect(url_for('login.login', error='datiErrore'))
 
                 session_token = str(uuid.uuid4())
                 session['email'] = email
@@ -116,17 +116,16 @@ def login():
                 session['SdA'] = docente_scuola_appartenenza
                 session['CU'] = docente_codice_univoco
                 session['Nome'] = nome_profilo
-
                 flash("Login effettuato con successo", "success")
-                return redirect(url_for('dashboardDocente.dashboard'))  # Reindirizza al dashboard dopo il login
+                return redirect(url_for('home'))  # Reindirizza al dashboard dopo il login
 
             else:
                 flash("Password errata", "error")
-                return redirect(url_for('login.login'))
+                return redirect(url_for('login.login', error='PasswordErrata'))
 
         else:
             flash("Email non registrata", "error")
-            return redirect(url_for('login.login'))
+            return redirect(url_for('login.login', error='EmailNonRegistrata'))
 
     except Exception as e:
         flash(f"Errore interno: {str(e)}", "error")
