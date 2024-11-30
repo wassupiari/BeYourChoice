@@ -27,23 +27,20 @@ def dashboard():
     # Recupera i dati necessari per il template (ad esempio, la lista delle classi)
     docente_model = DocenteModel()
 
-    # Esegui ulteriori operazioni necessarie per preparare i dati
-    # Per esempio, recuperare le classi gestite dal docente
-
     # Rendi il template con i dati necessari
     return DashboardController.mostra_dasboardDocente(codice_univoco)
 
 
 
 # Rotta per la classifica di una classe specifica
-@dashboardDocente.route('/classificaClasse/<int:id_classe>', methods=['GET'])
+@dashboardDocente.route('/classificaClasse/<int:ID_Classe>', methods=['GET'])
 @teacher_required
-def classifica_classe(id_classe):
+def classifica_classe(ID_Classe):
     """
     Visualizza la classifica di una specifica classe gestita dal docente.
     """
 
-    return DashboardController.mostra_classifica_classe(id_classe)
+    return DashboardController.mostra_classifica_classe(ID_Classe)
 
 
 # Rotta per lo storico delle attività di uno studente specifico

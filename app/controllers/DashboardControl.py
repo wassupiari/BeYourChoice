@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import render_template, session
 
 from app.controllers.loginControl import student_required, teacher_required
 from app.models.Attivita import Attivita
@@ -65,6 +65,8 @@ class DashboardController:
         :param id_classe: ID della classe.
         :return: Il rendering della vista 'classificaClasse.html'.
         """
+        session['ID_Classe'] = id_classe
+
         model = Attivita()
 
         # Recupera la classifica della classe
@@ -77,7 +79,7 @@ class DashboardController:
         return render_template(
             "classificaClasse.html",
             classifica=classifica,
-            id_classe=id_classe
+            ID_Classe=id_classe
         )
 
     @staticmethod
