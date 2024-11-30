@@ -17,7 +17,9 @@
       {% if messages %}
         <div class="flashes">
           {% for category, message in messages %}
+            {% if category == 'materiale_success' %}
             <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endif %}
           {% endfor %}
         </div>
       {% endif %}
@@ -37,6 +39,7 @@
                             <a href="{{ url_for('MaterialeDocente.rimuovi_materiale', materiale_id=materiale['_id']) }}" class="btn btn-danger" onclick="return confirm('Sei sicuro di voler eliminare questo materiale?');">Rimuovi</a>
                         </div>
                     </div>
+
                 {% endfor %}
             </div>
         {% else %}

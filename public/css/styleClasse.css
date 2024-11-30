@@ -204,6 +204,22 @@ h1 {
 .sidebar-item:hover i {
     color: #ffffff; /* Colore delle icone su hover */
 }
+.sidebar-item a {
+    display: flex;
+    flex-direction: column; /* Testo sotto l'icona */
+    justify-content: center;
+    align-items: center;
+    text-decoration: none; /* Rimuove la sottolineatura */
+    color: inherit; /* Mantiene il colore del genitore */
+    width: 100%; /* Si adatta alla dimensione dell'elemento */
+    height: 100%; /* Si adatta alla dimensione dell'elemento */
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.sidebar-item a:hover {
+    color: #ffffff; /* Cambia colore su hover */
+}
 
 .action-cell {
     text-align: center;

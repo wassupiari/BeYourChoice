@@ -97,7 +97,7 @@ def initialize_materiale_docente_blueprint(app: object) -> object:
 
             nuovo_materiale = MaterialeModel(id_MaterialeDidattico, titolo, descrizione, filepath, tipo)
             materiale_control.upload_material(nuovo_materiale)
-            flash("Materiale caricato con successo!", "success")
+            flash("Materiale caricato con successo!", "materiale_success")
             return redirect(url_for('MaterialeDocente.visualizza_materiale_docente'))
 
         return render_template('caricamentoMateriale.html')
@@ -150,7 +150,7 @@ def initialize_materiale_docente_blueprint(app: object) -> object:
             }
 
             materiale_control.edit_material(material_id_obj, updated_data)
-            flash("Materiale modificato con successo!", "success")
+            flash("Materiale modificato con successo!", "materiale_success")
             return redirect(url_for('MaterialeDocente.visualizza_materiale_docente'))
 
         if materiale['Tipo'] == 'txt':
