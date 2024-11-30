@@ -24,10 +24,13 @@
                 <h2>Classifica della classe</h2>
                 <ul>
                     {% for studente in classifica %}
-                        <li>{{ loop.index }}. {{ studente.Nome }} {{ studente.Cognome }}  <span>{{ studente.PunteggioTotale }}</span></li>
+                        <li>{{ loop.index }}. {{ studente.Nome }} {{ studente.Cognome }}
+                            <span>{{ studente.PunteggioTotale }}</span>
+                        </li>
                     {% endfor %}
                 </ul>
             </div>
+
 
             <!-- Storico Personale -->
             <div class="box tall-box">

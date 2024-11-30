@@ -87,8 +87,14 @@ def login():
                 session_token = str(uuid.uuid4())
                 session['email'] = email
                 session['session_token'] = session_token
+                id_classe = studente.get("ID_Classe")
+                cf_studente = studente.get("CF")
+                nome_studete = studente.get("nome")
+                session['CF'] = cf_studente
+                session['ID_Classe'] = id_classe
+                session['Nome'] = nome_studete
                 flash("Login effettuato con successo", "success")
-                return redirect(url_for('dashboardStudente.dashboard'))  # Reindirizza al dashboard dopo il login
+                return redirect(url_for('dashboard.dashboardStudente'))  # Reindirizza al dashboard dopo il login
 
             else:
                 flash("Password errata", "error")
