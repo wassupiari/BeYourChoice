@@ -21,7 +21,7 @@
                 </li>
                 {% for studente in classifica %}
                 <li>
-                    <a href="{{ url_for('dashboardDocente.storico_studente', cf_studente=cf_studente) }}">
+                    <a href="{{ url_for('dashboardDocente.storico_studente', cf_studente=studente.CF) }}">
                         <strong>{{ loop.index }}.</strong> {{ studente.Nome }} {{ studente.Cognome }}
                     </a>
                     <span>{{ studente.PunteggioTotale }}</span>
