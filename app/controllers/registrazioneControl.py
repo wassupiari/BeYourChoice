@@ -1,6 +1,4 @@
 import re
-import uuid
-
 from flask import Blueprint, request, jsonify, redirect, url_for, session
 from app.models.studenteModel import StudenteModel  # Assumendo che StudenteModel gestisca entrambi
 from app.models.docenteModel import DocenteModel
@@ -26,11 +24,7 @@ def registra():
         cf = request.form['cf']
         data_nascita = request.form['data-nascita']
         password = request.form['password']
-        codice_univoco = request.form['cu']  # Questo campo potrebbe non esistere
-
-        if codice_univoco is None: print("cu: null")
-        elif codice_univoco is '': print("cu: ")
-        else: print(codice_univoco)
+        codice_univoco = request.form.get('codice_univoco', '').strip()  # Aggiunta verifica del campo
 
         # Regex comuni
         email_regex = r"^[A-z0-9._%+-]+@[A-z0-9.-]+\.[A-z]{2,4}$"
@@ -44,31 +38,29 @@ def registra():
 
         # Controlli generali
         if not re.match(email_regex, email):
-            return redirect(url_for('login.login', error='formatoEmail'))
+            return redirect(url_for('login', error='formatoEmail'))
 
         if not re.match(nome_regex, nome):
-            return redirect(url_for('login.login', error='formatoNome'))
+            return redirect(url_for('login', error='formatoNome'))
 
         if not re.match(cognome_regex, cognome):
-            return redirect(url_for('login.login', error='formatoCognome'))
+            return redirect(url_for('login', error='formatoCognome'))
 
         if not re.match(sda_regex, sda):
-            return redirect(url_for('login.login', error='formatoSDA'))
+            return redirect(url_for('login', error='formatoSDA'))
 
         if not re.match(cf_regex, cf):
-            return redirect(url_for('login.login', error='formatocf'))
+            return redirect(url_for('login', error='formatocf'))
 
         if not re.match(data_nascita_regex, data_nascita):
-            return redirect(url_for('login.login', error='formatoDataNascita'))
+            return redirect(url_for('login', error='formatoDataNascita'))
 
         if not re.match(password_regex, password):
-            return redirect(url_for('login.login', error='formatoPassword'))
+            return redirect(url_for('login', error='formatoPassword'))
 
         if not codice_univoco is None:
-            if not(codice_univoco == ''):
-                if not re.match(codiceunivoco_regex, codice_univoco):
-                    return redirect(url_for('login.login', error='formatoCU'))
-            else: codice_univoco = "notValid"
+            if not re.match(codiceunivoco_regex, codice_univoco):
+                return redirect(url_for('login', error='formatoCU'))
 
         # Controllo se l'account esiste già
         docente_model = DocenteModel()
@@ -80,7 +72,7 @@ def registra():
             return redirect(url_for('login.login', error='alreadyRegistered'))
 
         # Registrazione come docente o studente
-        if codice_univoco != "notValid":  # Se presente, registra come docente
+        if codice_univoco:  # Se presente, registra come docente
             docente_dict = {
                 "nome": nome,
                 "cognome": cognome,
@@ -94,12 +86,7 @@ def registra():
 
             docente_model = DocenteModel()
             docente_model.aggiungi_docente(docente_dict)
-            session_token = str(uuid.uuid4())
             session['email'] = email
-            session['session_token'] = session_token
-            session['SdA'] = sda
-            session['CU'] = codice_univoco
-            session['Nome'] = nome
             return redirect(url_for('home'))
         else:  # Altrimenti, registra come studente
             studente_dict = {
@@ -113,11 +100,7 @@ def registra():
             }
 
             studente_model.aggiungi_studente(studente_dict)
-            session_token = str(uuid.uuid4())
             session['email'] = email
-            session['session_token'] = session_token
-            session['SdA'] = sda
-            session['Nome'] = nome
             return redirect(url_for('home'))
 
     except Exception as e:
