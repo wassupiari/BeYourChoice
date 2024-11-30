@@ -12,6 +12,8 @@ class DashboardController:
         :param id_classe: ID della classe.
         :return: Il rendering della vista 'dashboardStudente.html'.
         """
+        session['ID_Classe'] = id_classe
+
         model = Attivita()
 
         # Recupera i punteggi dello studente

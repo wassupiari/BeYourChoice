@@ -31,6 +31,7 @@ def student_required(f):
 
     return decorated_function
 
+
 # Decoratore per proteggere le rotte dei docenti
 def teacher_required(f):
     @wraps(f)
@@ -90,6 +91,11 @@ def login():
                 id_classe = studente.get("ID_Classe")
                 cf_studente = studente.get("CF")
                 nome_studete = studente.get("nome")
+                if studente.get("ID_Classe"):
+                    id_classe = studente["ID_Classe"]
+                else:
+                    id_classe = studente.get("ID_Classe", 0)
+
                 session['CF'] = cf_studente
                 session['ID_Classe'] = id_classe
                 session['Nome'] = nome_studete

@@ -7,44 +7,51 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styledashboard.css') }}">
 </head>
 <body>
-    {% include 'header.html' %}
-    <div class="dashboard">
-        <div class="section">
-            <!-- Punteggio Personale -->
-            <div class="box">
-                <h2>Punteggio Personale</h2>
-                <ul>
-                    <li>Quiz: <span>{{ punteggio_quiz }}</span></li>
-                    <li>Scenari Virtuali: <span>{{ punteggio_scenario }}</span></li>
-                </ul>
-            </div>
-
-            <!-- Classifica della classe -->
-            <div class="box tall-box half-width">
-                <h2>Classifica della classe</h2>
-                <ul>
-                    {% for studente in classifica %}
-                        <li>{{ loop.index }}. {{ studente.Nome }} {{ studente.Cognome }}
-                            <span>{{ studente.PunteggioTotale }}</span>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
+{% include 'header.html' %}
+<div class="dashboard">
+    <div class="section">
+        <a href="{{ url_for('classedocente.Classe_Studente', ID_Classe=session.get('ID_Classe', 0)) }}">
 
 
-            <!-- Storico Personale -->
-            <div class="box tall-box">
-                <h2>Storico Personale</h2>
-                <ul>
-                    {% for quiz in storico.Quiz %}
-                        <li>Quiz: {{ quiz.Argomento }} <span>{{ quiz.Punteggio }}</span></li>
-                    {% endfor %}
-                    {% for scenario in storico.Scenari %}
-                        <li>Scenario: {{ scenario.Titolo }}  <span>{{ scenario.Punteggio }}</span></li>
-                    {% endfor %}
-                </ul>
-            </div>
+        <button class="button">Gestione classe</button>
+
+        </a>
+        <!-- Punteggio Personale -->
+        <div class="box">
+            <h2>Punteggio Personale</h2>
+            <ul>
+                <li>Quiz: <span>{{ punteggio_quiz }}</span></li>
+                <li>Scenari Virtuali: <span>{{ punteggio_scenario }}</span></li>
+            </ul>
+        </div>
+
+        <!-- Classifica della classe -->
+        <div class="box tall-box half-width">
+            <h2>Classifica della classe</h2>
+            <ul>
+                {% for studente in classifica %}
+                <li>{{ loop.index }}. {{ studente.Nome }} {{ studente.Cognome }}
+                    <span>{{ studente.PunteggioTotale }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+
+        <!-- Storico Personale -->
+        <div class="box tall-box">
+            <h2>Storico Personale</h2>
+            <ul>
+                {% for quiz in storico.Quiz %}
+                <li>Quiz: {{ quiz.Argomento }} <span>{{ quiz.Punteggio }}</span></li>
+                {% endfor %}
+                {% for scenario in storico.Scenari %}
+                <li>Scenario: {{ scenario.Titolo }} <span>{{ scenario.Punteggio }}</span></li>
+                {% endfor %}
+            </ul>
         </div>
     </div>
+</div>
+
 </body>
 </html>

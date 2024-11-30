@@ -10,8 +10,6 @@ classe_virtuale_control = ClasseVirtualeControl()
 @classedocente.route('/classe/<int:ID_Classe>', methods=['GET', 'POST'])
 def Classe_Docente(ID_Classe):
     # Assumendo che l'ID_Classe sia passato come parametro o derivato da un'altra fonte
-    session['ID_Classe'] = ID_Classe
-
     print("La route /ClasseDocente è stata chiamata!")  # Debug
     session['ID_Classe'] = ID_Classe
     try:
@@ -30,25 +28,36 @@ def Classe_Docente(ID_Classe):
     except Exception as e:
         return render_template("errore.html", messaggio=f"Errore: {str(e)}")
 
-@classedocente.route('/classestudente', methods=['GET', 'POST'])
-def Classe_Studente():
-    print("La route /ClasseStudente è stata chiamata!")  # Debug
-    try:
-        # Ottieni l'ID della classe dalla query string (se non è presente, usa 101 come default)
-        ID_Classe = int(request.args.get("ID_Classe", 101))
-        print(f"ID_Classe ricevuto: {ID_Classe}")  # Aggiunto per debugging
 
-        # Usa il controller per ottenere i dati degli studenti
+from flask import redirect, url_for
+
+
+@classedocente.route('/classestudente/<int:ID_Classe>', methods=['GET', 'POST'])
+def Classe_Studente(ID_Classe):
+    print("La route /ClasseStudente è stata chiamata!")  # Debug
+    if ID_Classe == 0:
+        # Se ID_Classe è 0, reindirizza alla pagina noclasse
+        return redirect(url_for('classedocente.NoClasse'))
+
+    try:
+        print(f"ID_Classe ricevuto: {ID_Classe}")  # Debug
         dati_classe = classe_virtuale_control.mostra_classe(ID_Classe)
-        print(f"Dati classe ricevuti: {dati_classe}")  # Aggiunto per debugging
+        print(f"Dati classe ricevuti: {dati_classe}")  # Debug
+
         if "error" in dati_classe:
             return render_template("errore.html", messaggio=dati_classe["error"])
 
-            # Passa i dati al template classeDocente.html
         return render_template("classeStudente.html", classe=dati_classe)
 
     except Exception as e:
         return render_template("errore.html", messaggio=f"Errore: {str(e)}")
+
+
+# Route per la pagina noclasse
+@classedocente.route('/noclasse', methods=['GET'])
+def NoClasse():
+    return render_template("noclasse.html", messaggio="Nessuna classe selezionata.")
+
 
 @classedocente.route('/rimuovi-studente', methods=['POST'])
 def rimuovi_studente():
