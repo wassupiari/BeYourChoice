@@ -10,57 +10,61 @@ class Attivita:
         :param id_classe: ID della classe.
         :return: Lista degli studenti con Nome, Cognome, CF e Punteggio Totale.
         """
-        studente_collection = self.db_manager.get_collection("Studente")
-        scenario_collection = self.db_manager.get_collection("PunteggioScenario")
-        quiz_collection = self.db_manager.get_collection("RisultatoQuiz")
+        try:
+            studente_collection = self.db_manager.get_collection("Studente")
+            scenario_collection = self.db_manager.get_collection("PunteggioScenario")
+            quiz_collection = self.db_manager.get_collection("RisultatoQuiz")
 
-        # Recupera gli studenti della classe
-        studenti = list(
-            studente_collection.find(
-                {"ID_Classe": id_classe},
-                {"_id": 0, "CF": 1, "Nome": 1, "Cognome": 1}
+            # Recupera gli studenti della classe
+            studenti = list(
+                studente_collection.find(
+                    {"ID_Classe": id_classe},
+                    {"_id": 0, "CF": 1, "nome": 1, "cognome": 1}  # Cambia "CF" con "cf" se necessario
+                )
             )
-        )
 
-        # Mappa per i punteggi
-        punteggi_totali = {}
+            # Mappa per i punteggi
+            punteggi_totali = {studente.get("CF"): {"PunteggioScenari": 0, "PunteggioQuiz": 0} for studente in studenti}
 
-        # Calcola i punteggi dagli scenari
-        scenari_punteggi = scenario_collection.aggregate([
-            {"$group": {"_id": "$CF_Studente", "PunteggioScenari": {"$sum": "$Punteggio_Scenario"}}}
-        ])
-        for item in scenari_punteggi:
-            punteggi_totali[item["_id"]] = {"PunteggioScenari": item["PunteggioScenari"], "PunteggioQuiz": 0}
+            # Calcola i punteggi dagli scenari
+            scenari_punteggi = scenario_collection.aggregate([
+                {"$group": {"_id": "$CF_Studente", "PunteggioScenari": {"$sum": "$Punteggio_Scenario"}}}
+            ])
+            for item in scenari_punteggi:
+                if item["_id"] in punteggi_totali:
+                    punteggi_totali[item["_id"]]["PunteggioScenari"] = item["PunteggioScenari"]
 
-        # Calcola i punteggi dai quiz
-        quiz_punteggi = quiz_collection.aggregate([
-            {"$group": {"_id": "$CF_Studente", "PunteggioQuiz": {"$sum": "$Punteggio_Quiz"}}}
-        ])
-        for item in quiz_punteggi:
-            if item["_id"] in punteggi_totali:
-                punteggi_totali[item["_id"]]["PunteggioQuiz"] = item["PunteggioQuiz"]
-            else:
-                punteggi_totali[item["_id"]] = {"PunteggioScenari": 0, "PunteggioQuiz": item["PunteggioQuiz"]}
+            # Calcola i punteggi dai quiz
+            quiz_punteggi = quiz_collection.aggregate([
+                {"$group": {"_id": "$CF_Studente", "PunteggioQuiz": {"$sum": "$Punteggio_Quiz"}}}
+            ])
+            for item in quiz_punteggi:
+                if item["_id"] in punteggi_totali:
+                    punteggi_totali[item["_id"]]["PunteggioQuiz"] = item["PunteggioQuiz"]
 
-        # Combina i dati degli studenti con i punteggi
-        classifica = []
-        for studente in studenti:
-            cf_studente = studente["CF"]
-            punteggio_scenari = punteggi_totali.get(cf_studente, {}).get("PunteggioScenari", 0)
-            punteggio_quiz = punteggi_totali.get(cf_studente, {}).get("PunteggioQuiz", 0)
-            punteggio_totale = punteggio_scenari + punteggio_quiz
+            # Combina i dati degli studenti con i punteggi
+            classifica = []
+            for studente in studenti:
+                print(studente)
+                cf_studente = studente.get("CF")  # Cambia "CF" con "cf"
+                punteggio_scenari = punteggi_totali.get(cf_studente, {}).get("PunteggioScenari", 0)
+                punteggio_quiz = punteggi_totali.get(cf_studente, {}).get("PunteggioQuiz", 0)
+                punteggio_totale = punteggio_scenari + punteggio_quiz
 
-            classifica.append({
-                "CF": cf_studente,
-                "Nome": studente["Nome"],
-                "Cognome": studente["Cognome"],
-                "PunteggioTotale": punteggio_totale
-            })
+                classifica.append({
+                    "CF": cf_studente,
+                    "Nome": studente.get("nome"),
+                    "Cognome": studente.get("cognome"),
+                    "PunteggioTotale": punteggio_totale
+                })
 
-        # Ordina la classifica per punteggio totale decrescente
-        classifica.sort(key=lambda x: x["PunteggioTotale"], reverse=True)
+            # Ordina la classifica per punteggio totale decrescente
+            classifica.sort(key=lambda x: x["PunteggioTotale"], reverse=True)
 
-        return classifica
+            return classifica
+        except Exception as e:
+            print(f"Errore nel recupero della classifica: {e}")
+            return []
 
     def get_punteggio_personale(self, cf_studente):
         """

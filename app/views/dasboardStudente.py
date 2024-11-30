@@ -1,4 +1,4 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, session
 from app.controllers.DashboardControl import DashboardController
 from app.controllers.loginControl import student_required
 
@@ -12,6 +12,7 @@ def dashboardStudente():
     """
     Visualizza la dashboard per un utente specifico.
     """
-
+    cf_studente = session.get('CF')
+    id_classe = session.get('ID_Classe')
     # Usa il controller per ottenere i dati
     return DashboardController.mostra_dashboard(cf_studente, id_classe)
