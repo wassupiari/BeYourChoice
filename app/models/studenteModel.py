@@ -16,7 +16,6 @@ class StudenteModel:
         print("Studente aggiunto con successo!")
 
     def trova_studente(self, email):
-        print("supercazzola",email)
         # Cerca uno studente per email
         studente_collection = self.db_manager.get_collection("Studente")
         print(studente_collection.find_one({"email": email}))

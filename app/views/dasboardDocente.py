@@ -10,7 +10,6 @@ print("entrooooo")
 @dashboardDocente.route('/dashboardDocente', methods=['GET'])
 @teacher_required  # Usa il decoratore per proteggere la rotta
 def dashboard():
-    print("aaaaaaa")
     """
     Visualizza la dashboard per il docente autenticato.
     """

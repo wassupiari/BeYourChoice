@@ -97,7 +97,7 @@ def login():
                     # Se "ID_Classe" non esiste, assegniamo 0 (oppure il valore dalla sessione, se necessario)
                     id_classe = session.get("ID_Classe", 0)
 
-                print(id_classe, "ciaooo")
+                print(id_classe)
 
 
                 session['CF'] = cf_studente
@@ -143,7 +143,6 @@ def login():
 # Route per terminare la sessione (logout)
 @login_bp.route('/logout', methods=['POST'])
 def logout():
-    print("ciaoooo mondooo io sono lollipop")
     if 'email' in session:
         # Pulisce la sessione e disconnette l'utente
         session.pop('email', None)

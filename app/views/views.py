@@ -13,8 +13,8 @@ classe_control = ClasseVirtualeControl()
 @views.route('creazione-classe', methods=['GET', 'POST'])
 def creazione_classe():
     if request.method == 'POST':
-        # Ottieni il codice univoco del docente dalla sessione
         codice_univoco_docent = session.get("CU")
+        print(codice_univoco_docent)
 
         nome_classe = request.form['nome-classe']
         descrizione = request.form['descrizione']
@@ -40,3 +40,4 @@ def creazione_classe():
             return render_template('creazioneCV.html', error=str(e))
 
     return render_template('creazioneCV.html')
+
