@@ -32,9 +32,55 @@
     width: 600px; /* Riduci la larghezza */
     height: auto; /* Mantieni proporzioni */
     object-fit: contain; /* Evita distorsioni */
-    z-index: 10; /* Porta l'immagine sopra gli altri elementi */
+    z-index: 0; /* Porta l'immagine sopra gli altri elementi */
+}
+/*fine immagine strappata*/
+
+/*inizio bottone*/
+.scenario .button_1  {
+  z-index: 1; /* Porta l'immagine sopra gli altri elementi */
+  position: absolute;
+  right: 265px;
+  background-color:  #d75a3d;
+  color: #fff;
+  padding: 10px 30px; /*spaziatura dai bordi alla scritta*/
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font-weight: 200;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-top: 500px;
+  cursor: pointer;
 }
 
+.scenario .button_1.hidden {
+  background-color: transparent;
+  border-color: #fff;
+}
+/*fine bottone*/
+
+/*inizio bottone*/
+.scenario .button_2 {
+  position: relative;
+  left: 43%; /* Centra orizzontalmente */
+  z-index: 1; /* Porta l'immagine sopra gli altri elementi */
+  background-color:  #d75a3d;
+  color: #fff;
+  padding: 10px 30px; /*spaziatura dai bordi alla scritta*/
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font-weight: 200;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin: 25px auto 0;
+  cursor: pointer;
+}
+
+.scenario .button_2.hidden {
+  background-color: transparent;
+  border-color: #fff;
+}
+/*fine bottone*/
 
 .scenario:hover {
   transform: translateY(-10px); /* Leggera traslazione verso l'alto */
