@@ -196,7 +196,7 @@ class ClasseVirtuale:
 
             # Esegui la query per recuperare gli studenti della classe e ordina per 'Cognome' e 'Nome'
             studenti = list(
-                studente_collection.find({"ID_Classe": ID_Classe}).sort([("Nome", 1), ("Cognome", 1)])
+                studente_collection.find({"ID_Classe": ID_Classe}).sort([("nome", 1), ("cognome", 1)])
             )
 
             # Verifica se la query restituisce risultati
@@ -210,12 +210,12 @@ class ClasseVirtuale:
             mostraclasse = []
             for studente in studenti:
                 mostraclasse.append({
-                    "Nome": studente["Nome"],
-                    "Cognome": studente["Cognome"],
-                    "Data_Nascita": studente["Data_Nascita"],
+                    "Nome": studente["nome"],
+                    "Cognome": studente["cognome"],
+                    "Data_Nascita": studente.get("Data_Nascita", "N/A"),
                     "_id": studente["_id"]
                 })
-
+            print(mostraclasse)
             return mostraclasse
         except Exception as e:
             print(f"Errore durante il recupero degli studenti: {e}")  # Aggiunto per debugging
@@ -256,8 +256,8 @@ class ClasseVirtuale:
             studenti_istituto = []
             for studente in studenti:
                 studenti_istituto.append({
-                    "Nome": studente.get("Nome", "N/A"),
-                    "Cognome": studente.get("Cognome", "N/A"),
+                    "Nome": studente.get("nome", "N/A"),
+                    "Cognome": studente.get("cognome", "N/A"),
                     "Data_Nascita": studente.get("Data_Nascita", "N/A"),
                     "_id": str(studente["_id"])  # Converti ObjectId in stringa
                 })
