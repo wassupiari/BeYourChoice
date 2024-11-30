@@ -10,6 +10,8 @@ from app.views.views import views
 from app.models.studenteModel import StudenteModel
 from app.models.docenteModel import DocenteModel
 from app.models.Attivita import Attivita
+from app.views.MaterialeDocente import initialize_materiale_docente_blueprint
+from app.views.MaterialeStudente import initialize_materiale_studente_blueprint
 
 
 # Crea l'applicazione Flask
@@ -22,6 +24,7 @@ app.register_blueprint(views, url_prefix='/')  # Il prefisso '/' è opzionale, p
 app.secret_key=os.urandom(32).hex()
 app.register_blueprint(dashboard_bp)
 app.register_blueprint(dashboardDocente)
+
 # Definisci una route per la homepage
 @app.route('/')
 @app.route('/home')
@@ -47,6 +50,18 @@ def home():
 
 app.register_blueprint(login_bp)
 app.register_blueprint(registrazione_bp)
+
+UPLOAD_FOLDER = 'public/uploads'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+# Variabile per decidere quale blueprint registrare
+USE_DOCENTE = True  # Cambia questo valore in False per usare Studente invece
+
+# Inizializzazione del blueprint condizionale
+if USE_DOCENTE:
+    initialize_materiale_docente_blueprint(app)
+else:
+    initialize_materiale_studente_blueprint(app)
 
 
 # Avvio del server
