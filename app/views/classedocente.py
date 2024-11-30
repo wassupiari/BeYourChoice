@@ -29,7 +29,6 @@ def Classe_Docente(ID_Classe):
         return render_template("errore.html", messaggio=f"Errore: {str(e)}")
 
 
-from flask import redirect, url_for
 
 
 @classedocente.route('/classestudente/<int:ID_Classe>', methods=['GET', 'POST'])
