@@ -1,6 +1,6 @@
 from flask import Flask
-from app.views.docente import initialize_materiale_docente_blueprint
-from app.views.studente import initialize_materiale_studente_blueprint
+from app.views.MaterialeDocente import initialize_materiale_docente_blueprint
+from app.views.MaterialeStudente import initialize_materiale_studente_blueprint
 
 app = Flask(__name__, template_folder='app/templates', static_folder='public')
 app.secret_key = 'your_secret_key'

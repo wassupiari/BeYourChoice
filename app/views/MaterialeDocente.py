@@ -166,22 +166,35 @@ def initialize_materiale_docente_blueprint(app: object) -> object:
     def rimuovi_materiale(materiale_id):
         try:
             material_id_obj = ObjectId(materiale_id)
-        except Exception:
-            flash("ID del materiale non valido.", "error")
+        except Exception as e:
+            flash("ID del materiale non valido: " + str(e), "error")
             return redirect(url_for('MaterialeDocente.visualizza_materiale_docente'))
 
-        materiale = materiale_control.delete_material(material_id_obj)
+        materiale = materiale_control.view_material({"_id": material_id_obj})
 
         if materiale is None:
             flash("Materiale non trovato.", "error")
             return redirect(url_for('MaterialeDocente.visualizza_materiale_docente'))
 
-        file_path = os.path.join(app.config['UPLOAD_FOLDER'], materiale['File_Path'])
+        # Prova ad eliminare il materiale
+        delete_success = materiale_control.delete_material(material_id_obj)
 
-        if os.path.exists(file_path):
-            os.remove(file_path)
+        if not delete_success:
+            flash("Errore durante la rimozione del materiale dal database.", "error")
+            return redirect(url_for('MaterialeDocente.visualizza_materiale_docente'))
 
-        flash("Materiale rimosso con successo!", "success")
+        file_path = materiale.get('File_Path')
+        if file_path:
+            full_file_path = os.path.join(app.config['UPLOAD_FOLDER'], file_path)
+            if os.path.exists(full_file_path):
+                try:
+                    os.remove(full_file_path)
+                    flash("Materiale rimosso con successo!", "success")
+                except OSError as e:
+                    flash(f"Errore durante l'eliminazione del file: {e}", "error")
+            else:
+                flash("File non trovato, ma materiale rimosso dal database.", "warning")
+
         return redirect(url_for('MaterialeDocente.visualizza_materiale_docente'))
 
     @MaterialeDocente.route('/public/uploads/<filename>')
