@@ -16,28 +16,38 @@
             text-align: center;
         }
         img {
-            max-width: 100%;
+            max-width: 700px;
             height: auto;
             margin-bottom: 20px;
         }
         button {
             padding: 10px 20px;
-            font-size: 16px;
-            background-color: #007BFF;
-            color: white;
+            font-size: 1rem;
+            font-weight: 600;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-        }
+            transition: all 0.3s ease;
+            display: inline-block;
+            background-color: #000000;
+            color: #ffffff;
+            margin-right: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Effetto ombra */
+            cursor: pointer;
+            transition: box-shadow 0.3s ease, transform 0.3s ease; /* Effetti al passaggio del mouse */
+            }
+
         button:hover {
-            background-color: #0056b3;
-        }
+            transform: scale(1.05); /* Leggero ingrandimento al passaggio del mouse */
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Ombra più intensa su hover */
+            background-color: #d75a3d;
+            color: #ffffff;
+            }
     </style>
 </head>
 <body>
-    <h1>Nessuna Classe Selezionata</h1>
-    <p>{{ messaggio }}</p>
-    <img src="images/noclasse.png" alt="Immagine illustrativa">
+    <h1>Non sei in nessuna classe fratello!!</h1>
+    <img src="{{ url_for('static', filename='img/noclasse.jpg') }}">
     <a href="{{ url_for('home') }}">
         <button class="button">Torna alla Dashboard</button></a>
 </body>
