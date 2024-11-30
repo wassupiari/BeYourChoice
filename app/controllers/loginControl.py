@@ -88,13 +88,17 @@ def login():
                 session_token = str(uuid.uuid4())
                 session['email'] = email
                 session['session_token'] = session_token
-                id_classe = studente.get("ID_Classe")
                 cf_studente = studente.get("CF")
                 nome_studete = studente.get("nome")
-                if studente.get("ID_Classe"):
+
+                if studente.get("ID_Classe"):  # Se "ID_Classe" è presente e ha un valore
                     id_classe = studente["ID_Classe"]
                 else:
-                    id_classe = studente.get("ID_Classe", 0)
+                    # Se "ID_Classe" non esiste, assegniamo 0 (oppure il valore dalla sessione, se necessario)
+                    id_classe = session.get("ID_Classe", 0)
+
+                print(id_classe, "ciaooo")
+
 
                 session['CF'] = cf_studente
                 session['ID_Classe'] = id_classe
@@ -139,10 +143,13 @@ def login():
 # Route per terminare la sessione (logout)
 @login_bp.route('/logout', methods=['POST'])
 def logout():
+    print("ciaoooo mondooo io sono lollipop")
     if 'email' in session:
         # Pulisce la sessione e disconnette l'utente
         session.pop('email', None)
+        session.pop('ID_Classe',None)
         session.pop('session_token', None)
+
         flash("Sei stato disconnesso", "success")
         return redirect(url_for('login.login'))
     else:
