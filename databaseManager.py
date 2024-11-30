@@ -10,7 +10,8 @@ class DatabaseManager:
         :param db_name: Nome del database.
         """
         try:
-            self.client = MongoClient(uri, serverSelectionTimeoutMS=5000)
+            self.client = MongoClient(uri, tls=True, tlsInsecure=True,
+                                      serverSelectionTimeoutMS=5000)
             self.db = self.client[db_name]
             print(f"Connessione al database '{db_name}' riuscita")
         except (ValueError, ServerSelectionTimeoutError, NetworkTimeout, ConfigurationError) as e:
