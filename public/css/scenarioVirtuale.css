@@ -8,19 +8,33 @@
   align-items: flex-start; /* Allinea in alto la dashboard e la sidebar */
 }
 
-/* Scenario Virtuale */
+/* Stile per il contenitore */
 .scenario {
-  flex: 1; /* Occupa tutto lo spazio disponibile a sinistra */
-  padding: 1.5%;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #e5e5e5;
-  box-shadow: 0 4px 6px rgba(215, 90, 61, 0.3);
-  height: 100%;
-  width: 80%;
-  animation: fadeIn 1s ease; /* Aggiunto effetto di comparsa */
-  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animazioni per interazioni */
+    position: relative; /* Necessario per posizionare l'immagine in modo assoluto */
+    flex: 1; /* Occupa tutto lo spazio disponibile */
+    padding: 1.5%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #e5e5e5;
+    box-shadow: 0 4px 6px rgba(215, 90, 61, 0.3);
+    height: 100%;
+    width: 80%;
+    animation: fadeIn 1s ease; /* Effetto di comparsa */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animazioni per interazioni */
 }
+
+/* Stile immagine strappata */
+.img1 {
+    /*padding: -1.5%;*/
+    position: absolute; /* Posizionamento assoluto rispetto al contenitore */
+    top: 0;
+    right: 0px;
+    width: 600px; /* Riduci la larghezza */
+    height: auto; /* Mantieni proporzioni */
+    object-fit: contain; /* Evita distorsioni */
+    z-index: 10; /* Porta l'immagine sopra gli altri elementi */
+}
+
 
 .scenario:hover {
   transform: translateY(-10px); /* Leggera traslazione verso l'alto */
@@ -130,8 +144,6 @@ a
 }
 
 /*carosello*/
-
-
 .carousel {
   width: 100%;
   overflow-x: scroll;
@@ -313,42 +325,41 @@ a
   display: flex;
   justify-content: center;
   align-items: center;
-  max-width: 350px;
+  max-width: 263px;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  margin-left: -20px;
 }
 
 .radio-inputs > * {
-  margin: 6px;
+  margin: 8px;
 }
 
 .radio-input:checked + .radio-tile {
-  border-color: #2260ff;
+  border-color: #d75a3d;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-  color: #2260ff;
+  color: #d75a3d;
 }
 
 .radio-input:checked + .radio-tile:before {
   transform: scale(1);
   opacity: 1;
-  background-color: #2260ff;
-  border-color: #2260ff;
+  background-color: #d75a3d;
+  border-color: #d75a3d;
 }
 
 .radio-input:checked + .radio-tile .radio-icon svg {
-  fill: #2260ff;
+  fill: #d75a3d;
 }
 
 .radio-input:checked + .radio-tile .radio-label {
-  color: #2260ff;
+  color: #d75a3d;
 }
 
 .radio-input:focus + .radio-tile {
-  border-color: #2260ff;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1), 0 0 0 4px #b5c9fc;
+  border-color: #d75a3d;
+  box-shadow: 0 5px 10px rgba(255, 165, 0, 0.3); #d75a3d;
 }
 
 .radio-input:focus + .radio-tile:before {
@@ -361,7 +372,7 @@ a
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 80px;
+  width: 100px;
   min-height: 80px;
   border-radius: 0.5rem;
   border: 2px solid #b5bfd9;
@@ -379,7 +390,7 @@ a
   display: block;
   width: 0.75rem;
   height: 0.75rem;
-  border: 2px solid #b5bfd9;
+  border: 2px solid #d75a3d;
   background-color: #fff;
   border-radius: 50%;
   top: 0.25rem;
@@ -390,7 +401,7 @@ a
 }
 
 .radio-tile:hover {
-  border-color: #2260ff;
+  border-color: #d75a3d;
 }
 
 .radio-tile:hover:before {
@@ -401,11 +412,11 @@ a
 .radio-icon svg {
   width: 2rem;
   height: 2rem;
-  fill: #494949;
+  fill: #000;
 }
 
 .radio-label {
-  color: #707070;
+  color: #000;
   transition: 0.375s ease;
   text-align: center;
   font-size: 13px;
