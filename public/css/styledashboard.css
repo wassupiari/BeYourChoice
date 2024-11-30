@@ -77,3 +77,48 @@ body {
 .box li span + span {
   text-align: left; /* Allinea a sinistra il testo che non è in grassetto */
 }
+
+.sidebar {
+    width: 160px; /* Larghezza fissa della sidebar */
+    display: flex;
+    flex-direction: column; /* Disposizione verticale */
+    align-items: center; /* Centrare i contenuti */
+    gap: 10px; /* Spazio tra i quadrati */
+}
+
+/* Quadrati della barra laterale */
+.sidebar-item {
+    width: 165px; /* Larghezza dei quadrati */
+    height: 165px; /* Altezza dei quadrati */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 18px; /* Testo più piccolo */
+    font-weight: bold;
+    background-color: #ffffff;
+    color: #000000; /* Colore del testo */
+    border: 1px solid #ccc; /* Bordi visibili */
+    border-radius: 8px; /* Leggera arrotondatura degli angoli */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Effetto ombra */
+    cursor: pointer;
+    transition: box-shadow 0.3s ease, transform 0.3s ease; /* Effetti al passaggio del mouse */
+}
+
+.sidebar-item i {
+    font-size: 40px; /* Dimensione delle icone  */
+    margin-bottom: 10px; /* Spazio tra l'icona e il testo */
+    color: #000000; /* Colore delle icone */
+}
+
+.sidebar-item:hover {
+    transform: scale(1.05); /* Leggero ingrandimento al passaggio del mouse */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Ombra più intensa su hover */
+    background-color: #d75a3d;
+    color: #ffffff;
+}
+
+.sidebar-item:hover i {
+    color: #ffffff; /* Colore delle icone su hover */
+}
