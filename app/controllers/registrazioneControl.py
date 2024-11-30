@@ -8,11 +8,6 @@ registrazione_bp = Blueprint('registrazione', __name__)
 
 # Crea una rotta per la registrazione
 
-
-
-
-
-
 @registrazione_bp.route('/register', methods=['POST'])
 def registra():
     try:

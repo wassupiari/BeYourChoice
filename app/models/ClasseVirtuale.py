@@ -180,7 +180,6 @@ class ClasseVirtuale:
         return f"Studente con ID '{IdStudente}' rimosso con successo dalla classe '{IdClasse}'."
 
     def mostra_classe(self, ID_Classe):
-        print("ciao2")
         """
         Recupera gli studenti di una classe specifica in ordine alfabetico.
 
