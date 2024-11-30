@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="container" id="container">
-      <div class="sign-up">
+      <div class="reg">
         <form id="registrazioneForm" action="/register" method="POST">
           <h1>Crea un account</h1>
             <div class="switch-toggle">
@@ -18,20 +18,18 @@
                     <span>Docente</span>
                 </label>
             </div>
-
-            <input type="text" name="nome" id="nome" placeholder="Inserisci il tuo Nome" required>
-            <input type="text" name="cognome" id="cognome" placeholder="Inserisci il tuo Cognome" required>
-            <input type="text" name="sda" id="sda" placeholder="Inserisci il tuo Scuola di Appartenenza" required>
-            <input type="email" name="email" placeholder="Inserisci la tua Email" required>
-            <input type="text" name="cf" id="cf" placeholder="Inserisci il tuo Codice Fiscale" required>
-            <input type="date" name="data-nascita" id="data" required>
-            <input type="password" name="password" id="password" placeholder="Inserisci la tua Password" required>
-            <input type="text" name="codice_univoco" id="cu" placeholder="Inserisci il tuo Codice Univoco">
-            <button type="submit">INVIA</button>
-
+          <input type="text" name="nome" id="nome" placeholder="Inserisci il tuo Nome" required>
+                <input type="text" name="cognome" id="cognome" placeholder="Inserisci il tuo Cognome" required>
+                <input type="text" name="sda" id="sda" placeholder="Inserisci il tuo Scuola di Appartenenza" required>
+                <input type="email" name="email" placeholder="Inserisci la tua Email" required>
+                <input type="text" name="cf" id="cf" placeholder="Inserisci il tuo Codice Fiscale" required>
+                <input type="date" name="data-nascita" id="data" required>
+                <input type="password" name="password" id="password" placeholder="Inserisci la tua Password" required>
+                <input type="text" name="cu" id="cu" placeholder="Inserisci il tuo Codice Univoco" required>
+          <button type="submit">INVIA</button>
         </form>
       </div>
-      <div class="sign-in">
+      <div class="log">
         <form action="/login" method="POST">
           <h1>ACCEDI</h1>
           <input type="text" name="email" placeholder="Email" />
