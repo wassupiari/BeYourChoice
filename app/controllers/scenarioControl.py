@@ -1,10 +1,10 @@
 import re
-from flask import Blueprint, request, jsonify, redirect, url_for
+from flask import Blueprint, request, jsonify, redirect, url_for, render_template
 from app.models.scenarioModel import ScenarioModel
+from server import app
 
 # Crea un Blueprint per gestire gli scenari
 scenario_bp = Blueprint('scenario', __name__)  # Correzione: __name__ invece di _name_
-
 
 # Crea una rotta per la registrazione di uno scenario
 @scenario_bp.route('/scenario', methods=['POST'])
@@ -18,23 +18,23 @@ def registra_scenario():
 
         # Validazione dei campi
         if not titolo or not descrizione or not argomento:
-            return redirect(url_for('login', error='DatiObbligatori'))
+            return redirect(url_for('scenarioVirtuale', error='DatiObbligatori'))
 
         # Validazioni dei campi
         titolo_regex = r"^[A-Za-z\s]{2,50}$"  # Titolo con lettere e spazi, 2-50 caratteri
         descrizione_regex = r"^[^§]{2,255}$"  # Nessun '§', lunghezza 2-255 caratteri
 
         if not re.match(titolo_regex, titolo):
-            return redirect(url_for('login', error='formatoTitolo'))
+            return redirect(url_for('scenarioVirtuale', error='formatoTitolo'))
 
         if not re.match(descrizione_regex, descrizione):
-            return redirect(url_for('login', error='formatoDescrizione'))
+            return redirect(url_for('scenarioVirtuale', error='formatoDescrizione'))
 
         # Selezione di argomento (aggiusta in base ai tuoi argomenti validi)
         argomento_options = ["Sostenibilità", "Diritti Civili", "Sanità", "Società e Cultura",
                              "Politica Internazionale", "Economia e Lavoro"]
         if argomento not in argomento_options:
-            return redirect(url_for('login', error='argomentoNonValido'))
+            return redirect(url_for('scenarioVirtuale', error='argomentoNonValido'))
 
         # Crea un dizionario con i dati per lo scenario
         scenario_dict = {

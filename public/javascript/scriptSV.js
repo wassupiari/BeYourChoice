@@ -68,4 +68,33 @@ window.onload = function() {
     }
 };
 
+document.addEventListener("DOMContentLoaded", function() {
+    const createScenarioButton = document.querySelector('.button_2'); // Seleziona il bottone CREA SCENARIO
+    const formScenario = document.getElementById('formScenario'); // Seleziona il form
+
+    createScenarioButton.addEventListener('click', function(event) {
+        event.preventDefault(); // Previene l'invio predefinito del form
+
+        // Seleziona il radio button selezionato
+        const selectedRadio = document.querySelector('input[name="engine"]:checked');
+
+        if (selectedRadio) {
+            // Crea o aggiorna un input nascosto nel form
+            let inputModalita = document.querySelector('input[name="modalità"]');
+            if (!inputModalita) {
+                inputModalita = document.createElement('input');
+                inputModalita.type = 'hidden';
+                inputModalita.name = 'modalità';
+                formScenario.appendChild(inputModalita);
+            }
+            inputModalita.value = selectedRadio.nextElementSibling.querySelector('.radio-label').innerText.trim(); // Ottiene il valore del label associato
+
+            // Invia il form
+            formScenario.submit();
+        } else {
+            alert('Seleziona una modalità prima di procedere!');
+        }
+    });
+});
+
 
