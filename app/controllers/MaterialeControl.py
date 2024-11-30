@@ -45,3 +45,37 @@ class MaterialeControl:
 
         # Se non ci sono materiali nel database, inizia con l'ID 1
         return 1
+
+
+    def insert_document(self, document):
+        return self.collection.insert_one(document)
+
+    def find_document(self, query):
+        return self.collection.find_one(query)
+
+    def update_document(self, query, new_values):
+        return self.collection.update_one(query, {"$set": new_values})
+
+    def delete_document(self, query):
+        return self.collection.delete_one(query)
+
+    def delete_material(self, material_id):
+        result = self.collection.delete_one({'_id': ObjectId(material_id)})
+        return result.deleted_count == 1
+
+    def count_documents(self, query):
+        return self.collection.count_documents(query)
+
+    def get_all_materials(self):
+        materials = list(self.collection.find())
+        print(f"Materiali nel database: {materials}")
+        return materials
+
+    def get_material(self, query):
+        return self.collection.find_one(query)
+
+    def get_material_by_id(self, material_id):
+        return self.collection.find_one({'_id': ObjectId(material_id)})
+
+    def update_material(self, materiale_id, updated_data):
+        return self.collection.update_one({'_id': ObjectId(materiale_id)}, {'$set': updated_data})
