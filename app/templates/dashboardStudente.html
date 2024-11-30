@@ -10,12 +10,7 @@
 {% include 'header.html' %}
 <div class="dashboard">
     <div class="section">
-        <a href="{{ url_for('classedocente.Classe_Studente', ID_Classe=session.get('ID_Classe', 0)) }}">
 
-
-        <button class="button">Gestione classe</button>
-
-        </a>
         <!-- Punteggio Personale -->
         <div class="box">
             <h2>Punteggio Personale</h2>
@@ -52,6 +47,13 @@
         </div>
     </div>
 </div>
-
+<aside class="sidebar">
+        <div class="sidebar-item">
+        <a href="{{ url_for('classedocente.Classe_Studente', ID_Classe=session.get('ID_Classe', 0)) }}">
+            <i class="fa-solid fa-users-rectangle"></i>
+            <span></span>
+            </a>
+        </div>
+    </aside>
 </body>
 </html>

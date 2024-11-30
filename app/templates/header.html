@@ -34,10 +34,13 @@
             </nav>
             <div class="user-info">
                 <span style="font-size: 1.2rem;">Ciao, <strong>{{ session.get("Nome") }}</strong></span>
-                <a href="{{ url_for('login.login') }}" class="nav-link">
-                    <i class="fa-solid fa-arrow-right-from-bracket"></i><br>
-                    <span>Logout</span>
-                </a>
+                <!-- Form per il logout -->
+                <form action="{{ url_for('login.logout') }}" method="POST" style="display:inline;">
+                    <button type="submit" class="nav-link" style="background: none; border: none; cursor: pointer;">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i><br>
+                        <span>Logout</span>
+                    </button>
+                </form>
             </div>
         </div>
     </header>
