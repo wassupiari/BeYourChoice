@@ -15,10 +15,22 @@
                 <img src="{{ url_for('static', filename='img/Logo.png') }}" width="20%" >
             </div>
             <nav class="navigation">
-                <a href="#" class="nav-link">
-                    <i class="fas fa-user"></i><br>
-                    <span>Profilo</span>
-                </a>
+    {% if session['user_type'] == 'studente' %}
+        <a href="{{ url_for('profilo.visualizza_profilo_studente', cf_studente=session['CF']) }}" class="nav-link">
+            <i class="fas fa-user"></i><br>
+            <span>Profilo Studente</span>
+        </a>
+    {% elif session['user_type'] == 'docente' %}
+        <a href="{{ url_for('profilo.visualizza_profilo_docente', cf_docente=session['CF']) }}" class="nav-link">
+            <i class="fas fa-user"></i><br>
+            <span>Profilo Docente</span>
+        </a>
+    {% else %}
+        <a href="#" class="nav-link">
+            <i class="fas fa-user"></i><br>
+            <span>Profilo</span>
+        </a>
+    {% endif %}
                 <a href="{{ url_for('dashboardDocente.dashboard') }}" class="nav-link">
                     <i class="fas fa-cubes"></i><br>
                     <span>Dashboard</span>

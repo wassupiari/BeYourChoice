@@ -12,6 +12,7 @@ from app.models.docenteModel import DocenteModel
 from app.models.Attivita import Attivita
 from app.views.MaterialeDocente import initialize_materiale_docente_blueprint
 from app.views.MaterialeStudente import initialize_materiale_studente_blueprint
+from app.views.profilo import initialize_profilo_blueprint
 
 # Crea l'applicazione Flask
 app = Flask(__name__, template_folder='app/templates', static_folder="public")  # Imposta il percorso dei template
@@ -64,6 +65,8 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 initialize_materiale_docente_blueprint(app)
 
 initialize_materiale_studente_blueprint(app)
+
+initialize_profilo_blueprint(app)
 
 # Avvio del server
 if __name__ == "__main__":

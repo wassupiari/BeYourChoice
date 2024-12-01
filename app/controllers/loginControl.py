@@ -103,6 +103,7 @@ def login():
                 session['CF'] = cf_studente
                 session['ID_Classe'] = id_classe
                 session['Nome'] = nome_studete
+                session['user_type'] = 'studente'  # Imposta il tipo utente
                 flash("Login effettuato con successo", "success")
                 return redirect(url_for('dashboard.dashboard_studente'))  # Reindirizza al dashboard dopo il login
 
@@ -123,6 +124,8 @@ def login():
                 session['SdA'] = docente_scuola_appartenenza
                 session['CU'] = docente_codice_univoco
                 session['Nome'] = nome_profilo
+                session['cf'] = docente.get("cf_docente")
+                session['user_type'] = 'docente'
 
                 flash("Login effettuato con successo", "success")
                 return redirect(url_for('dashboardDocente.dashboard'))  # Reindirizza al dashboard dopo il login
