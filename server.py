@@ -57,13 +57,13 @@ UPLOAD_FOLDER = 'public/uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Variabile per decidere quale blueprint registrare
-USE_DOCENTE = True  # Cambia questo valore in False per usare Studente invece
+
 
 # Inizializzazione del blueprint condizionale
-if USE_DOCENTE:
-    initialize_materiale_docente_blueprint(app)
-else:
-    initialize_materiale_studente_blueprint(app)
+
+initialize_materiale_docente_blueprint(app)
+
+initialize_materiale_studente_blueprint(app)
 
 # Avvio del server
 if __name__ == "__main__":
