@@ -2,7 +2,7 @@ import os
 import re
 from bson import ObjectId
 from flask import Flask, render_template, request, redirect, url_for, flash, send_file, abort, send_from_directory, \
-    Blueprint
+    Blueprint, session
 
 from databaseManager import DatabaseManager
 from app.models.MaterialeModel import MaterialeModel
@@ -30,7 +30,8 @@ def initialize_materiale_docente_blueprint(app: object) -> object:
 
     @MaterialeDocente.route('/materiale/docente')
     def visualizza_materiale_docente():
-        materiali = materiale_control.view_all_materials()
+        ID_Classe = session.get('ID_Classe')
+        materiali = materiale_control.get_materials_by_id(ID_Classe)
         return render_template('materialeDocente.html', materiali=materiali)
 
     @MaterialeDocente.route('/serve_file/<path:filename>')
@@ -41,10 +42,7 @@ def initialize_materiale_docente_blueprint(app: object) -> object:
         else:
             abort(404)
 
-    @MaterialeDocente.route('/materiale/studente')
-    def visualizza_materiale_studente():
-        materiali = materiale_control.view_all_materials()
-        return render_template('materialeStudente.html', materiali=materiali)
+
 
     def is_title_valid(title):
         return bool(re.match(r'^[A-Za-z0-9 ]{2,20}$', title))
@@ -65,6 +63,7 @@ def initialize_materiale_docente_blueprint(app: object) -> object:
             descrizione = request.form['descrizione']
             tipo = request.form['tipo']
             file = request.files['file']
+            ID_Classe = session.get('ID_Classe')
 
             if not is_title_valid(titolo):
                 flash("Il titolo non è valido. Deve essere tra 2 e 20 caratteri e contenere solo lettere e numeri.",
@@ -95,7 +94,7 @@ def initialize_materiale_docente_blueprint(app: object) -> object:
 
             id_MaterialeDidattico = uuid.uuid4().hex
 
-            nuovo_materiale = MaterialeModel(id_MaterialeDidattico, titolo, descrizione, filepath, tipo)
+            nuovo_materiale = MaterialeModel(id_MaterialeDidattico, titolo, descrizione, filepath, tipo, ID_Classe)
             materiale_control.upload_material(nuovo_materiale)
             flash("Materiale caricato con successo!", "materiale_success")
             return redirect(url_for('MaterialeDocente.visualizza_materiale_docente'))
