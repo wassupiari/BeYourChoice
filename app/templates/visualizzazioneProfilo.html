@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profilo Docente</title>
+    <link rel="stylesheet" href="styleProfilo.css">
+</head>
+
+<body>
+    <main>
+        <section class="profile-view">
+            <h2>Informazioni Anagrafiche</h2>
+            <p><strong>Nome:</strong> Giuseppe</p>
+            <p><strong>Email:</strong> giuseppe@example.com</p>
+        </section>
+        <section class="profile-edit">
+            <h2>Modifica Profilo</h2>
+            <form>
+                <label for="nome">Nome:</label>
+                <input type="text" id="nome" name="nome" value="Giuseppe">
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="giuseppe@example.com">
+
+                <h2>modifica password</h2>
+
+                <label for="password">Nuova Password:</label>
+                <input type="password" id="password" name="password">
+
+                <label for="confirm-password">Conferma Password:</label>
+                <input type="password" id="confirm-password" name="confirm-password">
+
+                <button type="submit">Salva Modifiche</button>
+            </form>
+        </section>
+    </main>
+</body>
+</html>
