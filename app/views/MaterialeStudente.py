@@ -1,4 +1,4 @@
-from flask import Flask, Blueprint, render_template, send_file, redirect, url_for, abort
+from flask import Flask, Blueprint, render_template, send_file, redirect, url_for, abort, session
 from databaseManager import DatabaseManager
 from app.controllers.MaterialeControl import MaterialeControl
 import os
@@ -19,8 +19,12 @@ def initialize_materiale_studente_blueprint(app: object) -> object:
     @MaterialeStudente.route('/materiale/studente')
     def visualizza_materiale_studente():
         """Vista per visualizzare tutti i materiali disponibili per gli studenti."""
-        materiali = materiale_control.view_all_materials()
-        return render_template('materialeStudente.html', materiali=materiali)
+        ID_Classe = session.get('ID_Classe')
+        if ID_Classe is None:
+            return redirect(url_for('dashboardStudente'))
+
+        materiali =materiale_control.get_materials_by_id(ID_Classe)
+        return render_template('materialeStudente.html', ID_Classe=ID_Classe, materiali=materiali)
 
 
 

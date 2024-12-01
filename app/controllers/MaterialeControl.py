@@ -79,3 +79,16 @@ class MaterialeControl:
 
     def update_material(self, materiale_id, updated_data):
         return self.collection.update_one({'_id': ObjectId(materiale_id)}, {'$set': updated_data})
+
+    def get_materials_by_id(self, ID_Classe):
+            # Esegui una query MongoDB per ottenere i materiali per una specifica classe
+            try:
+                query = {"ID_Classe": ID_Classe}
+                materiali_della_classe = list(self.collection.find(query))
+                return materiali_della_classe
+            except Exception as e:
+                print(f"Errore nel recuperare i materiali per la classe {ID_Classe}: {str(e)}")
+                return []
+
+
+

@@ -17,7 +17,7 @@ def Classe_Docente(ID_Classe):
     try:
         # Ottieni l'ID della classe dalla query string (se non è presente, usa 101 come default)
         print(f"ID_Classe ricevuto: {ID_Classe}")  # Aggiunto per debugging
-
+        return render_template('classeDocente.html', ID_Classe=ID_Classe)
         # Usa il controller per ottenere i dati degli studenti
         dati_classe = classe_virtuale_control.mostra_classe(ID_Classe)
         print(f"Dati classe ricevuti: {dati_classe}")  # Aggiunto per debugging
