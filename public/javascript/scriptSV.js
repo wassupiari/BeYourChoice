@@ -84,15 +84,17 @@ document.addEventListener("DOMContentLoaded", function() {
         const selectedRadio = document.querySelector('input[name="engine"]:checked');
 
         if (selectedRadio) {
-            // Crea o aggiorna un input nascosto nel form
-            let inputModalita = document.querySelector('input[name="modalità"]');
+            // Controlla se l'input nascosto esiste già
+            let inputModalita = document.querySelector('input[name="modalita"]');
             if (!inputModalita) {
                 inputModalita = document.createElement('input');
                 inputModalita.type = 'hidden';
-                inputModalita.name = 'modalità';
+                inputModalita.name = 'modalita';
                 formScenario.appendChild(inputModalita);
             }
-            inputModalita.value = selectedRadio.nextElementSibling.querySelector('.radio-label').innerText.trim(); // Ottiene il valore del label associato
+
+            // Imposta il valore della modalità selezionata
+            inputModalita.value = selectedRadio.nextElementSibling.querySelector('.radio-label').innerText.trim();
 
             // Invia il form
             formScenario.submit();
@@ -101,5 +103,6 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 });
+
 
 

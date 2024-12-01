@@ -35,6 +35,8 @@ class scenarioControl:
                 "Modalità": modalita
             }
 
+            print(scenario_dict)
+
             scenario_model = ScenarioModel()
             scenario_model.aggiungi_scenario(scenario_dict)
 
