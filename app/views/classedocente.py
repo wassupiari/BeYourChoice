@@ -64,7 +64,7 @@ def NoClasse():
 # Route per la pagina manutenzione
 @classedocente.route('/manutenzione', methods=['GET'])
 def Manutenzione():
-    return render_template("manutenzione.html", messaggio="Manutenzione in corso.")
+    return render_template("error404.html", messaggio="Manutenzione in corso.")
 
 @classedocente.route('/rimuovi-studente', methods=['POST'])
 @teacher_required

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>404 page</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: #ffffff;
+            color: #333;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* Prevent scrollbar */
+        }
+
+        .page_404 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            height: 100%;
+            padding: 0 20px;
+        }
+
+        .four_zero_four_bg {
+            background-image: url(https://cdn.dribbble.com/users/285475/screenshots/2083086/dribbble_1.gif);
+            height: 800px; /* Increased size further */
+            width: 800px; /* Increased size further */
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            margin-bottom: -80px; /* Reduced margin to tighten spacing */
+        }
+
+        h1 {
+            font-size: 70px; /* Slightly reduced size */
+            font-weight: 700;
+            margin-top: -10px;
+            background: linear-gradient(90deg, #d75a3d, #d75a3d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .contant_box_404 p {
+            font-size: 14px;
+            margin-top: -30px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+            margin-right: 10px;
+            margin-bottom: 50px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Effetto ombra */
+            cursor: pointer;
+            transition: box-shadow 0.3s ease, transform 0.3s ease; /* Effetti al passaggio del mouse */
+        }
+
+        button.torna {
+            background-color: #000000;
+            color: #ffffff;
+        }
+
+        button.torna:hover {
+            transform: scale(1.05); /* Leggero ingrandimento al passaggio del mouse */
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Ombra più intensa su hover */
+            background-color: #d75a3d;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+<section class="page_404">
+    <div class="four_zero_four_bg"></div>
+    <h1>404</h1>
+    <div class="contant_box_404">
+        <p>La pagina che stai cercando non è al momento disponibile!</p>
+        <button type="button" class="torna"
+                    onclick="window.location.href='{{ url_for('home') }}'">
+                Torna alla dashboard
+        </button>
+    </div>
+</section>
+</body>
+</html>
