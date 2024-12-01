@@ -19,7 +19,11 @@ def registra():
         cf = request.form['cf']
         data_nascita = request.form['data-nascita']
         password = request.form['password']
-        codice_univoco = request.form.get('codice_univoco', '').strip()  # Aggiunta verifica del campo
+        codice_univoco = request.form.get('cu', '').strip()  # Aggiunta verifica del campo
+
+        print(codice_univoco)
+        if codice_univoco is None: print("cuVuoto")
+        elif codice_univoco == '': print("cuNotValid")
 
         # Regex comuni
         email_regex = r"^[A-z0-9._%+-]+@[A-z0-9.-]+\.[A-z]{2,4}$"
@@ -33,29 +37,30 @@ def registra():
 
         # Controlli generali
         if not re.match(email_regex, email):
-            return redirect(url_for('login', error='formatoEmail'))
+            return redirect(url_for('login.login', error='formatoEmail'))
 
         if not re.match(nome_regex, nome):
-            return redirect(url_for('login', error='formatoNome'))
+            return redirect(url_for('login.login', error='formatoNome'))
 
         if not re.match(cognome_regex, cognome):
-            return redirect(url_for('login', error='formatoCognome'))
+            return redirect(url_for('login.login', error='formatoCognome'))
 
         if not re.match(sda_regex, sda):
-            return redirect(url_for('login', error='formatoSDA'))
+            return redirect(url_for('login.login', error='formatoSDA'))
 
         if not re.match(cf_regex, cf):
-            return redirect(url_for('login', error='formatocf'))
+            return redirect(url_for('login.login', error='formatocf'))
 
         if not re.match(data_nascita_regex, data_nascita):
-            return redirect(url_for('login', error='formatoDataNascita'))
+            return redirect(url_for('login.login', error='formatoDataNascita'))
 
         if not re.match(password_regex, password):
-            return redirect(url_for('login', error='formatoPassword'))
+            return redirect(url_for('login.login', error='formatoPassword'))
 
         if not codice_univoco is None:
-            if not re.match(codiceunivoco_regex, codice_univoco):
-                return redirect(url_for('login', error='formatoCU'))
+            if not codice_univoco == '':
+                if not re.match(codiceunivoco_regex, codice_univoco):
+                    return redirect(url_for('login.login', error='formatoCU'))
 
         # Controllo se l'account esiste già
         docente_model = DocenteModel()

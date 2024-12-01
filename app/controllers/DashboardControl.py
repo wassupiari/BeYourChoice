@@ -1,9 +1,21 @@
 from flask import render_template, session
-
-from app.controllers.loginControl import student_required, teacher_required
 from app.models.Attivita import Attivita
 
+
 class DashboardController:
+    """
+    Controller per la gestione delle dashboard di studenti e docenti.
+
+    Metodi:
+    - mostra_dashboard(cf_studente, id_classe): Mostra la dashboard per uno studente
+        in una determinata classe.
+    - mostra_dashboard_docente(id_docente): Mostra la dashboard per un docente
+        con le classi gestite.
+    - mostra_classifica_classe(id_classe): Mostra la classifica di una specifica classe.
+    - mostra_storico_studente(cf_studente): Mostra lo storico delle attività svolte da
+        uno studente.
+    """
+
     @staticmethod
     def mostra_dashboard(cf_studente, id_classe):
         """
@@ -40,7 +52,7 @@ class DashboardController:
         )
 
     @staticmethod
-    def mostra_dasboardDocente(id_docente):
+    def mostra_dashboard_docente(id_docente):
         """
         Mostra la dashboard per un docente con le classi gestite.
         :param id_docente: ID del docente.
