@@ -1,54 +1,128 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nessuna Classe</title>
+    <title>404 page</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: #ffffff;
+            color: #333;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            overflow: hidden; /* Prevent scrollbar */
+        }
+
+        .page_404 {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            margin: 0;
-            font-family: Arial, sans-serif;
             text-align: center;
+            width: 100%;
+            padding: 0 20px;
+            box-sizing: border-box;
         }
-        img {
-            max-width: 700px;
-            height: auto;
-            margin-bottom: 20px;
+
+        .four_zero_four_bg {
+            background-image: url(https://cdn.dribbble.com/users/285475/screenshots/2083086/dribbble_1.gif);
+            height: 700px;
+            width: 700px;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            margin-top: -70px;
         }
+
+        h1 {
+            font-size: 50px;
+            font-weight: 700;
+            margin: 10px 0;
+            background: linear-gradient(90deg, #d75a3d, #d75a3d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-top: -120px;
+        }
+
+        .contant_box_404 p {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
         button {
-            padding: 10px 20px;
-            font-size: 1rem;
+            height: 50px;
+            width: 200px;
+            border-radius: 25px;
+            display: grid;
+            place-content: center;
+            color: #fff;
             font-weight: 600;
-            border: none;
-            border-radius: 5px;
+            font-size: 18px;
+            text-transform: uppercase;
+            text-decoration: none;
+            box-sizing: border-box;
+            background: #d75a3d;
             cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-block;
-            background-color: #000000;
-            color: #ffffff;
-            margin-right: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Effetto ombra */
-            cursor: pointer;
-            transition: box-shadow 0.3s ease, transform 0.3s ease; /* Effetti al passaggio del mouse */
+            letter-spacing: 1px;
+            position: relative;
+            margin-bottom: 40px;
+        }
+
+        @keyframes animate {
+            0% {
+                background-position: 0%;
             }
+            100% {
+                background-position: 400%;
+            }
+        }
 
         button:hover {
-            transform: scale(1.05); /* Leggero ingrandimento al passaggio del mouse */
-            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Ombra più intensa su hover */
-            background-color: #d75a3d;
+            animation: animate 8s linear infinite;
+            background: linear-gradient(90deg, #03a9f4, #f441a5, #ffeb3b, #03a9f4);
+            background-size: 400%;
             color: #ffffff;
-            }
+        }
+
+        button:before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            bottom: -5px;
+            right: -5px;
+            z-index: -1;
+            background: linear-gradient(90deg, #03a9f4, #f441a5, #ffeb3b, #03a9f4);
+            background-size: 400%;
+            border-radius: 30px;
+            opacity: 0;
+            transition: 1s;
+        }
+
+        button:hover:before {
+            filter: blur(20px);
+            opacity: 1;
+            animation: animate 8s linear infinite;
+        }
     </style>
 </head>
 <body>
-    <h1>Non sei in nessuna classe fratello!!</h1>
-    <img src="{{ url_for('static', filename='img/noclasse.jpg') }}">
-    <a href="{{ url_for('home') }}">
-        <button class="button">Torna alla Dashboard</button></a>
+<section class="page_404">
+    <div class="four_zero_four_bg"></div>
+    <h1>Errore 404</h1>
+    <div class="contant_box_404">
+        <p>Al momento non fai parte di nessuna classe!</p>
+    </div>
+</section>
+<footer>
+    <button type="button" onclick="window.location.href='{{ url_for('dashboardDocente.dashboard') }}'">
+        Torna alla dashboard
+    </button>
+</footer>
 </body>
 </html>
