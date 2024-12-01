@@ -104,7 +104,7 @@ def login():
                 session['ID_Classe'] = id_classe
                 session['Nome'] = nome_studete
                 flash("Login effettuato con successo", "success")
-                return redirect(url_for('dashboard.dashboardStudente'))  # Reindirizza al dashboard dopo il login
+                return redirect(url_for('dashboard.dashboard_studente'))  # Reindirizza al dashboard dopo il login
 
             else:
                 flash("Password errata", "error")

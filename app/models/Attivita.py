@@ -1,6 +1,14 @@
 from databaseManager import DatabaseManager
 
+
 class Attivita:
+    """
+    La classe Attivita gestisce le operazioni relative alle attività degli studenti,
+    come il recupero delle classifiche di classe, il calcolo dei punteggi personali,
+    il recupero dello storico delle attività e la gestione delle classi associate a un docente.
+    Utilizza DatabaseManager per interagire con il database MongoDB.
+    """
+
     def __init__(self):
         self.db_manager = DatabaseManager()
 
@@ -19,16 +27,17 @@ class Attivita:
             studenti = list(
                 studente_collection.find(
                     {"ID_Classe": id_classe},
-                    {"_id": 0, "CF": 1, "nome": 1, "cognome": 1}  # Cambia "CF" con "cf" se necessario
-                )
-            )
+                    {"_id": 0, "CF": 1, "nome": 1, "cognome": 1
+                     }))
 
             # Mappa per i punteggi
-            punteggi_totali = {studente.get("CF"): {"PunteggioScenari": 0, "PunteggioQuiz": 0} for studente in studenti}
+            punteggi_totali = {studente.get("CF"): {"PunteggioScenari": 0, "PunteggioQuiz": 0}
+                               for studente in studenti}
 
             # Calcola i punteggi dagli scenari
             scenari_punteggi = scenario_collection.aggregate([
-                {"$group": {"_id": "$CF_Studente", "PunteggioScenari": {"$sum": "$Punteggio_Scenario"}}}
+                {"$group": {"_id": "$CF_Studente", "PunteggioScenari": {"$sum":
+                                                                            "$Punteggio_Scenario"}}}
             ])
             for item in scenari_punteggi:
                 if item["_id"] in punteggi_totali:
