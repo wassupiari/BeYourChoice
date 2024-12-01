@@ -1,5 +1,6 @@
 from flask import *
 from app.controllers.ClasseVirtualeControl import ClasseVirtualeControl
+from app.controllers.loginControl import teacher_required, student_required
 
 # Crea il blueprint
 classedocente = Blueprint('classedocente', __name__)
@@ -8,6 +9,7 @@ classe_virtuale_control = ClasseVirtualeControl()
 
 
 @classedocente.route('/classe/<int:ID_Classe>', methods=['GET', 'POST'])
+@teacher_required
 def Classe_Docente(ID_Classe):
     # Assumendo che l'ID_Classe sia passato come parametro o derivato da un'altra fonte
     print("La route /ClasseDocente è stata chiamata!")  # Debug
@@ -32,6 +34,7 @@ def Classe_Docente(ID_Classe):
 
 
 @classedocente.route('/classestudente/<int:ID_Classe>', methods=['GET', 'POST'])
+@student_required
 def Classe_Studente(ID_Classe):
     print("La route /ClasseStudente è stata chiamata!")  # Debug
     if ID_Classe == 0:
@@ -54,6 +57,7 @@ def Classe_Studente(ID_Classe):
 
 # Route per la pagina noclasse
 @classedocente.route('/noclasse', methods=['GET'])
+@student_required
 def NoClasse():
     return render_template("noclasse.html", messaggio="Nessuna classe selezionata.")
 
@@ -63,6 +67,7 @@ def Manutenzione():
     return render_template("manutenzione.html", messaggio="Manutenzione in corso.")
 
 @classedocente.route('/rimuovi-studente', methods=['POST'])
+@teacher_required
 def rimuovi_studente():
     try:
         # Ottieni l'ID dello studente dalla richiesta
@@ -82,6 +87,7 @@ def rimuovi_studente():
 
 
 @classedocente.route('/aggiungi-studente', methods=['POST'])
+@teacher_required
 def aggiungi_studente():
     try:
         # Ottieni i dati dallo studente dalla richiesta
