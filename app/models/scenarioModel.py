@@ -1,7 +1,7 @@
 from databaseManager import DatabaseManager  # Importa la classe DatabaseManager
 
 class ScenarioModel:
-    def _init_(self):
+    def __init__(self):
         # Utilizza la connessione esistente al database
         self.db_manager = DatabaseManager()
 
