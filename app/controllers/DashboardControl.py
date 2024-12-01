@@ -38,8 +38,7 @@ class DashboardController:
         classifica = model.get_classifica_classe(id_classe)
         storico = model.get_storico(cf_studente)
 
-        # Chiude la connessione al database
-        model.close_connection()
+
 
         # Passa i dati al template
         return render_template(
@@ -63,8 +62,7 @@ class DashboardController:
         # Recupera le classi associate al docente
         classi = model.get_classi_docente(id_docente)
 
-        # Chiude la connessione al database
-        model.close_connection()
+
 
         # Passa i dati al template
         return render_template(
@@ -86,8 +84,7 @@ class DashboardController:
         # Recupera la classifica della classe
         classifica = model.get_classifica_classe(id_classe)
 
-        # Chiude la connessione al database
-        model.close_connection()
+
 
         # Passa i dati al template
         return render_template(
@@ -108,8 +105,7 @@ class DashboardController:
         # Recupera lo storico dello studente
         storico = model.get_storico(cf_studente)
 
-        # Chiude la connessione al database
-        model.close_connection()
+
 
         # Passa i dati al template
         return render_template(

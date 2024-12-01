@@ -167,8 +167,3 @@ class Attivita:
             )
         )
 
-    def close_connection(self):
-        """
-        Chiude la connessione al database.
-        """
-        self.db_manager.close_connection()
