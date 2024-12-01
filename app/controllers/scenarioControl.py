@@ -4,9 +4,9 @@ from app.models.scenarioModel import ScenarioModel
 
 class scenarioControl:
     @staticmethod
-    def registra_scenario(titolo, descrizione, modalita, argomento):
+    def registra_scenario(id, titolo, descrizione, modalita, argomento):
         try:
-            print(titolo, descrizione, modalita, argomento)
+            print(id, titolo, descrizione, modalita, argomento)
             # Validazione dei campi
             if not titolo or not descrizione or not argomento:
                 return redirect(url_for('scenario_bp.scenario_virtuale', error='DatiObbligatori'))
@@ -29,6 +29,7 @@ class scenarioControl:
 
             # Crea un dizionario con i dati per lo scenario
             scenario_dict = {
+                'ID_Scenario': id,
                 "Titolo": titolo,
                 "Descrizione": descrizione,
                 "Argomento": argomento,
