@@ -1,6 +1,7 @@
 from flask import Flask, render_template, session, redirect, url_for
 import os
 from app.controllers.loginControl import login_bp
+from app.controllers.quizControl import quiz_blueprint
 from app.controllers.registrazioneControl import registrazione_bp
 from app.views.dasboardDocente import dashboardDocente
 from app.views.dasboardStudente import dashboard_bp
@@ -58,6 +59,7 @@ def home():
 
 app.register_blueprint(login_bp)
 app.register_blueprint(registrazione_bp)
+app.register_blueprint(quiz_blueprint)
 
 UPLOAD_FOLDER = 'public/uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
