@@ -29,9 +29,6 @@ app.register_blueprint(dashboardDocente)
 @app.route('/quiz')
 def quiz():
     return render_template("creaQuiz.html")
-@app.route('/quizprecedenti')
-def quizprecedenti():
-    return render_template("quizPrecedenti.html")
 # Definisci una route per la homepage
 @app.route('/')
 @app.route('/dashboard')
