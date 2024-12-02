@@ -17,45 +17,65 @@
         <section class="profile-view">
             <h2>Gestione Profilo</h2>
             <form method="POST" id="profiloForm">
-                <div>
-                    <label for="nome"><strong>Nome:</strong></label>
-                    <input type="text" id="nome" name="nome" value="{{ profilo.get('nome', '') }}" readonly>
-                </div>
-                <div>
-                    <label for="cognome"><strong>Cognome:</strong></label>
-                    <input type="text" id="cognome" name="cognome" value="{{ profilo.get('cognome', '') }}" readonly>
-                </div>
-                <div>
-                    <label for="sda"><strong>Struttura di Afferenza (SdA):</strong></label>
-                    <input type="text" id="sda" name="sda" value="{{ profilo.get('sda') or profilo.get('SdA', '') }}" readonly>
-                </div>
-                <div>
-                    <label for="email"><strong>Email:</strong></label>
-                    <input type="email" id="email" name="email" value="{{ profilo.get('email', '') }}" readonly>
-                </div>
-                <div>
-                    <label for="cf"><strong>Codice Fiscale:</strong></label>
-                    <input type="text" id="cf" name="cf" value="{{ profilo.get('cf') or profilo.get('CF', '') }}" readonly>
-                </div>
-                <div>
-                    <label for="data_nascita"><strong>Data di Nascita:</strong></label>
-                    <input type="date" id="data_nascita" name="data_nascita" value="{{ profilo.get('data_nascita') or profilo.get('Data_Nascita', '') }}" readonly>
-                </div>
+                {% if profilo_studente %}
+                    <input type="hidden" name="ruolo" value="studente">
+                    <div>
+                        <label for="nome"><strong>Nome:</strong></label>
+                        <input type="text" id="nome" name="nome" value="{{ profilo_studente.get('nome', '') }}" readonly>
+                    </div>
+                    <div>
+                        <label for="cognome"><strong>Cognome:</strong></label>
+                        <input type="text" id="cognome" name="cognome" value="{{ profilo_studente.get('cognome', '') }}" readonly>
+                    </div>
+                    <div>
+                        <label for="email"><strong>Email:</strong></label>
+                        <input type="email" id="email" name="email" value="{{ profilo_studente.get('email', '') }}" readonly>
+                    </div>
+                    <!-- Aggiungi altri campi per il profilo studente se necessario -->
+                {% elif profilo_docente %}
+                    <input type="hidden" name="ruolo" value="docente">
+                    <div>
+                        <label for="nome"><strong>Nome:</strong></label>
+                        <input type="text" id="nome_docente" name="nome" value="{{ profilo_docente.get('nome', '') }}" readonly>
+                    </div>
+                    <div>
+                        <label for="cognome"><strong>Cognome:</strong></label>
+                        <input type="text" id="cognome_docente" name="cognome" value="{{ profilo_docente.get('cognome', '') }}" readonly>
+                    </div>
+                    <div>
+                        <label for="sda"><strong>Struttura di Afferenza (SdA):</strong></label>
+                        <input type="text" id="sda" name="sda" value="{{ profilo_docente.get('sda') or profilo_docente.get('SdA', '') }}" readonly>
+                    </div>
+                    <div>
+                        <label for="email"><strong>Email:</strong></label>
+                        <input type="email" id="email_docente" name="email" value="{{ profilo_docente.get('email', '') }}" readonly>
+                    </div>
+                    <div>
+                        <label for="cf"><strong>Codice Fiscale:</strong></label>
+                        <input type="text" id="cf" name="cf" value="{{ profilo_docente.get('cf') or profilo_docente.get('CF', '') }}" readonly>
+                    </div>
+                    <!-- Aggiungi altri campi per il profilo docente se necessario -->
+                {% endif %}
                 <button type="button" id="editButton">Modifica Profilo</button>
                 <button type="submit" id="saveButton" style="display: none;">Salva Modifiche</button>
             </form>
         </section>
     </main>
     <script>
-        document.getElementById('editButton').addEventListener('click', function() {
-            const form = document.getElementById('profiloForm');
-            const inputs = form.querySelectorAll('input');
+    document.getElementById('editButton').addEventListener('click', function() {
+        const form = document.getElementById('profiloForm');
+        const inputs = form.querySelectorAll('input:not([type="hidden"])');
+
+        if (confirm('Vuoi passare alla modalità di modifica?')) {
             inputs.forEach(input => {
-                input.removeAttribute('readonly');
+                if (input.id !== 'cf') { // Escludi il campo CF dalla modifica
+                    input.removeAttribute('readonly');
+                }
             });
             this.style.display = 'none';
             document.getElementById('saveButton').style.display = 'inline';
-        });
-    </script>
+        }
+    });
+</script>
 </body>
 </html>
