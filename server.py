@@ -29,7 +29,7 @@ app.register_blueprint(dashboardDocente)
 
 # Definisci una route per la homepage
 @app.route('/')
-@app.route('/dashboard')
+@app.route('/domandeQuizPrecedenti.html')
 def home():
     if 'email' not in session:
         return redirect(url_for('login.login'))
