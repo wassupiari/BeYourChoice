@@ -15,3 +15,8 @@ def scenario_virtuale():
     modalita = request.form.get('modalita', '').strip()
     argomento = request.form.get('argomento', '').strip()
     return scenarioControl.registra_scenario(id,titolo, descrizione, modalita, argomento)
+
+@scenario_bp.route('/postAssociazione')
+def postAssociazione():
+    return render_template("scenarioVirtuale.html")
+
