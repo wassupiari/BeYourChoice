@@ -13,7 +13,6 @@ from app.models.Attivita import Attivita
 from app.views.MaterialeDocente import initialize_materiale_docente_blueprint
 from app.views.MaterialeStudente import initialize_materiale_studente_blueprint
 from app.views.profilo import initialize_profilo_blueprint
-from app.views.quizView import quiz_bp
 
 # Crea l'applicazione Flask
 app = Flask(__name__, template_folder='app/templates', static_folder="public")  # Imposta il percorso dei template
@@ -26,7 +25,6 @@ app.register_blueprint(views, url_prefix='/')  # Il prefisso '/' è opzionale, p
 app.secret_key = os.urandom(32).hex()
 app.register_blueprint(dashboard_bp)
 app.register_blueprint(dashboardDocente)
-
 
 @app.route('/quiz')
 def quiz():
@@ -71,7 +69,7 @@ initialize_materiale_docente_blueprint(app)
 initialize_materiale_studente_blueprint(app)
 
 initialize_profilo_blueprint(app)
-app.register_blueprint(quiz_bp)
+
 # Avvio del server
 if __name__ == "__main__":
     app.run(debug=True)
