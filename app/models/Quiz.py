@@ -1,8 +1,10 @@
 import openai
-from datetime import datetime
+from flask import session
+
 from databaseManager import DatabaseManager
 
 db_manager = DatabaseManager()
+
 
 class QuizModel:
 
@@ -17,29 +19,34 @@ class QuizModel:
         try:
             domanda_lines = domanda_testo.strip().split("\n")
 
-            # Controlla se ci sono abbastanza linee per testo e risposte
+            # Controlla se ci sono abbastanza linee
             if len(domanda_lines) < 3:
-                raise ValueError("Formato della domanda non valido: non ci sono abbastanza righe.")
+                raise ValueError("Formato della domanda non valido.")
 
             # La prima riga è il testo della domanda
             testo_domanda = domanda_lines[0].strip()
 
-            # Trova le opzioni di risposta (devono iniziare con A), B), ecc.)
+            # Opzioni di risposta (iniziano con A), B), C), D))
             opzioni_risposte = [
-                line.strip() for line in domanda_lines[1:]
-                if line.startswith(("A)", "B)", "C)", "D)"))
+                line.strip() for line in domanda_lines[1:] if line.startswith(("A)", "B)", "C)", "D)"))
             ]
 
-            # Trova la risposta corretta
+            # Risposta corretta (formato: "Risposta corretta: X)")
             risposta_corretta = next(
                 (line.replace("Risposta corretta:", "").strip() for line in domanda_lines if
                  "Risposta corretta:" in line),
                 None
             )
 
-            # Verifica che tutti i componenti siano presenti
+            # Validazione dei componenti
             if not testo_domanda or not opzioni_risposte or not risposta_corretta:
-                raise ValueError("Alcuni componenti della domanda sono mancanti.")
+                raise ValueError("Alcuni componenti essenziali della domanda sono mancanti.")
+
+            # Rimuovi prefissi da opzioni
+            opzioni_risposte = [
+                opzione.replace("A)", "").replace("B)", "").replace("C)", "").replace("D)", "").strip()
+                for opzione in opzioni_risposte
+            ]
 
             return {
                 "Testo_Domanda": testo_domanda,
@@ -66,11 +73,16 @@ class QuizModel:
         while len(domande) < numero_domande:
             messages = [
                 {"role": "system",
-                 "content": "Sei un assistente esperto in educazione civica italiana. Genera domande per ragazzi delle superiori per un quiz."},
+                 "content":
+                            "Sei un assistente esperto in educazione civica italiana e devi generare domande per un quiz destinato a studenti delle scuole superiori. Le domande devono essere educative, coinvolgenti e adatte al livello di conoscenza degli studenti. Ogni domanda deve:"+
+                            "Essere chiara e formulata correttamente."+
+                            "Affrontare temi fondamentali di educazione civica italiana, come Costituzione, diritti e doveri dei cittadini, funzionamento dello Stato, istituzioni pubbliche, elezioni, legalità, cittadinanza attiva e sostenibilità."+
+                            "Essere accompagnata da opzioni di risposta:"+
+                            "Se modalità scelta multipla con 3 risposte: fornisci 3 opzioni di risposta, di cui solo 1 è corretta."+
+                            "Se modalità scelta multipla con 4 risposte: fornisci 4 opzioni di risposta, di cui solo 1 è corretta."},
                 {"role": "user", "content": prompt_base}
             ]
             try:
-
                 response = openai.ChatCompletion.create(
                     model="gpt-3.5-turbo",
                     messages=messages,
@@ -79,9 +91,9 @@ class QuizModel:
                 )
                 domanda = response.choices[0].message["content"].strip()
 
-
-                # Effettua il parsing
-                domande.append(QuizModel.parse_domanda(domanda))
+                # Effettua il parsing e aggiunge la domanda alla lista
+                parsed_domanda = QuizModel.parse_domanda(domanda)
+                domande.append(parsed_domanda)
             except ValueError as parse_error:
                 print(f"Errore nel parsing della domanda: {parse_error}")
                 continue  # Salta questa domanda e continua con la successiva
@@ -93,26 +105,60 @@ class QuizModel:
     @staticmethod
     def salva_quiz(data):
         """Salva un quiz e le sue domande nel database."""
-        quiz_collection = db_manager.get_collection("Quiz")
-        questions_collection = db_manager.get_collection("Domanda")
+        try:
+            quiz_collection = db_manager.get_collection("Quiz")
+            questions_collection = db_manager.get_collection("Domanda")
 
-        quiz = {
-            "ID_Quiz": data["ID_Quiz"],
-            "Argomento": data["Argomento"],
-            "N_Domande": data["N_Domande"],
-            "Modalità_Quiz": data["Modalità_Quiz"],
-            "Durata": data["Durata"],
-            "Data_Creazione": data["Data_Creazione"],
-            "ID_Classe": data["ID_Classe"]
-        }
-        quiz_collection.insert_one(quiz)
+            # Recupera l'ID della classe dalla sessione
+            id_classe = session.get("ID_Classe")
+            if not id_classe:
+                raise ValueError("ID Classe mancante nella sessione.")
 
-        for domanda in data["Domande"]:
-            question = {
-                "ID_Domanda": domanda["ID_Domanda"],
-                "Testo_Domanda": domanda["Testo_Domanda"],
-                "Opzioni_Risposte": domanda["Opzioni_Risposte"],
-                "Risposta_Corretta": domanda["Risposta_Corretta"],
-                "ID_Quiz": data["ID_Quiz"]
+            # Prepara il documento per il quiz
+            quiz = {
+                "ID_Quiz": data["ID_Quiz"],
+                "Titolo": data["Titolo"],
+                "Argomento": data["Argomento"],
+                "N_Domande": data["N_Domande"],
+                "Domande": data["Domande"],
+                "Modalità_Quiz": data["Modalità_Quiz"],
+                "Durata": data["Durata"],
+                "Data_Creazione": data["Data_Creazione"],
+                "ID_Classe": id_classe
             }
-            questions_collection.insert_one(question)
+            quiz_collection.insert_one(quiz)
+
+            # Inserisci ogni domanda nel database
+            for domanda in data["Domande"]:
+                question = {
+                    "ID_Domanda": domanda["ID_Domanda"],
+                    "Testo_Domanda": domanda["Testo_Domanda"],
+                    "Opzioni_Risposte": [
+                        opzione.replace("A)", "").replace("B)", "").replace("C)", "").replace("D)", "").strip()
+                        for opzione in domanda["Opzioni_Risposte"]
+                    ],
+                    "Risposta_Corretta": domanda["Risposta_Corretta"].replace("A)", "").replace("B)", "").replace("C)",
+                                                                                                                  "").replace(
+                        "D)", "").strip(),
+                    "ID_Quiz": data["ID_Quiz"]
+                }
+                questions_collection.insert_one(question)
+        except Exception as e:
+            raise ValueError(f"Errore durante il salvataggio del quiz: {e}")
+
+    def recupera_quiz_per_classe(id_classe):
+        """
+        Recupera tutti i quiz associati a una specifica classe.
+        :param id_classe: ID della classe
+        :return: Lista di quiz
+        """
+        try:
+            quiz_collection = db_manager.get_collection("Quiz")
+            quiz_list = list(quiz_collection.find({"ID_Classe": id_classe}))
+
+            # Converte l'ObjectId in stringa
+            for quiz in quiz_list:
+                quiz["_id"] = str(quiz["_id"])
+            return quiz_list
+        except Exception as e:
+            raise ValueError(f"Errore durante il recupero dei quiz per la classe {id_classe}: {e}")

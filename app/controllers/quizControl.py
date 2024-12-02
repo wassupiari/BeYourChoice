@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
-
-from flask import Blueprint, request, jsonify, render_template
+from flask import Blueprint, request, jsonify, render_template, session
+from app.controllers.loginControl import teacher_required, student_required
 from app.models.Quiz import QuizModel, db_manager
 import os
 from dotenv import load_dotenv
@@ -10,18 +10,28 @@ load_dotenv()
 
 quiz_blueprint = Blueprint("quiz", __name__, template_folder="../templates")
 
-@quiz_blueprint.route("/ciao1", methods=["GET"])
+@quiz_blueprint.route("/crea-quiz", methods=["GET"])
+@teacher_required
 def index():
-    """Renderizza la pagina principale."""
-    return render_template("index.html")
+    """Renderizza la pagina di creazione quiz."""
+    id_classe = session.get("ID_Classe")
+    if not id_classe:
+        return "ID Classe mancante nella sessione", 400
+    return render_template("creaQuiz.html", id_classe=id_classe)
 
 @quiz_blueprint.route("/genera", methods=["POST"])
+@teacher_required
 def genera_domande():
     """Genera domande per il quiz."""
     try:
         tema = request.json.get("tema")
         numero_domande = int(request.json.get("numero_domande"))
         modalita_risposta = request.json.get("modalita_risposta")
+
+        # Recupera l'ID classe dalla sessione
+        id_classe = session.get("ID_Classe")
+        if not id_classe:
+            return jsonify({"error": "ID Classe mancante nella sessione"}), 400
 
         if not tema or numero_domande <= 0 or modalita_risposta not in ["3_risposte", "4_risposte", "vero_falso"]:
             return jsonify({"error": "Parametri non validi"}), 400
@@ -39,18 +49,28 @@ def genera_domande():
         print(f"Errore durante la generazione delle domande: {e}")
         return jsonify({"error": f"Errore durante la generazione: {str(e)}"}), 500
 
-
 @quiz_blueprint.route("/salva", methods=["POST"])
+@teacher_required
 def salva_quiz():
     """Salva un quiz e le sue domande."""
     try:
         data = request.get_json()
+
+        # Recupera l'ID Classe dalla sessione e aggiungilo ai dati
+        id_classe = session.get("ID_Classe")
+        if not id_classe:
+            return jsonify({"error": "ID Classe mancante nella sessione"}), 400
+        data["ID_Classe"] = id_classe
+
+        # Salva il quiz utilizzando il modello
         QuizModel.salva_quiz(data)
         return jsonify({"message": "Quiz salvato correttamente!"})
     except Exception as e:
+        print(f"Errore durante il salvataggio del quiz: {e}")
         return jsonify({"error": f"Errore durante il salvataggio: {str(e)}"}), 500
 
 @quiz_blueprint.route('/quiz/<int:quiz_id>', methods=['GET'])
+@student_required
 def visualizza_quiz(quiz_id):
     """
     Visualizza un quiz e le sue domande.
@@ -83,3 +103,24 @@ def visualizza_quiz(quiz_id):
     except Exception as e:
         print(f"Errore durante il caricamento del quiz: {e}")
         return "Errore durante il caricamento del quiz", 500
+
+
+@quiz_blueprint.route("/visualizza-quiz", methods=["GET"])
+@teacher_required
+def visualizza_quiz_classe():
+    """
+    Recupera tutti i quiz per una specifica classe e li passa al template.
+    """
+    id_classe = session.get("ID_Classe")
+
+    if not id_classe:
+        return "ID Classe non specificato.", 400
+
+    try:
+        # Recupera i quiz dal database
+        quiz_list = QuizModel.recupera_quiz_per_classe(int(id_classe))
+
+        return render_template("quizPrecedenti.html", quiz_list=quiz_list, id_classe=id_classe)
+    except Exception as e:
+        print(f"Errore durante il recupero dei quiz: {e}")
+        return "Errore durante il recupero dei quiz.", 500

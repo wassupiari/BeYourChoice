@@ -70,10 +70,13 @@
         <span>Materiale didattico</span>
     </a>
 </div>
-        <div class="sidebar-item">
-            <i class="fas fa-question-circle"></i>
-            <span>Quiz</span>
-        </div>
+<div class="sidebar-item">
+    <a href="{{ url_for('quiz.visualizza_quiz_classe', id_classe=id_classe) }}">
+        <i class="fas fa-list"></i>
+        <span>Quiz</span>
+    </a>
+</div>
+
         <div class="sidebar-item">
             <i class="fas fa-globe"></i>
             <span>Scenari</span>

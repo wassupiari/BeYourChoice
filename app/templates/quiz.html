@@ -7,12 +7,13 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styleesecuzioneQuiz.css') }}">
 </head>
 <body>
+
     <div class="container">
         <h1>{{ quiz.Argomento }}</h1>
         <p><strong>Durata:</strong> {{ quiz.Durata }} minuti</p>
         <p><strong>Tempo rimanente:</strong>
           <span id="timer-minutes">{{ tempo_rimanente // 60 }}</span> minuti e
-          <span id="timer-seconds">{{ tempo_rimanente % 60 }}</span> secondia
+          <span id="timer-seconds">{{ tempo_rimanente % 60 }}</span> secondi
         </p>
 
         <form id="quiz-form">
