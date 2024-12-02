@@ -129,6 +129,7 @@
     outline: none; /* Rimuove il bordo blu di focus */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Aggiunge un'ombra leggera */
     /*margin-top: 5px;*/
+    font-family: 'open-sans', sans-serif;
 }
 
 /* Animazione di comparsa */
@@ -312,11 +313,12 @@ a
 }
 
 .carousel-item__img {
-    width: 100%; /* Adatta la larghezza dell'immagine al contenitore */
-    height: 100%; /* Adatta l'altezza dell'immagine al contenitore */
-    object-fit: contain; /* Mostra l'intera immagine senza ritagliarla */
-    object-position: center; /* Centra l'immagine all'interno della card */
-    display: block; /* Rimuove comportamenti inline */
+    width: 100%; /* Occupa tutta la larghezza della card */
+    height: 100%; /* Occupa tutta l'altezza della card */
+    object-fit: contain; /* Evita di tagliare l'immagine */
+    object-position: center; /* Centra l'immagine nella card */
+    display: block; /* Assicura che il comportamento inline sia rimosso */
+    border-radius: 10px; /* Arrotonda gli angoli, se necessario */
 }
 
 .carousel-item__details {

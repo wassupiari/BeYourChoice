@@ -2,192 +2,89 @@
 body, html {
     margin: 0;
     padding: 0;
+    width: 100%;
     height: 100%;
     font-family: 'open-sans', sans-serif;
 }
 
 /* Contenitore principale */
 .background-container {
-    padding: 50px;
     position: fixed;
-    width: 95%; /* Larghezza fissa */
-    height: 700px;
+    width: 100%;
+    height: 95%;
     background: no-repeat center center;
-    background-size: cover; /* L'immagine copre tutto lo spazio disponibile */
+    background-size: cover;
+    display: flex;
+    flex-direction: column; /* Imposta il layout verticale */
+    justify-content: flex-end; /* Posiziona il contenuto in basso */
+    align-items: center; /* Centra il contenuto orizzontalmente */
+    padding-bottom: 200px; /* Spazio dal bordo inferiore */
 }
 
-/* Contenuto al centro */
-.content {
-    margin-left: 750px;
-    margin-top: 560px;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    color: white; /* Testo bianco per contrastare lo sfondo */
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Ombra per migliorare la leggibilità */
-}
-
-.content h1 {
-    font-size: 45px;
-    margin-bottom: 6px;
-}
-
-.content p {
-    margin-bottom: 10px;
-    font-size: 1.5rem;
-}
-/*fine contenuto*/
-
-/* caricamento */
-.wrapper {
-  left: 35%;
-  width: 200px;
-  height: 60px;
-  position: relative;
-  z-index: 1;
-}
-
-.circle {
-  width: 20px;
-  height: 20px;
-  position: absolute;
-  border-radius: 50%;
-  background-color: #d75a3d;
-  left: 15%;
-  transform-origin: 50%;
-  animation: circle7124 .5s alternate infinite ease;
-}
-
-@keyframes circle7124 {
-  0% {
-    top: 60px;
-    height: 5px;
-    border-radius: 50px 50px 25px 25px;
-    transform: scaleX(1.7);
-  }
-
-  40% {
-    height: 20px;
-    border-radius: 50%;
-    transform: scaleX(1);
-  }
-
-  100% {
-    top: 0%;
-  }
-}
-
-.circle:nth-child(2) {
-  left: 45%;
-  animation-delay: .2s;
-}
-
-.circle:nth-child(3) {
-  left: auto;
-  right: 15%;
-  animation-delay: .3s;
-}
-
-.shadow {
-  width: 20px;
-  height: 4px;
-  border-radius: 50%;
-  background-color: rgba(0,0,0,0.9);
-  position: absolute;
-  top: 62px;
-  transform-origin: 50%;
-  z-index: -1;
-  left: 15%;
-  filter: blur(1px);
-  animation: shadow046 .5s alternate infinite ease;
-}
-
-@keyframes shadow046 {
-  0% {
-    transform: scaleX(1.5);
-  }
-
-  40% {
-    transform: scaleX(1);
-    opacity: .7;
-  }
-
-  100% {
-    transform: scaleX(.2);
-    opacity: .4;
-  }
-}
-
-.shadow:nth-child(4) {
-  left: 45%;
-  animation-delay: .2s
-}
-
-.shadow:nth-child(5) {
-  left: auto;
-  right: 15%;
-  animation-delay: .3s;
-}
-/*fine caricamento*/
-
-/*bottone*/
+/* Bottone */
 .button1 {
-  position: absolute; /* Posizionamento assoluto */
-  top: 20px; /* Distanza dal bordo superiore */
-  right: 80px; /* Distanza dal bordo destro */
-  padding: 13px 20px;
-  background-color: #d75a3d;
-  color: white;
-  text-decoration: none; /* Rimuove la sottolineatura dei link */
-  border-radius: 5px;
-  display: inline-block; /* Comportamento da bottone */
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  font-size: 13px;
+    position: absolute; /* Posizionamento assoluto */
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background-color: #d75a3d;
+    color: white;
+    text-decoration: none; /* Rimuove la sottolineatura */
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .button1:hover {
-  background-color: #b94b32;
-  transform: scale(1.05); /* Leggero ingrandimento al passaggio del mouse */
-}
-/*fine bottone*/
-
-/*pagina responsive*/
-@media (max-width: 768px) {
-    /* Adatta il layout per tablet */
-    .content h1 {
-        font-size: 2rem; /* Testo più piccolo */
-    }
-
-    .wrapper {
-        margin-top: 15px;
-    }
-
-    .button1 {
-        font-size: 0.9rem; /* Riduci la dimensione del bottone */
-    }
+    background-color: #b94b32;
+    transform: scale(1.05);
 }
 
-@media (max-width: 480px) {
-    /* Adatta il layout per smartphone */
-    .background-container {
-        padding: 10px;
-    }
+/* Contenuto (Scritta + Pallini) */
+.content {
+    text-align: center; /* Centra il contenuto */
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    width: 100%; /* Si estende sull'intero schermo */
+    max-width: 1200px; /* Imposta una larghezza massima */
+}
 
-    .content h1 {
-        font-size: 1.5rem; /* Ulteriore riduzione del testo */
-    }
+.content h1 {
+    font-size: 3rem;
+    margin-bottom: 15px; /* Spazio tra la scritta e i pallini */
+    line-height: 1.2;
+    word-wrap: break-word; /* Garantisce che il testo non esca dai bordi */
+}
 
-    .wrapper {
-        margin-top: 10px;
-    }
+/* Pallini di caricamento */
+.wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Spaziatura uniforme tra i pallini */
+    margin-bottom: 15px;
+}
 
-    .button1 {
-        font-size: 0.8rem; /* Dimensione bottone per smartphone */
-        padding: 8px 10px;
+.circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #d75a3d;
+    animation: circle7124 0.5s alternate infinite ease;
+}
+
+@keyframes circle7124 {
+    0% {
+        transform: scale(0.7);
+    }
+    100% {
+        transform: scale(1);
     }
 }
 
+.circle:nth-child(2) {
+    animation-delay: 0.2s;
+}
 
-
-
+.circle:nth-child(3) {
+    animation-delay:
