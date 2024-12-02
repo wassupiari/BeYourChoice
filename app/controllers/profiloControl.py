@@ -1,40 +1,22 @@
-from app.models.profiloModel import ProfiloStudente, ProfiloDocente
-
-
 class ProfiloControl:
     def __init__(self, db_manager):
-        self.db_manager = db_manager
+        self.docente_collection = db_manager.get_collection('Docente')
+        self.studente_collection = db_manager.get_collection('Studente')
 
-    def get_profilo_studente(self, cf_studente):
-        collection = self.db_manager.get_collection('Studente')
-        studente_data = collection.find_one({"CF": cf_studente})
+    def get_profilo_studente(self, email):
+        try:
+            query = {"email": email}
+            profilo_studente = list(self.studente_collection.find(query))
+            return profilo_studente
+        except Exception as e:
+            print(f"Errore nel recuperare il profilo dello studente dall'email {email}: {str(e)}")
+            return []
 
-        if studente_data:
-            return ProfiloStudente(
-                nome=studente_data["nome"],
-                cognome=studente_data["cognome"],
-                SdA=studente_data["sda"],
-                email=studente_data["email"],
-                CF=studente_data["cf"],
-                Data_Nascita=studente_data["Data_Nascita"],
-                password=studente_data["password"]
-            )
-        else:
-            raise ValueError("Studente non trovato nel database")
-
-    def get_profilo_docente(self, cf_docente):
-        collection = self.db_manager.get_collection('Docente')
-        docente_data = collection.find_one({"cf": cf_docente})
-
-        if docente_data:
-            return ProfiloDocente(
-                nome=docente_data["nome"],
-                cognome=docente_data["cognome"],
-                sda=docente_data["sda"],
-                email=docente_data["email"],
-                cf=docente_data["cf"],
-                data_nascita=docente_data["data_nascita"],
-                password=docente_data["password"]
-            )
-        else:
-            raise ValueError("Docente non trovato nel database")
+    def get_profilo_docente(self, email):
+        try:
+            query = {"email": email}
+            profilo_docente = list(self.docente_collection.find(query))
+            return profilo_docente
+        except Exception as e:
+            print(f"Errore nel recuperare il profilo del docente dall'email {email}: {str(e)}")
+            return []

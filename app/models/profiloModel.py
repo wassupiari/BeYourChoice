@@ -12,9 +12,9 @@ class ProfiloStudente:
         return {
             "nome": self.nome,
             "cognome": self.cognome,
-            "sda": self.SdA,
+            "SdA": self.SdA,
             "email": self.email,
-            "cf": self.CF,
+            "CF": self.CF,
             "Data_Nascita": self.Data_Nascita,
             "password": self.password,
         }

@@ -17,34 +17,29 @@ profilo_control = ProfiloControl(db_manager)
 profilo = Blueprint('profilo', __name__)
 
 def initialize_profilo_blueprint(app):
+    @profilo.route('/profilo/studente')
+    def visualizza_profilo_studente():
+            email = session.get('email')
+            if not email:
+                app.logger.info('Nessuna email trovata nella sessione.')
+            profilo = profilo_control.get_profilo_studente(email)
+            if isinstance(profilo, list) and len(profilo) > 0:
+                profilo = profilo[0]
+            elif isinstance(profilo, list) and len(profilo) == 0:
+                profilo = {}
+            return render_template('visualizzazioneProfilo.html', profilo=profilo)
 
-    @profilo.route('/studente/<cf_studente>', methods=['GET'])
-    def visualizza_profilo_studente(cf_studente):
-        try:
-            # Ottieni i dati del profilo dello studente
-            profilo = profilo_control.get_profilo_studente(cf_studente)
-            return render_template('visualizazzioneProfilo.html', profilo=profilo.to_dict())
-        except ValueError as e:
-            flash(str(e), 'error')
-            return redirect(url_for('home'))  # Supponendo che esista una rotta 'home'
-
-
-    @profilo.route('/docente', methods=['GET'])
+    @profilo.route('/profilo/docente')
     def visualizza_profilo_docente():
-        try:
-            # Recupera il codice fiscale del docente dalla sessione
-            cf_docente = session.get('cf')
-
-            # Verifica se il valore esiste nella sessione
-            if not cf_docente:
-                flash("Non sei autorizzato a visualizzare questa pagina", "error")
-                return redirect(url_for('home'))
-
-            # Ottieni i dati del profilo del docente
-            profilo = profilo_control.get_profilo_docente(cf_docente)
-            return render_template('profilo_docente.html', profilo=profilo.to_dict())
-        except ValueError as e:
-            flash(str(e), 'error')
-            return redirect(url_for('home'))
+            email = session.get('email')
+            if not email:
+                app.logger.info('Nessuna email trovata nella sessione.')
+            profilo = profilo_control.get_profilo_docente(email)
+            if isinstance(profilo, list) and len(profilo) > 0:
+                profilo = profilo[0]
+            elif isinstance(profilo, list) and len(profilo) == 0:
+                profilo = {}
+            app.logger.info('Profilo Docente: %s', profilo)
+            return render_template('visualizzazioneProfilo.html', profilo=profilo)
 
     app.register_blueprint(profilo)

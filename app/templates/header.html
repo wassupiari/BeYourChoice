@@ -16,12 +16,12 @@
             </div>
             <nav class="navigation">
     {% if session['user_type'] == 'studente' %}
-        <a href="{{ url_for('profilo.visualizza_profilo_studente', cf_studente=session['CF']) }}" class="nav-link">
+        <a href="{{ url_for('profilo.visualizza_profilo_studente') }}" class="nav-link">
             <i class="fas fa-user"></i><br>
             <span>Profilo Studente</span>
         </a>
     {% elif session['user_type'] == 'docente' %}
-        <a href="{{ url_for('profilo.visualizza_profilo_docente', cf_docente=session['CF']) }}" class="nav-link">
+        <a href="{{ url_for('profilo.visualizza_profilo_docente') }}" class="nav-link">
             <i class="fas fa-user"></i><br>
             <span>Profilo Docente</span>
         </a>
