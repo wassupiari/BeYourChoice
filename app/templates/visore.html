@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Immagine come Sfondo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/visore.css') }}">
+</head>
+<body>
+    <div class="background-container" style="background-image: url('{{ url_for('static', filename='img/vr.png') }}');">
+        <button class="button1" type="submit" >TERMINA ASSOCIAZIONE</button>
+        <div class="content">
+
+
+            <h1>Connessione al visore in corso</h1>
+
+            <div class="wrapper">
+                <div class="circle"></div>
+                <div class="circle"></div>
+                <div class="circle"></div>
+                <div class="shadow"></div>
+                <div class="shadow"></div>
+                <div class="shadow"></div>
+            </div>
+
+
+        </div>
+    </div>
+</body>
+</html>
