@@ -19,16 +19,21 @@ document.addEventListener("DOMContentLoaded", function() {
     const carouselItems = document.querySelectorAll('.carousel-item');
     let selectedArgomento = '';  // Variabile per memorizzare l'argomento selezionato
 
-    // Gestione della selezione nel carousel
     carouselItems.forEach((item) => {
         item.addEventListener('click', () => {
             // Ottieni il titolo del carousel selezionato
             selectedArgomento = item.querySelector('.carousel-item__details--title').innerText;
 
             // Aggiorna il campo nascosto del form
-            document.getElementById('selectedArgomento').value = selectedArgomento;
+            const hiddenInput = document.getElementById('selectedArgomento');
+            if (hiddenInput) {
+                hiddenInput.value = selectedArgomento;
+            } else {
+                console.error('Campo nascosto non trovato!');
+            }
         });
     });
+
 
     // Gestione dell'invio del form
     document.getElementById('scenarioForm').addEventListener('submit', async (event) => {
@@ -67,5 +72,37 @@ window.onload = function() {
         alert("L'argomento non è valido. Riprova.");
     }
 };
+
+document.addEventListener("DOMContentLoaded", function() {
+    const createScenarioButton = document.querySelector('.button_2'); // Seleziona il bottone CREA SCENARIO
+    const formScenario = document.getElementById('formScenario'); // Seleziona il form
+
+    createScenarioButton.addEventListener('click', function(event) {
+        event.preventDefault(); // Previene l'invio predefinito del form
+
+        // Seleziona il radio button selezionato
+        const selectedRadio = document.querySelector('input[name="engine"]:checked');
+
+        if (selectedRadio) {
+            // Controlla se l'input nascosto esiste già
+            let inputModalita = document.querySelector('input[name="modalita"]');
+            if (!inputModalita) {
+                inputModalita = document.createElement('input');
+                inputModalita.type = 'hidden';
+                inputModalita.name = 'modalita';
+                formScenario.appendChild(inputModalita);
+            }
+
+            // Imposta il valore della modalità selezionata
+            inputModalita.value = selectedRadio.nextElementSibling.querySelector('.radio-label').innerText.trim();
+
+            // Invia il form
+            formScenario.submit();
+        } else {
+            alert('Seleziona una modalità prima di procedere!');
+        }
+    });
+});
+
 
 
