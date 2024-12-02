@@ -91,3 +91,10 @@ h1 {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Effetto ombra */
     transition: box-shadow 0.3s ease, transform 0.3s ease; /* Effetti al passaggio del mouse */
 }
+
+.create-new button:hover{
+    transform: scale(1.05); /* Leggero ingrandimento al passaggio del mouse */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Ombra più intensa su hover */
+    background-color: #d75a3d;
+    color: #ffffff;
+}
