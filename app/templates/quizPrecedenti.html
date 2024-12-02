@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/stylequizPrecedenti.css') }}">
+    <title>Visualizzazione Quiz</title>
+    <style>
+
+    </style>
+</head>
+<body>
+{% include 'header.html' %}
+
+    <main>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h1>Visualizzazione quiz precedentemente generati</h1>
+        <div class="create-new">
+            <button >Crea Nuovo Quiz</button>
+        </div>
+        </div>
+        <div class="quiz-container">
+            <div class="quiz-item">
+                <div class="quiz-details">
+                    <p><strong>Titolo quiz 1</strong></p>
+                    <p>Argomento: Matematica</p>
+                    <p>N° domande: 10</p>
+                </div>
+                <div class="quiz-actions">
+                    <button class="results">Risultati</button>
+                    <button class="view">Visualizza</button>
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <div class="quiz-details">
+                    <p><strong>Titolo quiz 2</strong></p>
+                    <p>Argomento: Scienze</p>
+                    <p>N° domande: 15</p>
+                </div>
+                <div class="quiz-actions">
+                    <button class="results">Risultati</button>
+                    <button class="view">Visualizza</button>
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <div class="quiz-details">
+                    <p><strong>Titolo quiz 3</strong></p>
+                    <p>Argomento: Storia</p>
+                    <p>N° domande: 8</p>
+                </div>
+                <div class="quiz-actions">
+                    <button class="results">Risultati</button>
+                    <button class="view">Visualizza</button>
+                </div>
+            </div>
+
+            <div class="quiz-item">
+                <div class="quiz-details">
+                    <p><strong>Titolo quiz 4</strong></p>
+                    <p>Argomento: Inglese</p>
+                    <p>N° domande: 12</p>
+                </div>
+                <div class="quiz-actions">
+                    <button class="results">Risultati</button>
+                    <button class="view">Visualizza</button>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

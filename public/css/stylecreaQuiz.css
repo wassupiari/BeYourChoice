@@ -18,8 +18,10 @@ main {
 
 h1 {
    text-align: center;
-   font-size: 24px;
-   color: #333;
+    color: #333333;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    font-weight: 700;
 }
 
 form {
@@ -35,10 +37,15 @@ form label {
 form input[type="text"],
 form input[type="number"],
 form input[type="time"] {
-   width: 100%;
-   padding: 8px;
-   border: 1px solid #ccc;
-   border-radius: 4px;
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    background-color: #f9f4f1;
+    resize: none;
 }
 
 form .quiz-types {
@@ -54,18 +61,39 @@ form .buttons {
 
 form .buttons button {
    padding: 10px 20px;
+   font-size: 1rem;
+   font-weight: 600;
    border: none;
-   border-radius: 4px;
-   font-size: 14px;
+   border-radius: 5px;
    cursor: pointer;
+   transition: all 0.3s ease;
+   display: inline-block;
+   margin-right: 10px;
+   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Effetto ombra */
+   cursor: pointer;
+   transition: box-shadow 0.3s ease, transform 0.3s ease; /* Effetti al passaggio del mouse */
 }
 
 form .buttons .cancel {
-   background-color: #ccc;
-   color: #333;
+   background-color: #000000;
+    color: #ffffff;
+}
+
+form .buttons .cancel:hover {
+   transform: scale(1.05); /* Leggero ingrandimento al passaggio del mouse */
+   box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Ombra più intensa su hover */
+   background-color: #d75a3d;
+   color: #ffffff;
 }
 
 form .buttons .generate {
-   background-color: #2d3e50;
-   color: white;
+   background-color: #000000;
+    color: #ffffff;
+}
+
+form .buttons .generate:hover {
+   transform: scale(1.05); /* Leggero ingrandimento al passaggio del mouse */
+   box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Ombra più intensa su hover */
+   background-color: #d75a3d;
+   color: #ffffff;
 }

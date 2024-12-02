@@ -1,0 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
+body {
+   font-family: 'Open Sans', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #ffffff;
+    color: #333;
+    line-height: 1.6;
+}
+
+main {
+    width: 80%;
+    margin: 50px auto;
+    background: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+    border-radius: 8px;
+    padding: 20px 30px;
+    box-shadow: offset-x offset-y blur-radius spread-radius color;
+}
+
+h1 {
+    text-align: center;
+    color: #333333;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.quiz-container {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #000000;
+}
+
+.quiz-item {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 15px;
+    background-color: #f5f5f5;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.quiz-details {
+    flex: 1;
+}
+
+.quiz-details p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.quiz-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.quiz-actions button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.quiz-actions .results {
+    background-color: #2d3e50;
+    color: white;
+}
+
+.quiz-actions .view {
+    background-color: #007bff;
+    color: white;
+}
+
+.create-new button {
+    padding: 10px 20px;
+    background-color: #000000;
+    color: #ffffff;
+
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Effetto ombra */
+    transition: box-shadow 0.3s ease, transform 0.3s ease; /* Effetti al passaggio del mouse */
+}
