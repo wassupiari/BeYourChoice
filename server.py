@@ -26,12 +26,13 @@ app.secret_key = os.urandom(32).hex()
 app.register_blueprint(dashboard_bp)
 app.register_blueprint(dashboardDocente)
 
-@app.route('/quiz')
-def quiz():
-    return render_template("creaQuiz.html")
+
+@app.route('/quizprecedenti')
+def quizprecedenti():
+    return render_template("risultatiQuizPrecedenti.html")
 # Definisci una route per la homepage
 @app.route('/')
-@app.route('/domandeQuizPrecedenti.html')
+@app.route('/dashboard')
 def home():
     if 'email' not in session:
         return redirect(url_for('login.login'))

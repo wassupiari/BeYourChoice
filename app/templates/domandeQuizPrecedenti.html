@@ -2,45 +2,49 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>BeYourChoice Quiz Precedenti</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/quizPrecedentiStyle.css') }}">
 </head>
 <body>
-
-
-
-
-
-
-
-
-
 {% include 'header.html' %}
-    <h1>Visualizzazione domande dei quiz precedentemente creati</h1>
-    <div class="container">
-        <div class="quiz-section">
-            <h2>Domanda 1</h2>
+       <main>
+        <h1>Visualizzazione domande dei quiz precedentemente creati</h1>
+        <div class="question-list">
             <div class="question">
-                <input type="checkbox" id="answer1-1"> <label for="answer1-1"> mmmmm mm mm mm </label>
+                <h2>Domanda 1</h2>
+                <div class="option">
+                    <input type="checkbox" id="q1o1">
+                    <label for="q1o1">Opzione 1</label>
+                </div>
+                <div class="option">
+                    <input type="checkbox" id="q1o2" checked>
+                    <label for="q1o2">Opzione 2</label>
+                </div>
             </div>
-            <div class="answer">
-                <input type="checkbox" id="answer1-2" checked> <label for="answer1-2"> mmmmm </label>
+            <div class="question">
+                <h2>Domanda 2</h2>
+                <div class="option">
+                    <input type="checkbox" id="q2o1" checked>
+                    <label for="q2o1">Opzione 1</label>
+                </div>
+                <div class="option">
+                    <input type="checkbox" id="q2o2">
+                    <label for="q2o2">Opzione 2</label>
+                </div>
             </div>
-            <div class="answer">
-                <input type="checkbox" id="answer1-3"> <label for="answer1-3"> mmmmm </label>
+            <div class="question">
+                <h2>Domanda 3</h2>
+                <div class="option">
+                    <input type="checkbox" id="q3o1">
+                    <label for="q3o1">Opzione 1</label>
+                </div>
+                <div class="option">
+                    <input type="checkbox" id="q3o2" checked>
+                    <label for="q3o2">Opzione 2</label>
+                </div>
             </div>
         </div>
-        <div class="quiz-section">
-            <h2>Domanda 2</h2>
-            <div class="question">
-                <input type="checkbox" id="answer2-1"> <label for="answer2-1"> mmmmm mm mm mm </label>
-            </div>
-            <div class="answer">
-                <input type="checkbox" id="answer2-2" checked> <label for="answer2-2"> mmmmm </label>
-            </div>
-            < div class="answer">
-                <input type="checkbox" id="answer2-3"> <label for="answer2-3"> mmmmm </label>
-            </div>
-        </div>
-    </div>
+    </main>
 </body>
 </html>
