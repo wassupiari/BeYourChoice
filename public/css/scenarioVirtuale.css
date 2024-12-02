@@ -128,7 +128,6 @@
     resize: verticle; /* Permette il ridimensionamento verticale */
     outline: none; /* Rimuove il bordo blu di focus */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Aggiunge un'ombra leggera */
-    /*margin-top: 5px;*/
     font-family: 'open-sans', sans-serif;
 }
 
