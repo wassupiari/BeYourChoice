@@ -89,7 +89,7 @@ def login():
                 session['email'] = email
                 session['session_token'] = session_token
                 cf_studente = studente.get("CF")
-                nome_studete = studente.get("nome")
+                nome_studente = studente.get("nome")
 
                 if studente.get("ID_Classe"):  # Se "ID_Classe" è presente e ha un valore
                     id_classe = studente["ID_Classe"]
@@ -102,7 +102,7 @@ def login():
 
                 session['CF'] = cf_studente
                 session['ID_Classe'] = id_classe
-                session['Nome'] = nome_studete
+                session['Nome'] = nome_studente
                 session['user_type'] = 'studente'  # Imposta il tipo utente
                 flash("Login effettuato con successo", "success")
                 return redirect(url_for('dashboard.dashboard_studente'))  # Reindirizza al dashboard dopo il login

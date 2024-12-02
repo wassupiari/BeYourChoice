@@ -1,7 +1,10 @@
 import base64
 import logging
+
+import bcrypt
 from flask import flash, jsonify, session
 from werkzeug.security import generate_password_hash, check_password_hash
+
 
 
 class ProfiloControl:
@@ -45,14 +48,39 @@ class ProfiloControl:
             logging.error(f"Errore nell'aggiornare il profilo del docente per l'email {email}: {str(e)}")
             return False
 
-    def decode_base64_password(self, stored_password_binary):
-        # Decodifica la password Base64
-        decoded_bytes = base64.b64decode(stored_password_binary)
-        # Converti i bytes decodificati in una stringa, supponendo sia una stringa UTF-8
-        decoded_password = decoded_bytes.decode('utf-8')
-        return decoded_password
+    def decode_base64(data):
+        if not data:
+            raise ValueError("Nessun dato fornito per la decodifica.")
 
-    def modifica_password(self, email, old_password, new_password):
+        # Calcola il padding necessario
+        missing_padding = len(data) % 4
+        if missing_padding:
+            data += '=' * (4 - missing_padding)
+
+        try:
+            # Decodifica i dati dal base64
+            decoded_data = base64.b64decode(data)
+            return decoded_data.decode('utf-8')
+        except UnicodeDecodeError as e:
+            logging.error(f"Errore di decodifica UTF-8: {e}")
+            raise ValueError("Decodifica base64 riuscita, ma i dati non sono UTF-8.")
+        except base64.binascii.Error as e:
+            logging.error(f"Errore durante la decodifica base64: {e}")
+            raise ValueError(f"Errore durante la decodifica base64: {e}")
+
+    # Esempio log o trace per aiutare nel debugging
+
+
+    def modifica_password(self, email, old_password_encoded, new_password_encoded):
+
+        try:
+            # Corretto: fai riferimento correttamente al metodo decode_base64
+            old_password = self.decode_base64(old_password_encoded)
+            new_password = self.decode_base64(new_password_encoded)
+        except ValueError as e:
+            logging.error(f"Errore decodifica password: {e}")
+            return {'error': str(e)}
+
         try:
             email = session.get('email')  # Recupero dalla sessione
             if not email:
@@ -66,32 +94,16 @@ class ProfiloControl:
                 flash('Utente non trovato.', 'error')
                 return jsonify({'error': 'Utente non trovato.'}), 404
 
-            stored_password_binary = user['password']
+            if not bcrypt.checkpw(old_password.encode('utf-8'), user['password'].encode('utf-8')):
+                return {'error': 'La vecchia password non è corretta.'}
 
-            try:
-                stored_password_hash = self.decode_base64_password(stored_password_binary)
-            except Exception as e:
-                flash(f'Errore durante la decodifica della password: {str(e)}', 'error')
-                return jsonify({'error': f'Errore durante la decodifica della password: {str(e)}'}), 500
+            new_password_hashed = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
 
-            if check_password_hash(stored_password_hash, old_password):
-                new_password_hash = generate_password_hash(new_password)
-                new_password_binary = base64.b64encode(new_password_hash.encode('utf-8'))
 
-                result = self.docente_collection.update_one(
+            result = self.docente_collection.update_one(
                     {'email': user_email},
-                    {'$set': {'password': new_password_binary}}
+                    {'$set': {'password': new_password_hashed}}
                 )
-                if result.modified_count > 0:
-                    flash('Password cambiata con successo!', 'success')
-                    return jsonify({'message': 'Password cambiata con successo!'}), 200
-                else:
-                    flash('Errore nella modifica della password.', 'error')
-                    return jsonify({'error': 'Errore nella modifica della password.'}), 500
-            else:
-                flash('Vecchia password errata.', 'error')
-                return jsonify({'error': 'Vecchia password errata.'}), 401
-
         except Exception as e:
             flash(f'Errore durante il cambio della password: {str(e)}', 'error')
             return jsonify({'error': f'Errore durante il cambio della password: {str(e)}'}), 500
