@@ -10,17 +10,17 @@
     <!-- Inclusione dell'header -->
     {% include 'header.html' %}
 
-    <div class="container">
-        <h1>Generatore di Quiz di Educazione Civica</h1>
+    <div class="main">
+        <h1>Creazione Quiz</h1>
         <form id="quiz-form">
             <div>
-                <label for="tema">Titolo del Quiz:</label>
-                <input type="text" id="tema" name="tema" placeholder="Inserisci il titolo del quiz..." required>
+                <label for="topic">Titolo del Quiz:</label>
+                <input type="text" id="topic" name="topic" placeholder="Inserisci il titolo del quiz..." required>
             </div>
 
             <div>
-                <label for="topic">Argomento:</label>
-                <input type="text" id="topic" name="topic" placeholder="Inserisci l'argomento..." required>
+                <label for="tema">Argomento:</label>
+                <input type="text" id="tema" name="tema" placeholder="Inserisci l'argomento..." required>
             </div>
 
             <div>
@@ -39,7 +39,7 @@
             </div>
 
             <div>
-                <label for="modalita_risposta">Modalità di Risposta:</label>
+                <label>Modalità di Risposta:</label>
                 <select id="modalita_risposta" name="modalita_risposta" required>
                     <option value="3_risposte">Scelta multipla con 3 risposte</option>
                     <option value="4_risposte">Scelta multipla con 4 risposte</option>
@@ -56,10 +56,6 @@
 
         <div id="quiz-output" style="margin-top: 20px;"></div>
     </div>
-
-    <footer>
-        &copy; 2024 BeYourChoice
-    </footer>
 
     <script>
         let generatedQuestions = [];
