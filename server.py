@@ -26,7 +26,9 @@ app.secret_key = os.urandom(32).hex()
 app.register_blueprint(dashboard_bp)
 app.register_blueprint(dashboardDocente)
 
-
+@app.route('/quiz')
+def quiz():
+    return render_template("creaQuiz.html")
 # Definisci una route per la homepage
 @app.route('/')
 @app.route('/dashboard')
