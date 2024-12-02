@@ -41,7 +41,7 @@ class scenarioControl:
             scenario_model = ScenarioModel()
             scenario_model.aggiungi_scenario(scenario_dict)
 
-            return redirect(url_for('associazioneVR')), 200
+            return render_template("visore.html")
 
         except Exception as e:
             return jsonify({"error": str(e)}), 500
