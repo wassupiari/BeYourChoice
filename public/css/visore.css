@@ -152,6 +152,42 @@ body, html {
 }
 /*fine bottone*/
 
+/*pagina responsive*/
+@media (max-width: 768px) {
+    /* Adatta il layout per tablet */
+    .content h1 {
+        font-size: 2rem; /* Testo più piccolo */
+    }
+
+    .wrapper {
+        margin-top: 15px;
+    }
+
+    .button1 {
+        font-size: 0.9rem; /* Riduci la dimensione del bottone */
+    }
+}
+
+@media (max-width: 480px) {
+    /* Adatta il layout per smartphone */
+    .background-container {
+        padding: 10px;
+    }
+
+    .content h1 {
+        font-size: 1.5rem; /* Ulteriore riduzione del testo */
+    }
+
+    .wrapper {
+        margin-top: 10px;
+    }
+
+    .button1 {
+        font-size: 0.8rem; /* Dimensione bottone per smartphone */
+        padding: 8px 10px;
+    }
+}
+
 
 
 
