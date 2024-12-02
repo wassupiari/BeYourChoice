@@ -6,20 +6,13 @@ body {
     padding: 0;
 }
 
-/* Header (importato separatamente) */
-header {
-    background-color: #007bff;
-    color: white;
-    padding: 15px;
-    text-align: center;
-    font-size: 18px;
-}
 
 /* Stile principale del contenuto */
 main {
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 20px;
+    width: 80%;
+    height: calc(100vh - 2%);
+    margin: 2%;
+    padding: 10px;
     background-color: #ffffff;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -28,7 +21,7 @@ main {
 /* Titolo della pagina */
 main h2 {
     font-size: 24px;
-    color: #d75a3d;
+    color: #000000;
     margin-bottom: 20px;
     text-align: center;
 }
@@ -37,15 +30,14 @@ main h2 {
 .materiali-lista {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 93px;
      justify-content: center;
 }
 
 /* Singolo elemento materiale */
 .materiale-item {
     background-color: #f9f9f9;
-    width: 300px; /* Larghezza fissa */
-    height: 200px; /* Altezza fissa */
+    width: 30%;
+    height: 110%;
     padding: 15px;
     border-radius: 8px;
     border: 4px solid #ddd;
@@ -64,7 +56,7 @@ main h2 {
 /* Titolo del materiale */
 .materiale-item h3 {
     font-size: 18px;
-    color: #007bff;
+    color: #000000;
     margin-bottom: 10px;
 }
 
@@ -87,115 +79,34 @@ main h2 {
     margin-top: 10px;
 
 }
-/* Se c'è solo un pulsante, centrarlo */
-.azioni .btn:only-child {
-    margin: 0 auto; /* Centra orizzontalmente */
-    display: block; /* Assicura che il pulsante occupi solo lo spazio necessario */
-    text-align: center;
+
+
+
+
+i {
+    font-size: 30px; /* Dimensione delle icone  */
+    margin-bottom: 10px; /* Spazio tra l'icona e il testo */
+    color: #000000; /* Colore delle icone */
 }
 
-/* Pulsanti generali */
-.btn {
-    display: inline-block;
-    text-align: center;
-    text-decoration: none;
-    padding: 8px 15px;
-    font-size: 14px;
-    color: white;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
 
-/* Pulsante di visualizzazione */
-.btn:first-child {
-    background-color: #28a745;
-
-}
-
-.btn:first-child:hover {
-    background-color: #218838;
-    transform: scale(1.10);
-}
-
-/* Pulsante di modifica */
-.btn:nth-child(2) {
-    background-color: #ffc107;
-}
-
-.btn:nth-child(2):hover {
-    background-color: #e0a800;
-    transform: scale(1.10);
-}
-
-/* Pulsante di rimozione */
-.btn-danger {
-    background-color: #dc3545;
-}
-
-.btn-danger:hover {
-    background-color: #c82333;
-    transform: scale(1.10);
-}
-
-/* Messaggio vuoto */
-.empty-message {
-    text-align: center;
-    font-size: 16px;
-    color: #777;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    border: 1px dashed #ddd;
-}
 /* Contenitore per il pulsante di aggiunta materiale */
+
 .aggiungi-materiale {
     text-align: center;
-    margin-top: 20px;
 }
 
-
-/* Stile del pulsante di aggiunta materiale */
-.btn-aggiungi {
-    display: inline-block;
-    text-align: center;
-    text-decoration: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    font-weight: bold;
-    color: white;
-    background-color: #d75a3d; /* Arancione */
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-/* Effetto hover per il pulsante */
-.btn-aggiungi:hover {
-    background-color: #d75a3d;
-    color: white;
-    transform: scale(1.10);
-}
-
-.error-message {
+a
+{
+    display: flex;
+    flex-direction: column; /* Testo sotto l'icona */
+    justify-content: center;
+    align-items: center;
+    text-decoration: none; /* Rimuove la sottolineatura */
+    color: inherit; /* Mantiene il colore del genitore */
+    width: 100%; /* Si adatta alla dimensione dell'elemento */
+    height: 100%; /* Si adatta alla dimensione dell'elemento */
     font-size: 18px;
-    color: green;
-    margin-top: 5px;
-    text-align: center;
+    font-weight: bold;
 }
 
-.flashes {
-       list-style-type: none;
-       padding: 0;
-
-}
-
-.flashes li.error {
-       color: green;
-
-}
-
-.flashes li.success {
-       color: green;
-
-}

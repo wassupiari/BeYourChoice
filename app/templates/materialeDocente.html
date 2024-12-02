@@ -34,9 +34,9 @@
                         <p>{{ materiale['Descrizione'] }}</p>
                         <p><strong>Tipo:</strong> {{ materiale['Tipo'] }}</p>
                         <div class="azioni">
-                            <a href="{{ url_for('MaterialeDocente.serve_file', filename=materiale['File_Path']) }}" target="_blank" class="btn">Visualizza</a>
-                            <a href="{{ url_for('MaterialeDocente.modifica_materiale', materiale_id=materiale['_id']) }}" class="btn">Modifica</a>
-                            <a href="{{ url_for('MaterialeDocente.rimuovi_materiale', materiale_id=materiale['_id']) }}" class="btn btn-danger" onclick="return confirm('Sei sicuro di voler eliminare questo materiale?');">Rimuovi</a>
+                            <a href="{{ url_for('MaterialeDocente.serve_file', filename=materiale['File_Path']) }}" target="_blank"><i class="fa-solid fa-folder-open"></i></a>
+                            <a href="{{ url_for('MaterialeDocente.modifica_materiale', materiale_id=materiale['_id']) }}"><i class="fa-solid fa-file-signature"></i></a>
+                            <a href="{{ url_for('MaterialeDocente.rimuovi_materiale', materiale_id=materiale['_id']) }}" onclick="return confirm('Sei sicuro di voler eliminare questo materiale?');"><i class="fa-solid fa-file-circle-minus"></i></a>
                         </div>
                     </div>
 
@@ -45,8 +45,9 @@
         {% else %}
             <p class="empty-message">Nessun materiale presente.</p>
         {% endif %}
+    <br><br><br><br><br><br><br>
         <div class="aggiungi-materiale">
-            <a href="{{ url_for('MaterialeDocente.carica_materiale') }}" class="btn-aggiungi">Aggiungi Materiale Didattico</a>
+            <a href="{{ url_for('MaterialeDocente.carica_materiale') }}"><i class="fa-solid fa-file-arrow-up"></i>Aggiungi Materiale Didattico</a>
         </div>
     </main>
 </body>
