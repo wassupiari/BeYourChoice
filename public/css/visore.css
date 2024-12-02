@@ -3,14 +3,14 @@ body, html {
     margin: 0;
     padding: 0;
     height: 100%;
-    font-family: open-sans, sans-serif;
+    font-family: 'open-sans', sans-serif;
 }
 
 /* Contenitore principale */
 .background-container {
     padding: 50px;
     position: fixed;
-    width: 97%; /* Larghezza fissa */
+    width: 95%; /* Larghezza fissa */
     height: 700px;
     background: no-repeat center center;
     background-size: cover; /* L'immagine copre tutto lo spazio disponibile */
@@ -36,6 +36,7 @@ body, html {
     margin-bottom: 10px;
     font-size: 1.5rem;
 }
+/*fine contenuto*/
 
 /* caricamento */
 .wrapper {
@@ -127,7 +128,9 @@ body, html {
   right: 15%;
   animation-delay: .3s;
 }
+/*fine caricamento*/
 
+/*bottone*/
 .button1 {
   position: absolute; /* Posizionamento assoluto */
   top: 20px; /* Distanza dal bordo superiore */
@@ -135,17 +138,20 @@ body, html {
   padding: 13px 20px;
   background-color: #d75a3d;
   color: white;
-  border: none;
+  text-decoration: none; /* Rimuove la sottolineatura dei link */
   border-radius: 5px;
+  display: inline-block; /* Comportamento da bottone */
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
-  letter-spacing: 1px;
+  font-size: 13px;
 }
 
 .button1:hover {
   background-color: #b94b32;
   transform: scale(1.05); /* Leggero ingrandimento al passaggio del mouse */
 }
+/*fine bottone*/
+
 
 
 
