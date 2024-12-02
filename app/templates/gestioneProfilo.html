@@ -60,6 +60,18 @@
                 <button type="submit" id="saveButton" style="display: none;">Salva Modifiche</button>
             </form>
         </section>
+
+        <form method="POST" action="{{ url_for('profilo.change_password') }}" id="changePasswordForm">
+    <div>
+        <label for="oldPassword"><strong>Vecchia Password:</strong></label>
+        <input type="password" id="oldPassword" name="old_password" required>
+    </div>
+    <div>
+        <label for="newPassword"><strong>Nuova Password:</strong></label>
+        <input type="password" id="newPassword" name="new_password" required>
+    </div>
+    <button type="submit">Cambia Password</button>
+</form>
     </main>
     <script>
     document.getElementById('editButton').addEventListener('click', function() {

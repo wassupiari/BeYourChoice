@@ -1,22 +1,24 @@
-import os
-import re
-from bson import ObjectId
-from flask import Flask, render_template, request, redirect, url_for, flash, send_file, abort, send_from_directory, \
-    Blueprint, session
+from flask import render_template, request, flash, Blueprint, session
 
-from databaseManager import DatabaseManager
-from app.models.profiloModel import ProfiloStudente, ProfiloDocente
 from app.controllers.profiloControl import ProfiloControl
-import uuid  # Per generare ID unici
+from databaseManager import DatabaseManager
 
 database_uri = "mongodb+srv://rcione3:rcione3@beyourchoice.yqzo6.mongodb.net/?retryWrites=true&w=majority&appName=BeYourChoice"  # URI di connessione al database
 db_manager = DatabaseManager(database_uri)  # <--- Inizializza qui il tuo db_manager con l'URI
 
-profilo_control = ProfiloControl(db_manager)
+profilo_control: ProfiloControl = ProfiloControl(db_manager)
 
 profilo = Blueprint('profilo', __name__)
 
 def initialize_profilo_blueprint(app):
+    @profilo.route('/change_password', methods=['POST'])
+    def change_password():
+        old_password = request.form['old_password']
+        new_password = request.form['new_password']
+        email = session.get('email')
+
+        return profilo_control.modifica_password(email, old_password, new_password)
+
     @profilo.route('/profilo/gestione', methods=['GET', 'POST'])
     def gestione_profilo():
         email = session.get('email')
@@ -47,4 +49,4 @@ def initialize_profilo_blueprint(app):
             profilo_docente=profilo_docente[0] if profilo_docente else {}
         )
 
-    app.register_blueprint(profilo)
+    app.register_blueprint(profilo, url_prefix='/profilo')
