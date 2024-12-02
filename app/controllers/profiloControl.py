@@ -20,3 +20,19 @@ class ProfiloControl:
         except Exception as e:
             print(f"Errore nel recuperare il profilo del docente dall'email {email}: {str(e)}")
             return []
+
+    def update_profilo_studente(self, email, nuovi_dati):
+        try:
+            result = self.studente_collection.update_one({"email": email}, {"$set": nuovi_dati})
+            return result.modified_count > 0  # True se almeno un documento è stato modificato
+        except Exception as e:
+            print(f"Errore nell'aggiornare il profilo dello studente per l'email {email}: {str(e)}")
+            return False
+
+    def update_profilo_docente(self, email, nuovi_dati):
+        try:
+            result = self.docente_collection.update_one({"email": email}, {"$set": nuovi_dati})
+            return result.modified_count > 0  # True se almeno un documento è stato modificato
+        except Exception as e:
+            print(f"Errore nell'aggiornare il profilo del docente per l'email {email}: {str(e)}")
+            return False

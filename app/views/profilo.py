@@ -27,7 +27,7 @@ def initialize_profilo_blueprint(app):
                 profilo = profilo[0]
             elif isinstance(profilo, list) and len(profilo) == 0:
                 profilo = {}
-            return render_template('visualizzazioneProfilo.html', profilo=profilo)
+            return render_template('gestioneProfilo.html', profilo=profilo)
 
     @profilo.route('/profilo/docente')
     def visualizza_profilo_docente():
@@ -40,6 +40,42 @@ def initialize_profilo_blueprint(app):
             elif isinstance(profilo, list) and len(profilo) == 0:
                 profilo = {}
             app.logger.info('Profilo Docente: %s', profilo)
-            return render_template('visualizzazioneProfilo.html', profilo=profilo)
+            return render_template('gestioneProfilo.html', profilo=profilo)
+
+    def initialize_profilo_blueprint(app):
+        # ... codice esistente ...
+
+        @profilo.route('/profilo/studente', methods=['GET', 'POST'])
+        def gestione_profilo_studente():
+            email = session.get('email')
+            if not email:
+                app.logger.info('Nessuna email trovata nella sessione.')
+                return redirect(url_for('login'))
+
+            if request.method == 'POST':
+                nuovi_dati = request.form.to_dict()
+                if profilo_control.update_profilo_studente(email, nuovi_dati):
+                    flash('Profilo aggiornato con successo!', 'success')
+                else:
+                    flash('Errore nell aggiornamento del profilo.', 'error')
+                    profilo = profilo_control.get_profilo_studente(email)
+            return render_template('gestioneProfilo.html', ruolo='studente', profilo=profilo[0] if profilo else {})
+
+        # Gestione profilo per Docente
+        @profilo.route('/profilo/docente', methods=['GET', 'POST'])
+        def gestione_profilo_docente():
+            email = session.get('email')
+            if not email:
+                app.logger.info('Nessuna email trovata nella sessione.')
+                return redirect(url_for('login'))
+
+            if request.method == 'POST':
+                nuovi_dati = request.form.to_dict()
+                if profilo_control.update_profilo_docente(email, nuovi_dati):
+                    flash('Profilo aggiornato con successo!', 'success')
+                else:
+                    flash('Errore nell aggiornamento del profilo.', 'error')
+                    profilo = profilo_control.get_profilo_docente(email)
+            return render_template('gestioneProfilo.html', ruolo='docente', profilo=profilo[0] if profilo else {})
 
     app.register_blueprint(profilo)

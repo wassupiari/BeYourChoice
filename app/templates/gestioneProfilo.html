@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestione Profilo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleprofilo.css') }}">
+    <style>
+        input[readonly] {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+{% include 'header.html' %}
+<body>
+    <main>
+        <section class="profile-view">
+            <h2>Gestione Profilo</h2>
+            <form method="POST" id="profiloForm">
+                <div>
+                    <label for="nome"><strong>Nome:</strong></label>
+                    <input type="text" id="nome" name="nome" value="{{ profilo.get('nome', '') }}" readonly>
+                </div>
+                <div>
+                    <label for="cognome"><strong>Cognome:</strong></label>
+                    <input type="text" id="cognome" name="cognome" value="{{ profilo.get('cognome', '') }}" readonly>
+                </div>
+                <div>
+                    <label for="sda"><strong>Struttura di Afferenza (SdA):</strong></label>
+                    <input type="text" id="sda" name="sda" value="{{ profilo.get('sda') or profilo.get('SdA', '') }}" readonly>
+                </div>
+                <div>
+                    <label for="email"><strong>Email:</strong></label>
+                    <input type="email" id="email" name="email" value="{{ profilo.get('email', '') }}" readonly>
+                </div>
+                <div>
+                    <label for="cf"><strong>Codice Fiscale:</strong></label>
+                    <input type="text" id="cf" name="cf" value="{{ profilo.get('cf') or profilo.get('CF', '') }}" readonly>
+                </div>
+                <div>
+                    <label for="data_nascita"><strong>Data di Nascita:</strong></label>
+                    <input type="date" id="data_nascita" name="data_nascita" value="{{ profilo.get('data_nascita') or profilo.get('Data_Nascita', '') }}" readonly>
+                </div>
+                <button type="button" id="editButton">Modifica Profilo</button>
+                <button type="submit" id="saveButton" style="display: none;">Salva Modifiche</button>
+            </form>
+        </section>
+    </main>
+    <script>
+        document.getElementById('editButton').addEventListener('click', function() {
+            const form = document.getElementById('profiloForm');
+            const inputs = form.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.removeAttribute('readonly');
+            });
+            this.style.display = 'none';
+            document.getElementById('saveButton').style.display = 'inline';
+        });
+    </script>
+</body>
+</html>
