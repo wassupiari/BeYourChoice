@@ -31,12 +31,12 @@ def dashboard():
 # Rotta per la classifica di una classe specifica
 @dashboardDocente.route('/classificaClasse/<int:ID_Classe>', methods=['GET'])
 @teacher_required
-def classifica_classe(id_classe):
+def classifica_classe(ID_Classe):
     """
     Visualizza la classifica di una specifica classe gestita dal docente.
     """
 
-    return DashboardController.mostra_classifica_classe(id_classe)
+    return DashboardController.mostra_classifica_classe(ID_Classe)
 
 
 # Rotta per lo storico delle attività di uno studente specifico
