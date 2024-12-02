@@ -45,15 +45,17 @@
                 {% endfor %}
             </ul>
         </div>
-    </div>
-</div>
-<aside class="sidebar">
+
+
+    <aside class="sidebar">
         <div class="sidebar-item">
-        <a href="{{ url_for('classedocente.Classe_Studente', ID_Classe=session.get('ID_Classe')) }}">
-            <i class="fa-solid fa-users-rectangle"></i>
-            <span></span>
+            <a href="{{ url_for('classedocente.Classe_Studente', ID_Classe=session.get('ID_Classe')) }}">
+                <i class="fa-solid fa-users-rectangle"></i>
+                <span>Visualizzazione classe</span>
             </a>
         </div>
     </aside>
+    </div>
+</div>
 </body>
 </html>

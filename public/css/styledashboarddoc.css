@@ -44,7 +44,7 @@ li {
   text-align: left;
 }
 
-.button {
+.bottone {
   padding: 10px 20px;
   background-color: #f9f4f1;
   color: #000000;
@@ -58,7 +58,7 @@ li {
   transition: box-shadow 0.3s ease, transform 0.3s ease; /* Effetti al passaggio del mouse */
 }
 
-button:hover {
+.bottone:hover {
   background-color: #d75a3d;
   color: #ffffff;
   transform: scale(1.05); /* Leggero ingrandimento al passaggio del mouse */

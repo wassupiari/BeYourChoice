@@ -77,10 +77,9 @@ body {
 .box li span + span {
   text-align: left; /* Allinea a sinistra il testo che non è in grassetto */
 }
-
+/* Barra laterale */
 .sidebar {
     width: 160px; /* Larghezza fissa della sidebar */
-    flex-shrink: 0;
     display: flex;
     flex-direction: column; /* Disposizione verticale */
     align-items: center; /* Centrare i contenuti */
@@ -122,4 +121,20 @@ body {
 
 .sidebar-item:hover i {
     color: #ffffff; /* Colore delle icone su hover */
+}
+.sidebar-item a {
+    display: flex;
+    flex-direction: column; /* Testo sotto l'icona */
+    justify-content: center;
+    align-items: center;
+    text-decoration: none; /* Rimuove la sottolineatura */
+    color: inherit; /* Mantiene il colore del genitore */
+    width: 100%; /* Si adatta alla dimensione dell'elemento */
+    height: 100%; /* Si adatta alla dimensione dell'elemento */
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.sidebar-item a:hover {
+    color: #ffffff; /* Cambia colore su hover */
 }

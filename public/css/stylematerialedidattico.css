@@ -6,14 +6,6 @@ body {
     padding: 0;
 }
 
-/* Header (importato separatamente) */
-header {
-    background-color: #007bff;
-    color: white;
-    padding: 15px;
-    text-align: center;
-    font-size: 18px;
-}
 
 /* Stile principale del contenuto */
 main {
@@ -28,7 +20,7 @@ main {
 /* Titolo della pagina */
 main h2 {
     font-size: 24px;
-    color: #d75a3d;
+    color:  #d75a3d;
     margin-bottom: 20px;
     text-align: center;
 }
@@ -37,8 +29,8 @@ main h2 {
 .materiali-lista {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 93px;
-     justify-content: center;
+    gap: 93;
+    justify-content: center;
 }
 
 /* Singolo elemento materiale */
@@ -64,7 +56,7 @@ main h2 {
 /* Titolo del materiale */
 .materiale-item h3 {
     font-size: 18px;
-    color: #007bff;
+    color:  #007bff;
     margin-bottom: 10px;
 }
 
@@ -87,115 +79,87 @@ main h2 {
     margin-top: 10px;
 
 }
-/* Se c'è solo un pulsante, centrarlo */
-.azioni .btn:only-child {
-    margin: 0 auto; /* Centra orizzontalmente */
-    display: block; /* Assicura che il pulsante occupi solo lo spazio necessario */
-    text-align: center;
+
+
+
+
+i {
+    font-size: 30px; /* Dimensione delle icone  */
+    margin-bottom: 10px; /* Spazio tra l'icona e il testo */
+    color: #000000; /* Colore delle icone */
 }
 
-/* Pulsanti generali */
-.btn {
-    display: inline-block;
-    text-align: center;
-    text-decoration: none;
-    padding: 8px 15px;
-    font-size: 14px;
-    color: white;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
 
-/* Pulsante di visualizzazione */
-.btn:first-child {
-    background-color: #28a745;
-
-}
-
-.btn:first-child:hover {
-    background-color: #218838;
-    transform: scale(1.10);
-}
-
-/* Pulsante di modifica */
-.btn:nth-child(2) {
-    background-color: #ffc107;
-}
-
-.btn:nth-child(2):hover {
-    background-color: #e0a800;
-    transform: scale(1.10);
-}
-
-/* Pulsante di rimozione */
-.btn-danger {
-    background-color: #dc3545;
-}
-
-.btn-danger:hover {
-    background-color: #c82333;
-    transform: scale(1.10);
-}
-
-/* Messaggio vuoto */
-.empty-message {
-    text-align: center;
-    font-size: 16px;
-    color: #777;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    border: 1px dashed #ddd;
-}
 /* Contenitore per il pulsante di aggiunta materiale */
+
 .aggiungi-materiale {
     text-align: center;
-    margin-top: 20px;
 }
 
-
-/* Stile del pulsante di aggiunta materiale */
-.btn-aggiungi {
-    display: inline-block;
-    text-align: center;
-    text-decoration: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    font-weight: bold;
-    color: white;
-    background-color: #d75a3d; /* Arancione */
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-/* Effetto hover per il pulsante */
-.btn-aggiungi:hover {
-    background-color: #d75a3d;
-    color: white;
-    transform: scale(1.10);
-}
-
-.error-message {
+a
+{
+    display: flex;
+    flex-direction: column; /* Testo sotto l'icona */
+    justify-content: center;
+    align-items: center;
+    text-decoration: none; /* Rimuove la sottolineatura */
+    color: inherit; /* Mantiene il colore del genitore */
+    width: 30%; /* Si adatta alla dimensione dell'elemento */
+    height: 100%; /* Si adatta alla dimensione dell'elemento */
     font-size: 18px;
-    color: green;
-    margin-top: 5px;
-    text-align: center;
+    font-weight: bold;
 }
 
-.flashes {
-       list-style-type: none;
-       padding: 0;
-
+.azioni a {
+    display: inline-block;
+    margin: 0 10px;
+    color: #333333;
+    text-decoration: none;
+    font-size: 22px; /* Dimensione icone */
+    transition: transform 0.3s ease, color 0.3s ease;
 }
 
-.flashes li.error {
-       color: green;
-
+.azioni a:hover {
+    color: #d75a3d; /* Cambia colore all'hover */
+    transform: scale(1.2); /* Leggero ingrandimento */
 }
 
-.flashes li.success {
-       color: green;
-
+.azioni a i {
+    display: block;
+    transition: transform 0.3s ease, color 0.3s ease;
 }
+
+.azioni a:hover i {
+    color: #d75a3d;
+}
+
+.aggiungi-materiale a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px; /* Spazio tra icona e testo */
+    color: black;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.aggiungi-materiale a:hover {
+    color: #d75a3d;
+    transform: scale(1.1); /* Leggero ingrandimento */
+}
+
+.aggiungi-materiale a i {
+    font-size: 22px;
+    transition: transform 0.3s ease;
+}
+.aggiungi-materiale a: hover i {
+    color: #d75a3d;
+}
+.aggiungi-materiale a:hover i {
+    color: #d75a3d;
+    transform: scale(1.1); /* Leggero ingrandimento */
+}
+
+
