@@ -2,34 +2,26 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>BeYourChoice Quiz Precedenti</title>
+    <title>Risultati Quiz</title>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/quizPrecedentiStyle.css') }}">
 </head>
 <body>
     {% include 'header.html' %}
     <main>
-        <h1>QuizX - Risultati</h1>
+        <h1>Risultati del Quiz #{{ quiz_id }}</h1>
         <div class="results-table">
             <div class="table-header">
-                <span>Studenti della classe X</span>
-                <span>Risultati</span>
+                <span>Studente</span>
+                <span>Risultato</span>
             </div>
             <div class="table-body">
-                <!-- Esempio di righe -->
-                <div class="table-row">
-                    <span>Studente 1</span>
-                    <span>Risultato 1</span>
-                </div>
-                <div class="table-row">
-                    <span>Studente 2</span>
-                    <span>Risultato 2</span>
-                </div>
-                <div class="table-row">
-                    <span>Studente 3</span>
-                    <span>Risultato 3</span>
-                </div>
-
+                {% for risultato in risultati %}
+                    <div class="table-row">
+                        <span>{{ risultato.Nome }} {{ risultato.Cognome }}</span>
+                        <span>{{ risultato.Punteggio }}/100</span>
+                    </div>
+                {% endfor %}
             </div>
         </div>
     </main>

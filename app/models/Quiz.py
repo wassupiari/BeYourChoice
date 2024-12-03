@@ -162,3 +162,26 @@ class QuizModel:
             return quiz_list
         except Exception as e:
             raise ValueError(f"Errore durante il recupero dei quiz per la classe {id_classe}: {e}")
+
+    @staticmethod
+    def recupera_domande(question_ids):
+        """
+        Recupera le domande dal database in base agli ID.
+        """
+        try:
+            questions_collection = db_manager.get_collection("Domanda")
+            return list(questions_collection.find({"ID_Domanda": {"$in": question_ids}}))
+        except Exception as e:
+            raise ValueError(f"Errore durante il recupero delle domande: {e}")
+
+    @staticmethod
+    def salva_risultato_quiz(quiz_result):
+        """
+        Salva il risultato del quiz nel database.
+        """
+        try:
+            quiz_results_collection = db_manager.get_collection("RisultatoQuiz")
+            quiz_results_collection.insert_one(quiz_result)
+        except Exception as e:
+            raise ValueError(f"Errore durante il salvataggio del risultato: {e}")
+

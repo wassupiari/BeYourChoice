@@ -25,14 +25,17 @@
                         <p><strong>{{ quiz.Titolo }}</strong></p>
                         <p>Argomento: {{ quiz.Argomento }}</p>
                         <p>N° domande: {{ quiz.N_Domande }}</p>
+
                     </div>
                     <div class="quiz-actions">
-                        <a href="/risultati-quiz?id_quiz={{ quiz.ID_Quiz }}">
+                        <a href="{{ url_for('quiz.visualizza_risultati_quiz', quiz_id=quiz.ID_Quiz) }}">
                             <button class="results">Risultati</button>
                         </a>
-                        <a href="/visualizza-quiz?id_quiz={{ quiz.ID_Quiz }}">
-                            <button class="view">Visualizza</button>
+                        <a href="{{ url_for('quiz.visualizza_domande_quiz', quiz_id=quiz.ID_Quiz) }}"">
+                            <button class="results">Visualizza</button>
                         </a>
+
+
                     </div>
                 </div>
             {% endfor %}

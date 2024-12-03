@@ -53,7 +53,6 @@
         // Timer
         const timerMinutesElement = document.getElementById('timer-minutes');
         const timerSecondsElement = document.getElementById('timer-seconds');
-        const submitButton = document.getElementById('submit-btn');
         const quizForm = document.getElementById('quiz-form');
 
         let minutesRemaining = parseInt(timerMinutesElement.textContent);
@@ -82,29 +81,27 @@
             }
         }, 1000);
 
-        // Invio delle risposte
-        quizForm.addEventListener('submit', async function(event) {
-            event.preventDefault();
+        document.getElementById('quiz-form').addEventListener('submit', async function (event) {
+        event.preventDefault();
 
-            // Raccolta risposte
-            const formData = new FormData(event.target);
-            const risposte = {};
-            formData.forEach((value, key) => {
-                risposte[key] = value;
-            });
+        const formData = new FormData(this);
+        const jsonData = {};
+        formData.forEach((value, key) => jsonData[key] = value);
 
-            // Aggiungi il codice fiscale dello studente
-            risposte["CF_Studente"] = "PRSGST03M19F839F";
-
-            // Invio delle risposte al backend
-            const response = await fetch('/quiz/valuta', {
+        try {
+            const response = await fetch('/valuta-quiz', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(risposte)
+                body: JSON.stringify(jsonData)
             });
 
             const result = await response.json();
             alert(result.message);
+        } catch (error) {
+            alert("Errore durante l'invio delle risposte. Riprova.");
+            console.error("Errore:", error);
+        }
+
         });
     </script>
 </body>
