@@ -20,7 +20,7 @@
                 {% if messages %}
                     <ul class="flashes">
                         {% for category, message in messages %}
-                            {% if category == 'message_profile' %}
+                            {% if category == 'message_profile_successo'or category == 'message_profile_error'%}
                                 <li class="{{ category }}">{{ message }}</li>
                             {% endif %}
                         {% endfor %}

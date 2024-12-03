@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Domande del Quiz</title>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleQuizPrecedenti.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleDomandePrecedenti.css') }}">
 </head>
 <body>
 {% include 'header.html' %}
 
-<main>
+<main class="main-container">
     <h1>Domande del Quiz: {{ quiz.Titolo }}</h1>
     <div class="domande-container">
     <p><strong>Argomento:</strong> {{ quiz.Argomento }}</p>

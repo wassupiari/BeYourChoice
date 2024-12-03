@@ -1,4 +1,5 @@
 import logging
+import re
 
 import bcrypt
 from flask import flash, jsonify, session, url_for, redirect
@@ -69,6 +70,12 @@ class ProfiloControl:
         if not bcrypt.checkpw(vecchia_password.encode('utf-8'), docente['password']):
             return "Errore: Vecchia password errata."
 
+        password_regex = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s])[A-Za-z\d!@#$%^&*()\-_=+\[\]{};:,.<>?/\\|~]{8,20}$"
+
+        if not re.match(password_regex, nuova_password):
+            flash("formato password sbagliata , la password deve avere minimo 8 caratteri, una maiuscola , un carattere speciale e almeno un numero", "message_profile_error")
+            return redirect(url_for('profilo.gestione_profilo'))
+
         # Cifra la nuova password
         nuova_password_hash = bcrypt.hashpw(nuova_password.encode('utf-8'), bcrypt.gensalt())
 
@@ -80,8 +87,8 @@ class ProfiloControl:
 
         if result.modified_count > 0:
             if result.modified_count > 0:
-                flash("Password aggiornata con successo!", "message_profile")
+                flash("Password aggiornata con successo!", "message_profile_successo")
             else:
-                flash("Errore: Password non aggiornata.", "message_profile")
+                flash("Errore: Password non aggiornata.", "message_profile_error")
 
             return redirect(url_for('profilo.gestione_profilo'))
