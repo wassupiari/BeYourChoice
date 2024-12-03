@@ -7,13 +7,13 @@ body {
   flex-direction: column;
 }
 
-
-.main-container {
+.main {
     display: flex;
     margin: 10px;
     padding: 10px;
     height: 700px; /* Imposta un'altezza fissa per il contenitore principale */
     overflow-y: auto; /* Aggiunge lo scrolling verticale se il contenuto è troppo alto */
+
 }
 
 h1 {
@@ -103,63 +103,39 @@ h1 {
     color: #555;
 }
 
-.sidebar {
-    width: 160px; /* Larghezza fissa della sidebar */
-    display: flex;
-    flex-direction: column; /* Disposizione verticale */
-    align-items: center; /* Centrare i contenuti */
-    gap: 10px; /* Spazio tra i quadrati */
+.domande-container {
+    flex: 1;
+    margin-right: 30px;
+    margin-left: 30px;
+    padding: 20px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow-y: auto; /* Lo scrolling verticale è attivato nel contenitore centrale */
 }
 
-/* Quadrati della barra laterale */
-.sidebar-item {
-    width: 165px; /* Larghezza dei quadrati */
-    height: 165px; /* Altezza dei quadrati */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    font-size: 18px; /* Testo più piccolo */
-    font-weight: bold;
-    background-color: #ffffff;
-    color: #000000; /* Colore del testo */
-    border: 1px solid #ccc; /* Bordi visibili */
-    border-radius: 8px; /* Leggera arrotondatura degli angoli */
+.btn{
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-block;
+    margin-right: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Effetto ombra */
     cursor: pointer;
     transition: box-shadow 0.3s ease, transform 0.3s ease; /* Effetti al passaggio del mouse */
+    background-color: #000000;
+    color: #ffffff;
+    width: 20%;
 }
 
-.sidebar-item i {
-    font-size: 40px; /* Dimensione delle icone  */
-    margin-bottom: 10px; /* Spazio tra l'icona e il testo */
-    color: #000000; /* Colore delle icone */
-}
-
-.sidebar-item:hover {
+.btn:hover{
     transform: scale(1.05); /* Leggero ingrandimento al passaggio del mouse */
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Ombra più intensa su hover */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Ombra più pronunciata su hover */
     background-color: #d75a3d;
     color: #ffffff;
-}
-
-.sidebar-item:hover i {
-    color: #ffffff; /* Colore delle icone su hover */
-}
-.sidebar-item a {
-    display: flex;
-    flex-direction: column; /* Testo sotto l'icona */
-    justify-content: center;
-    align-items: center;
-    text-decoration: none; /* Rimuove la sottolineatura */
-    color: inherit; /* Mantiene il colore del genitore */
-    width: 100%; /* Si adatta alla dimensione dell'elemento */
-    height: 100%; /* Si adatta alla dimensione dell'elemento */
-    font-size: 18px;
-    font-weight: bold;
-}
-
-.sidebar-item a:hover {
-    color: #ffffff; /* Cambia colore su hover */
 }

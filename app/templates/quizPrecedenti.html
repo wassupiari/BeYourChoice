@@ -9,15 +9,10 @@
 {% include 'header.html' %}
 
 <main class="main-container">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h1>Visualizzazione quiz precedentemente generati</h1>
-        <div class="create-new">
-            <a href="/crea-quiz?id_classe={{ id_classe }}">
-                <button>Crea Nuovo Quiz</button>
-            </a>
-        </div>
-    </div>
     <div class="quiz-container">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h1>Quiz precedentemente generati</h1>
+        </div>
         {% if quiz_list %}
             {% for quiz in quiz_list %}
                 <div class="quiz-item">
@@ -45,9 +40,9 @@
     </div>
     <aside class="sidebar">
         <div class="sidebar-item">
-    <a href="{{ url_for('MaterialeDocente.visualizza_materiale_docente') }}">
+    <a href="/crea-quiz?id_classe={{ id_classe }}">
         <i class="fas fa-file-alt"></i>
-        <span>Materiale didattico</span>
+        <span>Crea Quiz</span>
     </a>
     </div>
     </aside>
