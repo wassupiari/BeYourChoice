@@ -7,6 +7,7 @@ from app.views.dasboardDocente import dashboardDocente
 from app.views.dasboardStudente import dashboard_bp
 from app.views.inserimentoStudente import inserimentostudente
 from app.views.classeDocente import classedocente
+from app.views.scenarioView import scenario_bp
 from app.views.views import views
 from app.models.studenteModel import StudenteModel
 from app.models.docenteModel import DocenteModel
@@ -27,6 +28,7 @@ app.register_blueprint(views, url_prefix='/')  # Il prefisso '/' è opzionale, p
 app.secret_key = os.urandom(32).hex()
 app.register_blueprint(dashboard_bp)
 app.register_blueprint(dashboardDocente)
+app.register_blueprint(scenario_bp)
 
 
 
