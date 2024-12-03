@@ -62,7 +62,7 @@
 </div>
 
         <div class="sidebar-item">
-            <a href="{{ url_for('quiz.visualizza_ultimo_quiz', id_classe=id_classe) }}">
+            <a href="{{ url_for('quiz.visualizza_ultimo_quiz', ID_Classe=session.get('ID_Classe'))}}">
             <i class="fas fa-question-circle"></i>
             <span>Quiz</span>
             </a>
