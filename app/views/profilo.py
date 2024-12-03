@@ -13,11 +13,11 @@ profilo = Blueprint('profilo', __name__)
 def initialize_profilo_blueprint(app):
     @profilo.route('/change_password', methods=['POST'])
     def change_password():
-        old_password = request.form['old_password']
-        new_password = request.form['new_password']
+        vecchia_password = request.form['old_password']
+        nuova_password = request.form['new_password']
         email = session.get('email')
 
-        return profilo_control.modifica_password(email, old_password, new_password)
+        return profilo_control.cambia_password(vecchia_password, nuova_password)
 
     @profilo.route('/profilo/gestione', methods=['GET', 'POST'])
     def gestione_profilo():

@@ -5,11 +5,12 @@ import bcrypt
 from flask import flash, jsonify, session
 from werkzeug.security import generate_password_hash, check_password_hash
 
+from databaseManager import DatabaseManager
+
 
 class ProfiloControl:
     def __init__(self, db_manager):
-        self.docente_collection = db_manager.get_collection('Docente')
-        self.studente_collection = db_manager.get_collection('Studente')
+        self.db_manager = DatabaseManager()
 
     def get_profilo_studente(self, email):
         try:
@@ -45,58 +46,38 @@ class ProfiloControl:
             logging.error(f"Errore nell'aggiornare il profilo del docente per l'email {email}: {str(e)}")
             return False
 
-    def decode_base64(self, data):
-        if not data:
-            raise ValueError("Nessun dato fornito per la decodifica.")
+    def cambia_password(self, vecchia_password, nuova_password):
+        """
+        Cambia la password di un docente utilizzando l'email dalla sessione.
+        """
+        docente_collection = self.db_manager.get_collection("Docente")
 
-        missing_padding = len(data) % 4
-        if missing_padding:
-            data += '=' * (4 - missing_padding)
+        # Ottieni l'email dalla sessione
+        email = session.get("email")
 
-        try:
-            # Decodifica base64
-            decoded_data = base64.b64decode(data)
+        if not email:
+            return "Errore: Nessuna email trovata nella sessione. Effettua il login."
 
-            # Tentativo di decodifica UTF-8
-            try:
-                return decoded_data.decode('utf-8')
-            except UnicodeDecodeError as e:
-                logging.error(f"Decodifica UTF-8 non riuscita: {e}. Dati problematici: {decoded_data}")
-                raise ValueError("Decodifica base64 riuscita, ma i dati non sono UTF-8. Verifica l'origine dei dati.")
-        except base64.binascii.Error as e:
-            logging.error(f"Errore durante la decodifica base64: {e}")
-            raise ValueError(f"Errore durante la decodifica base64: {e}")
+        # Trova il docente nel database tramite l'email
+        docente = docente_collection.find_one({"email": email})
 
-    def modifica_password(self, old_password_encoded, new_password_encoded):
-        try:
-            old_password = self.decode_base64(old_password_encoded)
-            new_password = self.decode_base64(new_password_encoded)
-        except ValueError as e:
-            logging.error(f"Errore decodifica password: {e}")
-            return {'error': str(e)}
+        if not docente:
+            return "Errore: Docente non trovato."
 
-        try:
-            session_email = session.get('email')
-            if not session_email:
-                logging.error('Email non trovata nella sessione.')
-                return jsonify({'error': 'Email non valida.'}), 400
+        # Verifica la vecchia password
+        if not bcrypt.checkpw(vecchia_password.encode('utf-8'), docente['password']):
+            return "Errore: Vecchia password errata."
 
-            user_email = session_email.lower()
-            user = self.docente_collection.find_one({'email': user_email})
+        # Cifra la nuova password
+        nuova_password_hash = bcrypt.hashpw(nuova_password.encode('utf-8'), bcrypt.gensalt())
 
-            if user is None:
-                flash('Utente non trovato.', 'error')
-                return jsonify({'error': 'Utente non trovato.'}), 404
+        # Aggiorna la password nel database
+        result = docente_collection.update_one(
+            {"email": email},
+            {"$set": {"password": nuova_password_hash}}
+        )
 
-            if not bcrypt.checkpw(old_password.encode('utf-8'), user['password']):
-                return {'error': 'La vecchia password non è corretta.'}
-
-            new_password_hashed = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
-
-            result = self.docente_collection.update_one(
-                {'email': user_email},
-                {'$set': {'password': new_password_hashed}}
-            )
-        except Exception as e:
-            logging.error(f'Errore durante il cambio della password per l\'utente {user_email}: {str(e)}')
-            return jsonify({'error': f'Errore durante il cambio della password.'}), 500
+        if result.modified_count > 0:
+            return "Password aggiornata con successo."
+        else:
+            return "Errore: Password non aggiornata."
