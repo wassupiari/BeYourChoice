@@ -4,7 +4,7 @@ from app.controllers.LoginControl import teacher_required
 
 # Crea il blueprint per la dashboard del docente
 dashboardDocente = Blueprint('dashboardDocente', __name__, template_folder='../templates')
-print("entrooooo")
+
 
 
 # Rotta per la dashboard del docente

@@ -13,7 +13,7 @@ def dashboard_studente():
     """
     Visualizza la dashboard per un utente specifico.
     """
-    cf_studente = session.get('CF')
+    cf_studente = session.get('cf')
     id_classe = session.get('ID_Classe')
     # Usa il controller per ottenere i dati
     return DashboardController.mostra_dashboard(cf_studente, id_classe)
