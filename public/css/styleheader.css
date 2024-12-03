@@ -38,6 +38,7 @@ body {
 
 .logo img:hover {
     transform: scale(1.05); /* Un leggero ingrandimento al passaggio del mouse */
+    filter: drop-shadow( 0 0 10px rgba(215, 90, 61, 0.5));
 }
 
 .navigation {
@@ -56,23 +57,27 @@ body {
     text-decoration: none;
     color: #333333;
     font-weight: bold;
-    font-size: 18px; /* Ridotta la dimensione del testo */
     transition: color 0.3s ease, transform 0.3s ease;
     position: relative;
 }
 
 .nav-link i {
-    font-size: 22px; /* Ridotta la dimensione delle icone */
+    font-size: 30px;
 }
 
-.nav-link.active i,
-.nav-link:hover i {
+.nav-link.active i
+{
     color: #d75a3d;
     transform: scale(1.1); /* Leggero ingrandimento al passaggio del mouse */
 }
+.nav-link:hover i {
+    color: #d75a3d;
+    transform: scale(1.1); /* Leggero ingrandimento al passaggio del mouse */
+    filter: drop-shadow( 0 0 10px rgba(215, 90, 61, 0.5));
+}
 
 .nav-link span {
-    margin-top: -17px;
+    margin-top: 1px;
     transition: color 0.3s ease;
 }
 

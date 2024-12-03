@@ -1,0 +1,480 @@
+/* Layout principale */
+.main-content {
+  font-family: 'open-sans';
+  display: flex;
+  flex-direction: row; /* Disposizione orizzontale: dashboard a sinistra, sidebar a destra */
+  gap: 20px; /* Spazio tra dashboard e sidebar */
+  margin: 20px; /* Margine attorno all'intero contenitore */
+  align-items: flex-start; /* Allinea in alto la dashboard e la sidebar */
+}
+
+/* Stile per il contenitore */
+.scenario {
+    position: relative; /* Necessario per posizionare l'immagine in modo assoluto */
+    flex: 1; /* Occupa tutto lo spazio disponibile */
+    padding: 1.5%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #e5e5e5;
+    box-shadow: 0 4px 6px rgba(215, 90, 61, 0.3);
+    height: 100%;
+    width: 80%;
+    animation: fadeIn 1s ease; /* Effetto di comparsa */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animazioni per interazioni */
+}
+
+/* Stile immagine strappata */
+.img1 {
+    /*padding: -1.5%;*/
+    position: absolute; /* Posizionamento assoluto rispetto al contenitore */
+    top: 0;
+    right: 0px;
+    width: 600px; /* Riduci la larghezza */
+    height: auto; /* Mantieni proporzioni */
+    object-fit: contain; /* Evita distorsioni */
+    z-index: 0; /* Porta l'immagine sopra gli altri elementi */
+}
+/*fine immagine strappata*/
+
+/*inizio bottone*/
+.scenario .button_1  {
+  z-index: 1; /* Porta l'immagine sopra gli altri elementi */
+  position: absolute;
+  right: 265px;
+  background-color:  #d75a3d;
+  color: #fff;
+  padding: 10px 30px; /*spaziatura dai bordi alla scritta*/
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font-weight: 200;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-top: 500px;
+  cursor: pointer;
+}
+
+.scenario .button_1.hidden {
+  background-color: transparent;
+  border-color: #fff;
+}
+/*fine bottone*/
+
+/*inizio bottone*/
+.scenario .button_2 {
+  position: relative;
+  left: 43%; /* Centra orizzontalmente */
+  z-index: 1; /* Porta l'immagine sopra gli altri elementi */
+  background-color:  #d75a3d;
+  color: #fff;
+  padding: 10px 30px; /*spaziatura dai bordi alla scritta*/
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font-weight: 200;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin: 25px auto 0;
+  cursor: pointer;
+}
+
+.scenario .button_2.hidden {
+  background-color: transparent;
+  border-color: #fff;
+}
+/*fine bottone*/
+
+.scenario:hover {
+  transform: translateY(-10px); /* Leggera traslazione verso l'alto */
+  box-shadow: 0 6px 10px rgba(215, 90, 61, 0.5); /* Ombra più intensa */
+}
+
+.scenario h2 {
+    margin-bottom: 10px; /* Spazio tra titolo e input */
+    margin-left: 20px;
+}
+
+.scenario form {
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px;
+}
+
+.scenario input {
+  border: none;
+  margin: 0;
+  padding: 10px 15px;
+  font-size: 14px;
+  border-radius: 8px;
+  width: 80%; /* Larghezza relativa al contenitore */
+  max-width: 400px;
+  outline: none;
+  /*margin-top: 5px;*/
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+/*DA FINIRE*/
+.scenario span{
+    margin-top: 20px;
+    margin-bottom: 0px;
+    font-size: 18px;
+}
+
+.scenario textarea {
+    width: 100%; /* Occupa tutta la larghezza del contenitore */
+    max-width: 500px; /* Limita la larghezza massima */
+    height: 120px; /* Altezza più grande per descrizioni */
+    padding: 10px; /* Spazi interni */
+    font-size: 14px; /* Dimensione del testo */
+    border-radius: 8px; /* Arrotonda gli angoli */
+    border: 1px solid #ccc; /* Bordi leggeri */
+    resize: verticle; /* Permette il ridimensionamento verticale */
+    outline: none; /* Rimuove il bordo blu di focus */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Aggiunge un'ombra leggera */
+    font-family: 'open-sans', sans-serif;
+}
+
+/* Animazione di comparsa */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* Animazione per gli elementi della lista */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.scenario li span {
+  font-weight: bold;
+  text-align: right;
+  width: 50%;
+}
+
+.scenario li span + span {
+  text-align: left;
+}
+
+/* Pulsanti */
+.button {
+  padding: 10px 20px;
+  background-color: #d75a3d;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+
+}
+
+.button:hover {
+  background-color: #b94b32;
+  transform: scale(1.05); /* Leggero ingrandimento al passaggio del mouse */
+}
+
+a
+{
+  text-decoration: none;
+    color: #000000;
+}
+
+/*carosello*/
+.carousel {
+  width: 100%;
+  overflow-x: scroll;
+  padding: 30px;
+  /*padding-top: 80px;*/
+  position: relative;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  overflow-y: hidden; /* Nascondi lo scroll verticale */
+}
+
+/* Personalizza lo scroll del carosello */
+.carousel {
+    width: 100%; /* Larghezza massima */
+    overflow-x: auto; /* Abilita lo scroll orizzontale */
+    padding: 30px;
+    position: relative;
+    box-sizing: border-box;
+    scroll-behavior: smooth; /* Scorrimento fluido */
+}
+
+/* Scrollbar */
+.carousel::-webkit-scrollbar {
+    height: 8px; /* Altezza dello scroll orizzontale */
+}
+
+.carousel::-webkit-scrollbar-track {
+    background: rgba(215, 90, 61, 0.2); /* Colore della traccia */
+    border-radius: 10px; /* Arrotonda la traccia */
+    margin-top: 10px; /* Allinea meglio lo scroll sotto le card */
+}
+
+.carousel::-webkit-scrollbar-thumb {
+    background: rgba(215, 90, 61, 0.7); /* Colore dello slider */
+    border-radius: 10px; /* Arrotonda lo slider */
+    transition: background 0.3s ease; /* Transizione sul colore */
+}
+
+.carousel::-webkit-scrollbar-thumb:hover {
+    background: rgba(215, 90, 61, 0.9); /* Colore più scuro al passaggio del mouse */
+}
+
+/* Centrare lo scroll */
+.carousel__container {
+    display: flex; /* Layout flessibile */
+    justify-content: center; /* Centra il contenuto */
+    white-space: nowrap; /* Impedisce il wrapping */
+    position: relative; /* Posiziona il carosello in modo relativo */
+    margin: 0 auto; /* Margine automatico per centrare */
+}
+/*fine scroll orizzontale bello*/
+
+/* Contenitore della spunta verde */
+.carousel-item.selected {
+    position: relative; /* Rende il contenitore relativo per posizionare la spunta */
+}
+
+.carousel-item.selected::after {
+    content: '✔'; /* Testo della spunta */
+    position: absolute;
+    top: 10px; /* Posiziona in alto */
+    right: 10px; /* Posiziona a destra */
+    width: 20px;
+    height: 20px;
+    font-size: 16px;
+    color: white; /* Colore del segno di spunta */
+    background-color: green; /* Sfondo verde */
+    border-radius: 50%; /* Arrotonda il quadrato */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Leggera ombra */
+}
+/*fine spunta del selezionato*/
+
+.carousel__container {
+  white-space: nowrap;
+  margin: 70px 0px;
+  padding-bottom: 0px;
+  display: inline-block;
+  margin-bottom: 20px;
+}
+.categories__title {
+  color: rgb(77, 55, 102);
+  font-size: 28px;
+  position: absolute;
+  padding-left: 30px;
+}
+
+.carousel-item {
+  width: 200px;
+  height: 250px;
+  border-radius: 20px;
+  background-color: #95bcd6;
+  overflow: hidden;
+  margin-right: 10px;
+  display: inline-block;
+  cursor: pointer;
+  -webkit-transition: 1000ms all;
+  transition: 1000ms all;
+  -webkit-transform-origin: center left;
+  transform-origin: center left;
+  position: relative;
+}
+
+.carousel-item:hover ~ .carousel-item {
+  -webkit-transform: translate3d(100px, 0, 0);
+  transform: translate3d(100px, 0, 0);
+}
+
+.carousel__container:hover .carousel-item {
+  opacity: 0.3;
+}
+
+.carousel__container:hover .carousel-item:hover {
+  -webkit-transform: scale(1.5);
+  transform: scale(1.5);
+  opacity: 1;
+}
+
+.carousel-item__img {
+    width: 100%; /* Occupa tutta la larghezza della card */
+    height: 100%; /* Occupa tutta l'altezza della card */
+    object-fit: contain; /* Evita di tagliare l'immagine */
+    object-position: center; /* Centra l'immagine nella card */
+    display: block; /* Assicura che il comportamento inline sia rimosso */
+    border-radius: 10px; /* Arrotonda gli angoli, se necessario */
+}
+
+.carousel-item__details {
+  background: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    from(rgba(0, 0, 0, 0.9)),
+    to(rgba(0, 0, 0, 0))
+  );
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  font-size: 10px;
+  opacity: 0;
+  -webkit-transition: 450ms opacity;
+  transition: 450ms opacity;
+  padding: 10px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.carousel-item__details:hover {
+  opacity: 1;
+}
+
+.carousel-item__details span {
+  font-size: 0.9rem;
+  color: #2ecc71;
+}
+
+.carousel-item__details .controls {
+  padding-top: 180px;
+}
+
+.carousel-item__details .carousel-item__details--title,
+.carousel-item__details--subtitle {
+  color: #fff;
+  margin: 5px 0;
+}
+/*fine carosello*/
+
+/*radio button*/
+.radio-inputs {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 263px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.radio-inputs > * {
+  margin: 8px;
+}
+
+.radio-input:checked + .radio-tile {
+  border-color: #d75a3d;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  color: #d75a3d;
+}
+
+.radio-input:checked + .radio-tile:before {
+  transform: scale(1);
+  opacity: 1;
+  background-color: #d75a3d;
+  border-color: #d75a3d;
+}
+
+.radio-input:checked + .radio-tile .radio-icon svg {
+  fill: #d75a3d;
+}
+
+.radio-input:checked + .radio-tile .radio-label {
+  color: #d75a3d;
+}
+
+.radio-input:focus + .radio-tile {
+  border-color: #d75a3d;
+  box-shadow: 0 5px 10px rgba(255, 165, 0, 0.3); #d75a3d;
+}
+
+.radio-input:focus + .radio-tile:before {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.radio-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  min-height: 80px;
+  border-radius: 0.5rem;
+  border: 2px solid #b5bfd9;
+  background-color: #fff;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  transition: 0.15s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+
+.radio-tile:before {
+  content: "";
+  position: absolute;
+  display: block;
+  width: 0.75rem;
+  height: 0.75rem;
+  border: 2px solid #d75a3d;
+  background-color: #fff;
+  border-radius: 50%;
+  top: 0.25rem;
+  left: 0.25rem;
+  opacity: 0;
+  transform: scale(0);
+  transition: 0.25s ease;
+}
+
+.radio-tile:hover {
+  border-color: #d75a3d;
+}
+
+.radio-tile:hover:before {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.radio-icon svg {
+  width: 2rem;
+  height: 2rem;
+  fill: #000;
+}
+
+.radio-label {
+  color: #000;
+  transition: 0.375s ease;
+  text-align: center;
+  font-size: 13px;
+}
+
+.radio-input {
+  clip: rect(0 0 0 0);
+  -webkit-clip-path: inset(100%);
+  clip-path: inset(100%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+/*fine radio button*/
+
