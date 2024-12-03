@@ -350,11 +350,8 @@ a
 }
 
 .carousel-item__details span {
-  /* width: 10px;
-  height: 10px; */
   font-size: 0.9rem;
   color: #2ecc71;
-  /* background-color: white; */
 }
 
 .carousel-item__details .controls {
