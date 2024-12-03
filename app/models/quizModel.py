@@ -182,11 +182,25 @@ class QuizModel:
         Salva il risultato del quiz nel database.
         """
         try:
+            # Collezioni del database
             quiz_results_collection = db_manager.get_collection("RisultatoQuiz")
+            attività_collection = db_manager.get_collection("Dashboard")
+            quiz_collection = db_manager.get_collection("Quiz")
+
+            # Salva il risultato del quiz
             quiz_results_collection.insert_one(quiz_result)
 
+            # Recupera l'ID del quiz
+            quiz_id = quiz_result['ID_Quiz']
+
+            # Recupera il titolo del quiz
+            quiz = quiz_collection.find_one({"ID_Quiz": quiz_id}, {"Titolo": 1})
+            if not quiz:
+                raise ValueError(f"Quiz con ID {quiz_id} non trovato.")
+
+            titolo_quiz = quiz["Titolo"]
+
             # Genera l'ID incrementale per l'attività
-            attività_collection = db_manager.get_collection("Dashboard")
             last_attività = attività_collection.find_one(sort=[("ID_Attività", -1)])  # Recupera l'ultima attività
             nuovo_id_attività = last_attività["ID_Attività"] + 1 if last_attività else 1
 
@@ -194,7 +208,7 @@ class QuizModel:
             attività = {
                 "ID_Attività": nuovo_id_attività,
                 "Data_Attività": datetime.utcnow(),  # Assicura che venga salvato come Date
-                "Descrizione_Attività": f"Completamento Quiz {quiz_result['ID_Quiz']}",
+                "Descrizione_Attività": f"Completamento Quiz: {titolo_quiz}",
                 "Punteggio_Attività": punteggio,
                 "CF_Studente": cf_studente
             }
@@ -203,4 +217,5 @@ class QuizModel:
             attività_collection.insert_one(attività)
         except Exception as e:
             raise ValueError(f"Errore durante il salvataggio del risultato: {e}")
+
 
