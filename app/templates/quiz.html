@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ quiz.Argomento }} - Quiz</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleesecuzioneQuiz.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <header class="main-header">
+        <div class="logo">
+                <img src="{{ url_for('static', filename='img/Logo.png') }}" width="20%" >
+        </div>
+        <div class="user-info">
+                <span style="font-size: 1.2rem;">Ciao, <strong>{{ session.get("Nome") }}</strong></span>
+                <!-- Form per il logout -->
+                <form action="{{ url_for('login.logout') }}" method="POST" style="display:inline;">
+                    <button type="submit" class="logout-button" style="background: none; border: none; cursor: pointer;">
+                        <i class="fa-solid fa-person-walking-luggage"></i><br>
+                        <span>Logout</span>
+                    </button>
+                </form>
+        </div>
+    </header>
+    <div class="container">
+        <h1>{{ quiz.Argomento }}</h1>
+        <p><strong>Durata:</strong> {{ quiz.Durata }} minuti</p>
+        <p><strong>Tempo rimanente:</strong>
+          <span id="timer-minutes">{{ tempo_rimanente // 60 }}</span> minuti e
+          <span id="timer-seconds">{{ tempo_rimanente % 60 }}</span> secondi
+        </p>
+
+        <form id="quiz-form">
+            {% for question in questions %}
+            <div class="card">
+                <p><strong>{{ loop.index }}. {{ question.Testo_Domanda }}</strong></p>
+                <div class="options-container">
+                    {% for option in question.Opzioni_Risposte %}
+                    <div class="option-container">
+                        <input type="radio" id="q{{ question.ID_Domanda }}_{{ loop.index }}"
+                               name="q{{ question.ID_Domanda }}" value="{{ option }}">
+                        <label for="q{{ question.ID_Domanda }}_{{ loop.index }}">{{ option }}</label>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+            <button type="submit" id="submit-btn" class="btn">Invia Risposte</button>
+        </form>
+    </div>
+    <script>
+        // Timer
+        const timerMinutesElement = document.getElementById('timer-minutes');
+        const timerSecondsElement = document.getElementById('timer-seconds');
+        const quizForm = document.getElementById('quiz-form');
+
+        let minutesRemaining = parseInt(timerMinutesElement.textContent);
+        let secondsRemaining = parseInt(timerSecondsElement.textContent);
+
+        const timerInterval = setInterval(() => {
+            if (minutesRemaining <= 0 && secondsRemaining <= 0) {
+                clearInterval(timerInterval);
+                timerMinutesElement.textContent = "0";
+                timerSecondsElement.textContent = "0";
+                timerMinutesElement.parentElement.innerHTML = "Tempo scaduto!";
+                submitButton.disabled = true; // Disabilita il pulsante
+                const inputs = quizForm.querySelectorAll('input');
+                inputs.forEach(input => input.disabled = true); // Disabilita tutte le opzioni
+            } else {
+                if (secondsRemaining === 0) {
+                    minutesRemaining -= 1;
+                    secondsRemaining = 59;
+                } else {
+                    secondsRemaining -= 1;
+                }
+
+                // Aggiorna il timer nel DOM
+                timerMinutesElement.textContent = minutesRemaining;
+                timerSecondsElement.textContent = secondsRemaining.toString().padStart(2, '0');
+            }
+        }, 1000);
+
+        document.getElementById('quiz-form').addEventListener('submit', async function (event) {
+        event.preventDefault();
+
+        const formData = new FormData(this);
+        const jsonData = {};
+        formData.forEach((value, key) => jsonData[key] = value);
+
+        try {
+            const response = await fetch('/valuta-quiz', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(jsonData)
+            });
+
+            const result = await response.json();
+            alert(result.message);
+        } catch (error) {
+            alert("Errore durante l'invio delle risposte. Riprova.");
+            console.error("Errore:", error);
+        }
+
+        });
+    </script>
+</body>
+</html>

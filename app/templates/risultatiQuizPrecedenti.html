@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Risultati Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/quizPrecedentiStyle.css') }}">
+</head>
+<body>
+    {% include 'header.html' %}
+    <main>
+        <h1>Risultati del Quiz #{{ quiz_id }}</h1>
+        <div class="results-table">
+            <div class="table-header">
+                <span>Studente</span>
+                <span>Risultato</span>
+            </div>
+            <div class="table-body">
+                {% for risultato in risultati %}
+                    <div class="table-row">
+                        <span>{{ risultato.Nome }} {{ risultato.Cognome }}</span>
+                        <span>{{ risultato.Punteggio }}/100</span>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </main>
+</body>
+</html>

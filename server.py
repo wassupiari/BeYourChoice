@@ -1,6 +1,7 @@
 from flask import Flask, render_template, session, redirect, url_for
 import os
 from app.controllers.loginControl import login_bp
+from app.controllers.quizControl import quiz_blueprint
 from app.controllers.registrazioneControl import registrazione_bp
 from app.views.dasboardDocente import dashboardDocente
 from app.views.dasboardStudente import dashboard_bp
@@ -15,7 +16,8 @@ from app.views.MaterialeStudente import initialize_materiale_studente_blueprint
 from app.views.profilo import initialize_profilo_blueprint
 
 # Crea l'applicazione Flask
-app = Flask(__name__, template_folder='app/templates', static_folder="public")  # Imposta il percorso dei template
+app = Flask(__name__, template_folder='app/templates', static_folder="public")
+# Imposta il percorso dei template
 app.register_blueprint(classedocente, url_prefix='/classedocente')  # Usa '/' o un altro prefisso a tua scelta
 app.register_blueprint(inserimentostudente,
                        url_prefix='/inserimentostudente')  # Il prefisso '/' è opzionale, puoi scegliere uno diverso
@@ -25,6 +27,11 @@ app.register_blueprint(views, url_prefix='/')  # Il prefisso '/' è opzionale, p
 app.secret_key = os.urandom(32).hex()
 app.register_blueprint(dashboard_bp)
 app.register_blueprint(dashboardDocente)
+
+
+
+
+
 
 
 # Definisci una route per la homepage
@@ -53,6 +60,7 @@ def home():
 
 app.register_blueprint(login_bp)
 app.register_blueprint(registrazione_bp)
+app.register_blueprint(quiz_blueprint)
 
 UPLOAD_FOLDER = 'public/uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
