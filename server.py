@@ -16,7 +16,8 @@ from app.views.MaterialeStudente import initialize_materiale_studente_blueprint
 from app.views.profilo import initialize_profilo_blueprint
 
 # Crea l'applicazione Flask
-app = Flask(__name__, template_folder='app/templates', static_folder="public")  # Imposta il percorso dei template
+app = Flask(__name__, template_folder='app/templates', static_folder="public")
+# Imposta il percorso dei template
 app.register_blueprint(classedocente, url_prefix='/classedocente')  # Usa '/' o un altro prefisso a tua scelta
 app.register_blueprint(inserimentostudente,
                        url_prefix='/inserimentostudente')  # Il prefisso '/' è opzionale, puoi scegliere uno diverso
@@ -28,9 +29,12 @@ app.register_blueprint(dashboard_bp)
 app.register_blueprint(dashboardDocente)
 
 
-@app.route('/quizdisponibili')
-def quizprecedenti():
-    return render_template("quizDisponibile.html")
+
+
+
+
+
+
 # Definisci una route per la homepage
 @app.route('/')
 @app.route('/dashboard')

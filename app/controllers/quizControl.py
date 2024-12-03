@@ -124,3 +124,114 @@ def visualizza_quiz_classe():
     except Exception as e:
         print(f"Errore durante il recupero dei quiz: {e}")
         return "Errore durante il recupero dei quiz.", 500
+
+@quiz_blueprint.route('/valuta-quiz', methods=['POST'])
+@student_required
+def valuta_quiz():
+    """
+    Valuta le risposte inviate dal form del quiz e salva il risultato.
+    """
+    try:
+        # Recupera il CF dalla sessione
+        cf_studente = session.get('cf')
+        if not cf_studente:
+            return jsonify({"message": "CF dello studente non trovato in sessione."}), 400
+
+        # Stampa il CF per debug
+        print(f"CF recuperato dalla sessione: {cf_studente}")
+
+        # Continua con la valutazione
+        data = request.get_json()
+        if not data:
+            return jsonify({"message": "Nessuna risposta ricevuta"}), 400
+
+        # Filtra solo le chiavi che iniziano con "q" per estrarre gli ID delle domande
+        question_ids = [int(key[1:]) for key in data.keys() if key.startswith("q")]
+        if not question_ids:
+            return jsonify({"message": "Nessuna domanda trovata"}), 400
+
+        # Recupera le domande
+        domande = QuizModel.recupera_domande(question_ids)
+        totale = len(domande)
+        if totale == 0:
+            return jsonify({"message": "Nessuna domanda valida trovata per il quiz"}), 400
+
+        # Valuta le risposte
+        corrette = 0
+        risposte_utente = []
+        for domanda in domande:
+            risposta_utente = data.get(f"q{domanda['ID_Domanda']}")
+            risposte_utente.append(risposta_utente)
+            if risposta_utente == domanda["Risposta_Corretta"]:
+                corrette += 1
+
+        # Calcola il punteggio
+        punteggio = int((corrette / totale) * 100)
+
+        # Salva il risultato del quiz
+        quiz_result = {
+            "ID_Quiz": domande[0]["ID_Quiz"],
+            "CF_Studente": cf_studente,
+            "Punteggio_Quiz": punteggio,
+            "Risposte": risposte_utente
+        }
+        QuizModel.salva_risultato_quiz(quiz_result)
+
+        return jsonify({"message": f"Hai ottenuto un punteggio di {punteggio}%. Domande corrette: {corrette}/{totale}"})
+    except Exception as e:
+        print(f"Errore durante la valutazione del quiz: {e}")
+        return jsonify({"message": "Errore durante la valutazione del quiz"}), 500
+
+@quiz_blueprint.route('/quiz/<int:quiz_id>/domande', methods=['GET'])
+@teacher_required
+def visualizza_domande_quiz(quiz_id):
+    """
+    Visualizza le domande di un quiz selezionato.
+    """
+    try:
+        # Recupera il quiz e le sue domande dal database
+        quiz_collection = db_manager.get_collection("Quiz")
+        questions_collection = db_manager.get_collection("Domanda")
+
+        quiz = quiz_collection.find_one({"ID_Quiz": quiz_id})
+        if not quiz:
+            return jsonify({"message": "Quiz non trovato"}), 404
+
+        domande = list(questions_collection.find({"ID_Quiz": quiz_id}))
+
+        # Passa i dati al template
+        return render_template('domandeQuizPrecedenti.html', quiz=quiz, domande=domande)
+    except Exception as e:
+        print(f"Errore durante la visualizzazione delle domande del quiz: {e}")
+        return jsonify({"message": "Errore durante la visualizzazione delle domande"}), 500
+
+@quiz_blueprint.route('/quiz/<int:quiz_id>/risultati', methods=['GET'])
+@teacher_required
+def visualizza_risultati_quiz(quiz_id):
+    """
+    Visualizza i risultati degli studenti per un quiz specifico.
+    """
+    try:
+        # Recupera i risultati degli studenti dal database
+        quiz_results_collection = db_manager.get_collection("RisultatoQuiz")
+        studenti_collection = db_manager.get_collection("Studente")
+
+        risultati = list(quiz_results_collection.find({"ID_Quiz": quiz_id}))
+
+        # Unisci i risultati con i dettagli degli studenti
+        risultati_completi = []
+        for risultato in risultati:
+            studente = studenti_collection.find_one({"cf": risultato["CF_Studente"]})  # Campo corretto: "cf"
+            risultati_completi.append({
+                "Nome": studente["nome"] if studente else "Studente Sconosciuto",
+                "Cognome": studente["cognome"] if studente else "",
+                "Punteggio": risultato["Punteggio_Quiz"]
+            })
+
+        return render_template('risultatiQuizPrecedenti.html', risultati=risultati_completi, quiz_id=quiz_id)
+    except Exception as e:
+        print(f"Errore durante il caricamento dei risultati: {e}")
+        return jsonify({"message": "Errore durante il caricamento dei risultati"}), 500
+
+
+

@@ -88,7 +88,7 @@ def login():
                 session_token = str(uuid.uuid4())
                 session['email'] = email
                 session['session_token'] = session_token
-                cf_studente = studente.get("CF")
+                cf_studente = studente.get("cf")
                 nome_studete = studente.get("nome")
 
                 if studente.get("ID_Classe"):  # Se "ID_Classe" è presente e ha un valore
@@ -100,7 +100,7 @@ def login():
                 print(id_classe)
 
 
-                session['CF'] = cf_studente
+                session['cf'] = cf_studente
                 session['ID_Classe'] = id_classe
                 session['Nome'] = nome_studete
                 session['user_type'] = 'studente'  # Imposta il tipo utente
