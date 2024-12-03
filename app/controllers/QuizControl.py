@@ -252,13 +252,12 @@ def visualizza_ultimo_quiz():
         if not cf_studente:
             return jsonify({"message": "Errore: codice fiscale non trovato nella sessione"}), 403
 
-        attività_completata = activities_collection.find_one({
-            "CF_Studente": cf_studente,
-            "Descrizione_Attività": {"$regex": f"Completamento Quiz {ultimo_quiz['ID_Quiz']}"}
+        attività_completate = activities_collection.find_one({
+            "CF_Studente": cf_studente
         })
 
         # Se il quiz è stato completato, non mostrarlo
-        if attività_completata:
+        if attività_completate:
             return render_template('quizDisponibile.html', quiz=None)
 
         # Recupera le domande associate al quiz
