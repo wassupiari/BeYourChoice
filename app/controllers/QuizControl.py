@@ -3,10 +3,10 @@ from flask import Blueprint, request, jsonify, render_template, session
 from app.controllers.LoginControl import teacher_required, student_required
 from app.models.quizModel import QuizModel, db_manager
 import os
-#from dotenv import load_dotenv
+from dotenv import load_dotenv
 
 # Carica le variabili d'ambiente
-#load_dotenv()
+load_dotenv()
 
 quiz_blueprint = Blueprint("quiz", __name__, template_folder="../templates")
 
