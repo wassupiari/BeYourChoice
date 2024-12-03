@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from databaseManager import DatabaseManager
 
 
@@ -105,54 +107,31 @@ class Attivita:
 
     def get_storico(self, cf_studente):
         """
-        Recupera lo storico dettagliato di tutte le attività svolte dallo studente.
+        Recupera lo storico dettagliato di tutte le attività svolte dallo studente dal database Dashboard.
         :param cf_studente: Codice fiscale dello studente.
-        :return: Un dizionario contenente i dettagli dei quiz e degli scenari svolti.
+        :return: Un elenco di attività.
         """
-        risultato_quiz_collection = self.db_manager.get_collection("RisultatoQuiz")
-        risultato_scenario_collection = self.db_manager.get_collection("PunteggioScenario")
-        quiz_collection = self.db_manager.get_collection("Quiz")
-        scenario_collection = self.db_manager.get_collection("ScenarioVirtuale")
+        try:
+            # Recupera la collezione Dashboard
+            dashboard_collection = self.db_manager.get_collection("Dashboard")
 
-        # Recupera i risultati dei quiz
-        quiz_risultati = list(
-            risultato_quiz_collection.find(
-                {"CF_Studente": cf_studente},
-                {"_id": 0, "ID_Quiz": 1, "Punteggio_Quiz": 1}
+            # Trova tutte le attività per lo studente
+            attivita_risultati = list(
+                dashboard_collection.find(
+                    {"CF_Studente": cf_studente},
+                    {"_id": 0, "ID_Attività": 1, "Data_Attività": 1, "Descrizione_Attività": 1, "Punteggio_Attività": 1}
+                )
             )
-        )
-        quiz_storico = []
-        for risultato in quiz_risultati:
-            quiz = quiz_collection.find_one(
-                {"ID_Quiz": risultato["ID_Quiz"]},
-                {"_id": 0, "Argomento": 1, "Modalità_Quiz": 1, "N_Domande": 1, "Durata": 1}
-            )
-            if quiz:
-                quiz["Punteggio"] = risultato["Punteggio_Quiz"]
-                quiz_storico.append(quiz)
 
-        # Recupera i risultati degli scenari
-        scenario_risultati = list(
-            risultato_scenario_collection.find(
-                {"CF_Studente": cf_studente},
-                {"_id": 0, "ID_Scenario": 1, "Punteggio_Scenario": 1}
-            )
-        )
-        scenario_storico = []
-        for risultato in scenario_risultati:
-            scenario = scenario_collection.find_one(
-                {"ID_Scenario": risultato["ID_Scenario"]},
-                {"_id": 0, "Titolo": 1, "Descrizione": 1, "Argomento": 1, "Modalità": 1}
-            )
-            if scenario:
-                scenario["Punteggio"] = risultato["Punteggio_Scenario"]
-                scenario_storico.append(scenario)
+            # Converte le date in un formato leggibile se necessario
+            for attivita in attivita_risultati:
+                if isinstance(attivita["Data_Attività"], datetime):
+                    attivita["Data_Attività"] = attivita["Data_Attività"].strftime("%d/%m/%Y %H:%M:%S")
 
-        return {
-            "Quiz": quiz_storico,
-            "Scenari": scenario_storico
-        }
-
+            return attivita_risultati
+        except Exception as e:
+            print(f"Errore durante il recupero dello storico: {e}")
+            return []
     def get_classi_docente(self, id_docente):
         """
         Recupera le classi associate a un docente.
