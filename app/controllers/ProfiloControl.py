@@ -1,5 +1,6 @@
 import logging
 import re
+from symtable import Class
 
 import bcrypt
 from flask import flash, jsonify, session, url_for, redirect
@@ -25,6 +26,8 @@ class ProfiloControl:
     def get_profilo_docente(self, email):
         try:
             docente_collection = self.db_manager.get_collection("Docente")
+
+            print("ciao")
             query = {"email": email}
             profilo_docente = list(docente_collection.find(query))
             return profilo_docente
@@ -34,7 +37,9 @@ class ProfiloControl:
 
     def update_profilo_studente(self, email, nuovi_dati):
         try:
-            result = self.studente_collection.update_one({"email": email}, {"$set": nuovi_dati})
+            studente_collection = self.db_manager.get_collection("Studente")
+
+            result = studente_collection.update_one({"email": email}, {"$set": nuovi_dati})
             return result.modified_count > 0
         except Exception as e:
             logging.error(f"Errore nell'aggiornare il profilo dello studente per l'email {email}: {str(e)}")
@@ -42,7 +47,9 @@ class ProfiloControl:
 
     def update_profilo_docente(self, email, nuovi_dati):
         try:
-            result = self.docente_collection.update_one({"email": email}, {"$set": nuovi_dati})
+            docente_collection = self.db_manager.get_collection("Docente")
+
+            result = docente_collection.update_one({"email": email}, {"$set": nuovi_dati})
             return result.modified_count > 0
         except Exception as e:
             logging.error(f"Errore nell'aggiornare il profilo del docente per l'email {email}: {str(e)}")
