@@ -5,14 +5,15 @@ from app.controllers.QuizControl import quiz_blueprint
 from app.controllers.RegistrazioneControl import registrazione_bp
 from app.views.dasboardDocente import dashboardDocente
 from app.views.dasboardStudente import dashboard_bp
-from app.views.inserimentostudente import inserimentostudente
-from app.views.classedocente import classedocente
+from app.views.inserimentoStudente import inserimentostudente
+from app.views.classeDocente import classedocente
+from app.views.scenarioView import scenario_bp
 from app.views.views import views
 from app.models.studenteModel import StudenteModel
 from app.models.docenteModel import DocenteModel
 from app.models.attivitaModel import Attivita
-from app.views.MaterialeDocente import initialize_materiale_docente_blueprint
-from app.views.MaterialeStudente import initialize_materiale_studente_blueprint
+from app.views.materialeDocente import initialize_materiale_docente_blueprint
+from app.views.materialeStudente import initialize_materiale_studente_blueprint
 from app.views.profilo import initialize_profilo_blueprint
 
 # Crea l'applicazione Flask
@@ -27,6 +28,7 @@ app.register_blueprint(views, url_prefix='/')  # Il prefisso '/' è opzionale, p
 app.secret_key = os.urandom(32).hex()
 app.register_blueprint(dashboard_bp)
 app.register_blueprint(dashboardDocente)
+app.register_blueprint(scenario_bp)
 
 
 
