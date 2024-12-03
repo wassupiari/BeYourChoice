@@ -27,11 +27,11 @@ class Attivita:
             studenti = list(
                 studente_collection.find(
                     {"ID_Classe": id_classe},
-                    {"_id": 0, "CF": 1, "nome": 1, "cognome": 1
+                    {"_id": 0, "cf": 1, "nome": 1, "cognome": 1
                      }))
 
             # Mappa per i punteggi
-            punteggi_totali = {studente.get("CF"): {"PunteggioScenari": 0, "PunteggioQuiz": 0}
+            punteggi_totali = {studente.get("cf"): {"PunteggioScenari": 0, "PunteggioQuiz": 0}
                                for studente in studenti}
 
             # Calcola i punteggi dagli scenari
@@ -55,7 +55,7 @@ class Attivita:
             classifica = []
             for studente in studenti:
                 print(studente)
-                cf_studente = studente.get("CF")  # Cambia "CF" con "cf"
+                cf_studente = studente.get("cf")  # Cambia "CF" con "cf"
                 punteggio_scenari = punteggi_totali.get(cf_studente, {}).get("PunteggioScenari", 0)
                 punteggio_quiz = punteggi_totali.get(cf_studente, {}).get("PunteggioQuiz", 0)
                 punteggio_totale = punteggio_scenari + punteggio_quiz
