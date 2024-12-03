@@ -1,5 +1,5 @@
 from flask import render_template, session
-from app.models.Attivita import Attivita
+from app.models.attivitaModel import Attivita
 
 
 class DashboardController:

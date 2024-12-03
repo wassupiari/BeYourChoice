@@ -2,7 +2,7 @@ from token import STRING
 
 from flask import Blueprint, request, render_template, session
 from app.controllers.ClasseVirtualeControl import ClasseVirtualeControl
-from app.controllers.loginControl import teacher_required
+from app.controllers.LoginControl import teacher_required
 
 # Crea il blueprint
 inserimentostudente = Blueprint('inserimentostudente', __name__, template_folder='../templates')

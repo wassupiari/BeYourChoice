@@ -1,4 +1,4 @@
-from app.models.ClasseVirtuale import ClasseVirtuale
+from app.models.classeVirtualeModel import ClasseVirtuale
 
 
 class ClasseVirtualeControl:

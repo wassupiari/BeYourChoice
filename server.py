@@ -1,8 +1,8 @@
 from flask import Flask, render_template, session, redirect, url_for
 import os
-from app.controllers.loginControl import login_bp
-from app.controllers.quizControl import quiz_blueprint
-from app.controllers.registrazioneControl import registrazione_bp
+from app.controllers.LoginControl import login_bp
+from app.controllers.QuizControl import quiz_blueprint
+from app.controllers.RegistrazioneControl import registrazione_bp
 from app.views.dasboardDocente import dashboardDocente
 from app.views.dasboardStudente import dashboard_bp
 from app.views.inserimentostudente import inserimentostudente
@@ -10,7 +10,7 @@ from app.views.classedocente import classedocente
 from app.views.views import views
 from app.models.studenteModel import StudenteModel
 from app.models.docenteModel import DocenteModel
-from app.models.Attivita import Attivita
+from app.models.attivitaModel import Attivita
 from app.views.MaterialeDocente import initialize_materiale_docente_blueprint
 from app.views.MaterialeStudente import initialize_materiale_studente_blueprint
 from app.views.profilo import initialize_profilo_blueprint

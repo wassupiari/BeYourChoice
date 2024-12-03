@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from flask import Blueprint, request, jsonify, render_template, session
-from app.controllers.loginControl import teacher_required, student_required
-from app.models.Quiz import QuizModel, db_manager
+from app.controllers.LoginControl import teacher_required, student_required
+from app.models.quizModel import QuizModel, db_manager
 import os
 from dotenv import load_dotenv
 

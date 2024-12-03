@@ -5,7 +5,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash, sen
     Blueprint, session
 
 from databaseManager import DatabaseManager
-from app.models.MaterialeModel import MaterialeModel
+from app.models.materialeModel import MaterialeModel
 from app.controllers.MaterialeControl import MaterialeControl
 import uuid  # Per generare ID unici
 

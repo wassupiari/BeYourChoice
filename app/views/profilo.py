@@ -1,6 +1,6 @@
 from flask import render_template, request, flash, Blueprint, session
 
-from app.controllers.profiloControl import ProfiloControl
+from app.controllers.ProfiloControl import ProfiloControl
 from databaseManager import DatabaseManager
 
 database_uri = "mongodb+srv://rcione3:rcione3@beyourchoice.yqzo6.mongodb.net/?retryWrites=true&w=majority&appName=BeYourChoice"  # URI di connessione al database

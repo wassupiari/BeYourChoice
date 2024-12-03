@@ -1,6 +1,6 @@
 from flask import Blueprint, session
 from app.controllers.DashboardControl import DashboardController
-from app.controllers.loginControl import teacher_required
+from app.controllers.LoginControl import teacher_required
 
 # Crea il blueprint per la dashboard del docente
 dashboardDocente = Blueprint('dashboardDocente', __name__, template_folder='../templates')
