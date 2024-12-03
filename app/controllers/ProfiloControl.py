@@ -13,8 +13,9 @@ class ProfiloControl:
 
     def get_profilo_studente(self, email):
         try:
+            studente_collection = self.db_manager.get_collection("Studente")
             query = {"email": email}
-            profilo_studente = list(self.studente_collection.find(query))
+            profilo_studente = list(studente_collection.find(query))
             return profilo_studente
         except Exception as e:
             logging.error(f"Errore nel recuperare il profilo dello studente dall'email {email}: {str(e)}")
@@ -22,8 +23,9 @@ class ProfiloControl:
 
     def get_profilo_docente(self, email):
         try:
+            docente_collection = self.db_manager.get_collection("Docente")
             query = {"email": email}
-            profilo_docente = list(self.docente_collection.find(query))
+            profilo_docente = list(docente_collection.find(query))
             return profilo_docente
         except Exception as e:
             logging.error(f"Errore nel recuperare il profilo del docente dall'email {email}: {str(e)}")

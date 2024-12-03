@@ -81,7 +81,7 @@ def registra():
                 "cf": cf,
                 "Data_Nascita": data_nascita,
                 "password": password,
-                "codice_univoco": codice_univoco
+                "codice_univoco": int(codice_univoco)
             }
 
             docente_model = DocenteModel()

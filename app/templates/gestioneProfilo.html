@@ -11,8 +11,8 @@
         }
     </style>
 </head>
-{% include 'header.html' %}
 <body>
+{% include 'header.html' %}
     <main>
         <section class="profile-view">
             <h2>Gestione Profilo</h2>
@@ -54,7 +54,7 @@
                         <input type="text" id="cognome_docente" name="cognome" value="{{ profilo_docente.get('cognome', '') }}" readonly>
                     </div>
                     <div>
-                        <label for="sda"><strong>Struttura di Afferenza (SdA):</strong></label>
+                        <label for="sda"><strong>Scuola di appartenenza:</strong></label>
                         <input type="text" id="sda" name="sda" value="{{ profilo_docente.get('sda') or profilo_docente.get('SdA', '') }}" readonly>
                     </div>
                     <div>
@@ -68,7 +68,7 @@
 
                     <!-- Aggiungi altri campi per il profilo docente se necessario -->
                 {% endif %}
-                <button type="submit" id="editButton">Modifica Profilo</button>
+                <button type="button" id="editButton">Modifica Profilo</button>
                 <button type="submit" id="saveButton" style="display: none;">Salva Modifiche</button>
             </form>
         </section>
@@ -105,7 +105,7 @@
                 }
             });
             this.style.display = 'none';
-            document.getElementById('saveButton').style.display = 'inline';
+            document.getElementById('saveButton').style.display = 'block';
         }
     });
 </script>
