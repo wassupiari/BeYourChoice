@@ -55,6 +55,12 @@ h1 {
     resize: none;
 }
 
+input:focus{
+    outline: none;
+    background-color: #f9f4f1;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+}
+
 form .quiz-types {
    display: flex;
    flex-direction: column;

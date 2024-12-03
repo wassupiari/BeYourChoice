@@ -1,48 +1,55 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
+
 body {
-   font-family: 'Open Sans', sans-serif;
+    font-family: 'Open Sans', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #ffffff;
+    background-color: #f7f7f7;
     color: #333;
     line-height: 1.6;
 }
 
-main {
-    width: 80%;
-    margin: 50px auto;
-    background: #ffffff;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
-    border-radius: 8px;
-    padding: 20px 30px;
-    box-shadow: offset-x offset-y blur-radius spread-radius color;
+.main-container {
+    display: flex;
+    margin: 10px;
+    padding: 10px;
+    height: 700px; /* Imposta un'altezza fissa per il contenitore principale */
+    overflow-y: auto; /* Aggiunge lo scrolling verticale se il contenuto è troppo alto */
 }
 
 h1 {
+    font-size: 24px;
     text-align: center;
-    color: #333333;
-    font-size: 1.8rem;
     margin-bottom: 20px;
     font-weight: 700;
+    color: #333;
 }
 
 .quiz-container {
-    display: block;
-    margin-bottom: 8px;
-    font-size: 1rem;
-    font-weight: bold;
-    color: #000000;
+    flex: 1;
+    margin-right: 20px;
+    padding: 20px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow-y: auto; /* Lo scrolling verticale è attivato nel contenitore centrale */
 }
 
 .quiz-item {
     border: 1px solid #ccc;
     border-radius: 8px;
     padding: 15px;
-    background-color: #f5f5f5;
+    background-color: #f9f9f9;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
+    transition: box-shadow 0.3s ease;
+}
+
+.quiz-item:hover {
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
 }
 
 .quiz-details {
@@ -52,6 +59,7 @@ h1 {
 .quiz-details p {
     margin: 5px 0;
     font-size: 14px;
+    color: #333;
 }
 
 .quiz-actions {
@@ -64,37 +72,76 @@ h1 {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 1rem; /* Dimensione del testo */
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    background-color: #000000; /* Sfondo bianco */
+    color: #ffffff; /* Colore del testo */
 }
 
-.quiz-actions .results {
-    background-color: #2d3e50;
-    color: white;
-}
-
-.quiz-actions .view {
-    background-color: #007bff;
-    color: white;
-}
-
-.create-new button {
-    padding: 10px 20px;
-    background-color: #000000;
+.quiz-actions .results:hover {
+    transform: scale(1.05); /* Leggero ingrandimento al passaggio del mouse */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Ombra più pronunciata su hover */
+    background-color: #d75a3d;
     color: #ffffff;
+}
 
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 600;
-    transition: all 0.3s ease;
+.quiz-actions .view:hover {
+    transform: scale(1.05); /* Leggero ingrandimento al passaggio del mouse */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Ombra più pronunciata su hover */
+    background-color: #d75a3d;
+    color: #ffffff;
+}
+
+/* Quadrati della barra laterale */
+.sidebar-item {
+    width: 165px; /* Larghezza dei quadrati */
+    height: 165px; /* Altezza dei quadrati */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 18px; /* Testo più piccolo */
+    font-weight: bold;
+    background-color: #ffffff;
+    color: #000000; /* Colore del testo */
+    border: 1px solid #ccc; /* Bordi visibili */
+    border-radius: 8px; /* Leggera arrotondatura degli angoli */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Effetto ombra */
+    cursor: pointer;
     transition: box-shadow 0.3s ease, transform 0.3s ease; /* Effetti al passaggio del mouse */
 }
 
-.create-new button:hover{
+.sidebar-item i {
+    font-size: 40px; /* Dimensione delle icone  */
+    margin-bottom: 10px; /* Spazio tra l'icona e il testo */
+    color: #000000; /* Colore delle icone */
+}
+
+.sidebar-item:hover {
     transform: scale(1.05); /* Leggero ingrandimento al passaggio del mouse */
     box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Ombra più intensa su hover */
     background-color: #d75a3d;
     color: #ffffff;
+}
+
+.sidebar-item:hover i {
+    color: #ffffff; /* Colore delle icone su hover */
+}
+.sidebar-item a {
+    display: flex;
+    flex-direction: column; /* Testo sotto l'icona */
+    justify-content: center;
+    align-items: center;
+    text-decoration: none; /* Rimuove la sottolineatura */
+    color: inherit; /* Mantiene il colore del genitore */
+    width: 100%; /* Si adatta alla dimensione dell'elemento */
+    height: 100%; /* Si adatta alla dimensione dell'elemento */
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.sidebar-item a:hover {
+    color: #ffffff; /* Cambia colore su hover */
 }
