@@ -2,49 +2,33 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>BeYourChoice Quiz Precedenti</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Domande del Quiz</title>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/quizPrecedentiStyle.css') }}">
 </head>
 <body>
 {% include 'header.html' %}
-       <main>
-        <h1>Visualizzazione domande dei quiz precedentemente creati</h1>
-        <div class="question-list">
+
+<main>
+    <h1>Domande del Quiz: {{ quiz.Titolo }}</h1>
+    <p><strong>Argomento:</strong> {{ quiz.Argomento }}</p>
+    <p><strong>Numero di domande:</strong> {{ quiz.N_Domande }}</p>
+
+    <div class="question-list">
+        {% for domanda in domande %}
             <div class="question">
-                <h2>Domanda 1</h2>
-                <div class="option">
-                    <input type="checkbox" id="q1o1">
-                    <label for="q1o1">Opzione 1</label>
-                </div>
-                <div class="option">
-                    <input type="checkbox" id="q1o2" checked>
-                    <label for="q1o2">Opzione 2</label>
-                </div>
+                <h2>{{ loop.index }}. {{ domanda.Testo_Domanda }}</h2>
+                {% for opzione in domanda.Opzioni_Risposte %}
+                    <div class="option">
+                        <input type="checkbox" disabled>
+                        <label>{{ opzione }}</label>
+                    </div>
+                {% endfor %}
+                <p><strong>Risposta corretta:</strong> {{ domanda.Risposta_Corretta }}</p>
             </div>
-            <div class="question">
-                <h2>Domanda 2</h2>
-                <div class="option">
-                    <input type="checkbox" id="q2o1" checked>
-                    <label for="q2o1">Opzione 1</label>
-                </div>
-                <div class="option">
-                    <input type="checkbox" id="q2o2">
-                    <label for="q2o2">Opzione 2</label>
-                </div>
-            </div>
-            <div class="question">
-                <h2>Domanda 3</h2>
-                <div class="option">
-                    <input type="checkbox" id="q3o1">
-                    <label for="q3o1">Opzione 1</label>
-                </div>
-                <div class="option">
-                    <input type="checkbox" id="q3o2" checked>
-                    <label for="q3o2">Opzione 2</label>
-                </div>
-            </div>
-        </div>
-    </main>
+        {% endfor %}
+    </div>
+</main>
 </body>
 </html>
