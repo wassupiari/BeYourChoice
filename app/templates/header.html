@@ -19,25 +19,28 @@
                     <i class="fas fa-user"></i><br>
                     <span>Profilo</span>
                 </a>
-                <a href="#" class="nav-link active">
+                <a href="{{ url_for('dashboardDocente.dashboard') }}" class="nav-link">
                     <i class="fas fa-cubes"></i><br>
                     <span>Dashboard</span>
                 </a>
-                <a href="#" class="nav-link">
+                <a href="{{ url_for('classedocente.Manutenzione') }}" class="nav-link">
                     <i class="fas fa-bell"></i><br>
                     <span>Notifiche</span>
                 </a>
-                <a href="#" class="nav-link">
+                <a href="{{ url_for('classedocente.Manutenzione') }}" class="nav-link">
                     <i class="fas fa-comments"></i><br>
                     <span>Chat</span>
                 </a>
             </nav>
             <div class="user-info">
-                <span>Ciao, <strong>{}</strong></span>
-                <a href="#" class="nav-link ">
-                    <i class="fa-solid fa-arrow-right-from-bracket"></i><br>
-                    <span>Logout</span>
-                </a>
+                <span style="font-size: 1.2rem;">Ciao, <strong>{{ session.get("Nome") }}</strong></span>
+                <!-- Form per il logout -->
+                <form action="{{ url_for('login.logout') }}" method="POST" style="display:inline;">
+                    <button type="submit" class="nav-link" style="background: none; border: none; cursor: pointer;">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i><br>
+                        <span>Logout</span>
+                    </button>
+                </form>
             </div>
         </div>
     </header>
