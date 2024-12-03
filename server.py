@@ -27,9 +27,7 @@ app.register_blueprint(views, url_prefix='/')  # Il prefisso '/' è opzionale, p
 app.secret_key = os.urandom(32).hex()
 app.register_blueprint(dashboard_bp)
 app.register_blueprint(dashboardDocente)
-@app.route('/quizdisponibili')
-def quizdisponibile():
-    return render_template('quizDisponibile.html')
+
 
 
 
