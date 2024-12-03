@@ -1,7 +1,7 @@
 import logging
 
 import bcrypt
-from flask import flash, jsonify, session
+from flask import flash, jsonify, session, url_for, redirect
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from databaseManager import DatabaseManager
@@ -77,6 +77,9 @@ class ProfiloControl:
         )
 
         if result.modified_count > 0:
-            return "Password aggiornata con successo."
-        else:
-            return "Errore: Password non aggiornata."
+            if result.modified_count > 0:
+                flash("Password aggiornata con successo!", "message_profile")
+            else:
+                flash("Errore: Password non aggiornata.", "message_profile")
+
+            return redirect(url_for('profilo.gestione_profilo'))

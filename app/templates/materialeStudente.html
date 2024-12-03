@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Materiale Studente</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/stylematerialedidattico.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleMaterialeDidattico.css') }}">
 </head>
 <body>
     {% include 'header.html' %}
@@ -21,7 +21,7 @@
                         <p><strong>Tipo:</strong> {{ materiale['Tipo'] }}</p>
                         <div class="azioni">
                             <!-- Visualizza il materiale con il link corretto -->
-                            <a href="{{ url_for('MaterialeStudente.serve_file', filename=materiale.File_Path) }}" target="_blank" class="btn">Visualizza</a>
+                           <a href="{{ url_for('MaterialeDocente.serve_file', filename=materiale['File_Path']) }}" target="_blank"><i class="fa-solid fa-folder-open"></i></a>
                         </div>
                     </div>
                 {% endfor %}

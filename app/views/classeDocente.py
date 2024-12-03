@@ -59,7 +59,7 @@ def Classe_Studente(ID_Classe):
 @classedocente.route('/noclasse', methods=['GET'])
 @student_required
 def NoClasse():
-    return render_template("noclasse.html", messaggio="Nessuna classe selezionata.")
+    return render_template("noClasse.html", messaggio="Nessuna classe selezionata.")
 
 # Route per la pagina manutenzione
 @classedocente.route('/manutenzione', methods=['GET'])

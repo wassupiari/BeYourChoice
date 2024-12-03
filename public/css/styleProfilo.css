@@ -1,0 +1,247 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+header {
+    background-color: #333;
+    color: white;
+    padding: 15px 0;
+    text-align: center;
+}
+
+main {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+header {
+    background-color: #333;
+    color: white;
+    padding: 15px 0;
+    text-align: center;
+}
+
+main {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+h2 {
+    margin-top: 0;
+    color: #007bff;
+    text-decoration: underline; /* Sottolinea il contenuto di h2 */
+}
+
+.profile-view {
+    margin-top: 20px;
+}
+
+.profile-view form {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-view label {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.profile-view input[type="text"],
+.profile-view input[type="email"],
+.profile-view input[type="password"] {
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+input[readonly] {
+    background-color: #f0f0f0;
+}
+
+button {
+    display: inline-block;
+    width: 200px; /* Larghezza fissa per uniformità */
+    text-align: center;
+    text-decoration: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin: 0 auto; /* Centra il pulsante */
+}
+
+button[type="submit"] {
+    background-color: #d75a3d;
+    border: none;
+}
+
+button[type="submit"]:hover {
+    background-color: #d75a3d;
+    transform: scale(1.05);
+}
+
+.error-message {
+    font-size: 18px;
+    color: red;
+    margin-top: 5px;
+}
+
+.flashes {
+    list-style-type: none;
+    padding: 0;
+}
+
+.flashes li.error {
+    color: red;
+}
+
+.flashes li.success {
+    color: green;
+}
+
+#changePasswordForm {
+    margin-top: 20px; /* Adjust to match profile form margin */
+    padding: 20px;
+    border-top: 1px solid #ddd;
+}
+
+#changePasswordForm div {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+#changePasswordForm label {
+    font-weight: bold;
+}
+
+#changePasswordForm input[type="password"] {
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+}
+
+h2 {
+    margin-top: 0;
+    color: #007bff;
+    text-decoration: underline; /* Sottolinea il contenuto di h2 */
+}
+
+.profile-view {
+    margin-top: 20px;
+}
+
+.profile-view form {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.profile-view label {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.profile-view input[type="text"],
+.profile-view input[type="email"],
+.profile-view input[type="password"] {
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+input[readonly] {
+    background-color: #f0f0f0;
+}
+
+button {
+    display: inline-block;
+    width: 200px; /* Larghezza fissa per uniformità */
+    text-align: center;
+    text-decoration: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    align:center;
+}
+
+button[type="submit"] {
+    background-color: #d75a3d;
+    border: none;
+}
+
+button[type="submit"]:hover {
+    background-color: #d75a3d;
+    transform: scale(1.05);
+}
+
+.error-message {
+    font-size: 18px;
+    color: red;
+    margin-top: 5px;
+}
+
+.flashes {
+    list-style-type: none;
+    padding: 0;
+}
+
+.flashes li.message_profile {
+    color: green;
+}
+
+
+#changePasswordForm {
+    margin-top: 40px;
+    padding: 20px;
+    border-top: 1px solid #ddd;
+}
+
+#changePasswordForm div {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+#changePasswordForm label {
+    font-weight: bold;
+}
+
+#changePasswordForm input[type="password"] {
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
