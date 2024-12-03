@@ -207,20 +207,19 @@ button[type="submit"]:hover {
     transform: scale(1.05);
 }
 
-.error-message {
-    font-size: 18px;
-    color: red;
-    margin-top: 5px;
-}
-
 .flashes {
     list-style-type: none;
     padding: 0;
 }
 
-.flashes li.message_profile {
+.flashes li.message_profile_error {
+    color: red;
+}
+
+.flashes li.message_profile_successo {
     color: green;
 }
+
 
 
 #changePasswordForm {
