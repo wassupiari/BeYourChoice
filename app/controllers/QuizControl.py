@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from flask import Blueprint, request, jsonify, render_template, session
-from app.controllers.loginControl import teacher_required, student_required
-from app.models.Quiz import QuizModel, db_manager
+from app.controllers.LoginControl import teacher_required, student_required
+from app.models.quizModel import QuizModel, db_manager
 import os
 from dotenv import load_dotenv
 
@@ -252,12 +252,13 @@ def visualizza_ultimo_quiz():
         if not cf_studente:
             return jsonify({"message": "Errore: codice fiscale non trovato nella sessione"}), 403
 
-        attività_completate = activities_collection.find_one({
-            "CF_Studente": cf_studente
+        attività_completata = activities_collection.find_one({
+            "CF_Studente": cf_studente,
+            "Descrizione_Attività": {"$regex": f"Completamento Quiz {ultimo_quiz['ID_Quiz']}"}
         })
 
         # Se il quiz è stato completato, non mostrarlo
-        if attività_completate:
+        if attività_completata:
             return render_template('quizDisponibile.html', quiz=None)
 
         # Recupera le domande associate al quiz
@@ -268,6 +269,7 @@ def visualizza_ultimo_quiz():
     except Exception as e:
         print(f"Errore durante il caricamento dell'ultimo quiz: {e}")
         return jsonify({"message": "Errore durante il caricamento dell'ultimo quiz"}), 500
+
 
 
 
