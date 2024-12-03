@@ -75,7 +75,8 @@ class ProfiloControl:
 
         # Verifica la vecchia password
         if not bcrypt.checkpw(vecchia_password.encode('utf-8'), docente['password']):
-            return "Errore: Vecchia password errata."
+            flash("vecchia password errata","message_profile_error")
+            return redirect(url_for('profilo.gestione_profilo'))
 
         password_regex = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s])[A-Za-z\d!@#$%^&*()\-_=+\[\]{};:,.<>?/\\|~]{8,20}$"
 
