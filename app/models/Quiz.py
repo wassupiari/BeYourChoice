@@ -186,7 +186,7 @@ class QuizModel:
             quiz_results_collection.insert_one(quiz_result)
 
             # Genera l'ID incrementale per l'attività
-            attività_collection = db_manager.get_collection("Attività")
+            attività_collection = db_manager.get_collection("Dashboard")
             last_attività = attività_collection.find_one(sort=[("ID_Attività", -1)])  # Recupera l'ultima attività
             nuovo_id_attività = last_attività["ID_Attività"] + 1 if last_attività else 1
 

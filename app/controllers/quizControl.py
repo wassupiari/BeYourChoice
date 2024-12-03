@@ -253,7 +253,6 @@ def visualizza_ultimo_quiz():
             return jsonify({"message": "Errore: codice fiscale non trovato nella sessione"}), 403
 
         attività_completate = activities_collection.find_one({
-            "ID_Attività": ultimo_quiz["ID_Quiz"],
             "CF_Studente": cf_studente
         })
 
