@@ -3,10 +3,10 @@ from flask import Blueprint, request, jsonify, render_template, session
 from app.controllers.LoginControl import teacher_required, student_required
 from app.models.quizModel import QuizModel, db_manager
 import os
-#from dotenv import load_dotenv
+from dotenv import load_dotenv
 
 # Carica le variabili d'ambiente
-#load_dotenv()
+load_dotenv()
 
 quiz_blueprint = Blueprint("quiz", __name__, template_folder="../templates")
 
@@ -252,13 +252,12 @@ def visualizza_ultimo_quiz():
         if not cf_studente:
             return jsonify({"message": "Errore: codice fiscale non trovato nella sessione"}), 403
 
-        attività_completata = activities_collection.find_one({
-            "CF_Studente": cf_studente,
-            "Descrizione_Attività": {"$regex": f"Completamento Quiz {ultimo_quiz['ID_Quiz']}"}
+        attività_completate = activities_collection.find_one({
+            "CF_Studente": cf_studente
         })
 
         # Se il quiz è stato completato, non mostrarlo
-        if attività_completata:
+        if attività_completate:
             return render_template('quizDisponibile.html', quiz=None)
 
         # Recupera le domande associate al quiz
