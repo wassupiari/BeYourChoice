@@ -219,7 +219,7 @@ h1 {
 }
 
 .sidebar-item a:hover {
-    color: #ffffff; /* Cambia colore su hover */
+    color: #00000; /* Cambia colore su hover */
 }
 
 .action-cell {
