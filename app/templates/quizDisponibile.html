@@ -2,25 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Quiz Disponibili</title>
+    <title>Quiz Disponibile</title>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styleQuizDisponibili.css') }}">
 </head>
 <body>
 {% include 'header.html' %}
-    <div class="container2">
-        <h1>Quiz disponibili</h1>
+
+<div class="container2">
+    <h1>Quiz Disponibile</h1>
+    {% if quiz %}
         <div class="quiz-card">
             <div class="quiz-info">
-                <h2>Quiz X</h2>
-                <p>durata del quiz: <span>60 min</span></p>
-                <p>numero domande quiz: <span>50</span></p>
+                <h2>{{ quiz.Titolo }}</h2>
+                <p>Durata del quiz: <span>{{ quiz.Durata }} min</span></p>
+                <p>Numero domande quiz: <span>{{ quiz.N_Domande }}</span></p>
             </div>
             <div class="quiz-button">
-                <button>&#9658;</button>
+                <a href="{{ url_for('quiz.visualizza_quiz', quiz_id=quiz.ID_Quiz) }}">
+                    <button>&#9658;</button>
+                </a>
             </div>
         </div>
+    {% else %}
+        <p>Nessun quiz disponibile al momento.</p>
+    {% endif %}
+    <a href="{{ url_for('dashboardDocente.dashboard') }}">
         <button class="back-button">Indietro</button>
-    </div>
+    </a>
+</div>
 </body>
 </html>

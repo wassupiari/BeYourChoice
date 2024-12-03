@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import openai
 from flask import session
 
@@ -175,13 +177,30 @@ class QuizModel:
             raise ValueError(f"Errore durante il recupero delle domande: {e}")
 
     @staticmethod
-    def salva_risultato_quiz(quiz_result):
+    def salva_risultato_quiz(quiz_result, cf_studente, punteggio):
         """
         Salva il risultato del quiz nel database.
         """
         try:
             quiz_results_collection = db_manager.get_collection("RisultatoQuiz")
             quiz_results_collection.insert_one(quiz_result)
+
+            # Genera l'ID incrementale per l'attività
+            attività_collection = db_manager.get_collection("Attività")
+            last_attività = attività_collection.find_one(sort=[("ID_Attività", -1)])  # Recupera l'ultima attività
+            nuovo_id_attività = last_attività["ID_Attività"] + 1 if last_attività else 1
+
+            # Salva l'attività svolta
+            attività = {
+                "ID_Attività": nuovo_id_attività,
+                "Data_Attività": datetime.utcnow(),  # Assicura che venga salvato come Date
+                "Descrizione_Attività": f"Completamento Quiz {quiz_result['ID_Quiz']}",
+                "Punteggio_Attività": punteggio,
+                "CF_Studente": cf_studente
+            }
+
+            # Inserisce l'attività nel database
+            attività_collection.insert_one(attività)
         except Exception as e:
             raise ValueError(f"Errore durante il salvataggio del risultato: {e}")
 
