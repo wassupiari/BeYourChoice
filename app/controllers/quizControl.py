@@ -137,10 +137,8 @@ def valuta_quiz():
         if not cf_studente:
             return jsonify({"message": "CF dello studente non trovato in sessione."}), 400
 
-        # Stampa il CF per debug
-        print(f"CF recuperato dalla sessione: {cf_studente}")
 
-        # Continua con la valutazione
+        # Recupera le risposte inviate
         data = request.get_json()
         if not data:
             return jsonify({"message": "Nessuna risposta ricevuta"}), 400
@@ -156,7 +154,7 @@ def valuta_quiz():
         if totale == 0:
             return jsonify({"message": "Nessuna domanda valida trovata per il quiz"}), 400
 
-        # Valuta le risposte
+        # Valutazione delle risposte
         corrette = 0
         risposte_utente = []
         for domanda in domande:
@@ -165,17 +163,17 @@ def valuta_quiz():
             if risposta_utente == domanda["Risposta_Corretta"]:
                 corrette += 1
 
-        # Calcola il punteggio
+        # Calcolo del punteggio
         punteggio = int((corrette / totale) * 100)
 
-        # Salva il risultato del quiz
+        # Salva il risultato del quiz e registra l'attività
         quiz_result = {
             "ID_Quiz": domande[0]["ID_Quiz"],
             "CF_Studente": cf_studente,
             "Punteggio_Quiz": punteggio,
             "Risposte": risposte_utente
         }
-        QuizModel.salva_risultato_quiz(quiz_result)
+        QuizModel.salva_risultato_quiz(quiz_result, cf_studente, punteggio)
 
         return jsonify({"message": f"Hai ottenuto un punteggio di {punteggio}%. Domande corrette: {corrette}/{totale}"})
     except Exception as e:
@@ -232,6 +230,47 @@ def visualizza_risultati_quiz(quiz_id):
     except Exception as e:
         print(f"Errore durante il caricamento dei risultati: {e}")
         return jsonify({"message": "Errore durante il caricamento dei risultati"}), 500
+
+@quiz_blueprint.route('/ultimo-quiz', methods=['GET'])
+def visualizza_ultimo_quiz():
+    """
+    Visualizza l'ultimo quiz creato dal docente per lo studente,
+    ma solo se non è stato già completato.
+    """
+    try:
+        # Recupera l'ultimo quiz dalla collezione Quiz
+        quiz_collection = db_manager.get_collection("Quiz")
+        activities_collection = db_manager.get_collection("Dashboard")
+
+        # Recupera l'ultimo quiz ordinando per data di creazione in ordine decrescente
+        ultimo_quiz = quiz_collection.find_one(sort=[("Data_Creazione", -1)])
+        if not ultimo_quiz:
+            return render_template('quizDisponibile.html', quiz=None)
+
+        # Controlla se lo studente ha già completato il quiz
+        cf_studente = session.get('cf')
+        if not cf_studente:
+            return jsonify({"message": "Errore: codice fiscale non trovato nella sessione"}), 403
+
+        attività_completate = activities_collection.find_one({
+            "ID_Attività": ultimo_quiz["ID_Quiz"],
+            "CF_Studente": cf_studente
+        })
+
+        # Se il quiz è stato completato, non mostrarlo
+        if attività_completate:
+            return render_template('quizDisponibile.html', quiz=None)
+
+        # Recupera le domande associate al quiz
+        questions_collection = db_manager.get_collection("Domanda")
+        domande = list(questions_collection.find({"ID_Quiz": ultimo_quiz["ID_Quiz"]}))
+
+        return render_template('quizDisponibile.html', quiz=ultimo_quiz, domande=domande)
+    except Exception as e:
+        print(f"Errore durante il caricamento dell'ultimo quiz: {e}")
+        return jsonify({"message": "Errore durante il caricamento dell'ultimo quiz"}), 500
+
+
 
 
 

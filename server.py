@@ -1,5 +1,5 @@
+from flask import Flask, render_template, session, redirect, url_for
 import os
-from flask import Flask, render_template, session, redirect, url_for, g
 from app.controllers.loginControl import login_bp
 from app.controllers.quizControl import quiz_blueprint
 from app.controllers.registrazioneControl import registrazione_bp
