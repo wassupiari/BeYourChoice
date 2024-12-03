@@ -8,7 +8,7 @@
 <body>
 {% include 'header.html' %}
 
-<main>
+<main class="main-container">
     <div style="display: flex; justify-content: space-between; align-items: center;">
         <h1>Visualizzazione quiz precedentemente generati</h1>
         <div class="create-new">
@@ -40,6 +40,14 @@
             <p>Nessun quiz trovato per questa classe.</p>
         {% endif %}
     </div>
+    <aside class="sidebar">
+        <div class="sidebar-item">
+    <a href="{{ url_for('MaterialeDocente.visualizza_materiale_docente') }}">
+        <i class="fas fa-file-alt"></i>
+        <span>Materiale didattico</span>
+    </a>
+    </div>
+    </aside>
 </main>
 </body>
 </html>

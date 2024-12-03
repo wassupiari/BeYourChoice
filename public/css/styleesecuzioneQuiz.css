@@ -8,6 +8,89 @@ body {
     line-height: 1.6;
 }
 
+/* CSS per posizionare il logo a sinistra e il pulsante di logout a destra */
+
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 20px; /* Margine interno per spaziatura */
+    background-color: #ffffff; /* Colore di sfondo opzionale */
+    border-bottom: 1px solid #ddd; /* Linea di separazione opzionale */
+    height: 100px; /* Altezza fissa per l'header */
+}
+
+.main-header:hover {
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    margin: 0 5% 0 5%; /* Ridotto il margine per il logo */
+    flex-shrink: 0;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Spaziatura tra gli elementi */
+}
+
+.user-info span {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-right: 10px; /* Spazio tra il testo e il pulsante di logout */
+    color: #333;
+}
+
+.user-info button.logout-button {
+    background-color: #d75a3d;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.user-info button.logout-button:hover {
+    background-color: #b94b32;
+    transform: scale(1.05); /* Leggero ingrandimento al passaggio del mouse */
+}
+
+.logout-button {
+    padding: 6px 12px; /* Ridotto il padding del bottone */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #d75a3d;
+    color: #000000;
+    font-weight: bold;
+    font-size: 12px; /* Ridotta la dimensione del testo */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.logout-button i {
+    font-size: 22px; /* Ridotta la dimensione delle icone */
+    color: #000000;
+}
+
+.logout-button:hover {
+    color: #d75a3d;
+    transform: scale(1.05); /* Leggero ingrandimento al passaggio del mouse */
+}
+
+.logout-button:hover i {
+    font-size: 22px; /* Ridotta la dimensione delle icone */
+    color: #d75a3d;
+}
+
 .container {
     width: 80%;
     margin: 50px auto;
@@ -32,35 +115,6 @@ h1 {
     font-size: 1rem;
     font-weight: bold;
     color: #000000;
-}
-
-./* Global Styles */
-body {
-    font-family: Arial, sans-serif;
-    background: linear-gradient(to right, #ece9e6, #ffffff);
-    color: #333;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-}
-
-.container {
-    width: 90%;
-    max-width: 800px;
-    background: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-
-h1 {
-    color: #2c3e50;
-    font-size: 2rem;
-    margin-bottom: 10px;
 }
 
 p {
@@ -160,7 +214,7 @@ button#submit-btn:disabled {
         font-size: 0.9rem;
     }
 }
- {
+{
     border: 1px solid #ccc;
     border-radius: 8px;
     padding: 15px;
@@ -207,7 +261,6 @@ button#submit-btn:disabled {
     padding: 10px 20px;
     background-color: #000000;
     color: #ffffff;
-
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -218,9 +271,11 @@ button#submit-btn:disabled {
     transition: box-shadow 0.3s ease, transform 0.3s ease; /* Effetti al passaggio del mouse */
 }
 
-.create-new button:hover{
+.create-new button:hover {
     transform: scale(1.05); /* Leggero ingrandimento al passaggio del mouse */
     box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Ombra più intensa su hover */
     background-color: #d75a3d;
     color: #ffffff;
 }
+
+/* CSS per posizionare il logo a sinistra e il pulsante di logout a destra */
