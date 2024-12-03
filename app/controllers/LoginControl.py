@@ -89,6 +89,7 @@ def login():
                 session['email'] = email
                 session['session_token'] = session_token
 
+
                 cf_studente = studente.get("cf")
                 nome_studente = studente.get("nome")
 
@@ -115,14 +116,14 @@ def login():
         elif docente:
             # Verifica la password per il docente
             if bcrypt.checkpw(password.encode('utf-8'), docente['password']):
-                docente_scuola_appartenenza = docente.get("sda")
+                docente_scuola_appartenenza = docente.get("SdA")
                 docente_codice_univoco = docente.get("codice_univoco")
                 nome_profilo = docente.get("nome")
 
                 session_token = str(uuid.uuid4())
                 session['email'] = email
                 session['session_token'] = session_token
-                session['SdA'] = docente_scuola_appartenenza
+                session['sda'] = docente_scuola_appartenenza
                 session['CU'] = docente_codice_univoco
                 session['Nome'] = nome_profilo
                 session['cf'] = docente.get("cf_docente")

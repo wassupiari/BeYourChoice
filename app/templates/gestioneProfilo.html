@@ -16,6 +16,17 @@
     <main>
         <section class="profile-view">
             <h2>Gestione Profilo</h2>
+                 {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <ul class="flashes">
+                        {% for category, message in messages %}
+                            {% if category == 'message_profile' %}
+                                <li class="{{ category }}">{{ message }}</li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
             <form method="POST" id="profiloForm">
                 {% if profilo_studente %}
                     <input type="hidden" name="ruolo" value="studente">
@@ -54,14 +65,20 @@
                         <label for="cf"><strong>Codice Fiscale:</strong></label>
                         <input type="text" id="cf" name="cf" value="{{ profilo_docente.get('cf') or profilo_docente.get('CF', '') }}" readonly>
                     </div>
+
                     <!-- Aggiungi altri campi per il profilo docente se necessario -->
                 {% endif %}
-                <button type="button" id="editButton">Modifica Profilo</button>
+                <button type="submit" id="editButton">Modifica Profilo</button>
                 <button type="submit" id="saveButton" style="display: none;">Salva Modifiche</button>
             </form>
         </section>
 
+
+
+
+         <section class="profile-view">
         <form method="POST" action="{{ url_for('profilo.change_password') }}" id="changePasswordForm">
+            <h2>Cambia Password</h2>
     <div>
         <label for="oldPassword"><strong>Vecchia Password:</strong></label>
         <input type="password" id="oldPassword" name="old_password" required>
@@ -72,7 +89,10 @@
     </div>
     <button type="submit">Cambia Password</button>
 </form>
+         </section>
     </main>
+
+
     <script>
     document.getElementById('editButton').addEventListener('click', function() {
         const form = document.getElementById('profiloForm');

@@ -16,7 +16,7 @@ def Inserimento_Studente():
     print("La route /InserimentoStudente stata chiamata!")  # Debug
     try:
         # Ottieni l'ID della classe dalla query string (se non è presente, usa 101 come default)
-        scuola_appartenenza = session.get('SdA')
+        scuola_appartenenza = session.get('sda')
         print(f"Sda ricevuto: {scuola_appartenenza}")  # Aggiunto per debugging
 
         # Usa il controller per ottenere i dati degli studentiErrore nell'aggiunta dello studente alla classe.

@@ -37,12 +37,20 @@
         <div class="box tall-box">
             <h2>Storico Personale</h2>
             <ul>
-                {% for quiz in storico.Quiz %}
-                <li>Quiz: {{ quiz.Argomento }} <span>{{ quiz.Punteggio }}</span></li>
-                {% endfor %}
-                {% for scenario in storico.Scenari %}
-                <li>Scenario: {{ scenario.Titolo }} <span>{{ scenario.Punteggio }}</span></li>
-                {% endfor %}
+                 {% if storico %}
+                    {% for attivita in storico %}
+                    <li>
+                        <div>
+                            <p><strong>{{ attivita.Descrizione_Attività }}</strong></p>
+                            <p><strong>Punteggio: </strong>{{ attivita.Punteggio_Attività }}</p>
+                        </div>
+                    </li>
+                    {% endfor %}
+                {% else %}
+                    <li>
+                        <p>Nessuna attività trovata.</p>
+                    </li>
+                {% endif %}
             </ul>
         </div>
 
