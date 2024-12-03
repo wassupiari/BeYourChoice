@@ -55,7 +55,7 @@ class ProfiloControl:
             logging.error(f"Errore nell'aggiornare il profilo del docente per l'email {email}: {str(e)}")
             return False
 
-    def cambia_password(self, vecchia_password, nuova_password):
+    def cambia_password_docente(self, vecchia_password, nuova_password):
         """
         Cambia la password di un docente utilizzando l'email dalla sessione.
         """
@@ -100,3 +100,50 @@ class ProfiloControl:
                 flash("Errore: Password non aggiornata.", "message_profile_error")
 
             return redirect(url_for('profilo.gestione_profilo'))
+
+    def cambia_password_studente(self, vecchia_password, nuova_password):
+        """
+        Cambia la password di uno studente utilizzando l'email dalla sessione.
+        """
+        studente_collection = self.db_manager.get_collection("Studente")
+
+        # Ottieni l'email dalla sessione
+        email = session.get("email")
+
+        if not email:
+            return "Errore: Nessuna email trovata nella sessione. Effettua il login."
+
+        # Trova lo studente nel database tramite l'email
+        studente = studente_collection.find_one({"email": email})
+
+        if not studente:
+            return "Errore: Studente non trovato."
+
+        # Verifica la vecchia password
+        if not bcrypt.checkpw(vecchia_password.encode('utf-8'), studente['password']):
+            flash("vecchia password errata", "message_profile_error")
+            return redirect(url_for('profilo.gestione_profilo'))
+
+        password_regex = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s])[A-Za-z\d!@#$%^&*()\-_=+\[\]{};:,.<>?/\\|~]{8,20}$"
+
+        if not re.match(password_regex, nuova_password):
+            flash(
+                "formato password sbagliata, la password deve avere minimo 8 caratteri, una maiuscola, un carattere speciale e almeno un numero",
+                "message_profile_error")
+            return redirect(url_for('profilo.gestione_profilo'))
+
+        # Cifra la nuova password
+        nuova_password_hash = bcrypt.hashpw(nuova_password.encode('utf-8'), bcrypt.gensalt())
+
+        # Aggiorna la password nel database
+        result = studente_collection.update_one(
+            {"email": email},
+            {"$set": {"password": nuova_password_hash}}
+        )
+
+        if result.modified_count > 0:
+            flash("Password aggiornata con successo!", "message_profile_successo")
+        else:
+            flash("Errore: Password non aggiornata.", "message_profile_error")
+
+        return redirect(url_for('profilo.gestione_profilo'))

@@ -73,23 +73,34 @@
             </form>
         </section>
 
-
-
-
-         <section class="profile-view">
-        <form method="POST" action="{{ url_for('profilo.change_password') }}" id="changePasswordForm">
-            <h2>Cambia Password</h2>
-    <div>
-        <label for="oldPassword"><strong>Vecchia Password:</strong></label>
-        <input type="password" id="oldPassword" name="old_password" required>
-    </div>
-    <div>
-        <label for="newPassword"><strong>Nuova Password:</strong></label>
-        <input type="password" id="newPassword" name="new_password" required>
-    </div>
-    <button type="submit">Cambia Password</button>
-</form>
-         </section>
+        <section class="profile-view">
+    <h2>Cambia Password</h2>
+    {% if profilo_studente %}
+    <form method="POST" action="{{ url_for('profilo.change_password_studente') }}" id="changePasswordFormStudente">
+        <div>
+            <label for="oldPasswordStudente"><strong>Vecchia Password:</strong></label>
+            <input type="password" id="oldPasswordStudente" name="old_password" required>
+        </div>
+        <div>
+            <label for="newPasswordStudente"><strong>Nuova Password:</strong></label>
+            <input type="password" id="newPasswordStudente" name="new_password" required>
+        </div>
+        <button type="submit">Cambia Password</button>
+    </form>
+    {% elif profilo_docente %}
+    <form method="POST" action="{{ url_for('profilo.change_password_docente') }}" id="changePasswordFormDocente">
+        <div>
+            <label for="oldPasswordDocente"><strong>Vecchia Password:</strong></label>
+            <input type="password" id="oldPasswordDocente" name="old_password" required>
+        </div>
+        <div>
+            <label for="newPasswordDocente"><strong>Nuova Password:</strong></label>
+            <input type="password" id="newPasswordDocente" name="new_password" required>
+        </div>
+        <button type="submit">Cambia Password</button>
+    </form>
+    {% endif %}
+</section>
     </main>
 
 
