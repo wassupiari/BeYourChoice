@@ -1,0 +1,48 @@
+<!-- dashboardDocente.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BeYourChoice Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styledashboarddoc.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+{% include 'header.html' %}
+<div class="main-content">
+    <!-- Dashboard principale -->
+    <div class="dashboard">
+        <h2>Classifica di tutte le classi</h2>
+        <ul>
+            {% for classe in classi %}
+            <li>
+                <strong>{{ classe.Nome_Classe }}</strong>
+                <span>
+                        <a class="pulsante"
+                           href="{{ url_for('dashboardDocente.classifica_classe', ID_Classe=classe.ID_Classe) }}">
+                            <button class="bottone">Classifica Classe</button>
+                        </a>
+                        <a class="pulsante"
+                           href="{{ url_for('classedocente.Classe_Docente', ID_Classe=classe.ID_Classe) }}">
+                            <button class="bottone">Gestione classe</button>
+                        </a>
+
+                    </span>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-item">
+            <a href="{{ url_for ('views.creazione_classe')}}">
+                <i class="fas fa-circle-plus"></i><br>
+                <span> Crea Classe Virtuale</span>
+            </a>
+        </div>
+    </aside>
+</div>
+</body>
+</html>

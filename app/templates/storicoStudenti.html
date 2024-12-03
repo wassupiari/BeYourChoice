@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storico dello Studente</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styledashboarddoc.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    {% include 'header.html' %}
+    <div class="main-content">
+        <!-- Storico dello studente -->
+        <div class="dashboard">
+            <h2>Storico dello Studente</h2>
+
+            <!-- Storico Quiz -->
+            <ul>
+                <li>
+                    <h3>Quiz Svolti</h3>
+                    <span><h3>Punteggio</h3></span>
+                </li>
+                {% for quiz in storico.Quiz %}
+                <li>
+                    {{ quiz.Argomento }}
+                    <span><strong>{{ quiz.Punteggio }}</strong></span>
+                </li>
+                {% endfor %}
+            </ul>
+
+            <!-- Storico Scenari -->
+            <ul>
+                <li>
+                    <h3>Scenari Svolti</h3>
+                    <span></span>
+                </li>
+                {% for scenario in storico.Scenari %}
+                <li>
+                    {{ scenario.Titolo }}
+                    <span><strong>{{ scenario.Punteggio }}</strong></span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-item">
+                    <a href="{{ url_for('classedocente.Classe_Docente', ID_Classe=session['ID_Classe']) }}">
+                    <i class="fa-solid fa-users-rectangle"></i>
+                    <br>
+                    <span>Gestione Classe</span>
+                </a>
+            </div>
+        </aside>
+    </div>
+</body>
+</html>

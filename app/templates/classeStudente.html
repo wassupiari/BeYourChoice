@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classe</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleClasse.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+<!-- Inclusione dell'header -->
+{% include 'header.html' %}
+
+<main class="main-container">
+    <!-- Contenitore centrale -->
+    <div class="classe-container">
+        <h1>Classe</h1>
+
+        <!-- Barra di ricerca -->
+        <div class="search-container">
+            <input type="text" placeholder="Cerca studente" class="search-bar">
+        </div>
+
+        <!-- Tabella studenti -->
+        <div class="table-wrapper">
+            <table class="student-table" style="width:100%">
+                <thead>
+                <tr>
+                    <th style="width:2%">#</th>
+                    <th style="width:30%">Nome</th>
+                    <th style="width:30%">Cognome</th>
+                    <th style="width:40%">Data di nascita</th>
+                    <th></th> <!-- Colonna per i pulsanti -->
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Iterazione degli studenti -->
+                {% for studente in classe %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ studente.Nome }}</td>
+                    <td>{{ studente.Cognome }}</td>
+                    <td>{{ studente.Data_Nascita }}</td>
+
+
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Barra laterale -->
+    <aside class="sidebar">
+            <div class="sidebar-item">
+                <a href="{{ url_for('MaterialeStudente.visualizza_materiale_studente') }}">
+        <i class="fas fa-file-alt"></i>
+        <span>Materiale didattico</span>
+    </a>
+</div>
+
+        <div class="sidebar-item">
+            <i class="fas fa-question-circle"></i>
+            <span>Quiz</span>
+        </div>
+        <div class="sidebar-item">
+            <i class="fas fa-globe"></i>
+            <span>Scenari</span>
+        </div>
+        <div class="sidebar-item">
+            <i class="fas fa-trophy"></i>
+            <span>Achievement</span>
+        </div>
+    </aside>
+</main>
+</body>
+
+</html>

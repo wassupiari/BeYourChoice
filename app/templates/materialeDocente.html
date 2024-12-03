@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Materiale Docente</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/stylematerialedidattico.css') }}">
+</head>
+<body>
+{% include 'header.html' %}
+
+    <main>
+        <h2>MATERIALE DIDATTICO</h2>
+
+        <div class="error-message">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flashes">
+          {% for category, message in messages %}
+            {% if category == 'materiale_success' %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    </div>
+
+        {% if materiali %}
+            <div class="materiali-lista">
+                {% for materiale in materiali %}
+                    <div class="materiale-item">
+                        <h3>{{ materiale['Titolo'] }}</h3>
+                        <p>{{ materiale['Descrizione'] }}</p>
+                        <p><strong>Tipo:</strong> {{ materiale['Tipo'] }}</p>
+                        <div class="azioni">
+                            <a href="{{ url_for('MaterialeDocente.serve_file', filename=materiale['File_Path']) }}" target="_blank"><i class="fa-solid fa-folder-open"></i></a>
+                            <a href="{{ url_for('MaterialeDocente.modifica_materiale', materiale_id=materiale['_id']) }}"><i class="fa-solid fa-file-signature"></i></a>
+                            <a href="{{ url_for('MaterialeDocente.rimuovi_materiale', materiale_id=materiale['_id']) }}" onclick="return confirm('Sei sicuro di voler eliminare questo materiale?');"><i class="fa-solid fa-file-circle-minus"></i></a>
+                        </div>
+                    </div>
+
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="empty-message">Nessun materiale presente.</p>
+        {% endif %}
+    <br><br><br><br><br><br><br>
+        <div class="aggiungi-materiale">
+            <a href="{{ url_for('MaterialeDocente.carica_materiale') }}"><i class="fa-solid fa-file-arrow-up"></i>Aggiungi Materiale Didattico</a>
+        </div>
+    </main>
+</body>

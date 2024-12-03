@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generazione Quiz</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/stylecreaQuiz.css') }}">
+</head>
+<body>
+<!-- Inclusione dell'header -->
+{% include 'header.html' %}
+
+<div class="main">
+    <h1>Creazione Quiz</h1>
+    <form id="quiz-form">
+        <div>
+            <label for="topic">Titolo del Quiz:</label>
+            <input type="text" id="topic" name="topic" placeholder="Inserisci il titolo del quiz..." required>
+        </div>
+
+        <div>
+            <label for="tema">Argomento:</label>
+            <input type="text" id="tema" name="tema" placeholder="Inserisci l'argomento..." required>
+        </div>
+
+        <div>
+            <label for="numero_domande">Numero di Domande:</label>
+            <input type="number" id="numero_domande" name="numero_domande" min="1" max="10" value="5" required>
+        </div>
+
+        <div>
+            <label for="durata_quiz">Durata del Quiz (minuti):</label>
+            <input type="number" id="durata_quiz" name="durata_quiz" min="1" max="120" value="30" required>
+        </div>
+
+
+        <div>
+            <label>Modalità di Risposta:</label>
+            <select id="modalita_risposta" name="modalita_risposta" required>
+                <option value="3_risposte">Scelta multipla con 3 risposte</option>
+                <option value="4_risposte">Scelta multipla con 4 risposte</option>
+            </select>
+        </div>
+
+        <div class="buttons">
+            <button type="button" id="regenerate-btn" class="btn" style="display: none;">Rigenera Domande</button>
+            <button type="submit" id="generate-btn" class="btn">Genera</button>
+            <button type="button" id="save-btn" class="btn" style="display: none;">Salva Quiz</button>
+        </div>
+    </form>
+
+    <div id="quiz-output" style="margin-top: 20px;"></div>
+</div>
+
+<script>
+    let generatedQuestions = [];
+    let quizId = Math.floor(Math.random() * 1000) + 400;
+
+    async function fetchDomande(payload) {
+        try {
+            const response = await fetch('/genera', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(payload),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || "Errore sconosciuto");
+            }
+
+            const data = await response.json();
+            console.log("Risposta dal server:", data);
+            return data;
+        } catch (error) {
+            console.error("Errore durante la richiesta:", error.message);
+            return [];
+        }
+    }
+
+    async function generaDomande(event) {
+        event.preventDefault();
+
+        const tema = document.getElementById('tema').value.trim();
+        const topic = document.getElementById('topic').value.trim();
+        const numeroDomande = parseInt(document.getElementById('numero_domande').value);
+        const modalitaRisposta = document.getElementById('modalita_risposta').value;
+
+        if (!tema || !topic || numeroDomande <= 0 || !modalitaRisposta) {
+            alert("Inserisci tutti i campi correttamente.");
+            return;
+        }
+
+        const outputDiv = document.getElementById('quiz-output');
+        outputDiv.innerHTML = '<h2>Generazione in corso...</h2>';
+
+        const payload = {
+            tema: `${tema} - ${topic}`,
+            numero_domande: numeroDomande,
+            modalita_risposta: modalitaRisposta,
+        };
+
+        const domande = await fetchDomande(payload);
+
+        if (domande.length > 0) {
+            // Aggiungi un ID unico a ogni domanda
+            generatedQuestions = domande.map((domanda, index) => ({
+                ID_Domanda: Math.floor(Math.random() * 1000000), // Genera un ID univoco casuale
+                Testo_Domanda: domanda.Testo_Domanda,
+                Opzioni_Risposte: domanda.Opzioni_Risposte,
+                Risposta_Corretta: domanda.Risposta_Corretta
+            }));
+
+            renderQuestions(outputDiv, generatedQuestions);
+            document.getElementById('regenerate-btn').style.display = 'block';
+            document.getElementById('save-btn').style.display = 'block';
+        } else {
+            outputDiv.innerHTML = '<h2>Errore durante la generazione delle domande.</h2>';
+        }
+    }
+
+
+    function renderQuestions(container, questions) {
+        container.innerHTML = '<h2>Domande Generate:</h2>';
+        questions.forEach((domanda, index) => {
+            const card = document.createElement('div');
+            card.className = 'card';
+
+            const domandaText = document.createElement('p');
+            domandaText.className = 'domanda-text';
+            domandaText.innerHTML = `<strong>${index + 1}. ${domanda.Testo_Domanda}</strong>`;
+
+            const options = document.createElement('div');
+            options.className = 'options-container';
+
+            domanda.Opzioni_Risposte.forEach((opzione) => {
+                const optionContainer = document.createElement('div');
+                optionContainer.className = 'option-container';
+
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = `domanda_${index}`;
+                radio.value = opzione;
+
+                const label = document.createElement('label');
+                label.innerText = opzione;
+                label.className = 'option-label';
+
+                optionContainer.appendChild(radio);
+                optionContainer.appendChild(label);
+                options.appendChild(optionContainer);
+            });
+
+            card.appendChild(domandaText);
+            card.appendChild(options);
+            container.appendChild(card);
+        });
+    }
+
+    const idClasse = "{{ id_classe }}";
+
+    async function salvaQuiz() {
+        const topic = document.getElementById('topic').value.trim();
+        const tema = document.getElementById('tema').value.trim();
+        const numeroDomande = parseInt(document.getElementById('numero_domande').value);
+        const durata = parseInt(document.getElementById('durata_quiz').value);
+
+        if (!tema || numeroDomande <= 0 || durata <= 0) {
+            alert("Inserisci tutti i campi correttamente.");
+            return;
+        }
+
+        if (!idClasse) {
+            alert("ID Classe mancante!");
+            return;
+        }
+
+        const quiz = {
+            ID_Quiz: Math.floor(Math.random() * 1000) + 400,
+            Titolo: topic,
+            Argomento: tema,
+            N_Domande: numeroDomande,
+            Domande: generatedQuestions,
+            Modalità_Quiz: document.getElementById('modalita_risposta').value,
+            Durata: durata,
+            Data_Creazione: new Date().toISOString(),
+            ID_Classe: idClasse,
+        };
+
+
+        console.log("Dati inviati al backend:", quiz);
+
+        try {
+            const response = await fetch('/salva', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(quiz),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || "Errore sconosciuto");
+            }
+
+            const result = await response.json();
+            alert(result.message);
+        } catch (error) {
+            console.error("Errore durante il salvataggio del quiz:", error.message);
+            alert("Errore durante il salvataggio. Controlla la console.");
+        }
+    }
+
+
+    document.getElementById('quiz-form').addEventListener('submit', generaDomande);
+    document.getElementById('regenerate-btn').addEventListener('click', async function () {
+        await generaDomande({
+            preventDefault: () => {
+            }
+        });
+    });
+    document.getElementById('save-btn').addEventListener('click', salvaQuiz);
+</script>
+</body>
+</html>
