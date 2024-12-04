@@ -1,10 +1,9 @@
-from flask import Flask, Blueprint, request
-import pytest
-from unittest.mock import MagicMock
-from app.controllers.MaterialeControl import MaterialeControl
-from app.models.materialeModel import MaterialeModel
-from bson import ObjectId
 import io
+from unittest.mock import MagicMock
+
+import pytest
+from bson import ObjectId
+from flask import Flask, Blueprint, request
 
 
 # Funzione per creare l'app Flask
