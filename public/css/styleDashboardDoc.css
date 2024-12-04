@@ -123,10 +123,19 @@ a:hover {
   color: #ffffff;
   text-decoration: none;
 }
-.studente:hover{
+/* Stile per il link dello studente */
+.studente {
   color: #000000;
-  text-decoration: none;
+  text-decoration: none; /* Rimuove la sottolineatura di default */
+  transition: color 0.3s ease; /* Aggiunge un'animazione sul colore */
+  cursor: pointer; /* Cambia il cursore in "pointer" */
 }
+
+.studente:hover {
+  color: #d75a3d; /* Cambia il colore al passaggio del mouse */
+  text-decoration: none; /* Mantiene la sottolineatura assente anche su hover */
+}
+
 
 .pulsante {
   color: #ffffff;

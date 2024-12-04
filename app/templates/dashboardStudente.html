@@ -23,12 +23,17 @@
         <!-- Classifica della classe -->
         <div class="box tall-box half-width">
             <h2>Classifica della classe</h2>
-            <ul>
+            <ul>{% if classifica %}
                 {% for studente in classifica %}
                 <li>{{ loop.index }}. {{ studente.Nome }} {{ studente.Cognome }}
                     <span>{{ studente.PunteggioTotale }}</span>
                 </li>
                 {% endfor %}
+            {% else %}
+                    <li>
+                        <p>Nessuna classe trovata.</p>
+                    </li>
+                {% endif %}
             </ul>
         </div>
 
