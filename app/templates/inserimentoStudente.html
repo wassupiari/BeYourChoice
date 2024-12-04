@@ -18,12 +18,11 @@
 
         <!-- Barra di ricerca -->
         <div class="search-container">
-            <input type="text" placeholder="Cerca studente" class="search-bar">
+            <input type="text" id="search-bar" placeholder="Cerca studente" class="search-bar"
+                   oninput="cercaStudente()">
             <a href="{{ url_for('classedocente.Classe_Docente', ID_Classe=session['ID_Classe']) }}">
                 <button class="annulla-button">Annulla</button>
             </a>
-
-
         </div>
 
         <!-- Tabella studenti -->
@@ -37,7 +36,7 @@
                 <th style="width:40%">Data di nascita</th>
             </tr>
             </thead>
-            <tbody>
+                <tbody id="student-table-body">
             <!-- Iterazione degli studenti -->
             {% for studente in classe %}
 
@@ -48,16 +47,13 @@
                 <td>{{ studente.Cognome }}</td>
                 <td>{{ studente.Data_Nascita }}</td>
                 <td class="action-cell">
-                        <button class="add-button" onclick="aggiungiStudente('{{ studente._id }}', '{{ session['ID_Classe'] }}')"><i class="fas fa-user-plus"></i></button>
+                    <button class="add-button"
+                            onclick="aggiungiStudente('{{ studente._id }}', '{{ session['ID_Classe'] }}')"><i
+                            class="fas fa-user-plus"></i></button>
 
                     </button>
                 </td>
             </tr>
-            {% else %}
-            <tr>
-                <td colspan="4">Nessuno studente trovato.</td>
-            </tr>
-
             {% endfor %}
             </tbody>
         </table>
@@ -87,33 +83,89 @@
 
 </body>
 <script>
-    function aggiungiStudente(studenteId, classeId) {
-    fetch('/classedocente/aggiungi-studente', {
+  let timer;  // Timer per il debounce
+function cercaStudente() {
+    clearTimeout(timer); // Cancella il timer precedente
+    const query = document.getElementById("search-bar").value.trim();
 
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            studente_id: studenteId,
-            classe_id: classeId
-        }),
-    })
+    // Se la barra di ricerca è vuota, ricarica la pagina
+    if (query === "") {
+        location.reload();
+        return;
+    }
 
+    // Debounce: aspetta 300ms dopo l'ultimo input prima di inviare la richiesta
+    timer = setTimeout(() => {
+fetch(`/classedocente/cerca-studente-istituto?query=${encodeURIComponent(query)}`)
     .then(response => response.json())
     .then(data => {
-        if (data.success) {
-            alert('Studente aggiunto con successo!');
-            location.reload();
-        } else {
-            alert(`Errore: ${data.error}`);
-        }
+        console.log("Dati ricevuti:", data); // Debug
+        aggiornaTabella(data); // Aggiorna la tabella con i risultati
     })
     .catch(error => {
-        console.error('Errore:', error);
-        alert('Errore nell\'aggiunta dello studente.');
+        console.error("Errore nella ricerca:", error);
+        alert("Errore durante la ricerca dello studente.");
     });
+
+    }, 300);
 }
 
+
+
+function aggiornaTabella(studenti) {
+    const tableBody = document.getElementById("student-table-body");
+    tableBody.innerHTML = ""; // Svuota il contenuto della tabella
+
+    if (studenti.length > 0) {
+        studenti.forEach((studente, index) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${studente.Nome}</td>
+                <td>${studente.Cognome}</td>
+                <td>${studente.Data_Nascita}</td>
+                <td class="action-cell">
+                    <button class="delete-button" onclick="rimuoviStudente('${studente._id}')">
+                        <i class="fas fa-user-times"></i>
+                    </button>
+                </td>
+            `;
+            tableBody.appendChild(row);
+        });
+    } else {
+        const noResultsRow = document.createElement("tr");
+        noResultsRow.innerHTML = "<td colspan='5'>Nessuno studente trovato.</td>";
+        tableBody.appendChild(noResultsRow);
+    }
+}
+
+    function aggiungiStudente(studenteId, classeId) {
+        fetch('/classedocente/aggiungi-studente', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                studente_id: studenteId,
+                classe_id: classeId
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Studente aggiunto con successo!');
+                location.reload();
+            } else {
+                alert(`Errore: ${data.error}`);
+            }
+        })
+        .catch(error => {
+            console.error('Errore:', error);
+            alert('Errore nell\'aggiunta dello studente.');
+        });
+    }
+
+
 </script>
+
 </html>

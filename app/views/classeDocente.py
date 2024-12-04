@@ -32,7 +32,42 @@ def Classe_Docente(ID_Classe):
         return render_template("errore.html", messaggio=f"Errore: {str(e)}")
 
 
+@classedocente.route('/cerca-studente', methods=['GET'])
+def cerca_studente():
+    query = request.args.get('query', '').strip()
+    id_classe = session.get('ID_Classe', None)  # Recupera l'ID della classe dalla sessione
 
+    if not id_classe:
+        return jsonify([])  # Nessuna classe selezionata
+
+    if query == '':
+        # Se la query è vuota, restituisci tutti gli studenti della classe
+        studenti = classe_virtuale_control.mostra_classe(id_classe)
+    else:
+        # Altrimenti, restituisci solo gli studenti filtrati
+        studenti = classe_virtuale_control.cerca_studenti(query, id_classe)
+
+    return jsonify(studenti)
+
+@classedocente.route('/cerca-studente-istituto', methods=['GET'])
+def cerca_studente_istituto():
+    query = request.args.get('query', '').strip()
+    id_classe = session.get('ID_Classe', None)  # Recupera l'ID della classe dalla sessione
+    print("mo mi incazzo")
+    if not id_classe:
+        return jsonify([])  # Nessuna classe selezionata
+
+    if query == '':
+        # Se la query è vuota, restituisci tutti gli studenti della classe
+        print("classe ci sei?")
+        studenti = classe_virtuale_control.mostra_studenti_istituto("Liceo scientifico galileo galilei")
+    else:
+        print("classe ci sei?")
+
+        # Altrimenti, restituisci solo gli studenti filtrati
+        studenti = classe_virtuale_control.cerca_studenti_istituto(query)
+
+    return jsonify(studenti)
 
 @classedocente.route('/classestudente/<int:ID_Classe>', methods=['GET', 'POST'])
 @student_required

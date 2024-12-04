@@ -1,6 +1,7 @@
 import os
 import re
 from bson import ObjectId
+from flask import session
 
 from pymongo import MongoClient
 
@@ -98,7 +99,7 @@ class ClasseVirtuale:
             'ID_Classe': ID_Classe,
             'Nome_Classe': NomeClasse,
             'Descrizione': Descrizione,
-            'ID_Docente' : ID_Docente
+            'ID_Docente': ID_Docente
         }
 
         # Inserisci il documento nella collezione
@@ -263,7 +264,7 @@ class ClasseVirtuale:
 
             return studenti_istituto
         except Exception as e:
-            print(f"Errore durante il recupero degli studenti: {e}")  # Debug
+            print(f"Errore durante il recupero degli studenti: {e}")  # Aggiunto per debugging
             raise
 
     def rimuovi_studente(self, studente_id):
@@ -320,3 +321,95 @@ class ClasseVirtuale:
         except Exception as e:
             print(f"Errore durante l'aggiunta dello studente alla classe: {e}")
             return False
+
+    def cerca_studenti(self, query, id_classe):
+        """
+        Cerca gli studenti della classe specificata in base alla query.
+
+        Args:
+            query (str): La query di ricerca.
+            id_classe (int): L'ID della classe.
+
+        Returns:
+            list[dict]: Studenti filtrati o tutti gli studenti se la query è vuota.
+        """
+        collection = self.db_manager.get_collection("Studente")
+        print("prova del nove", id_classe)
+        if not query:
+            # Restituisci tutti gli studenti della classe
+            studenti = list(collection.find({"ID_Classe": id_classe}))
+        else:
+            # Cerca studenti in base alla query (case-insensitive match)
+            print(id_classe)
+            print(query)
+            studenti = list(collection.find({
+                "ID_Classe": id_classe,
+                "$or": [
+                    {"nome": {"$regex": query, "$options": "i"}},
+                    {"cognome": {"$regex": query, "$options": "i"}}
+                ]
+            }))
+        return [
+            {
+
+                "Nome": studente["nome"],
+                "Cognome": studente["cognome"],
+                "Data_Nascita": studente["Data_Nascita"],
+                "_id": str(studente["_id"])
+            }
+
+            for studente in studenti
+
+        ]
+
+    def cerca_studenti_istituto(self, query):
+        print("passp3")
+        """
+        Cerca gli studenti della classe specificata in base alla query.
+
+        Args:
+            query (str): La query di ricerca.
+            id_classe (int): L'ID della classe.
+
+        Returns:
+            list[dict]: Studenti filtrati o tutti gli studenti se la query è vuota.
+        """
+
+        sda = session.get('sda')
+        print("passo4")
+        collection = self.db_manager.get_collection("Studente")
+        print("passo5")
+        print("prova del nove", sda)
+        if not query:
+            # Restituisci tutti gli studenti della classe
+            studenti = list(collection.find({"sda": sda}))
+        else:
+            studenti = list(collection.find({
+                "SdA": sda,  # Controlla la scuola di appartenenza
+                "$and": [  # Usa l'operatore $and per combinare le condizioni
+                    {
+                        "$or": [  # Cerca studenti senza classe e che corrispondono alla query
+                            {"ID_Classe": {"$exists": False}},  # Studenti senza classe
+                            {"ID_Classe": None}  # Studenti con ID_Classe a None
+                        ]
+                    },
+                    {
+                        "$or": [  # Cerca per nome o cognome (case-insensitive)
+                            {"nome": {"$regex": query, "$options": "i"}},  # Ricerca per nome
+                            {"cognome": {"$regex": query, "$options": "i"}}  # Ricerca per cognome
+                        ]
+                    }
+                ]
+            }))
+            return [
+                {
+
+                    "Nome": studente["nome"],
+                    "Cognome": studente["cognome"],
+                    "Data_Nascita": studente["Data_Nascita"],
+                    "_id": str(studente["_id"])
+                }
+
+                for studente in studenti
+
+            ]

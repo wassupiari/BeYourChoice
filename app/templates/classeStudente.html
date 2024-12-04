@@ -20,7 +20,8 @@
 
         <!-- Barra di ricerca -->
         <div class="search-container">
-            <input type="text" placeholder="Cerca studente" class="search-bar">
+            <input type="text" id="search-bar" placeholder="Cerca studente" class="search-bar"
+                   oninput="cercaStudente()"> <!-- Evento input -->
         </div>
 
         <!-- Tabella studenti -->
@@ -35,7 +36,7 @@
                     <th></th> <!-- Colonna per i pulsanti -->
                 </tr>
                 </thead>
-                <tbody>
+                <tbody id="student-table-body">
                 <!-- Iterazione degli studenti -->
                 {% for studente in classe %}
                 <tr>
@@ -54,33 +55,87 @@
 
     <!-- Barra laterale -->
     <aside class="sidebar">
-            <div class="sidebar-item">
-                <a href="{{ url_for('MaterialeStudente.visualizza_materiale_studente') }}">
-        <i class="fas fa-file-alt"></i>
-        <span>Materiale didattico</span>
-    </a>
-</div>
+        <div class="sidebar-item">
+            <a href="{{ url_for('MaterialeStudente.visualizza_materiale_studente') }}">
+                <i class="fas fa-file-alt"></i>
+                <span>Materiale didattico</span>
+            </a>
+        </div>
 
         <div class="sidebar-item">
             <a href="{{ url_for('quiz.visualizza_ultimo_quiz', ID_Classe=session.get('ID_Classe'))}}">
-            <i class="fas fa-question-circle"></i>
-            <span>Quiz</span>
+                <i class="fas fa-question-circle"></i>
+                <span>Quiz</span>
             </a>
         </div>
         <div class="sidebar-item">
-             <a href="{{ url_for('classedocente.Manutenzione') }}" class="nav-link">
-            <i class="fas fa-globe"></i>
-            <span>Scenari</span>
-             </a>
+            <a href="{{ url_for('classedocente.Manutenzione') }}" class="nav-link">
+                <i class="fas fa-globe"></i>
+                <span>Scenari</span>
+            </a>
         </div>
         <div class="sidebar-item">
             <a href="{{ url_for('classedocente.Manutenzione') }}" class="nav-link">
                 <i class="fas fa-trophy"></i>
-            <span>Achievement</span>
+                <span>Achievement</span>
             </a>
         </div>
     </aside>
 </main>
 </body>
+<script>
 
+    let timer;  // Timer per il debounce
+  function cercaStudente() {
+      clearTimeout(timer); // Cancella il timer precedente
+      const query = document.getElementById("search-bar").value.trim();
+
+      // Se la barra di ricerca è vuota, ricarica la pagina
+      if (query === "") {
+          location.reload();
+          return;
+      }
+
+      // Debounce: aspetta 300ms dopo l'ultimo input prima di inviare la richiesta
+      timer = setTimeout(() => {
+          fetch(`/classedocente/cerca-studente?query=${encodeURIComponent(query)}`)
+              .then(response => response.json())
+              .then(data => {
+                  aggiornaTabella(data); // Aggiorna la tabella con i risultati
+              })
+              .catch(error => {
+                  console.error("Errore nella ricerca:", error);
+                  alert("Errore durante la ricerca dello studente.");
+              });
+      }, 300);
+  }
+
+
+  function aggiornaTabella(studenti) {
+      const tableBody = document.getElementById("student-table-body");
+      tableBody.innerHTML = ""; // Svuota il contenuto della tabella
+
+      if (studenti.length > 0) {
+          studenti.forEach((studente, index) => {
+              const row = document.createElement("tr");
+              row.innerHTML = `
+                  <td>${index + 1}</td>
+                  <td>${studente.Nome}</td>
+                  <td>${studente.Cognome}</td>
+                  <td>${studente.Data_Nascita}</td>
+                  <td class="action-cell">
+                      <button class="delete-button" onclick="rimuoviStudente('${studente._id}')">
+                          <i class="fas fa-user-times"></i>
+                      </button>
+                  </td>
+              `;
+              tableBody.appendChild(row);
+          });
+      } else {
+          const noResultsRow = document.createElement("tr");
+          noResultsRow.innerHTML = "<td colspan='5'>Nessuno studente trovato.</td>";
+          tableBody.appendChild(noResultsRow);
+      }
+  }
+</script>
 </html>

@@ -60,6 +60,7 @@ class ClasseVirtualeControl:
             return {"error": "Si è verificato un errore nel recupero degli studenti."}
 
     def mostra_studenti_istituto(self, scuola_appartenenza):
+        print("2")
         """
         Recupera gli studenti della classe e prepara i dati per il rendering.
 
@@ -111,8 +112,33 @@ class ClasseVirtualeControl:
             bool: True se la rimozione ha successo, False altrimenti.
         """
         try:
-            self.model.aggiungi_studente(studente_id,classe_id)
+            self.model.aggiungi_studente(studente_id, classe_id)
             return True
+        except Exception as e:
+            print(f"Errore nel controller: {e}")
+            return False
+
+    def cerca_studenti(self, query,id_classe):
+
+        """
+        Rimuove uno studente dalla classe impostando ID_Classe a null.
+
+        Args:
+            studente_id (str): ID dello studente da rimuovere.
+
+        Returns:
+            bool: True se la rimozione ha successo, False altrimenti.
+        """
+        try:
+            return self.model.cerca_studenti(query, id_classe)
+        except Exception as e:
+            print(f"Errore nel controller: {e}")
+            return False
+
+    def cerca_studenti_istituto(self, query):
+        print("passo2")
+        try:
+            return self.model.cerca_studenti_istituto(query)
         except Exception as e:
             print(f"Errore nel controller: {e}")
             return False
