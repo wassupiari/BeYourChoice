@@ -19,7 +19,13 @@
                 {% for risultato in risultati %}
                     <div class="table-row">
                         <span>{{ risultato.Nome }} {{ risultato.Cognome }}</span>
-                        <span>{{ risultato.Punteggio }}/100</span>
+                        <span>
+                            {% if risultato.Punteggio == "Quiz non svolto" %}
+                                <em>{{ risultato.Punteggio }}</em>
+                            {% else %}
+                                {{ risultato.Punteggio }}/100
+                            {% endif %}
+                        </span>
                     </div>
                 {% endfor %}
             </div>

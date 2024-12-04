@@ -10,6 +10,7 @@ load_dotenv()
 
 quiz_blueprint = Blueprint("quiz", __name__, template_folder="../templates")
 
+
 @quiz_blueprint.route("/crea-quiz", methods=["GET"])
 @teacher_required
 def index():
@@ -18,6 +19,7 @@ def index():
     if not id_classe:
         return "ID Classe mancante nella sessione", 400
     return render_template("creaQuiz.html", id_classe=id_classe)
+
 
 @quiz_blueprint.route("/genera", methods=["POST"])
 @teacher_required
@@ -49,6 +51,7 @@ def genera_domande():
         print(f"Errore durante la generazione delle domande: {e}")
         return jsonify({"error": f"Errore durante la generazione: {str(e)}"}), 500
 
+
 @quiz_blueprint.route("/salva", methods=["POST"])
 @teacher_required
 def salva_quiz():
@@ -68,6 +71,7 @@ def salva_quiz():
     except Exception as e:
         print(f"Errore durante il salvataggio del quiz: {e}")
         return jsonify({"error": f"Errore durante il salvataggio: {str(e)}"}), 500
+
 
 @quiz_blueprint.route('/quiz/<int:quiz_id>', methods=['GET'])
 @student_required
@@ -125,6 +129,7 @@ def visualizza_quiz_classe():
         print(f"Errore durante il recupero dei quiz: {e}")
         return "Errore durante il recupero dei quiz.", 500
 
+
 @quiz_blueprint.route('/valuta-quiz', methods=['POST'])
 @student_required
 def valuta_quiz():
@@ -136,7 +141,6 @@ def valuta_quiz():
         cf_studente = session.get('cf')
         if not cf_studente:
             return jsonify({"message": "CF dello studente non trovato in sessione."}), 400
-
 
         # Recupera le risposte inviate
         data = request.get_json()
@@ -180,6 +184,7 @@ def valuta_quiz():
         print(f"Errore durante la valutazione del quiz: {e}")
         return jsonify({"message": "Errore durante la valutazione del quiz"}), 500
 
+
 @quiz_blueprint.route('/quiz/<int:quiz_id>/domande', methods=['GET'])
 @teacher_required
 def visualizza_domande_quiz(quiz_id):
@@ -203,74 +208,108 @@ def visualizza_domande_quiz(quiz_id):
         print(f"Errore durante la visualizzazione delle domande del quiz: {e}")
         return jsonify({"message": "Errore durante la visualizzazione delle domande"}), 500
 
+
 @quiz_blueprint.route('/quiz/<int:quiz_id>/risultati', methods=['GET'])
 @teacher_required
 def visualizza_risultati_quiz(quiz_id):
     """
-    Visualizza i risultati degli studenti per un quiz specifico.
+    Visualizza i risultati degli studenti per un quiz specifico,
+    includendo tutti gli studenti della classe e verificando
+    se hanno completato l'attività specifica.
     """
     try:
-        # Recupera i risultati degli studenti dal database
-        quiz_results_collection = db_manager.get_collection("RisultatoQuiz")
+        # Collezioni necessarie
         studenti_collection = db_manager.get_collection("Studente")
+        quiz_collection = db_manager.get_collection("Quiz")
+        dashboard_collection = db_manager.get_collection("Dashboard")
 
-        risultati = list(quiz_results_collection.find({"ID_Quiz": quiz_id}))
+        # Recupera il quiz per ottenere il titolo e l'ID della classe
+        quiz = quiz_collection.find_one({"ID_Quiz": quiz_id})
+        if not quiz:
+            return jsonify({"message": "Quiz non trovato"}), 404
 
-        # Unisci i risultati con i dettagli degli studenti
+        id_classe = quiz.get("ID_Classe")
+        titolo_quiz = quiz.get("Titolo")
+
+        # Recupera tutti gli studenti della classe
+        studenti_classe = list(studenti_collection.find({"ID_Classe": id_classe}))
+        if not studenti_classe:
+            return render_template('risultatiQuizPrecedenti.html', risultati=[], quiz_id=quiz_id)
+
+        # Recupera le attività completate dagli studenti per questo quiz
+        attività_completate = list(dashboard_collection.find({
+            "Descrizione_Attività": {"$regex": f"Completamento Quiz: {titolo_quiz}"}
+        }))
+        attività_per_cf = {attività["CF_Studente"].strip().upper(): attività for attività in attività_completate}
+
+        # Combina i risultati con l'elenco degli studenti
         risultati_completi = []
-        for risultato in risultati:
-            studente = studenti_collection.find_one({"cf": risultato["CF_Studente"]})  # Campo corretto: "cf"
-            risultati_completi.append({
-                "Nome": studente["nome"] if studente else "Studente Sconosciuto",
-                "Cognome": studente["cognome"] if studente else "",
-                "Punteggio": risultato["Punteggio_Quiz"]
-            })
+        for studente in studenti_classe:
+            cf = studente["cf"].strip().upper()
+            attività = attività_per_cf.get(cf)
+
+            if attività:
+                risultati_completi.append({
+                    "Nome": studente["nome"],
+                    "Cognome": studente["cognome"],
+                    "Punteggio": attività.get("Punteggio_Attività", "N/A")
+                })
+            else:
+                risultati_completi.append({
+                    "Nome": studente["nome"],
+                    "Cognome": studente["cognome"],
+                    "Punteggio": "Quiz non svolto"
+                })
 
         return render_template('risultatiQuizPrecedenti.html', risultati=risultati_completi, quiz_id=quiz_id)
     except Exception as e:
-        print(f"Errore durante il caricamento dei risultati: {e}")
         return jsonify({"message": "Errore durante il caricamento dei risultati"}), 500
+
 
 @quiz_blueprint.route('/ultimo-quiz', methods=['GET'])
 def visualizza_ultimo_quiz():
     """
-    Visualizza l'ultimo quiz creato dal docente per lo studente,
-    ma solo se non è stato già completato.
+    Visualizza l'ultimo quiz creato dal docente per una classe specifica,
+    ma solo se non è stato già completato dallo studente.
     """
     try:
-        # Recupera l'ultimo quiz dalla collezione Quiz
-        quiz_collection = db_manager.get_collection("Quiz")
-        activities_collection = db_manager.get_collection("Dashboard")
-
-        # Recupera l'ultimo quiz ordinando per data di creazione in ordine decrescente
-        ultimo_quiz = quiz_collection.find_one(sort=[("Data_Creazione", -1)])
-        if not ultimo_quiz:
-            return render_template('quizDisponibile.html', quiz=None)
-
-        # Controlla se lo studente ha già completato il quiz
+        # Recupera il CF dello studente dalla sessione
         cf_studente = session.get('cf')
         if not cf_studente:
+            print("CF dello studente non trovato nella sessione.")
             return jsonify({"message": "Errore: codice fiscale non trovato nella sessione"}), 403
 
-        attività_completate = activities_collection.find_one({
-            "CF_Studente": cf_studente
-        })
+        # Recupera l'ID della classe dalla sessione
+        id_classe = session.get('ID_Classe')
+        if not id_classe:
+            print("ID Classe non trovato nella sessione.")
+            return jsonify({"message": "Errore: ID Classe non trovato nella sessione"}), 403
 
-        # Se il quiz è stato completato, non mostrarlo
-        if attività_completate:
+        # Recupera l'ultimo quiz della classe specifica
+        quiz_collection = db_manager.get_collection("Quiz")
+        dashboard_collection = db_manager.get_collection("Dashboard")
+
+        ultimo_quiz = quiz_collection.find_one(
+            {"ID_Classe": id_classe},
+            sort=[("Data_Creazione", -1)]
+        )
+        if not ultimo_quiz:
+            print("Nessun quiz trovato per questa classe.")
             return render_template('quizDisponibile.html', quiz=None)
 
-        # Recupera le domande associate al quiz
-        questions_collection = db_manager.get_collection("Domanda")
-        domande = list(questions_collection.find({"ID_Quiz": ultimo_quiz["ID_Quiz"]}))
+        # Controlla se lo studente ha completato il quiz
+        attività_completata = dashboard_collection.find_one({
+            "CF_Studente": cf_studente,
+            "Descrizione_Attività": {"$regex": f"Completamento Quiz: {ultimo_quiz['Titolo']}"}
+        })
 
-        return render_template('quizDisponibile.html', quiz=ultimo_quiz, domande=domande)
+        if attività_completata:
+            print("Il quiz è già stato completato dallo studente.")
+            return render_template('quizDisponibile.html', quiz=None)
+
+        # Passa i dettagli del quiz al template
+        return render_template('quizDisponibile.html', quiz=ultimo_quiz)
     except Exception as e:
         print(f"Errore durante il caricamento dell'ultimo quiz: {e}")
         return jsonify({"message": "Errore durante il caricamento dell'ultimo quiz"}), 500
-
-
-
-
-
 
