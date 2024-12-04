@@ -1,8 +1,6 @@
-from datetime import datetime
-
+from datetime import datetime, timedelta
 import openai
 from flask import session
-
 from databaseManager import DatabaseManager
 
 db_manager = DatabaseManager()
@@ -12,39 +10,28 @@ class QuizModel:
 
     @staticmethod
     def parse_domanda(domanda_testo):
-        """
-        Elabora il testo della domanda generata da OpenAI per estrarre:
-        - Testo della domanda
-        - Opzioni di risposta
-        - Risposta corretta
-        """
+        """Elabora il testo della domanda generata da OpenAI per estrarre i dettagli."""
         try:
             domanda_lines = domanda_testo.strip().split("\n")
 
-            # Controlla se ci sono abbastanza linee
             if len(domanda_lines) < 3:
                 raise ValueError("Formato della domanda non valido.")
 
-            # La prima riga è il testo della domanda
             testo_domanda = domanda_lines[0].strip()
 
-            # Opzioni di risposta (iniziano con A), B), C), D))
             opzioni_risposte = [
                 line.strip() for line in domanda_lines[1:] if line.startswith(("A)", "B)", "C)", "D)"))
             ]
 
-            # Risposta corretta (formato: "Risposta corretta: X)")
             risposta_corretta = next(
                 (line.replace("Risposta corretta:", "").strip() for line in domanda_lines if
                  "Risposta corretta:" in line),
                 None
             )
 
-            # Validazione dei componenti
             if not testo_domanda or not opzioni_risposte or not risposta_corretta:
                 raise ValueError("Alcuni componenti essenziali della domanda sono mancanti.")
 
-            # Rimuovi prefissi da opzioni
             opzioni_risposte = [
                 opzione.replace("A)", "").replace("B)", "").replace("C)", "").replace("D)", "").strip()
                 for opzione in opzioni_risposte
@@ -75,13 +62,11 @@ class QuizModel:
         while len(domande) < numero_domande:
             messages = [
                 {"role": "system",
-                 "content":
-                            "Sei un assistente esperto in educazione civica italiana e devi generare domande per un quiz destinato a studenti delle scuole superiori. Le domande devono essere educative, coinvolgenti e adatte al livello di conoscenza degli studenti. Ogni domanda deve:"+
-                            "Essere chiara e formulata correttamente."+
-                            "Affrontare temi fondamentali di educazione civica italiana, come Costituzione, diritti e doveri dei cittadini, funzionamento dello Stato, istituzioni pubbliche, elezioni, legalità, cittadinanza attiva e sostenibilità."+
-                            "Essere accompagnata da opzioni di risposta:"+
-                            "Se modalità scelta multipla con 3 risposte: fornisci 3 opzioni di risposta, di cui solo 1 è corretta."+
-                            "Se modalità scelta multipla con 4 risposte: fornisci 4 opzioni di risposta, di cui solo 1 è corretta."},
+                 "content": (
+                     "Sei un assistente esperto in educazione civica italiana. Genera domande educative, coinvolgenti e "
+                     "adatte al livello delle scuole superiori. Ogni domanda deve essere chiara, affrontare temi come "
+                     "Costituzione, diritti, doveri, cittadinanza e sostenibilità, e includere opzioni di risposta."
+                 )},
                 {"role": "user", "content": prompt_base}
             ]
             try:
@@ -93,12 +78,11 @@ class QuizModel:
                 )
                 domanda = response.choices[0].message["content"].strip()
 
-                # Effettua il parsing e aggiunge la domanda alla lista
                 parsed_domanda = QuizModel.parse_domanda(domanda)
                 domande.append(parsed_domanda)
             except ValueError as parse_error:
                 print(f"Errore nel parsing della domanda: {parse_error}")
-                continue  # Salta questa domanda e continua con la successiva
+                continue
             except Exception as e:
                 print(f"Errore durante la richiesta OpenAI: {e}")
                 raise ValueError(f"Errore OpenAI: {e}")
@@ -111,12 +95,10 @@ class QuizModel:
             quiz_collection = db_manager.get_collection("Quiz")
             questions_collection = db_manager.get_collection("Domanda")
 
-            # Recupera l'ID della classe dalla sessione
             id_classe = session.get("ID_Classe")
             if not id_classe:
                 raise ValueError("ID Classe mancante nella sessione.")
 
-            # Prepara il documento per il quiz
             quiz = {
                 "ID_Quiz": data["ID_Quiz"],
                 "Titolo": data["Titolo"],
@@ -130,46 +112,21 @@ class QuizModel:
             }
             quiz_collection.insert_one(quiz)
 
-            # Inserisci ogni domanda nel database
             for domanda in data["Domande"]:
                 question = {
                     "ID_Domanda": domanda["ID_Domanda"],
                     "Testo_Domanda": domanda["Testo_Domanda"],
-                    "Opzioni_Risposte": [
-                        opzione.replace("A)", "").replace("B)", "").replace("C)", "").replace("D)", "").strip()
-                        for opzione in domanda["Opzioni_Risposte"]
-                    ],
-                    "Risposta_Corretta": domanda["Risposta_Corretta"].replace("A)", "").replace("B)", "").replace("C)",
-                                                                                                                  "").replace(
-                        "D)", "").strip(),
+                    "Opzioni_Risposte": domanda["Opzioni_Risposte"],
+                    "Risposta_Corretta": domanda["Risposta_Corretta"],
                     "ID_Quiz": data["ID_Quiz"]
                 }
                 questions_collection.insert_one(question)
         except Exception as e:
             raise ValueError(f"Errore durante il salvataggio del quiz: {e}")
 
-    def recupera_quiz_per_classe(id_classe):
-        """
-        Recupera tutti i quiz associati a una specifica classe.
-        :param id_classe: ID della classe
-        :return: Lista di quiz
-        """
-        try:
-            quiz_collection = db_manager.get_collection("Quiz")
-            quiz_list = list(quiz_collection.find({"ID_Classe": id_classe}))
-
-            # Converte l'ObjectId in stringa
-            for quiz in quiz_list:
-                quiz["_id"] = str(quiz["_id"])
-            return quiz_list
-        except Exception as e:
-            raise ValueError(f"Errore durante il recupero dei quiz per la classe {id_classe}: {e}")
-
     @staticmethod
     def recupera_domande(question_ids):
-        """
-        Recupera le domande dal database in base agli ID.
-        """
+        """Recupera le domande dal database in base agli ID."""
         try:
             questions_collection = db_manager.get_collection("Domanda")
             return list(questions_collection.find({"ID_Domanda": {"$in": question_ids}}))
@@ -177,12 +134,111 @@ class QuizModel:
             raise ValueError(f"Errore durante il recupero delle domande: {e}")
 
     @staticmethod
-    def salva_risultato_quiz(quiz_result, cf_studente, punteggio):
+    def recupera_quiz(quiz_id):
+        """Recupera un quiz in base al suo ID."""
+        try:
+            quiz_collection = db_manager.get_collection("Quiz")
+            quiz = quiz_collection.find_one({"ID_Quiz": quiz_id})
+            if not quiz:
+                raise ValueError("Quiz non trovato.")
+            quiz["_id"] = str(quiz["_id"])  # Convert ObjectId to string
+            return quiz
+        except Exception as e:
+            raise ValueError(f"Errore durante il recupero del quiz: {e}")
+
+    @staticmethod
+    def recupera_quiz_per_classe(id_classe):
+        """Recupera tutti i quiz per una classe specifica."""
+        try:
+            quiz_collection = db_manager.get_collection("Quiz")
+            quiz_list = list(quiz_collection.find({"ID_Classe": id_classe}))
+            for quiz in quiz_list:
+                quiz["_id"] = str(quiz["_id"])  # Convert ObjectId
+            return quiz_list
+        except Exception as e:
+            raise ValueError(f"Errore durante il recupero dei quiz: {e}")
+
+    @staticmethod
+    def recupera_risultati_per_quiz(quiz_id):
+        """Recupera i risultati di un quiz."""
+        try:
+            risultati_collection = db_manager.get_collection("RisultatoQuiz")
+            return list(risultati_collection.find({"ID_Quiz": quiz_id}))
+        except Exception as e:
+            raise ValueError(f"Errore durante il recupero dei risultati: {e}")
+
+    @staticmethod
+    def recupera_ultimo_quiz(id_classe, cf_studente):
+        """Recupera l'ultimo quiz non completato da uno studente."""
+        try:
+            quiz_collection = db_manager.get_collection("Quiz")
+            dashboard_collection = db_manager.get_collection("Dashboard")
+
+            ultimo_quiz = quiz_collection.find_one(
+                {"ID_Classe": id_classe},
+                sort=[("Data_Creazione", -1)]
+            )
+
+            if not ultimo_quiz:
+                return None
+
+            completato = dashboard_collection.find_one({
+                "CF_Studente": cf_studente,
+                "Descrizione_Attività": {"$regex": f"Completamento Quiz: {ultimo_quiz['Titolo']}"}
+            })
+
+            return None if completato else ultimo_quiz
+        except Exception as e:
+            raise ValueError(f"Errore durante il recupero dell'ultimo quiz: {e}")
+
+    @staticmethod
+    def recupera_studenti_classe(id_classe):
+        """Recupera tutti gli studenti di una classe."""
+        try:
+            studenti_collection = db_manager.get_collection("Studente")
+            return list(studenti_collection.find({"ID_Classe": id_classe}))
+        except Exception as e:
+            raise ValueError(f"Errore durante il recupero degli studenti: {e}")
+
+    @staticmethod
+    def recupera_attività_completate(titolo_quiz):
         """
-        Salva il risultato del quiz nel database.
+        Recupera le attività completate per un determinato quiz basandosi sul titolo del quiz.
+        :param titolo_quiz: Titolo del quiz
+        :return: Lista di attività completate
         """
         try:
-            # Collezioni del database
+            dashboard_collection = db_manager.get_collection("Dashboard")
+            return list(dashboard_collection.find({
+                "Descrizione_Attività": {"$regex": f"Completamento Quiz: {titolo_quiz}"}
+            }))
+        except Exception as e:
+            raise ValueError(f"Errore durante il recupero delle attività completate: {e}")
+
+    @staticmethod
+    def calcola_tempo_rimanente(quiz):
+        """Calcola il tempo rimanente per completare un quiz."""
+        try:
+            ora_inizio = datetime.fromisoformat(quiz["Ora_Inizio"])
+            durata_quiz = quiz["Durata"]
+            fine = ora_inizio + timedelta(minutes=durata_quiz)
+            tempo_rimanente = max(0, (fine - datetime.utcnow()).total_seconds())
+            return int(tempo_rimanente)
+        except KeyError as e:
+            raise ValueError(f"Errore nel calcolo del tempo rimanente: campo mancante {e}")
+        except Exception as e:
+            raise ValueError(f"Errore nel calcolo del tempo rimanente: {e}")
+
+    @staticmethod
+    def salva_risultato_quiz(quiz_result, cf_studente, punteggio):
+        """
+        Salva il risultato del quiz nel database e registra l'attività nella dashboard.
+        :param quiz_result: Dati del risultato del quiz da salvare.
+        :param cf_studente: Codice fiscale dello studente.
+        :param punteggio: Punteggio ottenuto dallo studente.
+        """
+        try:
+            # Collezioni necessarie
             quiz_results_collection = db_manager.get_collection("RisultatoQuiz")
             attività_collection = db_manager.get_collection("Dashboard")
             quiz_collection = db_manager.get_collection("Quiz")
@@ -190,32 +246,23 @@ class QuizModel:
             # Salva il risultato del quiz
             quiz_results_collection.insert_one(quiz_result)
 
-            # Recupera l'ID del quiz
-            quiz_id = quiz_result['ID_Quiz']
-
             # Recupera il titolo del quiz
-            quiz = quiz_collection.find_one({"ID_Quiz": quiz_id}, {"Titolo": 1})
+            quiz = quiz_collection.find_one({"ID_Quiz": quiz_result["ID_Quiz"]}, {"Titolo": 1})
             if not quiz:
-                raise ValueError(f"Quiz con ID {quiz_id} non trovato.")
-
+                raise ValueError(f"Quiz con ID {quiz_result['ID_Quiz']} non trovato.")
             titolo_quiz = quiz["Titolo"]
 
-            # Genera l'ID incrementale per l'attività
-            last_attività = attività_collection.find_one(sort=[("ID_Attività", -1)])  # Recupera l'ultima attività
-            nuovo_id_attività = last_attività["ID_Attività"] + 1 if last_attività else 1
-
-            # Salva l'attività svolta
+            # Genera l'attività svolta
             attività = {
-                "ID_Attività": nuovo_id_attività,
-                "Data_Attività": datetime.utcnow(),  # Assicura che venga salvato come Date
+                "ID_Attività": attività_collection.count_documents({}) + 1,  # Genera un ID incrementale
+                "Data_Attività": datetime.utcnow(),
                 "Descrizione_Attività": f"Completamento Quiz: {titolo_quiz}",
                 "Punteggio_Attività": punteggio,
                 "CF_Studente": cf_studente
             }
 
-            # Inserisce l'attività nel database
+            # Inserisce l'attività nella dashboard
             attività_collection.insert_one(attività)
+            print(f"DEBUG: Risultato del quiz e attività salvati correttamente per lo studente {cf_studente}")
         except Exception as e:
             raise ValueError(f"Errore durante il salvataggio del risultato: {e}")
-
-
