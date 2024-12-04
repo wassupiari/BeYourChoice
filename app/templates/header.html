@@ -12,7 +12,9 @@
     <header class="main-header">
         <div class="container">
             <div class="logo">
-                <img src="{{ url_for('static', filename='img/Logo.png') }}" width="20%" >
+                <a href="{{url_for('classedocente.LogoAction')}}">
+                    <img src="{{ url_for('static', filename='img/Logo.png') }}" width="20%" >
+                </a>
             </div>
             <nav class="navigation">
                 <a href="{{ url_for('profilo.gestione_profilo') }}" class="nav-link">
