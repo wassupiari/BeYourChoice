@@ -253,3 +253,23 @@ def visualizza_ultimo_quiz():
         return QuizView.mostra_ultimo_quiz(ultimo_quiz)
     except Exception as e:
         return QuizView.mostra_errore("Errore durante il caricamento dell'ultimo quiz")
+
+@quiz_blueprint.route("/visualizza-quiz", methods=["GET"])
+@teacher_required
+def visualizza_quiz_classe():
+    """
+    Recupera tutti i quiz per una specifica classe e li passa al template per il docente.
+    """
+    try:
+        id_classe = session.get("ID_Classe")  # Recupera l'ID della classe dalla sessione
+        if not id_classe:
+            return QuizView.mostra_errore("ID Classe non specificato.", 400)
+
+        # Recupera i quiz dal database
+        quiz_list = QuizModel.recupera_quiz_per_classe(id_classe)
+
+        # Passa i dati alla view per la visualizzazione
+        return QuizView.mostra_quiz_precedenti(quiz_list, id_classe)
+    except Exception as e:
+        print(f"Errore durante il recupero dei quiz: {e}")
+        return QuizView.mostra_errore("Errore durante il recupero dei quiz")

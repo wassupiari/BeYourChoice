@@ -1,5 +1,6 @@
 from flask import render_template, request, flash, Blueprint, session
 
+from app.controllers.LoginControl import student_required, teacher_required
 from app.controllers.ProfiloControl import ProfiloControl
 from databaseManager import DatabaseManager
 
@@ -20,6 +21,7 @@ def initialize_profilo_blueprint(app):
         return profilo_control.cambia_password_docente(vecchia_password, nuova_password)
 
     @profilo.route('/change_password_studente', methods=['POST'])
+
     def change_password_studente():
         vecchia_password = request.form['old_password']
         nuova_password = request.form['new_password']
@@ -27,7 +29,8 @@ def initialize_profilo_blueprint(app):
 
         return profilo_control.cambia_password_studente(vecchia_password, nuova_password)
 
-    @profilo.route('/profilo/gestione', methods=['GET', 'POST'])
+    @profilo.route('/gestione', methods=['GET', 'POST'])
+
     def gestione_profilo():
         email = session.get('email')
         if not email:
