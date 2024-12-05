@@ -1,3 +1,4 @@
+import uuid
 from datetime import datetime, timedelta
 import openai
 from flask import session
@@ -96,6 +97,8 @@ class QuizModel:
         try:
             quiz_collection = QuizModel.db_manager.get_collection("Quiz")
             questions_collection = QuizModel.db_manager.get_collection("Domanda")
+            if "ID_Quiz" not in data or quiz_collection.find_one({"ID_Quiz": data["ID_Quiz"]}):
+                data["ID_Quiz"] = str(uuid.uuid4())  # Genera un ID univoco
 
             id_classe = session.get("ID_Classe")
             if not id_classe:
