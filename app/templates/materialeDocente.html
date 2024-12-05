@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Materiale Docente</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleMaterialeDidattico.css') }}">
+    <title>BeYourChoice Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleMaterialedidattico.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
 {% include 'header.html' %}
-
-    <main>
+     <div class="main">
         <h2>MATERIALE DIDATTICO</h2>
 
         <div class="error-message">
@@ -49,5 +49,5 @@
         <div class="aggiungi-materiale">
             <a href="{{ url_for('MaterialeDocente.carica_materiale') }}"><i class="fa-solid fa-file-arrow-up"></i>Aggiungi Materiale Didattico</a>
         </div>
-    </main>
+    </div>
 </body>

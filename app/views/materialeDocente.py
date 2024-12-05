@@ -13,8 +13,8 @@ MAX_FILE_SIZE_MB = 2
 ALLOWED_EXTENSIONS = {'docx', 'pdf', 'jpeg', 'png', 'txt', 'jpg', 'mp4'}
 
 # Supponiamo che DatabaseManager sia il manager db richiesto
-database_uri = "mongodb+srv://rcione3:rcione3@beyourchoice.yqzo6.mongodb.net/?retryWrites=true&w=majority&appName=BeYourChoice"  # URI di connessione al database
-db_manager = DatabaseManager(database_uri)  # <--- Inizializza qui il tuo db_manager con l'URI
+
+db_manager = DatabaseManager()  # <--- Inizializza qui il tuo db_manager con l'URI
 
 # Passa l'istanza di db_manager a MaterialeModel
 materiale_control = MaterialeControl(db_manager)

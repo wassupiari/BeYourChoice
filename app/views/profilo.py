@@ -4,8 +4,8 @@ from app.controllers.LoginControl import student_required, teacher_required
 from app.controllers.ProfiloControl import ProfiloControl
 from databaseManager import DatabaseManager
 
-database_uri = "mongodb+srv://rcione3:rcione3@beyourchoice.yqzo6.mongodb.net/?retryWrites=true&w=majority&appName=BeYourChoice"  # URI di connessione al database
-db_manager = DatabaseManager(database_uri)  # <--- Inizializza qui il tuo db_manager con l'URI
+
+db_manager = DatabaseManager()
 
 profilo_control: ProfiloControl = ProfiloControl(db_manager)
 

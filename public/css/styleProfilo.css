@@ -1,26 +1,5 @@
-/*Foglio di stile utilizzato per la pagina del profilo*/
+/* Foglio di stile utilizzato per la pagina del profilo */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
-    margin: 0;
-    padding: 0;
-    color: #333;
-}
-
-header {
-    background-color: #333;
-    color: white;
-    padding: 15px 0;
-    text-align: center;
-}
-
-main {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: white;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;body {
     font-family: Arial, sans-serif;
     background-color: #f9f9f9;
     margin: 0;
@@ -46,7 +25,7 @@ main {
 
 h2 {
     margin-top: 0;
-    color: #007bff;
+    color: #333;
     text-decoration: underline; /* Sottolinea il contenuto di h2 */
 }
 
@@ -62,6 +41,7 @@ h2 {
 .profile-view label {
     margin-top: 10px;
     font-weight: bold;
+    margin-bottom: 5px; /* Spazio tra il label e gli elementi successivi */
 }
 
 .profile-view input[type="text"],
@@ -79,29 +59,25 @@ input[readonly] {
     background-color: #f0f0f0;
 }
 
+/* Stile comune per tutti i pulsanti */
 button {
-    display: inline-block;
-    width: 200px; /* Larghezza fissa per uniformità */
-    text-align: center;
-    text-decoration: none;
     padding: 10px 20px;
-    font-size: 16px;
-    font-weight: bold;
-    color: white;
-    border-radius: 4px;
+    background-color: #f9f4f1;
+    color: #000000;
+    font-weight: 600;
+    border: 1px solid #ccc; /* Bordi visibili */
+    border-radius: 8px; /* Leggera arrotondatura degli angoli */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Effetto ombra */
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    margin: 0 auto; /* Centra il pulsante */
+    transition: box-shadow 0.3s ease, transform 0.3s ease; /* Effetti al passaggio del mouse */
+    margin-top: 15px; /* Spazio tra il pulsante e il label */
 }
 
-button[type="submit"] {
-    background-color: #d75a3d;
-    border: none;
-}
-
-button[type="submit"]:hover {
+/* Effetto hover per tutti i pulsanti */
+button:hover {
     background-color: #d75a3d;
     transform: scale(1.05);
+    color: #ffffff;
 }
 
 .error-message {
@@ -115,11 +91,11 @@ button[type="submit"]:hover {
     padding: 0;
 }
 
-.flashes li.error {
+.flashes li.message_profile_error {
     color: red;
 }
 
-.flashes li.success {
+.flashes li.message_profile_successo {
     color: green;
 }
 
@@ -137,106 +113,7 @@ button[type="submit"]:hover {
 
 #changePasswordForm label {
     font-weight: bold;
-}
-
-#changePasswordForm input[type="password"] {
-    padding: 10px;
-    margin-top: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-}
-
-h2 {
-    margin-top: 0;
-    color: #007bff;
-    text-decoration: underline; /* Sottolinea il contenuto di h2 */
-}
-
-.profile-view {
-    margin-top: 20px;
-}
-
-.profile-view form {
-    display: flex;
-    flex-direction: column;
-
-}
-
-.profile-view label {
-    margin-top: 10px;
-    font-weight: bold;
-}
-
-.profile-view input[type="text"],
-.profile-view input[type="email"],
-.profile-view input[type="password"] {
-    padding: 10px;
-    margin-top: 5px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-input[readonly] {
-    background-color: #f0f0f0;
-}
-
-button {
-    display: inline-block;
-    width: 200px; /* Larghezza fissa per uniformità */
-    text-align: center;
-    text-decoration: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    font-weight: bold;
-    color: white;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    align:center;
-}
-
-button[type="submit"] {
-    background-color: #d75a3d;
-    border: none;
-}
-
-button[type="submit"]:hover {
-    background-color: #d75a3d;
-    transform: scale(1.05);
-}
-
-.flashes {
-    list-style-type: none;
-    padding: 0;
-}
-
-.flashes li.message_profile_error {
-    color: red;
-}
-
-.flashes li.message_profile_successo {
-    color: green;
-}
-
-
-
-#changePasswordForm {
-    margin-top: 40px;
-    padding: 20px;
-    border-top: 1px solid #ddd;
-}
-
-#changePasswordForm div {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 15px;
-}
-
-#changePasswordForm label {
-    font-weight: bold;
+    margin-bottom: 5px; /* Spazio tra il label e gli input sottostanti */
 }
 
 #changePasswordForm input[type="password"] {

@@ -6,9 +6,8 @@ body {
     padding: 0;
 }
 
-
 /* Stile principale del contenuto */
-main {
+.main {
     max-width: 1200px;
     margin: 20px auto;
     padding: 20px;
@@ -18,9 +17,9 @@ main {
 }
 
 /* Titolo della pagina */
-main h2 {
+.main h2 {
     font-size: 24px;
-    color:  #d75a3d;
+    color: black;
     margin-bottom: 20px;
     text-align: center;
 }
@@ -28,8 +27,8 @@ main h2 {
 /* Contenitore generale per la lista di materiali */
 .materiali-lista {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 93;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
     justify-content: center;
 }
 
@@ -56,7 +55,7 @@ main h2 {
 /* Titolo del materiale */
 .materiale-item h3 {
     font-size: 18px;
-    color:  #007bff;
+    color: black;
     margin-bottom: 10px;
 }
 
@@ -77,11 +76,7 @@ main h2 {
     display: flex;
     justify-content: space-between;
     margin-top: 10px;
-
 }
-
-
-
 
 i {
     font-size: 30px; /* Dimensione delle icone  */
@@ -89,15 +84,12 @@ i {
     color: #000000; /* Colore delle icone */
 }
 
-
 /* Contenitore per il pulsante di aggiunta materiale */
-
 .aggiungi-materiale {
     text-align: center;
 }
 
-a
-{
+a {
     display: flex;
     flex-direction: column; /* Testo sotto l'icona */
     justify-content: center;
@@ -154,12 +146,15 @@ a
     font-size: 22px;
     transition: transform 0.3s ease;
 }
-.aggiungi-materiale a: hover i {
-    color: #d75a3d;
-}
+
 .aggiungi-materiale a:hover i {
     color: #d75a3d;
     transform: scale(1.1); /* Leggero ingrandimento */
 }
-
-
+.flashes {
+       list-style-type: none;
+       padding: 0;
+   }
+.flashes li.materiale_success {
+   color: green;
+}
