@@ -14,7 +14,7 @@ from app.models.attivitaModel import Attivita
 from app.views.materialeDocente import initialize_materiale_docente_blueprint
 from app.views.materialeStudente import initialize_materiale_studente_blueprint
 from app.views.profilo import initialize_profilo_blueprint
-from databaseManager import DatabaseManager
+
 
 # Crea l'applicazione Flask
 app = Flask(__name__, template_folder='app/templates', static_folder="public")
@@ -29,7 +29,6 @@ app = Flask(__name__, template_folder='app/templates', static_folder="public")
 
 # Definisci una route per la homepage
 @app.route('/')
-@app.route('/dashboard')
 def home():
     if 'email' not in session:
         return redirect(url_for('login.login'))

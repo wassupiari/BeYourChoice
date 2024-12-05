@@ -105,7 +105,7 @@ def login():
                 session['cf'] = cf_studente
                 session['ID_Classe'] = id_classe
                 session['Nome'] = nome_studente
-                session['user_type'] = 'studente'  # Imposta il tipo utente
+                session['role'] = 'studente'
                 flash("Login effettuato con successo", "success")
                 return redirect(url_for('dashboard.dashboard_studente'))  # Reindirizza al dashboard dopo il login
 
@@ -127,7 +127,7 @@ def login():
                 session['CU'] = docente_codice_univoco
                 session['Nome'] = nome_profilo
                 session['cf'] = docente.get("cf_docente")
-                session['user_type'] = 'docente'
+                session['role'] = 'docente'
 
                 flash("Login effettuato con successo", "success")
                 return redirect(url_for('dashboard.dashboard_docente'))  # Reindirizza al dashboard dopo il login

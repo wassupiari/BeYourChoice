@@ -9,7 +9,7 @@ dashboard_blueprint = Blueprint('dashboard', __name__, template_folder='../templ
 
 class DashboardController:
     @staticmethod
-    @dashboard_blueprint.route('/dashboardDocente', methods=['GET'])
+    @dashboard_blueprint.route('/dashboard-docente', methods=['GET'])
     @teacher_required
     def dashboard_docente():
         codice_univoco = session.get('CU')
@@ -21,7 +21,7 @@ class DashboardController:
         return TeacherDashboardView.render_dashboard(classi)
 
     @staticmethod
-    @dashboard_blueprint.route('/classificaClasse/<int:ID_Classe>', methods=['GET'])
+    @dashboard_blueprint.route('/classifica/<int:ID_Classe>', methods=['GET'])
     @teacher_required
     def classifica_classe(ID_Classe):
         session['ID_Classe'] = ID_Classe
@@ -38,7 +38,7 @@ class DashboardController:
         return TeacherDashboardView.render_storico(storico, cf_studente)
 
     @staticmethod
-    @dashboard_blueprint.route('/dashboardStudente', methods=['GET'])
+    @dashboard_blueprint.route('/dashboard-studente', methods=['GET'])
     @student_required
     def dashboard_studente():
         """
