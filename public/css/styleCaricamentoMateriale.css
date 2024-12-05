@@ -1,4 +1,4 @@
-/*Foglio di stile utilizzato per il caricamento del materiale didattico*/
+/Foglio di stile utilizzato per il caricamento del materiale didattico/
 /* Stile generale per il corpo della pagina */
 body {
     font-family: Arial, sans-serif;
@@ -122,5 +122,5 @@ form div {
        color: red;
    }
    .flashes li.success {
-       color: green;
-   }
+       color:green;
+}
