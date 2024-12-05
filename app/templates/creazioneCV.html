@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Creazione Classe Virtuale</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styleClasseVirtuale.css') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/favicon-32x32.png') }}">
 </head>
 <body>
 <!-- Inclusione dell'header -->
@@ -23,7 +24,7 @@
 
             <!-- Pulsante per annullare -->
             <button type="button" class="annulla"
-                    onclick="window.location.href='{{ url_for('dashboardDocente.dashboard') }}'">
+                    onclick="window.location.href='{{ url_for('dashboard.dashboard_docente') }}'">
                 Annulla
             </button>
 

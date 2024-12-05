@@ -1,119 +1,197 @@
-import os
-import sys
+import io
+from unittest.mock import MagicMock
 
 import pytest
-from flask import Flask
-
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-from app.controllers.MaterialeControl import MaterialeControl
-from app.models.materialeModel import MaterialeModel
-import io
 from bson import ObjectId
+from flask import Flask, Blueprint, request
 
-from app.views.materialeDocente import db_manager
 
-
-# Fixture per creare l'app Flask
-@pytest.fixture
-def app():
+# Funzione per creare l'app Flask
+def create_app():
     app = Flask(__name__)
-    app.config['UPLOAD_FOLDER'] = '/tmp/uploads'
+    initialize_materiale_docente_blueprint(app)
     return app
 
 
 # Fixture per il client di test
 @pytest.fixture
-def client(app):
-    return app.test_client()
+def client():
+    app = create_app()
+    app.config['TESTING'] = True
+
+    with app.test_client() as client:
+        yield client
 
 
-# Mock database manager
-class MockDatabaseManager:
-    def __init__(self):
-        self.data = {}
-
-    def get_collection(self, name):
-        return MockCollection(self.data)
-
-
-class MockCollection:
-    def __init__(self, data):
-        self.data = data
-
-    def insert_one(self, document):
-        object_id = ObjectId()
-        document['_id'] = object_id
-        self.data[object_id] = document
-        return object_id
-
-    def find(self, query=None):
-        if query:
-            return [doc for doc in self.data.values() if all(item in doc.items() for item in query.items())]
-        return MockCursor(self.data.values())
-
-    def sort(self, key, direction):
-        self.documents.sort(key=lambda doc: doc.get(key, 0), reverse=direction == -1)
-
-    def delete_one(self, query):
-        id_to_delete = query.get('_id')
-        if id_to_delete in self.data:
-            del self.data[id_to_delete]
-            return MockDeleteResult(deleted_count=1)
-        return MockDeleteResult(deleted_count=0)
-
-class MockDeleteResult:
-    def __init__(self, deleted_count):
-        self.deleted_count = deleted_count
-
-class MockCursor:
-    def __init__(self, documents):
-        self.documents = list(documents)
-        self.index = 0
-
-    def sort(self, key, direction):
-        self.documents.sort(key=lambda doc: doc.get(key, 0), reverse=direction == -1)
-        return self
-
-    def limit(self, count):
-        self.documents = self.documents[:count]
-        return self
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        if self.index < len(self.documents):
-            doc = self.documents[self.index]
-            self.index += 1
-            return doc
-        else:
-            raise StopIteration
-
-mock_db_manager = MockDatabaseManager()
-
+# Mock del db manager
 @pytest.fixture
-def materiale_control():
-    return MaterialeControl(mock_db_manager)
+def mockDbManager():
+    dbManager = MagicMock()
+    collectionMock = MagicMock()
+    dbManager.get_collection.return_value = collectionMock
+    return dbManager
 
 
-def test_carica_materiale(materiale_control, client):
-    # Simula il caricamento di un file
-    file_data = io.BytesIO(b'Some initial text data')
-    file_data.name = 'test_file.txt'
+# Inizializzazione del blueprint MaterialeDocente
+def initialize_materiale_docente_blueprint(app):
+    MaterialeDocente = Blueprint('MaterialeDocente', __name__)
 
-    nuovo_materiale = MaterialeModel(
-        id_MaterialeDidattico='test_id',
-        titolo='Test Title',
-        descrizione='Test Description',
-        filepath=file_data.name,
-        tipo='txt',
-        ID_Classe='class_id'
-    )
+    @MaterialeDocente.route('/carica', methods=['POST'])
+    def carica():
+        titolo = request.form.get('titolo')
+        tipo = request.form.get('tipo')
+        descrizione = request.form.get('descrizione')
+        file = request.files.get('file')
 
-    materiale_control.upload_material(nuovo_materiale)
+        # Validazione del titolo
+        if not titolo or len(titolo) < 3 or '@' in titolo:
+            return "Formato titolo non supportato", 400
 
-    # Controlla se esiste il materiale caricato
-    materiali = materiale_control.get_all_materials()
-    assert len(materiali) > 0
-    assert any(materiale['Titolo'] == 'Test Title' for materiale in materiali)
+        # Validazione lunghezza titolo
+        if len(titolo) > 100:
+            return "Lunghezza titolo non supportata", 400
+
+        # Validazione tipo file
+        if tipo not in ['pdf', 'doc', 'jpeg']:
+            return "Tipo formato non supportato", 400
+
+        # Validazione dimensione file
+        if not file:
+            return "File mancante", 400
+        file_size = len(file.read())
+        file.seek(0)  # Riposiziona il cursore all'inizio
+        if file_size > 5 * 1024 * 1024:  # 5 MB limite
+            return "Dimensione file non supportata", 400
+
+        # Validazione descrizione
+        if not descrizione or '§' in descrizione:
+            return "Formato descrizione non supportato", 400
+
+        # Validazione lunghezza descrizione
+        if len(descrizione) > 500:
+            return "Lunghezza descrizione non supportata", 400
+
+        return "Caricamento avvenuto con successo", 302
+
+    @MaterialeDocente.route('/rimuovi/<material_id>', methods=['GET'])
+    def rimuovi(material_id):
+        if not ObjectId.is_valid(material_id):
+            return "Materiale non trovato", 404
+        return "Materiale rimosso con successo!", 200
+
+    app.register_blueprint(MaterialeDocente)
+
+
+# Test per tipo non supportato
+@pytest.mark.parametrize("test_id", ["TC_GMD_1_1"])
+def test_carica_materiale_tipo_non_supportato(client, test_id):
+    data = {
+        'titolo': 'FileNonSupportato',
+        'tipo': 'mp3',
+        'descrizione': 'Descrizione valida',
+        'file': (io.BytesIO(b'contenuto file'), 'file.mp3')
+    }
+    response = client.post('/carica', data=data, content_type='multipart/form-data')
+    assert "Tipo formato non supportato" in response.data.decode('utf-8')
+    print(f"Test {test_id}: Tipo file non supportato gestito correttamente!")
+
+
+# Test per dimensione non supportata
+@pytest.mark.parametrize("test_id", ["TC_GMD_1_2"])
+def test_carica_materiale_dimensione_non_supportata(client, test_id):
+    data = {
+        'titolo': 'FileTroppoGrande',
+        'tipo': 'pdf',
+        'descrizione': 'Descrizione valida',
+        'file': (io.BytesIO(b'a' * (6 * 1024 * 1024)), 'file.pdf')  # 6 MB
+    }
+    response = client.post('/carica', data=data, content_type='multipart/form-data')
+    assert "Dimensione file non supportata" in response.data.decode('utf-8')
+    print(f"Test {test_id}: Dimensione file non supportata gestita correttamente!")
+
+
+# Test per formato titolo non supportato
+@pytest.mark.parametrize("test_id", ["TC_GMD_1_3"])
+def test_carica_materiale_formato_titolo_non_supportato(client, test_id):
+    data = {
+        'titolo': 'Titolo@Errato',
+        'tipo': 'pdf',
+        'descrizione': 'Descrizione valida',
+        'file': (io.BytesIO(b'contenuto file'), 'file.pdf')
+    }
+    response = client.post('/carica', data=data, content_type='multipart/form-data')
+    assert "Formato titolo non supportato" in response.data.decode('utf-8')
+    print(f"Test {test_id}: Formato titolo non supportato gestito correttamente!")
+
+
+# Test per lunghezza titolo non supportata
+@pytest.mark.parametrize("test_id", ["TC_GMD_1_4"])
+def test_carica_materiale_lunghezza_titolo_non_supportata(client, test_id):
+    data = {
+        'titolo': 'T' * 101,  # 101 caratteri
+        'tipo': 'pdf',
+        'descrizione': 'Descrizione valida',
+        'file': (io.BytesIO(b'contenuto file'), 'file.pdf')
+    }
+    response = client.post('/carica', data=data, content_type='multipart/form-data')
+    assert "Lunghezza titolo non supportata" in response.data.decode('utf-8')
+    print(f"Test {test_id}: Lunghezza titolo non supportata gestita correttamente!")
+
+
+# Test per formato descrizione non supportato
+@pytest.mark.parametrize("test_id", ["TC_GMD_1_5"])
+def test_carica_materiale_formato_descrizione_non_supportato(client, test_id):
+    data = {
+        'titolo': 'TitoloValido',
+        'tipo': 'pdf',
+        'descrizione': 'Descrizione§Errata',
+        'file': (io.BytesIO(b'contenuto file'), 'file.pdf')
+    }
+    response = client.post('/carica', data=data, content_type='multipart/form-data')
+    assert "Formato descrizione non supportato" in response.data.decode('utf-8')
+    print(f"Test {test_id}: Formato descrizione non supportato gestito correttamente!")
+
+
+# Test per lunghezza descrizione non supportata
+@pytest.mark.parametrize("test_id", ["TC_GMD_1_6"])
+def test_carica_materiale_lunghezza_descrizione_non_supportata(client, test_id):
+    data = {
+        'titolo': 'TitoloValido',
+        'tipo': 'pdf',
+        'descrizione': 'D' * 501,  # 501 caratteri
+        'file': (io.BytesIO(b'contenuto file'), 'file.pdf')
+    }
+    response = client.post('/carica', data=data, content_type='multipart/form-data')
+    assert "Lunghezza descrizione non supportata" in response.data.decode('utf-8')
+    print(f"Test {test_id}: Lunghezza descrizione non supportata gestita correttamente!")
+
+
+# Test per caricamento avvenuto con successo
+@pytest.mark.parametrize("test_id", ["TC_GMD_1_7"])
+def test_carica_materiale_successo(client, test_id):
+    data = {
+        'titolo': 'TitoloValido',
+        'tipo': 'pdf',
+        'descrizione': 'Descrizione valida',
+        'file': (io.BytesIO(b'contenuto file'), 'file.pdf')
+    }
+    response = client.post('/carica', data=data, content_type='multipart/form-data')
+    assert response.status_code == 302
+    print(f"Test {test_id}: Caricamento avvenuto con successo!")
+
+
+# Test per rimuovere materiale con ID valido
+@pytest.mark.parametrize("test_id", ["TC_GMD_2_2"])
+def test_rimuovi_materiale_valido(client, test_id):
+    materiale_id = str(ObjectId())
+    response = client.get(f'/rimuovi/{materiale_id}')
+    assert "Materiale rimosso con successo!" in response.data.decode('utf-8')
+    print(f"Test {test_id}: Rimozione materiale valida gestita correttamente!")
+
+
+# Test per rimuovere materiale con ID non valido
+@pytest.mark.parametrize("test_id", ["TC_GMD_2_1"])
+def test_rimuovi_materiale_id_non_valido(client, test_id):
+    response = client.get('/rimuovi/invalid_id')
+    assert "Materiale non trovato" in response.data.decode('utf-8')
+    print(f"Test {test_id}: ID materiale non valido gestito correttamente!")

@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styleDashboardDoc.css') }}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/favicon-32x32.png') }}">
 </head>
 <body>
 {% include 'header.html' %}
@@ -20,7 +21,7 @@
                 <strong>{{ classe.Nome_Classe }}</strong>
                 <span>
                         <a class="pulsante"
-                           href="{{ url_for('dashboardDocente.classifica_classe', ID_Classe=classe.ID_Classe) }}">
+                           href="{{ url_for('dashboard.classifica_classe', ID_Classe=classe.ID_Classe) }}">
                             <button class="bottone">Classifica classe</button>
                         </a>
                         <a class="pulsante"

@@ -1,19 +1,27 @@
-from flask import Blueprint, session
-from app.controllers.DashboardControl import DashboardController
-from app.controllers.LoginControl import student_required
+from flask import Blueprint, render_template, jsonify, session
 
-# Crea il blueprint
-dashboard_bp = Blueprint('dashboard', __name__, template_folder='../templates')
+# Crea il blueprint per la dashboard dello studente
+student_dashboard_blueprint = Blueprint('dashboard', __name__, template_folder='../templates')
+
+class StudentDashboardView:
+    @staticmethod
+    def render_dashboard(classifica, punteggio_scenario, punteggio_quiz, punteggio_totale, storico):
+        """
+        Mostra la dashboard dello studente con classifica, punteggi e storico.
+        """
+        return render_template(
+            "dashboardStudente.html",
+            classifica=classifica,
+            punteggio_scenario=punteggio_scenario,
+            punteggio_quiz=punteggio_quiz,
+            punteggio_totale=punteggio_totale,
+            storico=storico
+        )
 
 
-# Rotta per la dashboard
-@dashboard_bp.route('/dashboard')
-@student_required
-def dashboard_studente():
-    """
-    Visualizza la dashboard per un utente specifico.
-    """
-    cf_studente = session.get('cf')
-    id_classe = session.get('ID_Classe')
-    # Usa il controller per ottenere i dati
-    return DashboardController.mostra_dashboard(cf_studente, id_classe)
+    @staticmethod
+    def render_errore(messaggio, codice_http):
+        """
+        Mostra un errore generico per le pagine dello studente.
+        """
+        return jsonify({"error": messaggio}), codice_http

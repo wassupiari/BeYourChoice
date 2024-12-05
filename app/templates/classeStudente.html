@@ -7,6 +7,7 @@
     <title>Classe</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styleClasse.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/favicon-32x32.png') }}">
 </head>
 
 <body>
@@ -69,13 +70,13 @@
             </a>
         </div>
         <div class="sidebar-item">
-            <a href="{{ url_for('classedocente.Manutenzione') }}" class="nav-link">
+            <a href="{{ url_for('classedocente.Manutenzione') }}">
                 <i class="fas fa-globe"></i>
                 <span>Scenari</span>
             </a>
         </div>
         <div class="sidebar-item">
-            <a href="{{ url_for('classedocente.Manutenzione') }}" class="nav-link">
+            <a href="{{ url_for('classedocente.Manutenzione') }}" >
                 <i class="fas fa-trophy"></i>
                 <span>Achievement</span>
             </a>

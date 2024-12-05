@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Materiale Studente</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styleMaterialeDidattico.css') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/favicon-32x32.png') }}">
 </head>
 <body>
     {% include 'header.html' %}
 
-    <main>
+    <div class="main">
         <h2>MATERIALE DIDATTICO</h2>
 
         {% if materiali %}
@@ -30,6 +31,6 @@
             <p class="empty-message">Nessun materiale presente.</p>
         {% endif %}
 
-    </main>
+    </div>
 </body>
 </html>

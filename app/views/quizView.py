@@ -64,3 +64,10 @@ class QuizView:
         Mostra l'ultimo quiz disponibile per una classe.
         """
         return render_template("quizDisponibile.html", quiz=quiz)
+
+    @staticmethod
+    def mostra_errore(messaggio, codice_http=403):
+        """
+        Mostra un messaggio di errore con un codice HTTP.
+        """
+        return render_template("errore.html", messaggio=messaggio), codice_http

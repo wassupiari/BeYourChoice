@@ -21,7 +21,7 @@
                     <i class="fas fa-user"></i><br>
                     <span>Profilo</span>
                 </a>
-                <a href="{{ url_for('dashboardDocente.dashboard') }}" class="nav-link">
+                <a href="{{ url_for('dashboard.dashboard_docente') if session.get('role') == 'docente' else url_for('dashboard.dashboard_studente') }}" class="nav-link">
                     <i class="fas fa-cubes"></i><br>
                     <span>Dashboard</span>
                 </a>
