@@ -15,6 +15,7 @@ from app.models.attivitaModel import Attivita
 from app.views.materialeDocente import initialize_materiale_docente_blueprint
 from app.views.materialeStudente import initialize_materiale_studente_blueprint
 from app.views.profilo import initialize_profilo_blueprint
+from databaseManager import DatabaseManager
 
 # Crea l'applicazione Flask
 app = Flask(__name__, template_folder='app/templates', static_folder="public")
@@ -77,6 +78,7 @@ initialize_materiale_docente_blueprint(app)
 initialize_materiale_studente_blueprint(app)
 
 initialize_profilo_blueprint(app)
+
 
 # Avvio del server
 if __name__ == "__main__":

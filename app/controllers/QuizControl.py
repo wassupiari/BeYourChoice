@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from flask import Blueprint, request, session, jsonify
-from app.models.quizModel import QuizModel, db_manager
+from app.models.quizModel import QuizModel
 from app.views.quizView import QuizView
 from app.controllers.LoginControl import teacher_required, student_required
 import os

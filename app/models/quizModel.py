@@ -1,12 +1,14 @@
 from datetime import datetime, timedelta
 import openai
-from flask import session, make_response, request
+from flask import session
 from databaseManager import DatabaseManager
 
-db_manager = DatabaseManager()
+
 
 
 class QuizModel:
+
+    db_manager = DatabaseManager()
 
     @staticmethod
     def parse_domanda(domanda_testo):
@@ -92,8 +94,8 @@ class QuizModel:
     def salva_quiz(data):
         """Salva un quiz e le sue domande nel database."""
         try:
-            quiz_collection = db_manager.get_collection("Quiz")
-            questions_collection = db_manager.get_collection("Domanda")
+            quiz_collection = QuizModel.db_manager.get_collection("Quiz")
+            questions_collection = QuizModel.db_manager.get_collection("Domanda")
 
             id_classe = session.get("ID_Classe")
             if not id_classe:
@@ -128,7 +130,7 @@ class QuizModel:
     def recupera_domande(question_ids):
         """Recupera le domande dal database in base agli ID."""
         try:
-            questions_collection = db_manager.get_collection("Domanda")
+            questions_collection = QuizModel.db_manager.get_collection("Domanda")
             return list(questions_collection.find({"ID_Domanda": {"$in": question_ids}}))
         except Exception as e:
             raise ValueError(f"Errore durante il recupero delle domande: {e}")
@@ -137,7 +139,7 @@ class QuizModel:
     def recupera_quiz(quiz_id):
         """Recupera un quiz in base al suo ID."""
         try:
-            quiz_collection = db_manager.get_collection("Quiz")
+            quiz_collection = QuizModel.db_manager.get_collection("Quiz")
             quiz = quiz_collection.find_one({"ID_Quiz": quiz_id})
             if not quiz:
                 raise ValueError("Quiz non trovato.")
@@ -150,7 +152,7 @@ class QuizModel:
     def recupera_quiz_per_classe(id_classe):
         """Recupera tutti i quiz per una classe specifica."""
         try:
-            quiz_collection = db_manager.get_collection("Quiz")
+            quiz_collection = QuizModel.db_manager.get_collection("Quiz")
             quiz_list = list(quiz_collection.find({"ID_Classe": id_classe}))
             for quiz in quiz_list:
                 quiz["_id"] = str(quiz["_id"])  # Convert ObjectId
@@ -162,7 +164,7 @@ class QuizModel:
     def recupera_risultati_per_quiz(quiz_id):
         """Recupera i risultati di un quiz."""
         try:
-            risultati_collection = db_manager.get_collection("RisultatoQuiz")
+            risultati_collection = QuizModel.db_manager.get_collection("RisultatoQuiz")
             return list(risultati_collection.find({"ID_Quiz": quiz_id}))
         except Exception as e:
             raise ValueError(f"Errore durante il recupero dei risultati: {e}")
@@ -171,8 +173,8 @@ class QuizModel:
     def recupera_ultimo_quiz(id_classe, cf_studente):
         """Recupera l'ultimo quiz non completato da uno studente."""
         try:
-            quiz_collection = db_manager.get_collection("Quiz")
-            dashboard_collection = db_manager.get_collection("Dashboard")
+            quiz_collection = QuizModel.db_manager.get_collection("Quiz")
+            dashboard_collection = QuizModel.db_manager.get_collection("Dashboard")
 
             ultimo_quiz = quiz_collection.find_one(
                 {"ID_Classe": id_classe},
@@ -195,7 +197,7 @@ class QuizModel:
     def recupera_studenti_classe(id_classe):
         """Recupera tutti gli studenti di una classe."""
         try:
-            studenti_collection = db_manager.get_collection("Studente")
+            studenti_collection = QuizModel.db_manager.get_collection("Studente")
             return list(studenti_collection.find({"ID_Classe": id_classe}))
         except Exception as e:
             raise ValueError(f"Errore durante il recupero degli studenti: {e}")
@@ -208,7 +210,7 @@ class QuizModel:
         :return: Lista di attività completate
         """
         try:
-            dashboard_collection = db_manager.get_collection("Dashboard")
+            dashboard_collection = QuizModel.db_manager.get_collection("Dashboard")
             return list(dashboard_collection.find({
                 "Descrizione_Attività": {"$regex": f"Completamento Quiz: {titolo_quiz}"}
             }))
@@ -220,17 +222,16 @@ class QuizModel:
         """
         Calcola il tempo rimanente per un quiz specifico.
         """
-        quiz_collection = db_manager.get_collection("Quiz")
-        session_collection = db_manager.get_collection("SessioniQuiz")
+        quiz_collection = QuizModel.db_manager.get_collection("Quiz")
 
         # Recupera l'ora di inizio dal database o impostala
-        sessione = session_collection.find_one({"ID_Quiz": quiz_id, "CF_Studente": cf_studente})
+        sessione = quiz_collection.find_one({"ID_Quiz": quiz_id, "CF_Studente": cf_studente})
         ora_attuale = datetime.utcnow()
 
         if not sessione:
             # Se la sessione non esiste, creala
             ora_inizio = ora_attuale
-            session_collection.insert_one({"ID_Quiz": quiz_id, "CF_Studente": cf_studente, "Ora_Inizio": ora_inizio})
+            quiz_collection.insert_one({"ID_Quiz": quiz_id, "CF_Studente": cf_studente, "Ora_Inizio": ora_inizio})
         else:
             ora_inizio = sessione["Ora_Inizio"]
 
@@ -254,9 +255,9 @@ class QuizModel:
         """
         try:
             # Collezioni necessarie
-            quiz_results_collection = db_manager.get_collection("RisultatoQuiz")
-            attività_collection = db_manager.get_collection("Dashboard")
-            quiz_collection = db_manager.get_collection("Quiz")
+            quiz_results_collection = QuizModel.db_manager.get_collection("RisultatoQuiz")
+            attività_collection = QuizModel.db_manager.get_collection("Dashboard")
+            quiz_collection = QuizModel.db_manager.get_collection("Quiz")
 
             # Salva il risultato del quiz
             quiz_results_collection.insert_one(quiz_result)
@@ -288,7 +289,7 @@ class QuizModel:
         Verifica se uno studente ha già completato un quiz specifico.
         """
         try:
-            risultati_collection = db_manager.get_collection("RisultatoQuiz")
+            risultati_collection = QuizModel.db_manager.get_collection("RisultatoQuiz")
             risultato = risultati_collection.find_one({"ID_Quiz": quiz_id, "CF_Studente": cf_studente})
             return risultato is not None  # Restituisce True se il quiz è completato
         except Exception as e:
