@@ -14,7 +14,7 @@ ALLOWED_EXTENSIONS = {'docx', 'pdf', 'jpeg', 'png', 'txt', 'jpg', 'mp4'}
 
 # Supponiamo che DatabaseManager sia il manager db richiesto
 
-db_manager = DatabaseManager()  # <--- Inizializza qui il tuo db_manager con l'URI
+db_manager = DatabaseManager()
 
 # Passa l'istanza di db_manager a MaterialeModel
 materiale_control = MaterialeControl(db_manager)
