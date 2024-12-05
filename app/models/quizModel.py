@@ -216,46 +216,33 @@ class QuizModel:
             raise ValueError(f"Errore durante il recupero delle attività completate: {e}")
 
     @staticmethod
-    def recupera_o_imposta_ora_inizio(quiz_id, cf_studente):
+    def calcola_tempo_rimanente(quiz_id, cf_studente):
         """
-        Recupera o imposta l'ora di inizio per lo studente che sta eseguendo il quiz utilizzando i cookie.
-        :param quiz_id: ID del quiz.
-        :param cf_studente: Codice fiscale dello studente.
-        :return: Ora di inizio (datetime) e tempo rimanente (in secondi).
+        Calcola il tempo rimanente per un quiz specifico.
         """
-        try:
-            cookie_name = f"quiz_{quiz_id}_start_time"
+        quiz_collection = db_manager.get_collection("Quiz")
+        session_collection = db_manager.get_collection("SessioniQuiz")
 
-            # Recupera l'ora di inizio dal cookie
-            ora_inizio_cookie = request.cookies.get(cookie_name)
+        # Recupera l'ora di inizio dal database o impostala
+        sessione = session_collection.find_one({"ID_Quiz": quiz_id, "CF_Studente": cf_studente})
+        ora_attuale = datetime.utcnow()
 
-            if ora_inizio_cookie:
-                # Converti l'ora di inizio dal cookie in oggetto datetime
-                ora_inizio = datetime.fromisoformat(ora_inizio_cookie)
-            else:
-                # Imposta l'ora di inizio corrente se non esiste il cookie
-                ora_inizio = datetime.utcnow()
+        if not sessione:
+            # Se la sessione non esiste, creala
+            ora_inizio = ora_attuale
+            session_collection.insert_one({"ID_Quiz": quiz_id, "CF_Studente": cf_studente, "Ora_Inizio": ora_inizio})
+        else:
+            ora_inizio = sessione["Ora_Inizio"]
 
-            # Recupera la durata del quiz dal database
-            quiz_collection = db_manager.get_collection("Quiz")
-            quiz = quiz_collection.find_one({"ID_Quiz": quiz_id})
-            if not quiz:
-                raise ValueError("Quiz non trovato.")
-            durata_quiz = quiz["Durata"]
+        # Recupera la durata del quiz
+        quiz = quiz_collection.find_one({"ID_Quiz": quiz_id})
+        durata_quiz = quiz["Durata"] if quiz else 30  # Default a 30 minuti
 
-            # Calcola il tempo rimanente
-            fine_quiz = ora_inizio + timedelta(minutes=durata_quiz)
-            tempo_rimanente = max(0, int((fine_quiz - datetime.utcnow()).total_seconds()))
+        # Calcola il tempo rimanente in secondi
+        fine_quiz = ora_inizio + timedelta(minutes=durata_quiz)
+        tempo_rimanente = max(0, int((fine_quiz - ora_attuale).total_seconds()))
 
-            # Se non esisteva il cookie, lo imposta
-            if not ora_inizio_cookie:
-                response = make_response({"message": "Ora di inizio impostata."})
-                response.set_cookie(cookie_name, ora_inizio.isoformat(), max_age=durata_quiz * 60)
-                return ora_inizio, tempo_rimanente, response
-
-            return ora_inizio, tempo_rimanente, None
-        except Exception as e:
-            raise ValueError(f"Errore durante la gestione della sessione del quiz: {e}")
+        return tempo_rimanente
 
     @staticmethod
     def salva_risultato_quiz(quiz_result, cf_studente, punteggio):
@@ -294,3 +281,17 @@ class QuizModel:
             print(f"DEBUG: Risultato del quiz e attività salvati correttamente per lo studente {cf_studente}")
         except Exception as e:
             raise ValueError(f"Errore durante il salvataggio del risultato: {e}")
+
+    @staticmethod
+    def verifica_completamento_quiz(quiz_id, cf_studente):
+        """
+        Verifica se uno studente ha già completato un quiz specifico.
+        """
+        try:
+            risultati_collection = db_manager.get_collection("RisultatoQuiz")
+            risultato = risultati_collection.find_one({"ID_Quiz": quiz_id, "CF_Studente": cf_studente})
+            return risultato is not None  # Restituisce True se il quiz è completato
+        except Exception as e:
+            print(f"ERRORE durante la verifica del completamento del quiz: {e}")
+            return False
+

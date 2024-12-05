@@ -72,38 +72,32 @@ def salva_quiz():
 @student_required
 def visualizza_quiz(quiz_id):
     """
-    Visualizza un quiz e gestisce il tempo rimanente per ogni studente utilizzando i cookie.
+    Mostra la pagina del quiz solo se lo studente non lo ha già completato.
     """
     try:
-        # Recupera il CF dello studente dalla sessione
         cf_studente = session.get('cf')
         if not cf_studente:
             return QuizView.mostra_errore("CF dello studente non trovato nella sessione", 403)
 
-        # Recupera o imposta l'ora di inizio per lo studente
-        ora_inizio, tempo_rimanente, response = QuizModel.recupera_o_imposta_ora_inizio(quiz_id, cf_studente)
-        print(f"DEBUG: Ora inizio: {ora_inizio}, Tempo rimanente: {tempo_rimanente}")
+        # Controlla se lo studente ha già completato il quiz
+        if QuizModel.verifica_completamento_quiz(quiz_id, cf_studente):
+            return QuizView.mostra_errore("Hai già completato questo quiz.", 403)
 
-        # Recupera il quiz e le domande
+        # Recupera i dati del quiz
         quiz = QuizModel.recupera_quiz(quiz_id)
         if not quiz:
             return QuizView.mostra_errore("Quiz non trovato", 404)
 
-        question_ids = [domanda["ID_Domanda"] for domanda in quiz["Domande"]]
-        domande = QuizModel.recupera_domande(question_ids)
+        domande = QuizModel.recupera_domande([d["ID_Domanda"] for d in quiz["Domande"]])
+        tempo_rimanente = QuizModel.calcola_tempo_rimanente(quiz_id, cf_studente)
 
-        # Genera la risposta HTML
-        response_data = QuizView.mostra_quiz(quiz, domande, tempo_rimanente)
-
-        # Se esiste un oggetto Response da impostare, aggiungi i cookie
-        if response:
-            response.set_data(response_data)  # Imposta la stringa HTML come contenuto
-            return response
-
-        return response_data  # Restituisci direttamente la stringa HTML se non ci sono cookie
+        return QuizView.mostra_quiz(quiz, domande, tempo_rimanente)
     except Exception as e:
         print(f"ERRORE: {e}")
-        return QuizView.mostra_errore("Errore durante il caricamento del quiz")
+        return QuizView.mostra_errore("Errore durante il caricamento del quiz", 500)
+
+
+
 
 
 
@@ -114,38 +108,48 @@ def visualizza_quiz(quiz_id):
 def valuta_quiz():
     """
     Valuta le risposte inviate dal form del quiz e salva il risultato.
-    Restituisce il punteggio allo studente in formato JSON.
     """
     try:
+        # Recupera il CF dello studente dalla sessione
         cf_studente = session.get('cf')
         if not cf_studente:
-            return jsonify({"error": "CF dello studente non trovato in sessione"}), 400
+            return jsonify({"error": "CF dello studente non trovato nella sessione"}), 400
 
+        # Recupera i dati della richiesta
         data = request.get_json()
         if not data:
             return jsonify({"error": "Nessuna risposta ricevuta"}), 400
 
+        # Estrai gli ID delle domande
         question_ids = [int(key[1:]) for key in data.keys() if key.startswith("q")]
+        if not question_ids:
+            return jsonify({"error": "Nessuna domanda valida trovata"}), 400
+
+        # Recupera le domande dal database
         domande = QuizModel.recupera_domande(question_ids)
         totale = len(domande)
-
         if totale == 0:
-            return jsonify({"error": "Nessuna domanda valida trovata per il quiz"}), 400
+            return jsonify({"error": "Nessuna domanda trovata nel database"}), 400
 
+        # Valuta le risposte
         corrette = 0
         for domanda in domande:
             risposta_utente = data.get(f"q{domanda['ID_Domanda']}")
             if risposta_utente == domanda["Risposta_Corretta"]:
                 corrette += 1
 
+        # Calcola il punteggio
         punteggio = int((corrette / totale) * 100)
 
+        # Prepara il risultato del quiz
         quiz_result = {
             "ID_Quiz": domande[0]["ID_Quiz"],
             "CF_Studente": cf_studente,
             "Punteggio_Quiz": punteggio,
             "Risposte": [data.get(f"q{d['ID_Domanda']}") for d in domande]
         }
+
+        # Salva il risultato del quiz
         QuizModel.salva_risultato_quiz(quiz_result, cf_studente, punteggio)
 
         return jsonify({
@@ -155,8 +159,9 @@ def valuta_quiz():
             "totale": totale
         })
     except Exception as e:
-        print(f"ERRORE: {e}")
+        print(f"ERRORE durante la valutazione del quiz: {e}")
         return jsonify({"error": "Errore durante la valutazione del quiz"}), 500
+
 
 
 
