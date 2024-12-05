@@ -234,7 +234,6 @@ class QuizModel:
         if not sessione:
             # Se la sessione non esiste, creala
             ora_inizio = ora_attuale
-            quiz_collection.insert_one({"ID_Quiz": quiz_id, "CF_Studente": cf_studente, "Ora_Inizio": ora_inizio})
         else:
             ora_inizio = sessione["Ora_Inizio"]
 
