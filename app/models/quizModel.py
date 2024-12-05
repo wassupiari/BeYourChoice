@@ -8,7 +8,7 @@ from databaseManager import DatabaseManager
 
 class QuizModel:
 
-    db_manager = DatabaseManager()
+    db_manager = DatabaseManager(db_name="BeYourChoice;")
 
     @staticmethod
     def parse_domanda(domanda_testo):
