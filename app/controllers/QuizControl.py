@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from flask import Blueprint, request, session
+from flask import Blueprint, request, session, jsonify
 from app.models.quizModel import QuizModel, db_manager
 from app.views.quizView import QuizView
 from app.controllers.LoginControl import teacher_required, student_required
@@ -68,45 +68,44 @@ def salva_quiz():
 
 
 
-
 @quiz_blueprint.route('/quiz/<int:quiz_id>', methods=['GET'])
 @student_required
 def visualizza_quiz(quiz_id):
     """
-    Visualizza un quiz e le sue domande.
+    Visualizza un quiz e gestisce il tempo rimanente per ogni studente utilizzando i cookie.
     """
     try:
-        print(f"DEBUG: Caricamento quiz con ID: {quiz_id}")
+        # Recupera il CF dello studente dalla sessione
+        cf_studente = session.get('cf')
+        if not cf_studente:
+            return QuizView.mostra_errore("CF dello studente non trovato nella sessione", 403)
 
-        # Recupera il quiz dal database
+        # Recupera o imposta l'ora di inizio per lo studente
+        ora_inizio, tempo_rimanente, response = QuizModel.recupera_o_imposta_ora_inizio(quiz_id, cf_studente)
+        print(f"DEBUG: Ora inizio: {ora_inizio}, Tempo rimanente: {tempo_rimanente}")
+
+        # Recupera il quiz e le domande
         quiz = QuizModel.recupera_quiz(quiz_id)
         if not quiz:
-            print("DEBUG: Quiz non trovato")
             return QuizView.mostra_errore("Quiz non trovato", 404)
 
-        print(f"DEBUG: Quiz trovato: {quiz}")
+        question_ids = [domanda["ID_Domanda"] for domanda in quiz["Domande"]]
+        domande = QuizModel.recupera_domande(question_ids)
 
-        # Recupera o assegna l'ora di inizio
-        if "Ora_Inizio" not in quiz:
-            quiz["Ora_Inizio"] = datetime.utcnow().isoformat()
-            print(f"DEBUG: Ora inizio assegnata: {quiz['Ora_Inizio']}")
-            db_manager.get_collection("Quiz").update_one(
-                {"ID_Quiz": quiz_id}, {"$set": {"Ora_Inizio": quiz["Ora_Inizio"]}}
-            )
+        # Genera la risposta HTML
+        response_data = QuizView.mostra_quiz(quiz, domande, tempo_rimanente)
 
-        # Calcola il tempo rimanente
-        tempo_rimanente = QuizModel.calcola_tempo_rimanente(quiz)
-        print(f"DEBUG: Tempo rimanente: {tempo_rimanente} secondi")
+        # Se esiste un oggetto Response da impostare, aggiungi i cookie
+        if response:
+            response.set_data(response_data)  # Imposta la stringa HTML come contenuto
+            return response
 
-        # Recupera le domande del quiz
-        question_ids = [d["ID_Domanda"] for d in quiz["Domande"]]
-        questions = QuizModel.recupera_domande(question_ids)
-        print(f"DEBUG: Domande recuperate: {questions}")
-
-        return QuizView.mostra_quiz(quiz, questions, tempo_rimanente)
+        return response_data  # Restituisci direttamente la stringa HTML se non ci sono cookie
     except Exception as e:
         print(f"ERRORE: {e}")
         return QuizView.mostra_errore("Errore durante il caricamento del quiz")
+
+
 
 
 
@@ -115,66 +114,50 @@ def visualizza_quiz(quiz_id):
 def valuta_quiz():
     """
     Valuta le risposte inviate dal form del quiz e salva il risultato.
+    Restituisce il punteggio allo studente in formato JSON.
     """
     try:
-        # Recupera il CF dello studente dalla sessione
         cf_studente = session.get('cf')
         if not cf_studente:
-            print("DEBUG: CF dello studente non trovato in sessione")
-            return QuizView.mostra_errore("CF dello studente non trovato in sessione", 400)
+            return jsonify({"error": "CF dello studente non trovato in sessione"}), 400
 
-        # Recupera le risposte inviate
         data = request.get_json()
         if not data:
-            print("DEBUG: Nessuna risposta ricevuta")
-            return QuizView.mostra_errore("Nessuna risposta ricevuta", 400)
+            return jsonify({"error": "Nessuna risposta ricevuta"}), 400
 
-        # Filtra solo le chiavi che iniziano con "q" per estrarre gli ID delle domande
         question_ids = [int(key[1:]) for key in data.keys() if key.startswith("q")]
-        if not question_ids:
-            print("DEBUG: Nessuna domanda trovata nelle risposte")
-            return QuizView.mostra_errore("Nessuna domanda trovata", 400)
-
-        print(f"DEBUG: Domande trovate: {question_ids}")
-
-        # Recupera le domande
         domande = QuizModel.recupera_domande(question_ids)
         totale = len(domande)
+
         if totale == 0:
-            print("DEBUG: Nessuna domanda valida trovata per il quiz")
-            return QuizView.mostra_errore("Nessuna domanda valida trovata per il quiz", 400)
+            return jsonify({"error": "Nessuna domanda valida trovata per il quiz"}), 400
 
-        print(f"DEBUG: Domande recuperate dal database: {domande}")
-
-        # Valutazione delle risposte
         corrette = 0
-        risposte_utente = []
         for domanda in domande:
             risposta_utente = data.get(f"q{domanda['ID_Domanda']}")
-            risposte_utente.append(risposta_utente)
             if risposta_utente == domanda["Risposta_Corretta"]:
                 corrette += 1
 
-        print(f"DEBUG: Risposte corrette: {corrette}/{totale}")
-
-        # Calcolo del punteggio
         punteggio = int((corrette / totale) * 100)
 
-        # Salva il risultato del quiz e registra l'attività
         quiz_result = {
             "ID_Quiz": domande[0]["ID_Quiz"],
             "CF_Studente": cf_studente,
             "Punteggio_Quiz": punteggio,
-            "Risposte": risposte_utente
+            "Risposte": [data.get(f"q{d['ID_Domanda']}") for d in domande]
         }
         QuizModel.salva_risultato_quiz(quiz_result, cf_studente, punteggio)
 
-        print("DEBUG: Risultato del quiz salvato correttamente")
-
-        return QuizView.mostra_messaggio(f"Hai ottenuto un punteggio di {punteggio}%. Domande corrette: {corrette}/{totale}")
+        return jsonify({
+            "message": f"Hai ottenuto un punteggio di {punteggio}%. Domande corrette: {corrette}/{totale}",
+            "punteggio": punteggio,
+            "corrette": corrette,
+            "totale": totale
+        })
     except Exception as e:
         print(f"ERRORE: {e}")
-        return QuizView.mostra_errore("Errore durante la valutazione del quiz")
+        return jsonify({"error": "Errore durante la valutazione del quiz"}), 500
+
 
 
 @quiz_blueprint.route('/quiz/<int:quiz_id>/domande', methods=['GET'])

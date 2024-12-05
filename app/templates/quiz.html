@@ -10,25 +10,25 @@
 <body>
     <header class="main-header">
         <div class="logo">
-                <img src="{{ url_for('static', filename='img/Logo.png') }}" width="20%" >
+            <img src="{{ url_for('static', filename='img/Logo.png') }}" width="20%">
         </div>
         <div class="user-info">
-                <span style="font-size: 1.2rem;">Ciao, <strong>{{ session.get("Nome") }}</strong></span>
-                <!-- Form per il logout -->
-                <form action="{{ url_for('login.logout') }}" method="POST" style="display:inline;">
-                    <button type="submit" class="logout-button" style="background: none; border: none; cursor: pointer;">
-                        <i class="fa-solid fa-person-walking-luggage"></i><br>
-                        <span>Logout</span>
-                    </button>
-                </form>
+            <span style="font-size: 1.2rem;">Ciao, <strong>{{ session.get("Nome") }}</strong></span>
+            <!-- Form per il logout -->
+            <form action="{{ url_for('login.logout') }}" method="POST" style="display:inline;">
+                <button type="submit" class="logout-button" style="background: none; border: none; cursor: pointer;">
+                    <i class="fa-solid fa-person-walking-luggage"></i><br>
+                    <span>Logout</span>
+                </button>
+            </form>
         </div>
     </header>
     <div class="container">
         <h1>{{ quiz.Argomento }}</h1>
         <p><strong>Durata:</strong> {{ quiz.Durata }} minuti</p>
         <p><strong>Tempo rimanente:</strong>
-          <span id="timer-minutes">{{ tempo_rimanente // 60 }}</span> minuti e
-          <span id="timer-seconds">{{ tempo_rimanente % 60 }}</span> secondi
+            <span id="timer-minutes">{{ tempo_rimanente // 60 }}</span> minuti e
+            <span id="timer-seconds">{{ tempo_rimanente % 60 }}</span> secondi
         </p>
 
         <form id="quiz-form">
@@ -49,6 +49,15 @@
             <button type="submit" id="submit-btn" class="btn">Invia Risposte</button>
         </form>
     </div>
+
+    <!-- Modale per il risultato -->
+    <div id="result-modal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); z-index: 1000;">
+        <h2>Risultato del Quiz</h2>
+        <p id="result-message"></p>
+        <button id="close-modal" class="btn" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">Chiudi</button>
+    </div>
+    <div id="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 999;"></div>
+
     <script>
         // Timer
         const timerMinutesElement = document.getElementById('timer-minutes');
@@ -64,9 +73,9 @@
                 timerMinutesElement.textContent = "0";
                 timerSecondsElement.textContent = "0";
                 timerMinutesElement.parentElement.innerHTML = "Tempo scaduto!";
-                submitButton.disabled = true; // Disabilita il pulsante
+                document.getElementById('submit-btn').disabled = true;
                 const inputs = quizForm.querySelectorAll('input');
-                inputs.forEach(input => input.disabled = true); // Disabilita tutte le opzioni
+                inputs.forEach(input => input.disabled = true);
             } else {
                 if (secondsRemaining === 0) {
                     minutesRemaining -= 1;
@@ -75,33 +84,51 @@
                     secondsRemaining -= 1;
                 }
 
-                // Aggiorna il timer nel DOM
                 timerMinutesElement.textContent = minutesRemaining;
                 timerSecondsElement.textContent = secondsRemaining.toString().padStart(2, '0');
             }
         }, 1000);
 
+        // Gestione del modulo
         document.getElementById('quiz-form').addEventListener('submit', async function (event) {
-        event.preventDefault();
+            event.preventDefault();
 
-        const formData = new FormData(this);
-        const jsonData = {};
-        formData.forEach((value, key) => jsonData[key] = value);
+            const formData = new FormData(this);
+            const jsonData = {};
+            formData.forEach((value, key) => jsonData[key] = value);
 
-        try {
-            const response = await fetch('/valuta-quiz', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(jsonData)
-            });
+            try {
+                const response = await fetch("{{ url_for('quiz.valuta_quiz') }}", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(jsonData)
+                });
 
-            const result = await response.json();
-            alert(result.message);
-        } catch (error) {
-            alert("Errore durante l'invio delle risposte. Riprova.");
-            console.error("Errore:", error);
-        }
+                const result = await response.json();
+                if (result.error) {
+                    alert(result.error);
+                    return;
+                }
 
+                // Mostra il popup con il risultato
+                document.getElementById('result-message').innerText = result.message;
+                document.getElementById('result-modal').style.display = 'block';
+                document.getElementById('modal-overlay').style.display = 'block';
+
+                // Reindirizza alla pagina del quiz disponibile dopo 5 secondi
+                setTimeout(() => {
+                    window.location.href = "{{ url_for('quiz.visualizza_ultimo_quiz') }}";
+                }, 5000);
+            } catch (error) {
+                alert("Errore durante l'invio delle risposte. Riprova.");
+                console.error("Errore:", error);
+            }
+        });
+
+        // Chiusura del popup
+        document.getElementById('close-modal').addEventListener('click', function () {
+            document.getElementById('result-modal').style.display = 'none';
+            document.getElementById('modal-overlay').style.display = 'none';
         });
     </script>
 </body>

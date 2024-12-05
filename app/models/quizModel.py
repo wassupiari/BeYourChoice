@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 import openai
-from flask import session
+from flask import session, make_response, request
 from databaseManager import DatabaseManager
 
 db_manager = DatabaseManager()
@@ -216,18 +216,46 @@ class QuizModel:
             raise ValueError(f"Errore durante il recupero delle attività completate: {e}")
 
     @staticmethod
-    def calcola_tempo_rimanente(quiz):
-        """Calcola il tempo rimanente per completare un quiz."""
+    def recupera_o_imposta_ora_inizio(quiz_id, cf_studente):
+        """
+        Recupera o imposta l'ora di inizio per lo studente che sta eseguendo il quiz utilizzando i cookie.
+        :param quiz_id: ID del quiz.
+        :param cf_studente: Codice fiscale dello studente.
+        :return: Ora di inizio (datetime) e tempo rimanente (in secondi).
+        """
         try:
-            ora_inizio = datetime.fromisoformat(quiz["Ora_Inizio"])
+            cookie_name = f"quiz_{quiz_id}_start_time"
+
+            # Recupera l'ora di inizio dal cookie
+            ora_inizio_cookie = request.cookies.get(cookie_name)
+
+            if ora_inizio_cookie:
+                # Converti l'ora di inizio dal cookie in oggetto datetime
+                ora_inizio = datetime.fromisoformat(ora_inizio_cookie)
+            else:
+                # Imposta l'ora di inizio corrente se non esiste il cookie
+                ora_inizio = datetime.utcnow()
+
+            # Recupera la durata del quiz dal database
+            quiz_collection = db_manager.get_collection("Quiz")
+            quiz = quiz_collection.find_one({"ID_Quiz": quiz_id})
+            if not quiz:
+                raise ValueError("Quiz non trovato.")
             durata_quiz = quiz["Durata"]
-            fine = ora_inizio + timedelta(minutes=durata_quiz)
-            tempo_rimanente = max(0, (fine - datetime.utcnow()).total_seconds())
-            return int(tempo_rimanente)
-        except KeyError as e:
-            raise ValueError(f"Errore nel calcolo del tempo rimanente: campo mancante {e}")
+
+            # Calcola il tempo rimanente
+            fine_quiz = ora_inizio + timedelta(minutes=durata_quiz)
+            tempo_rimanente = max(0, int((fine_quiz - datetime.utcnow()).total_seconds()))
+
+            # Se non esisteva il cookie, lo imposta
+            if not ora_inizio_cookie:
+                response = make_response({"message": "Ora di inizio impostata."})
+                response.set_cookie(cookie_name, ora_inizio.isoformat(), max_age=durata_quiz * 60)
+                return ora_inizio, tempo_rimanente, response
+
+            return ora_inizio, tempo_rimanente, None
         except Exception as e:
-            raise ValueError(f"Errore nel calcolo del tempo rimanente: {e}")
+            raise ValueError(f"Errore durante la gestione della sessione del quiz: {e}")
 
     @staticmethod
     def salva_risultato_quiz(quiz_result, cf_studente, punteggio):
