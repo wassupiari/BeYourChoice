@@ -1,58 +1,47 @@
-from flask import render_template, request, flash, Blueprint, session
-
-from app.controllers.LoginControl import student_required, teacher_required
-from app.controllers.ProfiloControl import ProfiloControl
+from flask import render_template, request, flash, Blueprint, session, redirect, url_for
+from app.models.profiloModel import ProfiloModel
 from databaseManager import DatabaseManager
 
-
 db_manager = DatabaseManager()
-
-profilo_control: ProfiloControl = ProfiloControl(db_manager)
+profilo_model = ProfiloModel(db_manager)
 
 profilo = Blueprint('profilo', __name__)
+
 
 def initialize_profilo_blueprint(app):
     @profilo.route('/change_password_docente', methods=['POST'])
     def change_password_docente():
         vecchia_password = request.form['old_password']
         nuova_password = request.form['new_password']
-        email = session.get('email')
-
-        return profilo_control.cambia_password_docente(vecchia_password, nuova_password)
+        return profilo_model.cambia_password_docente(vecchia_password, nuova_password)
 
     @profilo.route('/change_password_studente', methods=['POST'])
-
     def change_password_studente():
         vecchia_password = request.form['old_password']
         nuova_password = request.form['new_password']
-        email = session.get('email')
-
-        return profilo_control.cambia_password_studente(vecchia_password, nuova_password)
+        return profilo_model.cambia_password_studente(vecchia_password, nuova_password)
 
     @profilo.route('/gestione', methods=['GET', 'POST'])
-
     def gestione_profilo():
         email = session.get('email')
         if not email:
             app.logger.info('Nessuna email trovata nella sessione.')
+            return redirect(url_for('login'))
 
         if request.method == 'POST':
             nuovi_dati = request.form.to_dict()
-            # Determina il tipo di utente: studente o docente
-            if 'ruolo' in request.form and request.form['ruolo'] == 'docente':
-                if profilo_control.update_profilo_docente(email, nuovi_dati):
-                    flash('Profilo Docente aggiornato con successo!', 'success')
-                else:
-                    flash('Errore nell\'aggiornamento del profilo.', 'error')
+            ruolo = request.form.get('ruolo', 'studente')
+            success = False
+            if ruolo == 'docente':
+                success = profilo_model.update_profilo_docente(email, nuovi_dati)
             else:
-                if profilo_control.update_profilo_studente(email, nuovi_dati):
-                    flash('Profilo Studente aggiornato con successo!', 'success')
-                else:
-                    flash('Errore nell\'aggiornamento del profilo.', 'error')
+                success = profilo_model.update_profilo_studente(email, nuovi_dati)
 
-        # Recupera il profilo
-        profilo_studente = profilo_control.get_profilo_studente(email)
-        profilo_docente = profilo_control.get_profilo_docente(email)
+            flash('Profilo aggiornato con successo!' if success else 'Errore nell\'aggiornamento del profilo.',
+                  'success' if success else 'error')
+
+        profilo_studente = profilo_model.get_profilo_studente(email)
+        profilo_docente = profilo_model.get_profilo_docente(email)
 
         return render_template(
             'gestioneProfilo.html',
