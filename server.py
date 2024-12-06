@@ -20,13 +20,6 @@ from app.views.profilo import initialize_profilo_blueprint
 app = Flask(__name__, template_folder='app/templates', static_folder="public")
 # Imposta il percorso dei template
 
-
-
-
-
-
-
-
 # Definisci una route per la homepage
 @app.route('/')
 def home():
