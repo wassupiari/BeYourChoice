@@ -32,7 +32,8 @@ def creazione_classe():
 
             if doc is not None:
                 # Se è un docente, reindirizzalo alla dashboard docente
-                return redirect(url_for('dashboardDocente.dashboard'))
+                print("provola")
+                return redirect(url_for('dashboard.dashboard_docente'))
             else:
                 # Se non è né studente né docente, reindirizza alla home o login
                 return redirect(url_for('home'))

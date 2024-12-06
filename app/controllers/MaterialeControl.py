@@ -9,12 +9,13 @@ class MaterialeControl:
         return list(self.collection.find())
 
     def upload_material(self, materiale_model):
+        from uuid import uuid4
         # Assegna un nuovo ID unico al materiale
-        if not hasattr(materiale_model, 'ID_MaterialeDidattico') or materiale_model.ID_MaterialeDidattico is None:
-            materiale_model.ID_MaterialeDidattico = self.get_next_id()
+        if 'ID_MaterialeDidattico' not in materiale_model or materiale_model['ID_MaterialeDidattico'] is None:
+            materiale_model['ID_MaterialeDidattico'] = str(uuid4())
 
         # Inserisce nel database
-        self.collection.insert_one(materiale_model.to_dict())
+        self.collection.insert_one(materiale_model)
 
     def edit_material(self, material_id, updated_data):
         self.collection.update_one(
@@ -32,19 +33,7 @@ class MaterialeControl:
     def view_material(self, filter_criteria):
         return self.collection.find_one(filter_criteria)
 
-    def get_next_id(self):
-        # Trova l'ultimo documento inserito ordinando per ID_MaterialeDidattico in ordine decrescente
-        last_material = self.collection.find().sort("ID_MaterialeDidattico", -1).limit(1)
-        last_material_list = list(last_material)
 
-        # Se esiste un materiale precedente, incrementa l'ultimo ID trovato
-        if last_material_list:
-            last_id = last_material_list[0].get("ID_MaterialeDidattico", 0)
-            if isinstance(last_id, int):
-                return last_id + 1
-
-        # Se non ci sono materiali nel database, inizia con l'ID 1
-        return 1
 
 
     def insert_document(self, document):
@@ -81,14 +70,14 @@ class MaterialeControl:
         return self.collection.update_one({'_id': ObjectId(materiale_id)}, {'$set': updated_data})
 
     def get_materials_by_id(self, ID_Classe):
-            # Esegui una query MongoDB per ottenere i materiali per una specifica classe
-            try:
-                query = {"ID_Classe": ID_Classe}
-                materiali_della_classe = list(self.collection.find(query))
-                return materiali_della_classe
-            except Exception as e:
-                print(f"Errore nel recuperare i materiali per la classe {ID_Classe}: {str(e)}")
-                return []
-
-
-
+        """Esegui una query MongoDB per ottenere i materiali per una specifica classe."""
+        try:
+            query = {"ID_Classe": ID_Classe}
+            print(f"Eseguendo query con ID_Classe: {ID_Classe}")
+            materiali_della_classe = list(self.collection.find(query))
+            if not materiali_della_classe:
+                print(f"Nessun materiale trovato per la classe {ID_Classe}.")
+            return materiali_della_classe
+        except Exception as e:
+            print(f"Errore nel recuperare i materiali per la classe {ID_Classe}: {str(e)}")
+            return []

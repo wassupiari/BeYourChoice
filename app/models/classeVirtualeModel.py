@@ -74,43 +74,47 @@ class ClasseVirtuale:
         Args:
             NomeClasse (str): Il nome della classe virtuale.
             Descrizione (str): La descrizione della classe virtuale.
+            ID_Docente (str): L'ID del docente che crea la classe.
+
         Returns:
-            str: Messaggio di successo o errore.
+            bool: True se la creazione è avvenuta con successo, altrimenti False.
 
         Raises:
             ValueError: Se ci sono problemi con il formato o la lunghezza.
         """
-        # Validazione del nome della classe
-        if not (2 <= len(NomeClasse) <= 20):
-            raise ValueError("Lunghezza del nome della classe virtuale non corretta.")
-        if not re.match(r"^[A-Za-zÀ-ú‘’',\(\)\s]{2,20}$", NomeClasse):
-            raise ValueError("Formato del nome della classe virtuale non corretto.")
+        try:
+            # Validazione del nome della classe
+            if not (2 <= len(NomeClasse) <= 20):
+                raise ValueError("Lunghezza del nome della classe virtuale non corretta.")
+            if not re.match(r"^[A-Za-zÀ-ú‘’',\(\)\s0-9]{2,20}$", NomeClasse):
+                raise ValueError("Formato del nome della classe virtuale non corretto.")
 
-        # Validazione della descrizione
-        if not (2 <= len(Descrizione) <= 255):
-            raise ValueError("Lunghezza della descrizione della classe virtuale non corretta.")
-        if not re.match(r"^[^§]{2,255}$", Descrizione):
-            raise ValueError("Formato della descrizione della classe virtuale non corretto.")
+            # Validazione della descrizione
+            if not (2 <= len(Descrizione) <= 255):
+                raise ValueError("Lunghezza della descrizione della classe virtuale non corretta.")
+            if not re.match(r"^[^§]{2,255}$", Descrizione):
+                raise ValueError("Formato della descrizione della classe virtuale non corretto.")
 
-        # Creazione della classe virtuale
-        collection = self.db_manager.get_collection('ClasseVirtuale')
-        ID_Classe = self.auto_increment_id  # Usa l'ID auto-incrementale
-        documento = {
-            'ID_Classe': ID_Classe,
-            'Nome_Classe': NomeClasse,
-            'Descrizione': Descrizione,
-            'ID_Docente': ID_Docente
-        }
+            # Creazione della classe virtuale
+            collection = self.db_manager.get_collection('ClasseVirtuale')
+            ID_Classe = self.auto_increment_id  # Usa l'ID auto-incrementale
+            documento = {
+                'ID_Classe': ID_Classe,
+                'Nome_Classe': NomeClasse,
+                'Descrizione': Descrizione,
+                'ID_Docente': ID_Docente
+            }
 
-        # Inserisci il documento nella collezione
-        collection.insert_one(documento)
+            # Inserisci il documento nella collezione
+            collection.insert_one(documento)
 
-        # Incrementa l'ID per la prossima classe
-        self.auto_increment_id += 1
-        studenti_visualizzati = self.visualizza_tutti_studenti()
-        print(studenti_visualizzati)  # Mostra il risultato a schermo
+            # Incrementa l'ID per la prossima classe
+            self.auto_increment_id += 1
 
-        return "Classe virtuale creata con successo"
+            return True
+        except Exception as e:
+            print(f"Errore durante la creazione della classe: {e}")
+            return False
 
     def inserimentoClasseStudente(self, IdClasse, IdStudente):
         """

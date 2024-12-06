@@ -1,13 +1,15 @@
-/Foglio di stile utilizzato per la pagina della creazione del materiale didattico/
+/* Foglio di stile utilizzato per la pagina della creazione del materiale didattico */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: "Open Sans", sans-serif;
     background-color: #f5f5f5;
     margin: 0;
     padding: 0;
 }
 
 /* Stile principale del contenuto */
-.main {
+.principal-content {
     max-width: 1200px;
     margin: 20px auto;
     padding: 20px;
@@ -17,7 +19,7 @@ body {
 }
 
 /* Titolo della pagina */
-.main h2 {
+.principal-content h2 {
     font-size: 24px;
     color: black;
     margin-bottom: 20px;
@@ -89,7 +91,7 @@ i {
     text-align: center;
 }
 
-a {
+.collegamenti {
     display: flex;
     flex-direction: column; /* Testo sotto l'icona */
     justify-content: center;
@@ -107,7 +109,7 @@ a {
     margin: 0 10px;
     color: #333333;
     text-decoration: none;
-    font-size: 22px; /* Dimensione icone */
+    font-size: 30px; /* Dimensione icone */
     transition: transform 0.3s ease, color 0.3s ease;
 }
 
@@ -117,6 +119,7 @@ a {
 }
 
 .azioni a i {
+    font-size: 30px;
     display: block;
     transition: transform 0.3s ease, color 0.3s ease;
 }
@@ -143,7 +146,7 @@ a {
 }
 
 .aggiungi-materiale a i {
-    font-size: 22px;
+    font-size: 30px;
     transition: transform 0.3s ease;
 }
 
@@ -156,5 +159,5 @@ a {
        padding: 0;
    }
 .flashes li.materiale_success {
-   color: green;
+  color:green;
 }

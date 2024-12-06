@@ -1,42 +1,24 @@
-class ProfiloStudente:
-    def __init__(self, nome, cognome, SdA, email, CF, Data_Nascita, password):
-        self.nome = nome
-        self.cognome = cognome
-        self.SdA = SdA
-        self.email = email
-        self.CF = CF
-        self.Data_Nascita = Data_Nascita
-        self.password = password
-
-    def to_dict(self):
-        return {
-            "nome": self.nome,
-            "cognome": self.cognome,
-            "SdA": self.SdA,
-            "email": self.email,
-            "CF": self.CF,
-            "Data_Nascita": self.Data_Nascita,
-            "password": self.password,
-        }
+from app.controllers.ProfiloControl import ProfiloControl
 
 
-class ProfiloDocente:
-    def __init__(self, nome, cognome, sda, email, cf, data_nascita, password):
-        self.nome = nome
-        self.cognome = cognome
-        self.sda = sda
-        self.email = email
-        self.cf = cf
-        self.data_nascita = data_nascita
-        self.password = password
+class ProfiloModel:
+    def __init__(self, db_manager):
+        self.control = ProfiloControl(db_manager)
 
-    def to_dict(self):
-        return {
-            "nome": self.nome,
-            "cognome": self.cognome,
-            "sda": self.sda,
-            "email": self.email,
-            "cf": self.cf,
-            "data_nascita": self.data_nascita,
-            "password": self.password,
-        }
+    def get_profilo_studente(self, email):
+        return self.control.get_profilo_studente(email)
+
+    def get_profilo_docente(self, email):
+        return self.control.get_profilo_docente(email)
+
+    def update_profilo_studente(self, email, nuovi_dati):
+        return self.control.update_profilo_studente(email, nuovi_dati)
+
+    def update_profilo_docente(self, email, nuovi_dati):
+        return self.control.update_profilo_docente(email, nuovi_dati)
+
+    def cambia_password_studente(self, vecchia_password, nuova_password):
+        return self.control.cambia_password_studente(vecchia_password, nuova_password)
+
+    def cambia_password_docente(self, vecchia_password, nuova_password):
+        return self.control.cambia_password_docente(vecchia_password, nuova_password)
