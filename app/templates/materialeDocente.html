@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <title>BeYourChoice Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleMaterialedidattico.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleMaterialeDidattico.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
 {% include 'header.html' %}
-     <div class="main">
+     <div class="principal-content">
         <h2>MATERIALE DIDATTICO</h2>
 
         <div class="error-message">
@@ -34,9 +35,9 @@
                         <p>{{ materiale['Descrizione'] }}</p>
                         <p><strong>Tipo:</strong> {{ materiale['Tipo'] }}</p>
                         <div class="azioni">
-                            <a href="{{ url_for('MaterialeDocente.serve_file', filename=materiale['File_Path']) }}" target="_blank"><i class="fa-solid fa-folder-open"></i></a>
-                            <a href="{{ url_for('MaterialeDocente.modifica_materiale', materiale_id=materiale['_id']) }}"><i class="fa-solid fa-file-signature"></i></a>
-                            <a href="{{ url_for('MaterialeDocente.rimuovi_materiale', materiale_id=materiale['_id']) }}" onclick="return confirm('Sei sicuro di voler eliminare questo materiale?');"><i class="fa-solid fa-file-circle-minus"></i></a>
+                            <a class="collegamenti" href="{{ url_for('MaterialeDocente.serve_file', filename=materiale['File_Path']) }}" target="_blank"><i class="fa-solid fa-folder-open"></i></a>
+                            <a class="collegamenti" href="{{ url_for('MaterialeDocente.modifica_materiale', materiale_id=materiale['_id']) }}"><i class="fa-solid fa-file-signature"></i></a>
+                            <a class="collegamenti" href="{{ url_for('MaterialeDocente.rimuovi_materiale', materiale_id=materiale['_id']) }}" onclick="return confirm('Sei sicuro di voler eliminare questo materiale?');"><i class="fa-solid fa-file-circle-minus"></i></a>
                         </div>
                     </div>
 
@@ -47,7 +48,7 @@
         {% endif %}
     <br><br><br><br><br><br><br>
         <div class="aggiungi-materiale">
-            <a href="{{ url_for('MaterialeDocente.carica_materiale') }}"><i class="fa-solid fa-file-arrow-up"></i>Aggiungi Materiale Didattico</a>
+            <a class="collegamenti" href="{{ url_for('MaterialeDocente.carica_materiale') }}"><i class="fa-solid fa-file-arrow-up"></i>Aggiungi Materiale Didattico</a>
         </div>
     </div>
 </body>
