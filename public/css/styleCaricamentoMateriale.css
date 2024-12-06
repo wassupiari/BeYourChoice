@@ -1,23 +1,15 @@
-/Foglio di stile utilizzato per il caricamento del materiale didattico/
-/* Stile generale per il corpo della pagina */
+/*9Foglio di stile utilizzato per il caricamento del materiale didattico
+ Stile generale per il corpo della pagina */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
 body {
-    font-family: Arial, sans-serif;
+    font-family: "Open Sans", sans-serif;
     background-color: #f5f5f5;
     margin: 0;
     padding: 0;
 }
 
-/* Header (importato separatamente) */
-header {
-    background-color: #007bff;
-    color: white;
-    padding: 15px;
-    text-align: center;
-    font-size: 18px;
-}
-
 /* Contenitore principale */
-main {
+.principal {
     max-width: 600px;
     margin: 40px auto;
     padding: 30px;
@@ -27,7 +19,7 @@ main {
 }
 
 /* Titolo della pagina */
-main .h2 h2 {
+h2 {
     font-size: 24px;
     color: #333;
     text-align: center;
@@ -71,7 +63,6 @@ button[type="submit"] {
   padding: 10px 20px;
   background-color: #f9f4f1;
   color: #000000;
-  font-weight: 600;
   border: none;
   border-radius: 5px;
   border: 1px solid #ccc; /* Bordi visibili */
@@ -123,4 +114,28 @@ form div {
    }
    .flashes li.success {
        color:green;
+}
+.btn-cancel {
+    padding: 10px 20px;
+    background-color: #f9f4f1;
+    color: #000000;
+    border: none;
+    border-radius: 5px;
+    border: 1px solid #ccc; /* Bordi visibili */
+    border-radius: 8px; /* Leggera arrotondatura degli angoli */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Effetto ombra */
+    cursor: pointer;
+    transition: box-shadow 0.3s ease, transform 0.3s ease; /* Effetti al passaggio del mouse */
+}
+a
+{
+    font-size 14px;
+    text-decoration: none;
+    text-align: center;
+}
+.btn-cancel:hover {
+   background-color: #d75a3d;
+  color: #ffffff;
+  transform: scale(1.05); /* Leggero ingrandimento al passaggio del mouse */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Ombra più intensa su hover */
 }

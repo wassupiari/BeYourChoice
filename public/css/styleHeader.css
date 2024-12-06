@@ -113,18 +113,44 @@ body {
 }
 
 .logout-button {
-    padding: 6px 12px; /* Ridotto il padding del bottone */
+    padding: 10px 12px; /* Ridotto il padding del bottone */
     border: none;
     border-radius: 5px;
     cursor: pointer;
     background-color: #d75a3d;
-    color: #fff;
+    color: #000000;
     font-weight: bold;
-    font-size: 12px; /* Ridotta la dimensione del testo */
+    font-size: 18px; /* Ridotta la dimensione del testo */
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .logout-button:hover {
     background-color: #b94b32;
     transform: scale(1.05); /* Leggero ingrandimento al passaggio del mouse */
+}
+.logout-button:hover span {
+    color: #d75a3d;
+}
+
+.logout-button:before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    background-color: #d75a3d;
+    bottom: -5px;
+    left: 4%;
+    transition: width 0.3s ease, left 0.3s ease;
+}
+
+.logout-button:hover:before {
+    width: 100%;
+    left: 0;
+}
+.logout-button i {
+    font-size: 30px;
+}
+.logout-button:hover i {
+    color: #d75a3d;
+    transform: scale(1.1); /* Leggero ingrandimento al passaggio del mouse */
 }
