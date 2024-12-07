@@ -26,7 +26,7 @@ def client():
 # Test per formato email non valido
 @pytest.mark.parametrize("test_id", ["TC_LOGIN_1_1"])
 def test_login_email_non_valida(client, test_id):
-    response = client.post('/login', data={"email": "email_invalid@gmail.com", "password": "Password123@"})
+    response = client.post('/login', data={"email": "email_invalid@", "password": "Password123@"})
     assert response.status_code == 400
     assert response.json["error"] == "Formato email non valido"
     print(f"Test {test_id}: Formato email non valido gestito correttamente!")
