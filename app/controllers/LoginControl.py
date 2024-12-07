@@ -1,5 +1,4 @@
 from functools import wraps
-
 from flask import Blueprint, request, jsonify, session, redirect, url_for, flash, render_template
 import bcrypt
 import re
