@@ -16,7 +16,7 @@ def student_required(f):
     def decorated_function(*args, **kwargs):
         if 'email' not in session or 'session_token' not in session:
             flash("Devi effettuare il login per accedere", "error")
-            return redirect(url_for('login.login3'))  # Se non è loggato, redirige al login
+            return redirect(url_for('login.login'))  # Se non è loggato, redirige al login
 
         # Verifica se è uno studente
         studente_model = StudenteModel()

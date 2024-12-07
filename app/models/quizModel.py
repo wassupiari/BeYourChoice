@@ -298,3 +298,13 @@ class QuizModel:
             print(f"ERRORE durante la verifica del completamento del quiz: {e}")
             return False
 
+    @staticmethod
+    def verifica_titolo(titolo):
+        """Verifica se il titolo del quiz esiste già nel database."""
+        try:
+            quiz_collection = QuizModel.db_manager.get_collection("Quiz")
+            # Cerca un documento con il titolo specificato
+            return quiz_collection.find_one({"Titolo": titolo}) is not None
+        except Exception as e:
+            raise ValueError(f"Errore durante la verifica del titolo: {e}")
+
