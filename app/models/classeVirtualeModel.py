@@ -92,7 +92,7 @@ class ClasseVirtuale:
             # Validazione della descrizione
             if not (2 <= len(Descrizione) <= 255):
                 raise ValueError("Lunghezza della descrizione della classe virtuale non corretta.")
-            if not re.match(r"^[^§]{2,255}$", Descrizione):
+            if not re.match(r"^[a-zA-Z0-9 ]{2,255}$", Descrizione):
                 raise ValueError("Formato della descrizione della classe virtuale non corretto.")
 
             # Creazione della classe virtuale
