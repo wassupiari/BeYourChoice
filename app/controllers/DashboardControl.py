@@ -47,7 +47,7 @@ class DashboardController:
         cf_studente = session.get('cf')
         id_classe = session.get('ID_Classe')
 
-        if not cf_studente or not id_classe:
+        if not cf_studente:
             return StudentDashboardView.render_errore("Sessione non valida", 400)
 
         model = Attivita()
