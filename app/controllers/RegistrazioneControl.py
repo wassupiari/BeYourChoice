@@ -87,7 +87,7 @@ def registra():
             docente_model = DocenteModel()
             docente_model.aggiungi_docente(docente_dict)
             session['email'] = email
-            return redirect(url_for('home'))
+            return redirect(url_for('dashboard.dashboard_docente'))
         else:  # Altrimenti, registra come studente
             studente_dict = {
                 "nome": nome,
@@ -101,7 +101,7 @@ def registra():
 
             studente_model.aggiungi_studente(studente_dict)
             session['email'] = email
-            return redirect(url_for('home'))
+            return redirect(url_for('dashboard.dashboard_studente'))
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
