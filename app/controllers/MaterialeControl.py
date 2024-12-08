@@ -5,10 +5,10 @@ class MaterialeControl:
     def __init__(self, db_manager):
         self.collection = db_manager.get_collection('MaterialeDidattico')
 
-    def view_all_materials(self):
+    def visualizza_tutti_materiali(self):
         return list(self.collection.find())
 
-    def upload_material(self, materiale_model):
+    def carica_materiali(self, materiale_model):
         from uuid import uuid4
         # Assegna un nuovo ID unico al materiale
         if 'ID_MaterialeDidattico' not in materiale_model or materiale_model['ID_MaterialeDidattico'] is None:
@@ -17,7 +17,7 @@ class MaterialeControl:
         # Inserisce nel database
         self.collection.insert_one(materiale_model)
 
-    def edit_material(self, material_id, updated_data):
+    def modifica_materiale(self, material_id, updated_data):
         self.collection.update_one(
             {"_id": ObjectId(material_id)},
             {"$set": updated_data}
@@ -30,7 +30,7 @@ class MaterialeControl:
             return materiale
         return None
 
-    def view_material(self, filter_criteria):
+    def visualizza_materiale(self, filter_criteria):
         return self.collection.find_one(filter_criteria)
 
 
@@ -48,7 +48,7 @@ class MaterialeControl:
     def delete_document(self, query):
         return self.collection.delete_one(query)
 
-    def delete_material(self, material_id):
+    def elimina_materiale(self, material_id):
         result = self.collection.delete_one({'_id': ObjectId(material_id)})
         return result.deleted_count == 1
 
