@@ -2,74 +2,95 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BeYourChoice Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styleDashboard.css') }}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/favicon-32x32.png') }}">
 </head>
 <body>
-{% include 'header.html' %}
-<div class="dashboard">
-    <div class="section">
+    {% include 'header.html' %}
 
-        <!-- Punteggio Personale -->
-        <div class="box">
-            <h2>Punteggio Personale</h2>
-            <ul>
-                <li>Quiz: <span>{{ punteggio_quiz }}</span></li>
-                <li>Scenari Virtuali: <span>{{ punteggio_scenario }}</span></li>
-            </ul>
-        </div>
+    <div class="dashboard">
+        <div class="section">
 
-        <!-- Classifica della classe -->
-        <div class="box tall-box half-width">
-            <h2>Classifica della classe</h2>
-            <ul>{% if classifica %}
-                {% for studente in classifica %}
-                <li>{{ loop.index }}. {{ studente.Nome }} {{ studente.Cognome }}
-                    <span>{{ studente.PunteggioTotale }}</span>
-                </li>
-                {% endfor %}
-            {% else %}
-                    <li>
-                        <p>Nessuna classe trovata.</p>
+            <!-- Punteggio Personale -->
+            <div class="box">
+                <h2>Punteggio Personale</h2>
+                <ul>
+                    <li>Quiz:
+                        <span>
+                            {% if punteggio_quiz %}
+                                {{ punteggio_quiz }}
+                            {% else %}
+                                Nessun punteggio
+                            {% endif %}
+                        </span>
                     </li>
-                {% endif %}
-            </ul>
-        </div>
-
-
-        <!-- Storico Personale -->
-        <div class="box tall-box">
-            <h2>Storico Personale</h2>
-            <ul>
-                 {% if storico %}
-                    {% for attivita in storico %}
-                    <li>
-                        <div>
-                            <p><strong>{{ attivita.Descrizione_Attività }}</strong></p>
-                            <p><strong>Punteggio: </strong>{{ attivita.Punteggio_Attività }}</p>
-                        </div>
+                    <li>Scenari Virtuali:
+                        <span>
+                            {% if punteggio_scenario %}
+                                {{ punteggio_scenario }}
+                            {% else %}
+                                Nessun punteggio
+                            {% endif %}
+                        </span>
                     </li>
-                    {% endfor %}
-                {% else %}
-                    <li>
-                        <p>Nessuna attività trovata.</p>
-                    </li>
-                {% endif %}
-            </ul>
-        </div>
+                </ul>
+            </div>
 
+            <!-- Classifica della classe -->
+            <div class="box tall-box half-width">
+                <h2>Classifica della classe</h2>
+                <ul>
+                    {% if classifica and classifica|length > 0 %}
+                        {% for studente in classifica %}
+                            <li>
+                                {{ loop.index }}. {{ studente.nome }} {{ studente.cognome }}
+                                <span>{{ studente.punteggio_totale }}</span>
+                            </li>
+                        {% endfor %}
+                    {% else %}
+                        <li>
+                            <p>Nessuna classifica disponibile.</p>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
 
-    <aside class="sidebar">
-        <div class="sidebar-item">
-            <a href="{{ url_for('classedocente.classe_studente', id_classe=session.get('id_classe')) }}">
-                <i class="fa-solid fa-users-rectangle"></i>
-                <span>Visualizzazione classe</span>
-            </a>
+            <!-- Storico Personale -->
+            <div class="box tall-box">
+                <h2>Storico Personale</h2>
+                <ul>
+                    {% if storico and storico|length > 0 %}
+                        {% for attivita in storico %}
+                            <li>
+                                <div>
+                                    <p><strong>{{ attivita.descrizione_attivita }}</strong></p>
+                                    <p><strong>Punteggio: </strong>{{ attivita.punteggio_attivita }}</p>
+                                    <p><em>{{ attivita.data_attivita }}</em></p>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    {% else %}
+                        <li>
+                            <p>Nessuna attività trovata.</p>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-item">
+                    <a href="{{ url_for('classedocente.classe_studente', id_classe=session.get('id_classe')) }}">
+                        <i class="fa-solid fa-users-rectangle"></i>
+                        <span>Visualizzazione classe</span>
+                    </a>
+                </div>
+            </aside>
+
         </div>
-    </aside>
     </div>
-</div>
 </body>
 </html>

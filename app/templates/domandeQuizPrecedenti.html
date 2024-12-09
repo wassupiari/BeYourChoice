@@ -21,7 +21,7 @@
         {% for domanda in domande %}
             <div class="question">
                 <h2>{{ loop.index }}. {{ domanda.testo_domanda }}</h2>
-                {% for opzione in domanda.opzioni_risposta %}
+                {% for opzione in domanda.opzioni_risposte %}
                     <div class="option">
                         <input type="checkbox" disabled>
                         <label>{{ opzione }}</label>

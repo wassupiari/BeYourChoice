@@ -19,66 +19,70 @@ class Attivita:
 
             studenti = list(
                 studente_collection.find({"id_classe": id_classe}, {"_id": 0, "cf": 1, "nome": 1, "cognome": 1}))
-            punteggi_totali = {studente["cf"]: {"PunteggioScenari": 0, "PunteggioQuiz": 0} for studente in studenti}
+            punteggi_totali = {studente["cf"]: {"punteggio_scenario": 0, "punteggio_quiz": 0} for studente in studenti}
 
             scenari_punteggi = scenario_collection.aggregate([
-                {"$group": {"_id": "$CF_Studente", "PunteggioScenari": {"$sum": "$Punteggio_Scenario"}}}
+                {"$group": {"_id": "$cf_studente", "punteggio_scenario": {"$sum": "$punteggio_scenario"}}}
             ])
             for item in scenari_punteggi:
                 if item["_id"] in punteggi_totali:
-                    punteggi_totali[item["_id"]]["PunteggioScenari"] = item["PunteggioScenari"]
+                    punteggi_totali[item["_id"]]["punteggio_scenario"] = item["punteggio_scenario"]
 
             quiz_punteggi = quiz_collection.aggregate([
-                {"$group": {"_id": "$CF_Studente", "PunteggioQuiz": {"$sum": "$Punteggio_Quiz"}}}
+                {"$group": {"_id": "$cf_studente", "punteggio_quiz": {"$sum": "$punteggio_quiz"}}}
             ])
             for item in quiz_punteggi:
                 if item["_id"] in punteggi_totali:
-                    punteggi_totali[item["_id"]]["PunteggioQuiz"] = item["PunteggioQuiz"]
+                    punteggi_totali[item["_id"]]["punteggio_quiz"] = item["punteggio_quiz"]
 
             classifica = []
             for studente in studenti:
                 cf_studente = studente["cf"]
-                punteggio_scenari = punteggi_totali.get(cf_studente, {}).get("PunteggioScenari", 0)
-                punteggio_quiz = punteggi_totali.get(cf_studente, {}).get("PunteggioQuiz", 0)
-                punteggio_totale = punteggio_scenari + punteggio_quiz
+                punteggio_scenario = punteggi_totali.get(cf_studente, {}).get("punteggio_scenario", 0)
+                punteggio_quiz = punteggi_totali.get(cf_studente, {}).get("punteggio_quiz", 0)
+                punteggio_totale = punteggio_scenario + punteggio_quiz
 
                 classifica.append({
-                    "CF": cf_studente,
-                    "Nome": studente["nome"],
-                    "Cognome": studente["cognome"],
-                    "PunteggioTotale": punteggio_totale
+                    "cf": cf_studente,
+                    "nome": studente["nome"],
+                    "cognome": studente["cognome"],
+                    "punteggio_totale": punteggio_totale
                 })
 
-            classifica.sort(key=lambda x: x["PunteggioTotale"], reverse=True)
+            classifica.sort(key=lambda x: x["punteggio_totale"], reverse=True)
             return classifica
         except Exception as e:
             print(f"Errore nel recupero della classifica: {e}")
             return []
 
     def get_punteggio_personale(self, cf_studente):
-        """
-        Calcola il punteggio personale dello studente.
-        """
         try:
             scenario_collection = self.db_manager.get_collection("PunteggioScenario")
             quiz_collection = self.db_manager.get_collection("RisultatoQuiz")
+
+            print(f"DEBUG: Recupero punteggio per lo studente {cf_studente}")
 
             scenario_result = scenario_collection.aggregate([
                 {"$match": {"CF_Studente": cf_studente}},
                 {"$group": {"_id": "$CF_Studente", "PunteggioScenari": {"$sum": "$Punteggio_Scenario"}}}
             ])
-            punteggio_scenari = next(scenario_result, {}).get("PunteggioScenari", 0)
+            print(f"DEBUG: Risultato scenari: {list(scenario_result)}")
 
             quiz_result = quiz_collection.aggregate([
-                {"$match": {"CF_Studente": cf_studente}},
-                {"$group": {"_id": "$CF_Studente", "PunteggioQuiz": {"$sum": "$Punteggio_Quiz"}}}
+                {"$match": {"cf_studente": cf_studente}},  # Filtra per studente
+                {"$group": {"_id": "$cf_studente", "punteggio_quiz": {"$sum": "$punteggio_quiz"}}}  # Somma i punteggi
             ])
-            punteggio_quiz = next(quiz_result, {}).get("PunteggioQuiz", 0)
+            punteggio_quiz = next(quiz_result, {}).get("punteggio_quiz", 0)  # Ottieni il valore o 0
 
-            return {"PunteggioQuiz": punteggio_quiz, "PunteggioScenari": punteggio_scenari}
+            print(f"DEBUG: Risultato quiz: {list(quiz_result)}")
+
+            punteggio_scenari = next(scenario_result, {}).get("PunteggioScenari", 0)
+
+
+            return {"punteggio_quiz": punteggio_quiz, "PunteggioScenari": punteggio_scenari}
         except Exception as e:
             print(f"Errore nel calcolo del punteggio personale: {e}")
-            return {"PunteggioQuiz": 0, "PunteggioScenari": 0}
+            return {"punteggio_quiz": 0, "PunteggioScenari": 0}
 
     def get_storico(self, cf_studente):
         """
@@ -87,7 +91,7 @@ class Attivita:
         try:
             dashboard_collection = self.db_manager.get_collection("Dashboard")
             attivita_risultati = list(dashboard_collection.find(
-                {"CF_Studente": cf_studente},
+                {"cf_studente": cf_studente},
                 {"_id": 0, "id_attivita": 1, "data_attivita": 1, "descrizione_attivita": 1, "punteggio_attivita": 1}
             ))
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ quiz.Argomento }} - Quiz</title>
+    <title>{{ quiz.argomento }} - Quiz</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styleQuiz.css') }}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/favicon-32x32.png') }}">
@@ -14,7 +14,7 @@
             <img src="{{ url_for('static', filename='img/Logo.png') }}" width="20%">
         </div>
         <div class="user-info">
-            <span style="font-size: 1.2rem;">Ciao, <strong>{{ session.get("Nome") }}</strong></span>
+            <span style="font-size: 1.2rem;">Ciao, <strong>{{ session.get("nome") }}</strong></span>
             <form action="{{ url_for('login.logout') }}" method="POST" style="display:inline;">
                 <button type="submit" class="logout-button" style="background: none; border: none; cursor: pointer;">
                     <i class="fa-solid fa-person-walking-luggage"></i><br>
@@ -24,8 +24,8 @@
         </div>
     </header>
     <div class="container">
-        <h1>{{ quiz.Argomento }}</h1>
-        <p><strong>Durata:</strong> {{ quiz.Durata }} minuti</p>
+        <h1>{{ quiz.argomento }}</h1>
+        <p><strong>Durata:</strong> {{ quiz.durata }} minuti</p>
         <p><strong>Tempo rimanente:</strong>
             <span id="timer-minutes">{{ tempo_rimanente // 60 }}</span> minuti e
             <span id="timer-seconds">{{ tempo_rimanente % 60 }}</span> secondi
@@ -33,19 +33,20 @@
 
         <form id="quiz-form">
             {% for question in questions %}
-            <div class="card">
-                <p><strong>{{ loop.index }}. {{ question.Testo_Domanda }}</strong></p>
-                <div class="options-container">
-                    {% for option in question.Opzioni_Risposte %}
-                    <div class="option-container">
-                        <input type="radio" id="q{{ question.id_domanda }}_{{ loop.index }}"
-                               name="q{{ question.id_domanda }}" value="{{ option }}">
-                        <label for="q{{ question.id_domanda }}_{{ loop.index }}">{{ option }}</label>
+                <div class="card">
+                    <p><strong>{{ loop.index }}. {{ question.testo_domanda }}</strong></p>
+                    <div class="options-container">
+                        {% for option in question.opzioni_risposte %}
+                        <div class="option-container">
+                            <input type="radio" id="q{{ question.id_domanda }}_{{ loop.index }}"
+                                   name="q{{ question.id_domanda }}" value="{{ option }}">
+                            <label for="q{{ question.id_domanda }}_{{ loop.index }}">{{ option }}</label>
+                        </div>
+                        {% endfor %}
                     </div>
-                    {% endfor %}
                 </div>
-            </div>
-            {% endfor %}
+                {% endfor %}
+
             <button type="submit" id="submit-btn" class="btn">Invia Risposte</button>
         </form>
     </div>

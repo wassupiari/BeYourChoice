@@ -11,7 +11,7 @@ def scenario_virtuale():
     scenarioModel = ScenarioModel()
     id = scenarioModel.get_ultimo_scenario_id()
     if id is None: id = 0
-    elif id is 0: id = 1
+    elif id == 0: id = 1
     elif id > 0: id=id+1
     titolo = request.form.get('titolo', '').strip()
     descrizione = request.form.get('descrizione', '').strip()

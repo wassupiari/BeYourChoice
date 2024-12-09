@@ -14,7 +14,7 @@
     <div class="main-content">
         <!-- Storico dello studente -->
         <div class="dashboard">
-            <h2>Storico dello Studente: {{ cf_studente }}</h2>
+            <h2>Storico dello Studente</h2>
 
             <!-- Storico delle Attività -->
             <ul>
@@ -25,7 +25,7 @@
                     {% for attivita in storico %}
                     <li>
                         <div>
-                            <p><strong>{{ attivita.descrizione_attivta }}</strong></p>
+                            <p><strong>{{ attivita.descrizione_attivita }}</strong></p>
                             <p><strong>Punteggio: </strong>{{ attivita.punteggio_attivita }}</p>
                         </div>
                     </li>

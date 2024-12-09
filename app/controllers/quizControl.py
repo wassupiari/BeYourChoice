@@ -161,7 +161,7 @@ def valuta_quiz():
         corrette = 0
         for domanda in domande:
             risposta_utente = data.get(f"q{domanda['id_domanda']}")
-            if risposta_utente == domanda["Risposta_Corretta"]:
+            if risposta_utente == domanda["risposta_corretta"]:
                 corrette += 1
 
         # Calcola il punteggio
@@ -170,7 +170,7 @@ def valuta_quiz():
         # Prepara il risultato del quiz
         quiz_result = {
             "id_quiz": domande[0]["id_quiz"],
-            "cg_studente": cf_studente,
+            "cf_studente": cf_studente,
             "punteggio_quiz": punteggio,
             "risposte": [data.get(f"q{d['id_domanda']}") for d in domande]
         }
@@ -200,10 +200,17 @@ def visualizza_domande_quiz(quiz_id):
         if not quiz:
             return QuizView.mostra_errore("Quiz non trovato", 404)
 
+        print(f"DEBUG Quiz: {quiz}")  # Debug temporaneo
+
+
         domande = QuizModel.recupera_domande([d["id_domanda"] for d in quiz["domande"]])
+        print(f"DEBUG Domande per il quiz: {domande}")  # Debug temporaneo
+
         return QuizView.mostra_domande_quiz(quiz, domande)
     except Exception as e:
-        return QuizView.mostra_errore("Errore durante la visualizzazione delle domande")
+        print(f"ERRORE: {e}")
+        return QuizView.mostra_errore("Errore durante la visualizzazione delle domande", 500)
+
 
 
 
