@@ -3,7 +3,7 @@ import re
 from flask import Blueprint, request, session, jsonify
 from app.models.quizModel import QuizModel
 from app.views.quizView import QuizView
-from app.controllers.LoginControl import teacher_required, student_required
+from app.controllers.loginControl import teacher_required, student_required
 from dotenv import load_dotenv
 
 # Carica le variabili d'ambiente
