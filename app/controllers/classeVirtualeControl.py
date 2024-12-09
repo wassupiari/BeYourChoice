@@ -16,7 +16,7 @@ class ClasseVirtualeControl:
             print(f"Errore: {e}")
             raise
 
-    def mostra_classe(self, id_classe):
+    def mostra_studenti_classe(self, id_classe):
         """
             Recupera gli studenti della classe e prepara i dati per il rendering.
 
@@ -27,7 +27,7 @@ class ClasseVirtualeControl:
             list[dict]: Lista di studenti con Nome, Cognome e Data di Nascita.
         """
         try:
-            studenti = self.model.mostra_classe(id_classe)  # Chiama il metodo per recuperare gli studenti
+            studenti = self.model.mostra_studenti_classe(id_classe)  # Chiama il metodo per recuperare gli studenti
             print(f"Studente recuperati: {len(studenti)}")
 
             return studenti
@@ -60,7 +60,7 @@ class ClasseVirtualeControl:
             print(f"Errore generale: {e}")
             return {"error": "Si è verificato un errore nel recupero degli studenti."}
 
-    def rimuovi_studente(self, id_studente):
+    def rimuovi_studente_classe(self, id_studente):
 
         """
             Rimuove uno studente dalla classe impostando id_classe a null.
@@ -72,13 +72,13 @@ class ClasseVirtualeControl:
             bool: True se la rimozione ha successo, False altrimenti.
         """
         try:
-            self.model.rimuovi_studente(id_studente)
+            self.model.rimuovi_studente_classe(id_studente)
             return True
         except Exception as e:
             print(f"Errore nel controller: {e}")
             return False
 
-    def aggiungi_studente(self, id_studente, id_classe):
+    def aggiungi_studente_classe(self, id_studente, id_classe):
 
         """
             Aggiunge uno studente  alla classe.
@@ -91,13 +91,13 @@ class ClasseVirtualeControl:
             bool: True se la rimozione ha successo, False altrimenti.
         """
         try:
-            self.model.aggiungi_studente(id_studente, id_classe)
+            self.model.aggiungi_studente_classe(id_studente, id_classe)
             return True
         except Exception as e:
             print(f"Errore nel controller: {e}")
             return False
 
-    def cerca_studenti(self, query, id_classe):
+    def cerca_studenti_classe(self, query, id_classe):
         """
             Ricerca studenti nella classe tramite codice fiscale
         Args:
@@ -107,7 +107,7 @@ class ClasseVirtualeControl:
             bool: True se la ricerca va a buon fine.
         """
         try:
-            return self.model.cerca_studenti(query, id_classe)
+            return self.model.cerca_studenti_classe(query, id_classe)
         except Exception as e:
             print(f"Errore nel controller: {e}")
             return False

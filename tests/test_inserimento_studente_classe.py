@@ -21,7 +21,7 @@ def test_aggiungi_studente_fallimento(classe_virtuale_model,test_id):
     studente_id = ""
     classe_id = 10541
 
-    risultato = classe_virtuale_model.aggiungi_studente(studente_id, classe_id)
+    risultato = classe_virtuale_model.aggiungi_studente_classe(studente_id, classe_id)
     assert risultato is False, "Studente aggiunto alla classe virtuale”."
 
 # Test 2:
@@ -30,7 +30,7 @@ def test_aggiungi_studente_successp(classe_virtuale_model,test_id):
     studente_id = "675432b468ea2d008264cfc2"
     classe_id = 10541
 
-    risultato = classe_virtuale_model.aggiungi_studente(studente_id, classe_id)
+    risultato = classe_virtuale_model.aggiungi_studente_classe(studente_id, classe_id)
     assert risultato is True, "Nessuno studente selezionato”."
 
 
