@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ quiz.Argomento }} - Quiz</title>
+    <title>{{ quiz.argomento }} - Quiz</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/stylecreaQuiz.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>{{ quiz.Argomento }}</h1>
-        <p><strong>Durata:</strong> {{ quiz.Durata }} minuti</p>
+        <h1>{{ quiz.argomento }}</h1>
+        <p><strong>Durata:</strong> {{ quiz.durata }} minuti</p>
         <p><strong>Tempo rimanente:</strong>
           <span id="timer-minutes">{{ tempo_rimanente // 60 }}</span> minuti e
           <span id="timer-seconds">{{ tempo_rimanente % 60 }}</span> secondi
@@ -18,13 +18,13 @@
         <form id="quiz-form">
             {% for question in questions %}
             <div class="card">
-                <p><strong>{{ loop.index }}. {{ question.Testo_Domanda }}</strong></p>
+                <p><strong>{{ loop.index }}. {{ question.testo_domanda }}</strong></p>
                 <div class="options-container">
-                    {% for option in question.Opzioni_Risposte %}
+                    {% for option in question.opzioni_risposta %}
                     <div class="option-container">
-                        <input type="radio" id="q{{ question.ID_Domanda }}_{{ loop.index }}"
-                               name="q{{ question.ID_Domanda }}" value="{{ option }}">
-                        <label for="q{{ question.ID_Domanda }}_{{ loop.index }}">{{ option }}</label>
+                        <input type="radio" id="q{{ question.id_domanda }}_{{ loop.index }}"
+                               name="q{{ question.id_domanda }}" value="{{ option }}">
+                        <label for="q{{ question.id_domanda }}_{{ loop.index }}">{{ option }}</label>
                     </div>
                     {% endfor %}
                 </div>

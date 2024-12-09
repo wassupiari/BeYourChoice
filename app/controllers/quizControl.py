@@ -206,6 +206,7 @@ def visualizza_domande_quiz(quiz_id):
         return QuizView.mostra_errore("Errore durante la visualizzazione delle domande")
 
 
+
 @quiz_blueprint.route('/quiz/<int:quiz_id>/risultati', methods=['GET'])
 @teacher_required
 def visualizza_risultati_quiz(quiz_id):

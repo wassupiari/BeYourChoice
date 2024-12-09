@@ -15,12 +15,12 @@
         {% if quiz %}
             <div class="quiz-card">
                 <div class="quiz-info">
-                    <h2>{{ quiz.Titolo }}</h2>
-                    <p>Durata del quiz: <span>{{ quiz.Durata }} min</span></p>
-                    <p>Numero domande quiz: <span>{{ quiz.N_Domande }}</span></p>
+                    <h2>{{ quiz.titolo }}</h2>
+                    <p>Durata del quiz: <span>{{ quiz.durata }} min</span></p>
+                    <p>Numero domande quiz: <span>{{ quiz.n_domande }}</span></p>
                 </div>
                 <div class="quiz-button">
-                    <a href="{{ url_for('quiz.visualizza_quiz', quiz_id=quiz.ID_Quiz) }}">
+                    <a href="{{ url_for('quiz.visualizza_quiz', quiz_id=quiz.id_quiz) }}">
                         <button>Inizia Quiz &#9658;</button>
                     </a>
                 </div>

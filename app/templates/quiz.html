@@ -38,9 +38,9 @@
                 <div class="options-container">
                     {% for option in question.Opzioni_Risposte %}
                     <div class="option-container">
-                        <input type="radio" id="q{{ question.ID_Domanda }}_{{ loop.index }}"
-                               name="q{{ question.ID_Domanda }}" value="{{ option }}">
-                        <label for="q{{ question.ID_Domanda }}_{{ loop.index }}">{{ option }}</label>
+                        <input type="radio" id="q{{ question.id_domanda }}_{{ loop.index }}"
+                               name="q{{ question.id_domanda }}" value="{{ option }}">
+                        <label for="q{{ question.id_domanda }}_{{ loop.index }}">{{ option }}</label>
                     </div>
                     {% endfor %}
                 </div>
