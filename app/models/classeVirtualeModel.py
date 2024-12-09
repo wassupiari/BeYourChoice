@@ -285,6 +285,7 @@ class ClasseVirtuale:
     from bson import ObjectId
 
     def aggiungi_studente(self, studente_id, classe_id):
+        print("aaaa")
         """
         Aggiunge uno studente alla classe, impostando l'ID della classe nel documento dello studente.
 
@@ -299,6 +300,12 @@ class ClasseVirtuale:
             # Recupera la collezione 'Studenti'
             studente_collection = self.db_manager.get_collection("Studente")
             # Filtra per l'ID dello studente e aggiungi l'ID della classe
+            # Controlla se lo studente esiste
+            studente = studente_collection.find_one({"_id": ObjectId(studente_id)})
+            if not studente:
+                print(f"Errore: Studente con ID '{studente_id}' non trovato.")
+                return False
+
             result = studente_collection.update_one(
                 {"_id": ObjectId(studente_id)},  # Filtra per l'ID dello studente
                 {"$set": {"id_classe": classe_id}}  # Imposta l'ID della classe
