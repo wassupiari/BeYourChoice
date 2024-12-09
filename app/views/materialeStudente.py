@@ -12,7 +12,7 @@ MaterialeStudente = Blueprint('MaterialeStudente', __name__)
 db_manager = DatabaseManager()
 materiale_control = MaterialeControl(db_manager)
 materiale_model = MaterialeModel(db_manager)
-materiale_model.set_upload_folder('/public/uploads')
+materiale_model.set_cartella_uploads('/public/uploads')
 
 def initialize_materiale_studente_blueprint(app: object) -> object:
     @MaterialeStudente.route('/')
@@ -29,9 +29,9 @@ def initialize_materiale_studente_blueprint(app: object) -> object:
         materiali = materiale_model.visualizza_materiali(ID_Classe)
         return render_template('materialeStudente.html', ID_Classe=ID_Classe, materiali=materiali)
 
-    @MaterialeStudente.route('/serve_file/<path:filename>')
-    def serve_file(filename: str):
+    @MaterialeStudente.route('/servi_file/<path:nomefile>')
+    def servi_file(nomefile: str):
         """Servizio per servire i file agli studenti."""
-        return materiale_model.serve_file(filename)
+        return materiale_model.servi_file(nomefile)
 
     app.register_blueprint(MaterialeStudente)
