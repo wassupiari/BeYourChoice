@@ -49,7 +49,7 @@ class QuizModel:
             raise ValueError(f"Errore nel parsing della domanda: {e}")
 
     @staticmethod
-    def genera_domande(tema, numero_domande, modalita_risposta, api_key):
+    def genera_domande(tema, numero_domande, modalita_risposta,durata, api_key):
         """Genera domande utilizzando OpenAI GPT."""
         openai.api_key = api_key
         domande = []
@@ -59,8 +59,6 @@ class QuizModel:
             prompt_base += "La domanda deve avere 3 opzioni di risposta: una corretta e due sbagliate."
         elif modalita_risposta == "4_risposte":
             prompt_base += "La domanda deve avere 4 opzioni di risposta: una corretta e tre sbagliate."
-        elif modalita_risposta == "vero_falso":
-            prompt_base += "La domanda deve essere nella modalità vero/falso con la risposta corretta specificata."
 
         while len(domande) < numero_domande:
             messages = [
@@ -84,7 +82,6 @@ class QuizModel:
                 parsed_domanda = QuizModel.parse_domanda(domanda)
                 domande.append(parsed_domanda)
             except ValueError as parse_error:
-                print(f"Errore nel parsing della domanda: {parse_error}")
                 continue
             except Exception as e:
                 print(f"Errore durante la richiesta OpenAI: {e}")

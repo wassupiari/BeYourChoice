@@ -25,6 +25,7 @@ def index():
 
 
 @quiz_blueprint.route("/genera", methods=["POST"])
+@teacher_required
 def genera_domande():
     """Genera domande per il quiz."""
     try:
@@ -32,12 +33,12 @@ def genera_domande():
         tema = request.json.get("tema")
         numero_domande = request.json.get("numero_domande")
         modalita_risposta = request.json.get("modalita_risposta")
+        durata = request.json.get("durata")
 
         # Controlli di validazione
         if not titolo or not re.match(r"^[A-Za-zÀ-ú0-9\s\-_']{2,255}$", titolo):
             return jsonify({"error": "Il titolo non è valido (2-255 caratteri, formato corretto)."}), 400
 
-        # Controllo sull'esistenza del titolo
         if QuizModel.verifica_titolo(titolo):
             return jsonify({"error": "Il titolo esiste già nel database."}), 400
 
@@ -50,17 +51,22 @@ def genera_domande():
         if modalita_risposta not in ["3_risposte", "4_risposte", "vero_falso"]:
             return jsonify({"error": "Modalità di risposta non valida."}), 400
 
+        if not durata or not (1 <= int(durata) <= 120):
+            return jsonify({"error": "La durata deve essere compresa tra 1 e 120 minuti."}), 400
+
         # Genera domande
         domande = QuizModel.genera_domande(
             tema=tema,
             numero_domande=int(numero_domande),
             modalita_risposta=modalita_risposta,
+            durata=durata,
             api_key=os.getenv("OPENAI_API_KEY")
         )
 
         return jsonify(domande), 200
     except Exception as e:
         return jsonify({"error": f"Errore durante la generazione: {str(e)}"}), 500
+
 
 
 
