@@ -14,6 +14,7 @@ materiale_control = MaterialeControl(db_manager)
 materiale_model = MaterialeModel(db_manager)
 materiale_model.set_cartella_uploads('/public/uploads')
 
+
 def initialize_materiale_studente_blueprint(app: object) -> object:
     @MaterialeStudente.route('/')
     def index():
@@ -22,12 +23,23 @@ def initialize_materiale_studente_blueprint(app: object) -> object:
     @MaterialeStudente.route('/materiale/studente')
     def visualizza_materiale_studente():
         """Vista per visualizzare tutti i materiali disponibili per gli studenti."""
-        ID_Classe = session.get('ID_Classe')
-        if ID_Classe is None:
-            return redirect(url_for('dashboardStudente'))
+        id_classe = session.get('id_classe')
+        cf_studente = session.get('cf_studente')
 
-        materiali = materiale_model.visualizza_materiali(ID_Classe)
-        return render_template('materialeStudente.html', ID_Classe=ID_Classe, materiali=materiali)
+        if cf_studente is None:
+            # Tentativo di recupero del cf_studente, simulando una fonte, ad esempio un database
+            cf_studente = recupera_cf_studente()
+            if cf_studente:
+                session['cf_studente'] = cf_studente
+            else:
+                abort(400, 'Parametro cf_studente mancante')
+
+        if id_classe is None:
+            # Passa cf_studente come parametro per costruire correttamente l'URL
+            return redirect(url_for('dashboard.storico_studente', cf_studente=cf_studente))
+
+        materiali = materiale_model.visualizza_materiali(id_classe)
+        return render_template('materialeStudente.html', ID_Classe=id_classe, materiali=materiali)
 
     @MaterialeStudente.route('/servi_file/<path:nomefile>')
     def servi_file(nomefile: str):
@@ -35,3 +47,9 @@ def initialize_materiale_studente_blueprint(app: object) -> object:
         return materiale_model.servi_file(nomefile)
 
     app.register_blueprint(MaterialeStudente)
+
+
+def recupera_cf_studente():
+    # Implementa qui la logica per ottenere cf_studente
+    # Per scopi di esempio, restituiamo un valore fisso
+    return 'cf_studente_esempio'  # Sostituisci con la logica effettiva
