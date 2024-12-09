@@ -48,7 +48,7 @@ def genera_domande():
         if not numero_domande or not (5 <= int(numero_domande) <= 20):
             return jsonify({"error": "Il numero di domande deve essere compreso tra 5 e 20."}), 400
 
-        if modalita_risposta not in ["3_risposte", "4_risposte", "vero_falso"]:
+        if modalita_risposta not in ["3_risposte", "4_risposte"]:
             return jsonify({"error": "Modalità di risposta non valida."}), 400
 
 
