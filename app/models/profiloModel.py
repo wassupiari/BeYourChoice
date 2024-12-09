@@ -12,10 +12,10 @@ class ProfiloModel:
         return self.control.get_profilo_docente(email)
 
     def update_profilo_studente(self, email, nuovi_dati):
-        return self.control.update_profilo_studente(email, nuovi_dati)
+        return self.control.carica_profilo_studente(email, nuovi_dati)
 
     def update_profilo_docente(self, email, nuovi_dati):
-        return self.control.update_profilo_docente(email, nuovi_dati)
+        return self.control.carica_profilo_docente(email, nuovi_dati)
 
     def cambia_password_studente(self, vecchia_password, nuova_password):
         return self.control.cambia_password_studente(vecchia_password, nuova_password)
