@@ -93,10 +93,12 @@ button:hover {
 
 .flashes li.message_profile_error {
     color: red;
+    text-align: center;
 }
 
 .flashes li.message_profile_successo {
     color: green;
+    text-align: center;
 }
 
 #changePasswordForm {

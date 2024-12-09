@@ -155,9 +155,11 @@ i {
     transform: scale(1.1); /* Leggero ingrandimento */
 }
 .flashes {
-       list-style-type: none;
-       padding: 0;
-   }
+    list-style-type: none;
+    padding: 0;
+}
+
 .flashes li.materiale_success {
-  color:green;
+  color: green;
+  text-align: center;
 }
