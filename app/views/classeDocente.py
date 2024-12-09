@@ -17,7 +17,7 @@ def classe_docente(id_classe):
     try:
         # Ottieni l'ID della classe dalla query string (se non è presente, usa 101 come default)
         print(f"ID_Classe ricevuto: {id_classe}")
-        dati_classe = classe_virtuale_control.mostra_classe(id_classe)
+        dati_classe = classe_virtuale_control.mostra_studenti_classe(id_classe)
         print(f"Dati classe ricevuti: {dati_classe}")  # Aggiunto per debugging
 
         if "error" in dati_classe:
@@ -41,10 +41,10 @@ def cerca_studente():
 
     if query == '':
         # Se la query è vuota, restituisci tutti gli studenti della classe
-        studenti = classe_virtuale_control.mostra_classe(id_classe)
+        studenti = classe_virtuale_control.mostra_studenti_classe(id_classe)
     else:
         # Altrimenti, restituisci solo gli studenti filtrati
-        studenti = classe_virtuale_control.cerca_studenti(query, id_classe)
+        studenti = classe_virtuale_control.cerca_studenti_classe(query, id_classe)
 
     return jsonify(studenti)
 
@@ -75,7 +75,7 @@ def classe_studente(id_classe):
         return redirect(url_for('classedocente.no_classe'))
 
     try:
-        dati_classe = classe_virtuale_control.mostra_classe(id_classe)
+        dati_classe = classe_virtuale_control.mostra_studenti_classe(id_classe)
         print(f"Dati classe ricevuti: {dati_classe}")  # Debug
 
         if "error" in dati_classe:
@@ -105,17 +105,17 @@ def logo_action():
 
 @classedocente.route('/rimuovi-studente', methods=['POST'])
 @teacher_required
-def rimuovi_studente():
+def rimuovi_studente_classe():
     try:
         # Ottieni l'ID dello studente dalla richiesta
         data = request.get_json()
-        studente_id = data.get('studente_id')
+        id_studente = data.get('id_studente')
 
-        if not studente_id:
+        if not id_studente:
             return jsonify({'error': 'ID studente mancante'}), 400
 
         # Chiama il metodo per rimuovere lo studente
-        result = classe_virtuale_control.rimuovi_studente(studente_id)
+        result = classe_virtuale_control.rimuovi_studente_classe(id_studente)
 
         # Se il risultato è positivo, invia una risposta di successo
         return jsonify({'success': True}), 200
@@ -125,18 +125,18 @@ def rimuovi_studente():
 
 @classedocente.route('/aggiungi-studente', methods=['POST'])
 @teacher_required
-def aggiungi_studente():
+def aggiungi_studente_classe():
     try:
         # Ottieni i dati dallo studente dalla richiesta
         data = request.get_json()  # Dati inviati come JSON
-        studente_id = data.get('studente_id')
-        classe_id = int(data.get('classe_id'))  # Conversione esplicita a intero
+        id_studente = data.get('id_studente')
+        id_classe = int(data.get('id_classe'))  # Conversione esplicita a intero
 
-        if not studente_id or not classe_id:
+        if not id_studente or not id_classe:
             return jsonify({'error': 'ID dello studente o della classe non forniti'}), 400
 
         # Aggiungi lo studente alla classe
-        result = classe_virtuale_control.aggiungi_studente(studente_id, classe_id)
+        result = classe_virtuale_control.aggiungi_studente_classe(id_studente, id_classe)
 
         # Se l'inserimento è avvenuto con successo
         if result:
