@@ -1,13 +1,13 @@
 /*Foglio di stile utilizzato per la classe*/
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
 
-body {
-    font-family: 'Open Sans', sans-serif;
+html, body {
     margin: 0;
     padding: 0;
-    background-color: #ffffff; /* Colore di sfondo chiaro */
-    color: #333;
-    line-height: 1.6;
+    font-family: 'Open Sans', sans-serif;
+    background-color: #f9f4f1; /* Sfondo neutro */
+    height: 100%;
+    overflow: hidden; /* Disabilita lo scrolling globale */
 }
 
 /* Contenitore principale con altezza limitata */
