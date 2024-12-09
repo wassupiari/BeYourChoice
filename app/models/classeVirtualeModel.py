@@ -59,7 +59,7 @@ class ClasseVirtuale:
 
     def creazione_classe_virtuale(self, nome_classe, descrizione, id_docente):
         """
-        Crea una nuova classe virtuale, con verifica del formato e lunghezza per nome e descrizione.
+            Crea una nuova classe virtuale, con verifica del formato e lunghezza per nome e descrizione.
 
         Args:
             nome_classe (str): Il nome della classe virtuale.
@@ -106,77 +106,9 @@ class ClasseVirtuale:
             print(f"Errore durante la creazione della classe: {e}")
             return False
 
-    def inserimento_classe_studente(self, id_classe, id_studente):
-        """
-        Aggiunge uno studente a una classe virtuale.
-
-        Args:
-            id_classe (int): L'ID della classe virtuale.
-            id_studente (str): L'ID dello studente da aggiungere.
-
-        Returns:
-            str: Messaggio di successo o errore.
-
-        Raises:
-            ValueError: Se la classe virtuale non esiste o lo studente è già presente.
-        """
-        # Recupera la collezione 'ClasseVirtuale'
-        collection = self.db_manager.get_collection('ClasseVirtuale')
-
-        # Verifica se la classe esiste
-        classe = collection.find_one({'ID_Classe': id_classe})
-        if not classe:
-            raise ValueError(f"Errore: Classe con ID '{id_classe}' non trovata.")
-
-        # Verifica se lo studente è già nella classe
-        if id_studente in classe["studenti"]:
-            raise ValueError(f"Errore: Studente con ID '{id_studente}' già presente nella classe '{id_classe}'.")
-
-        # Aggiunge lo studente alla classe
-        collection.update_one(
-            {'ID_Classe': id_classe},
-            {'$push': {'studenti': id_studente}}
-        )
-
-        return f"Studente con ID '{id_studente}' aggiunto con successo alla classe '{id_classe}'."
-
-    def rimozione_classe_studente(self, id_classe, id_studente):
-        """
-        Rimuove uno studente da una classe virtuale.
-
-        Args:
-            id_classe(int): L'ID della classe virtuale.
-            id_studente (str): L'ID dello studente da rimuovere.
-
-        Returns:
-            str: Messaggio di successo o errore.
-
-        Raises:
-            ValueError: Se la classe virtuale non esiste o lo studente non è iscritto.
-        """
-        # Recupera la collezione 'ClasseVirtuale'
-        collection = self.db_manager.get_collection('ClasseVirtuale')
-
-        # Verifica se la classe esiste
-        classe = collection.find_one({'ID_Classe': id_classe})
-        if not classe:
-            raise ValueError(f"Errore: Classe con ID '{id_classe}' non trovata.")
-
-        # Verifica se lo studente è nella classe
-        if id_studente not in classe["studenti"]:
-            raise ValueError(f"Errore: Studente con ID '{id_studente}' non presente nella classe '{id_classe}'.")
-
-        # Rimuove lo studente dalla classe
-        collection.update_one(
-            {'ID_Classe': id_classe},
-            {'$pull': {'studenti': id_studente}}
-        )
-
-        return f"Studente con ID '{id_studente}' rimosso con successo dalla classe '{id_classe}'."
-
     def mostra_classe(self, id_classe):
         """
-        Recupera gli studenti di una classe specifica in ordine alfabetico.
+            Recupera gli studenti di una classe specifica in ordine alfabetico.
 
         Args:
             id_classe (int): L'ID della classe virtuale.
@@ -216,8 +148,8 @@ class ClasseVirtuale:
 
     def mostra_studenti_istituto(self, scuola_appartenenza):
         """
-        Recupera gli studenti di un istituto specifico che non sono assegnati a una classe,
-        ordinati alfabeticamente per Cognome e Nome.
+            Recupera gli studenti di un istituto specifico che non sono assegnati a una classe,
+            ordinati alfabeticamente per Cognome e Nome.
 
         Args:
             scuola_appartenenza (str): La scuola di appartenenza (SdA).
@@ -262,7 +194,8 @@ class ClasseVirtuale:
 
     def rimuovi_studente(self, studente_id):
         """
-        Imposta il campo ID_Classe dello studente a null.
+
+            Imposta il campo ID_Classe dello studente a null.
 
         Args:
             studente_id (str): ID dello studente da rimuovere.
@@ -284,10 +217,10 @@ class ClasseVirtuale:
 
     from bson import ObjectId
 
-    def aggiungi_studente(self, studente_id, classe_id):
+    def aggiungi_studente(self, id_studente, id_classe):
         print("aaaa")
         """
-        Aggiunge uno studente alla classe, impostando l'ID della classe nel documento dello studente.
+            Aggiunge uno studente alla classe, impostando l'ID della classe nel documento dello studente.
 
         Args:
             studente_id (str): L'ID dello studente.
@@ -301,21 +234,21 @@ class ClasseVirtuale:
             studente_collection = self.db_manager.get_collection("Studente")
             # Filtra per l'ID dello studente e aggiungi l'ID della classe
             # Controlla se lo studente esiste
-            studente = studente_collection.find_one({"_id": ObjectId(studente_id)})
+            studente = studente_collection.find_one({"_id": ObjectId(id_studente)})
             if not studente:
-                print(f"Errore: Studente con ID '{studente_id}' non trovato.")
+                print(f"Errore: Studente con ID '{id_studente}' non trovato.")
                 return False
 
             result = studente_collection.update_one(
-                {"_id": ObjectId(studente_id)},  # Filtra per l'ID dello studente
-                {"$set": {"id_classe": classe_id}}  # Imposta l'ID della classe
+                {"_id": ObjectId(id_studente)},  # Filtra per l'ID dello studente
+                {"$set": {"id_classe": id_classe}}  # Imposta l'ID della classe
             )
 
             # Verifica se l'operazione è stata eseguita correttamente
             if result.modified_count > 0:
                 return True
             else:
-                print(f"Errore: Nessuna modifica effettuata per lo studente con ID '{studente_id}'.")
+                print(f"Errore: Nessuna modifica effettuata per lo studente con ID '{id_studente}'.")
                 return False
 
         except Exception as e:
@@ -324,7 +257,7 @@ class ClasseVirtuale:
 
     def cerca_studenti(self, query, id_classe):
         """
-        Cerca gli studenti della classe specificata in base alla query.
+            Cerca gli studenti della classe specificata in base alla query.
 
         Args:
             query (str): La query di ricerca.
@@ -361,11 +294,10 @@ class ClasseVirtuale:
 
     def cerca_studenti_istituto(self, query):
         """
-        Cerca gli studenti della classe specificata in base alla query.
+          Cerca gli studenti dell'istituto del docente che sta effettuando la ricerca
 
         Args:
             query (str): La query di ricerca.
-            id_classe (int): L'ID della classe.
 
         Returns:
             list[dict]: Studenti filtrati o tutti gli studenti se la query è vuota.
