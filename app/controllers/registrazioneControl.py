@@ -76,10 +76,10 @@ def registra():
             docente_dict = {
                 "nome": nome,
                 "cognome": cognome,
-                "SdA": sda,
+                "sda": sda,
                 "email": email,
                 "cf": cf,
-                "Data_Nascita": data_nascita,
+                "data_nascita": data_nascita,
                 "password": password,
                 "codice_univoco": int(codice_univoco)
             }
@@ -92,10 +92,10 @@ def registra():
             studente_dict = {
                 "nome": nome,
                 "cognome": cognome,
-                "SdA": sda,
+                "sda": sda,
                 "email": email,
                 "cf": cf,
-                "Data_Nascita": data_nascita,
+                "data_nascita": data_nascita,
                 "password": password
             }
 

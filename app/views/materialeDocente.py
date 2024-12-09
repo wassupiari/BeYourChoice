@@ -7,7 +7,7 @@ from pymongo import collection
 
 from databaseManager import DatabaseManager
 from app.models.materialeModel import MaterialeModel
-from app.controllers.MaterialeControl import MaterialeControl
+from app.controllers.materialeControl import MaterialeControl
 import uuid  # Per generare ID unici
 
 MAX_FILE_SIZE_MB = 2

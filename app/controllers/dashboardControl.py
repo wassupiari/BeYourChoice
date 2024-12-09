@@ -1,7 +1,7 @@
 from flask import Blueprint, session
 from app.models.attivitaModel import Attivita
 from app.views.dasboardDocente import TeacherDashboardView
-from app.controllers.LoginControl import teacher_required, student_required
+from app.controllers.loginControl import teacher_required, student_required
 from app.views.dasboardStudente import StudentDashboardView
 
 # Blueprint per la dashboard del docente

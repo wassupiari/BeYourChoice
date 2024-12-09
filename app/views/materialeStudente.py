@@ -2,7 +2,7 @@ from flask import Flask, Blueprint, render_template, send_file, redirect, url_fo
 
 from app.models.materialeModel import MaterialeModel
 from databaseManager import DatabaseManager
-from app.controllers.MaterialeControl import MaterialeControl
+from app.controllers.materialeControl import MaterialeControl
 import os
 
 # Crea un Blueprint per la gestione lato studente

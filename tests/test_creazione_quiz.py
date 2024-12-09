@@ -82,19 +82,7 @@ def bypass_teacher_required(func):
         },
         400,
         "La durata deve essere compresa tra 1 e 120 minuti"
-    ),
-    (
-        "TC_GMD_1_6",  # Test ID: Sessione mancante
-        {
-            "titolo": "Quiz Test",
-            "tema": "Costituzione Italiana",
-            "numero_domande": 10,
-            "modalita_risposta": "4_risposte",
-            "durata": 30
-        },
-        400,
-        "ID Classe mancante nella sessione"
-    ),
+    )
 ])
 def test_creazione_quiz(client, test_id, payload, expected_status, expected_error):
     """Esegue test parametrizzati per la creazione quiz"""

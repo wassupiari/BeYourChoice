@@ -3,7 +3,7 @@ import re
 from flask import Blueprint, request, session, jsonify
 from app.models.quizModel import QuizModel
 from app.views.quizView import QuizView
-from app.controllers.LoginControl import teacher_required, student_required
+from app.controllers.loginControl import teacher_required, student_required
 from dotenv import load_dotenv
 
 # Carica le variabili d'ambiente
@@ -51,8 +51,7 @@ def genera_domande():
         if modalita_risposta not in ["3_risposte", "4_risposte", "vero_falso"]:
             return jsonify({"error": "Modalità di risposta non valida."}), 400
 
-        if not durata or not (1 <= int(durata) <= 120):
-            return jsonify({"error": "La durata deve essere compresa tra 1 e 120 minuti."}), 400
+
 
         # Genera domande
         domande = QuizModel.genera_domande(

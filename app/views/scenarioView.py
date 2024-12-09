@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request
 
-from app.controllers.ScenarioControl import scenarioControl
+from app.controllers.scenarioControl import scenarioControl
 from app.models.scenarioModel import ScenarioModel
 
 # Crea un Blueprint per il modulo Scenario

@@ -2,7 +2,7 @@ import os
 import re
 from bson import ObjectId
 from flask import flash, redirect, url_for, send_file, abort, session
-from app.controllers.MaterialeControl import MaterialeControl
+from app.controllers.materialeControl import MaterialeControl
 import uuid
 
 MAX_FILE_SIZE_MB = 2

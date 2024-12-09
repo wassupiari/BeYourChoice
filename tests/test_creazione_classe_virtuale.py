@@ -19,6 +19,7 @@ def test_nome_classe_lunghezza_non_valida(classe_virtuale_model, test_id):
         nome_classe = "5"
         descrizione = "La miglior classe"
         id_docente = "121212"
+        id_docente = "121212"
         risultato = classe_virtuale_model.creazioneClasseVirtuale(nome_classe, descrizione, id_docente)
         assert risultato is False, "Lunghezza del nome della classe virtuale non corretta"
 
