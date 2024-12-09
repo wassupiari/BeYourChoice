@@ -7,12 +7,6 @@ body {
     color: #333;
 }
 
-header {
-    background-color: #333;
-    color: white;
-    padding: 15px 0;
-    text-align: center;
-}
 
 main {
     max-width: 800px;
@@ -60,7 +54,7 @@ input[readonly] {
 }
 
 /* Stile comune per tutti i pulsanti */
-button {
+.button1 {
     padding: 10px 20px;
     background-color: #f9f4f1;
     color: #000000;
@@ -74,7 +68,7 @@ button {
 }
 
 /* Effetto hover per tutti i pulsanti */
-button:hover {
+.button1:hover {
     background-color: #d75a3d;
     transform: scale(1.05);
     color: #ffffff;

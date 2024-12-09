@@ -13,7 +13,7 @@ classe_control = ClasseVirtualeControl()
 @creazioneclasse.route('creazione-classe', methods=['GET', 'POST'])
 def creazione_classe():
     if request.method == 'POST':
-        codice_univoco_docent = session.get("CU")
+        codice_univoco_docent = session.get("cu")
 
         nome_classe = request.form['nome-classe']
         descrizione = request.form['descrizione']
