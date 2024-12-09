@@ -82,7 +82,7 @@ body {
 }
 
 .nav-link span {
-    margin-top: 1px;
+    margin-top: -10px;
     transition: color 0.3s ease;
 }
 
