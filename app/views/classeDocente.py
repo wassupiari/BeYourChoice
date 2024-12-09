@@ -10,15 +10,15 @@ classe_virtuale_control = ClasseVirtualeControl()
 
 @classedocente.route('/classe/<int:ID_Classe>', methods=['GET', 'POST'])
 @teacher_required
-def Classe_Docente(ID_Classe):
+def classe_docente(id_classe):
     # Assumendo che l'ID_Classe sia passato come parametro o derivato da un'altra fonte
     print("La route /ClasseDocente è stata chiamata!")  # Debug
-    session['ID_Classe'] = ID_Classe
+    session['ID_Classe'] = id_classe
 
     try:
         # Ottieni l'ID della classe dalla query string (se non è presente, usa 101 come default)
-        print(f"ID_Classe ricevuto: {ID_Classe}")
-        dati_classe = classe_virtuale_control.mostra_classe(ID_Classe)
+        print(f"ID_Classe ricevuto: {id_classe}")
+        dati_classe = classe_virtuale_control.mostra_classe(id_classe)
         # Aggiunto per debugging
         # Usa il controller per ottenere i dati degli studenti
         print(f"Dati classe ricevuti: {dati_classe}")  # Aggiunto per debugging
@@ -59,10 +59,8 @@ def cerca_studente_istituto():
 
     if query == '':
         # Se la query è vuota, restituisci tutti gli studenti della classe
-        print("classe ci sei?")
         studenti = classe_virtuale_control.mostra_studenti_istituto("Liceo scientifico galileo galilei")
     else:
-        print("classe ci sei?")
 
         # Altrimenti, restituisci solo gli studenti filtrati
         studenti = classe_virtuale_control.cerca_studenti_istituto(query)
@@ -71,15 +69,14 @@ def cerca_studente_istituto():
 
 @classedocente.route('/classestudente/<int:ID_Classe>', methods=['GET', 'POST'])
 @student_required
-def Classe_Studente(ID_Classe):
+def classe_studente(id_classe):
     print("La route /ClasseStudente è stata chiamata!")  # Debug
-    if ID_Classe == 0:
+    if id_classe == 0:
         # Se ID_Classe è 0, reindirizza alla pagina noclasse
         return redirect(url_for('classedocente.NoClasse'))
 
     try:
-        print(f"ID_Classe ricevuto: {ID_Classe}")  # Debug
-        dati_classe = classe_virtuale_control.mostra_classe(ID_Classe)
+        dati_classe = classe_virtuale_control.mostra_classe(id_classe)
         print(f"Dati classe ricevuti: {dati_classe}")  # Debug
 
         if "error" in dati_classe:
@@ -94,17 +91,17 @@ def Classe_Studente(ID_Classe):
 # Route per la pagina noclasse
 @classedocente.route('/noclasse', methods=['GET'])
 @student_required
-def NoClasse():
+def no_classe():
     return render_template("noClasse.html", messaggio="Nessuna classe selezionata.")
 
 # Route per la pagina manutenzione
 @classedocente.route('/manutenzione', methods=['GET'])
-def Manutenzione():
+def manutenzione():
     return render_template("error404.html", messaggio="Manutenzione in corso.")
 
 # Route per la pagina manutenzione
 @classedocente.route('/logoaction', methods=['GET'])
-def LogoAction():
+def logo_action():
     return render_template("logoaction.html", messaggio="Manutenzione in corso.")
 
 @classedocente.route('/rimuovi-studente', methods=['POST'])

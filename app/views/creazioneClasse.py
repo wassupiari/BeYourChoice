@@ -4,13 +4,13 @@ from app.controllers.LoginControl import teacher_required
 from app.models.studenteModel import StudenteModel
 from app.models.docenteModel import DocenteModel
 
-views = Blueprint('views', __name__)
+creazioneclasse = Blueprint('creazioneclasse', __name__)
 
 # Inizializza il controller della classe virtuale
 classe_control = ClasseVirtualeControl()
 
 
-@views.route('creazione-classe', methods=['GET', 'POST'])
+@creazioneclasse.route('creazione-classe', methods=['GET', 'POST'])
 def creazione_classe():
     if request.method == 'POST':
         codice_univoco_docent = session.get("CU")
@@ -21,7 +21,7 @@ def creazione_classe():
 
         try:
             # Crea la classe virtuale
-            classe_control.creazioneClasseVirtuale(nome_classe, descrizione, codice_univoco_docent)
+            classe_control.creazione_classe_virtuale(nome_classe, descrizione, codice_univoco_docent)
 
             # Dopo la creazione, controlla se l'utente è uno studente o un docente
             # Controlla se l'utente è uno studente
