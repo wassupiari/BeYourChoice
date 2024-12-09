@@ -16,7 +16,7 @@ quiz_blueprint = Blueprint("quiz", __name__, template_folder="../templates")
 @teacher_required
 def index():
     """Renderizza la pagina di creazione quiz."""
-    id_classe = session.get("ID_Classe")
+    id_classe = session.get("id_classe")
     if not id_classe:
         return QuizView.mostra_errore("ID Classe mancante nella sessione", 400)
     return QuizView.mostra_crea_quiz(id_classe)
@@ -77,10 +77,10 @@ def salva_quiz():
     """Salva un quiz e le sue domande."""
     try:
         data = request.get_json()
-        id_classe = session.get("ID_Classe")
+        id_classe = session.get("id_classe")
         if not id_classe:
             return QuizView.mostra_errore("ID Classe mancante nella sessione", 400)
-        data["ID_Classe"] = id_classe
+        data["id_classe"] = id_classe
 
         QuizModel.salva_quiz(data)
         return QuizView.mostra_messaggio("Quiz salvato correttamente!")
@@ -109,7 +109,7 @@ def visualizza_quiz(quiz_id):
         if not quiz:
             return QuizView.mostra_errore("Quiz non trovato", 404)
 
-        domande = QuizModel.recupera_domande([d["ID_Domanda"] for d in quiz["Domande"]])
+        domande = QuizModel.recupera_domande([d["id_domanda"] for d in quiz["domande"]])
         tempo_rimanente = QuizModel.calcola_tempo_rimanente(quiz_id, cf_studente)
 
         return QuizView.mostra_quiz(quiz, domande, tempo_rimanente)
@@ -155,7 +155,7 @@ def valuta_quiz():
         # Valuta le risposte
         corrette = 0
         for domanda in domande:
-            risposta_utente = data.get(f"q{domanda['ID_Domanda']}")
+            risposta_utente = data.get(f"q{domanda['id_domanda']}")
             if risposta_utente == domanda["Risposta_Corretta"]:
                 corrette += 1
 
@@ -164,10 +164,10 @@ def valuta_quiz():
 
         # Prepara il risultato del quiz
         quiz_result = {
-            "ID_Quiz": domande[0]["ID_Quiz"],
-            "CF_Studente": cf_studente,
-            "Punteggio_Quiz": punteggio,
-            "Risposte": [data.get(f"q{d['ID_Domanda']}") for d in domande]
+            "id_quiz": domande[0]["id_quiz"],
+            "cg_studente": cf_studente,
+            "punteggio_quiz": punteggio,
+            "risposte": [data.get(f"q{d['id_domanda']}") for d in domande]
         }
 
         # Salva il risultato del quiz
@@ -195,7 +195,7 @@ def visualizza_domande_quiz(quiz_id):
         if not quiz:
             return QuizView.mostra_errore("Quiz non trovato", 404)
 
-        domande = QuizModel.recupera_domande([d["ID_Domanda"] for d in quiz["Domande"]])
+        domande = QuizModel.recupera_domande([d["id_domanda"] for d in quiz["domande"]])
         return QuizView.mostra_domande_quiz(quiz, domande)
     except Exception as e:
         return QuizView.mostra_errore("Errore durante la visualizzazione delle domande")
@@ -214,8 +214,8 @@ def visualizza_risultati_quiz(quiz_id):
         if not quiz:
             return QuizView.mostra_errore("Quiz non trovato", 404)
 
-        id_classe = quiz.get("ID_Classe")
-        titolo_quiz = quiz.get("Titolo")
+        id_classe = quiz.get("id_classe")
+        titolo_quiz = quiz.get("titolo")
 
         # Recupera tutti gli studenti della classe
         studenti_classe = QuizModel.recupera_studenti_classe(id_classe)
@@ -224,14 +224,14 @@ def visualizza_risultati_quiz(quiz_id):
 
         # Recupera le attività completate per questo quiz
         attività_completate = QuizModel.recupera_attività_completate(titolo_quiz)
-        attività_per_cf = {attività["CF_Studente"].strip().upper(): attività for attività in attività_completate}
+        attività_per_cf = {attività["cf_studente"].strip().upper(): attività for attività in attività_completate}
 
         # Combina i risultati con l'elenco degli studenti
         risultati_completi = [
             {
                 "Nome": studente["nome"],
                 "Cognome": studente["cognome"],
-                "Punteggio": attività_per_cf.get(studente["cf"].strip().upper(), {}).get("Punteggio_Attività", "Quiz non svolto")
+                "Punteggio": attività_per_cf.get(studente["cf"].strip().upper(), {}).get("punteggio_attivita", "Quiz non svolto")
             }
             for studente in studenti_classe
         ]
@@ -250,7 +250,7 @@ def visualizza_ultimo_quiz():
     """Visualizza l'ultimo quiz disponibile per una classe."""
     try:
         cf_studente = session.get('cf')
-        id_classe = session.get('ID_Classe')
+        id_classe = session.get('id_classe')
 
         if not cf_studente or not id_classe:
             return QuizView.mostra_errore("Sessione non valida", 400)
@@ -270,7 +270,7 @@ def visualizza_quiz_classe():
     Recupera tutti i quiz per una specifica classe e li passa al template per il docente.
     """
     try:
-        id_classe = session.get("ID_Classe")  # Recupera l'ID della classe dalla sessione
+        id_classe = session.get("id_classe")  # Recupera l'ID della classe dalla sessione
         if not id_classe:
             return QuizView.mostra_errore("ID Classe non specificato.", 400)
 
