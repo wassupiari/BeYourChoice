@@ -51,8 +51,7 @@ def genera_domande():
         if modalita_risposta not in ["3_risposte", "4_risposte", "vero_falso"]:
             return jsonify({"error": "Modalità di risposta non valida."}), 400
 
-        if not durata or not (1 <= int(durata) <= 120):
-            return jsonify({"error": "La durata deve essere compresa tra 1 e 120 minuti."}), 400
+
 
         # Genera domande
         domande = QuizModel.genera_domande(
