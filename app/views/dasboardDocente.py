@@ -7,7 +7,7 @@ class TeacherDashboardView:
 
     @staticmethod
     def render_classifica(classifica, id_classe):
-        return render_template("classificaClasse.html", classifica=classifica, ID_Classe=id_classe)
+        return render_template("classificaClasse.html", classifica=classifica, id_classe=id_classe)
 
     @staticmethod
     def render_storico(storico, cf_studente):

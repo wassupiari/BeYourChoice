@@ -8,24 +8,23 @@ classedocente = Blueprint('classedocente', __name__)
 classe_virtuale_control = ClasseVirtualeControl()
 
 
-@classedocente.route('/classe/<int:ID_Classe>', methods=['GET', 'POST'])
+@classedocente.route('/classe/<int:id_classe>', methods=['GET', 'POST'])
 @teacher_required
 def classe_docente(id_classe):
-    # Assumendo che l'ID_Classe sia passato come parametro o derivato da un'altra fonte
     print("La route /ClasseDocente è stata chiamata!")  # Debug
-    session['ID_Classe'] = id_classe
+    session['id_classe'] = id_classe
 
     try:
         # Ottieni l'ID della classe dalla query string (se non è presente, usa 101 come default)
         print(f"ID_Classe ricevuto: {id_classe}")
         dati_classe = classe_virtuale_control.mostra_classe(id_classe)
-        # Aggiunto per debugging
-        # Usa il controller per ottenere i dati degli studenti
         print(f"Dati classe ricevuti: {dati_classe}")  # Aggiunto per debugging
+
         if "error" in dati_classe:
             return render_template("classeDocente.html")
 
-            # Passa i dati al template classeDocente.html
+        # Assicurati che 'dati_classe' sia un dizionario o un oggetto con l'attributo 'id_classe'
+        print(dati_classe)  # Debugging
         return render_template("classeDocente.html", classe=dati_classe)
 
     except Exception as e:
@@ -35,7 +34,7 @@ def classe_docente(id_classe):
 @classedocente.route('/cerca-studente', methods=['GET'])
 def cerca_studente():
     query = request.args.get('query', '').strip()
-    id_classe = session.get('ID_Classe', None)  # Recupera l'ID della classe dalla sessione
+    id_classe = session.get('id_classe', None)  # Recupera l'ID della classe dalla sessione
 
     if not id_classe:
         return jsonify([])  # Nessuna classe selezionata
@@ -52,8 +51,7 @@ def cerca_studente():
 @classedocente.route('/cerca-studente-istituto', methods=['GET'])
 def cerca_studente_istituto():
     query = request.args.get('query', '').strip()
-    id_classe = session.get('ID_Classe', None)  # Recupera l'ID della classe dalla sessione
-    print("mo mi incazzo")
+    id_classe = session.get('id_classe', None)  # Recupera l'ID della classe dalla sessione
     if not id_classe:
         return jsonify([])  # Nessuna classe selezionata
 
@@ -67,13 +65,14 @@ def cerca_studente_istituto():
 
     return jsonify(studenti)
 
-@classedocente.route('/classestudente/<int:ID_Classe>', methods=['GET', 'POST'])
+@classedocente.route('/classestudente/<int:id_classe>', methods=['GET', 'POST'])
 @student_required
 def classe_studente(id_classe):
     print("La route /ClasseStudente è stata chiamata!")  # Debug
+    print(id_classe)
     if id_classe == 0:
         # Se ID_Classe è 0, reindirizza alla pagina noclasse
-        return redirect(url_for('classedocente.NoClasse'))
+        return redirect(url_for('classedocente.no_classe'))
 
     try:
         dati_classe = classe_virtuale_control.mostra_classe(id_classe)

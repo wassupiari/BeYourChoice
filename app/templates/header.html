@@ -35,7 +35,7 @@
                 </a>
             </nav>
             <div class="user-info">
-                <span style="font-size: 1.2rem;">Ciao, <strong>{{ session.get("Nome") }}</strong></span>
+                <span style="font-size: 1.2rem;">Ciao, <strong>{{ session.get("nome") }}</strong></span>
                 <!-- Form per il logout -->
                 <form action="{{ url_for('login.logout') }}" method="POST" style="display:inline;">
                     <button type="submit" class="logout-button" style="background: none; border: none; cursor: pointer;">

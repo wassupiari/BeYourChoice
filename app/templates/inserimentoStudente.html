@@ -21,7 +21,7 @@
         <div class="search-container">
             <input type="text" id="search-bar" placeholder="Cerca studente" class="search-bar"
                    oninput="cercaStudente()">
-            <a href="{{ url_for('classedocente.classe_docente', id_classe=session['ID_Classe']) }}">
+            <a href="{{ url_for('classedocente.classe_docente', id_classe=session['id_classe']) }}">
                 <button class="annulla-button">Annulla</button>
             </a>
         </div>
@@ -49,7 +49,7 @@
                 <td>{{ studente.Data_Nascita }}</td>
                 <td class="action-cell">
                     <button class="add-button"
-                            onclick="aggiungiStudente('{{ studente._id }}', '{{ session['ID_Classe'] }}')"><i
+                            onclick="aggiungiStudente('{{ studente._id }}', '{{ session['id_classe'] }}')"><i
                             class="fas fa-user-plus"></i></button>
 
                     </button>

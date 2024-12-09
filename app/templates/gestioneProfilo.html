@@ -20,12 +20,12 @@
                  {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                     <ul class="flashes">
-                        {% for category, message in messages %}
-                            {% if category == 'message_profile_successo'or category == 'message_profile_error'%}
-                                <li class="{{ category }}">{{ message }}</li>
-                            {% endif %}
-                        {% endfor %}
-                    </ul>
+        {% for category, message in messages %}
+            {% if category in ['message_profile_successo', 'message_profile_error'] %}
+                <li class="{{ category }}">{{ message }}</li>
+            {% endif %}
+        {% endfor %}
+    </ul>
                 {% endif %}
             {% endwith %}
             <form method="POST" id="profiloForm">
@@ -77,26 +77,26 @@
         <section class="profile-view">
     <h2>Cambia Password</h2>
     {% if profilo_studente %}
-    <form method="POST" action="{{ url_for('profilo.change_password_studente') }}" id="changePasswordFormStudente">
+    <form method="POST" action="{{ url_for('profilo.cambia_password_studente') }}" id="changePasswordFormStudente">
         <div>
-            <label for="oldPasswordStudente"><strong>Vecchia Password:</strong></label>
-            <input type="password" id="oldPasswordStudente" name="old_password" required>
+            <label for="vecchiaPasswordStudente"><strong>Vecchia Password:</strong></label>
+            <input type="password" id="vecchiaPasswordStudente" name="vecchia_password" placeholder="Vecchia Password" required>
         </div>
         <div>
-            <label for="newPasswordStudente"><strong>Nuova Password:</strong></label>
-            <input type="password" id="newPasswordStudente" name="new_password" required>
+            <label for="nuovaPasswordStudente"><strong>Nuova Password:</strong></label>
+            <input type="password" id="nuovaPasswordStudente" name="nuova_password" placeholder="Nuova Password" required>
         </div>
         <button type="submit">Cambia Password</button>
     </form>
     {% elif profilo_docente %}
-    <form method="POST" action="{{ url_for('profilo.change_password_docente') }}" id="changePasswordFormDocente">
+    <form method="POST" action="{{ url_for('profilo.cambia_password_docente') }}" id="changePasswordFormDocente">
         <div>
-            <label for="oldPasswordDocente"><strong>Vecchia Password:</strong></label>
-            <input type="password" id="oldPasswordDocente" name="old_password" required>
+            <label for="vecchiaPasswordDocente"><strong>Vecchia Password:</strong></label>
+            <input type="password" id="vecchiaPasswordDocente" name="vecchia_password" placeholder="Vecchia Password" required>
         </div>
         <div>
-            <label for="newPasswordDocente"><strong>Nuova Password:</strong></label>
-            <input type="password" id="newPasswordDocente" name="new_password" required>
+            <label for="nuovaPasswordDocente"><strong>Nuova Password:</strong></label>
+            <input type="password" id="nuovaPasswordDocente" name="nuova_password" placeholder="Nuova Password" required>
         </div>
         <button type="submit">Cambia Password</button>
     </form>
@@ -106,20 +106,30 @@
 
 
     <script>
-    document.getElementById('editButton').addEventListener('click', function() {
-        const form = document.getElementById('profiloForm');
-        const inputs = form.querySelectorAll('input:not([type="hidden"])');
+        document.getElementById('editButton').addEventListener('click', function() {
+            const form = document.getElementById('profiloForm');
+            const inputs = form.querySelectorAll('input:not([type="hidden"])');
 
-        if (confirm('Vuoi passare alla modalità di modifica?')) {
-            inputs.forEach(input => {
-                if (input.id !== 'cf') { // Escludi il campo CF dalla modifica
-                    input.removeAttribute('readonly');
-                }
-            });
-            this.style.display = 'none';
-            document.getElementById('saveButton').style.display = 'block';
+            if (confirm('Vuoi passare alla modalità di modifica?')) {
+                inputs.forEach(input => {
+                    if (input.id !== 'cf') { // Escludi il campo CF dalla modifica
+                        input.removeAttribute('readonly');
+                    }
+                });
+                this.style.display = 'none';
+                document.getElementById('saveButton').style.display = 'block';
+            }
+        });
+
+        // Aggiunge il controllo di visibilità della password
+        function togglePasswordVisibility(elementId) {
+            const input = document.getElementById(elementId);
+            if (input.type === 'password') {
+                input.type = 'text';
+            } else {
+                input.type = 'password';
+            }
         }
-    });
-</script>
+    </script>
 </body>
 </html>

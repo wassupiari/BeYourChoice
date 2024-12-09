@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modulo di Registrazione</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styleAutenticazione.css') }}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/favicon-32x32.png') }}">
 </head>
@@ -25,7 +26,10 @@
                 <input type="email" name="email" placeholder="Inserisci la tua Email" required>
                 <input type="text" name="cf" id="cf" placeholder="Inserisci il tuo Codice Fiscale" required>
                 <input type="date" name="data-nascita" id="data" required>
-                <input type="password" name="password" id="password" placeholder="Inserisci la tua Password" required>
+                <div class="password-container">
+                    <input type="password" name="password" id="password" placeholder="Inserisci la tua Password" required>
+                    <i id="togglePassword" onclick="showPwd()"  class="fas fa-eye"></i>
+                </div>
                 <input type="text" name="cu" id="cu" placeholder="Inserisci il tuo Codice Univoco" required>
           <button type="submit">INVIA</button>
         </form>
@@ -34,8 +38,11 @@
         <form action="/login" method="POST">
           <h1>ACCEDI</h1>
           <input type="text" name="email" placeholder="Email" />
-          <input type="password" name="password" placeholder="Password" />
-          <button >ACCEDI</button>
+          <div class="password-container">
+                    <input type="password" name="password" id="password2" placeholder="Inserisci la tua Password" required>
+                    <i id="togglePassword2" onclick="showPwd2()"  class="fas fa-eye"></i>
+          </div>
+            <button>ACCEDI</button>
         </form>
       </div>
       <div class="toogle-container" style="background-image: url('{{ url_for('static', filename='img/6.png') }}');">
