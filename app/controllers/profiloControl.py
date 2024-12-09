@@ -29,6 +29,11 @@ class ProfiloControl:
             return []
 
     def carica_profilo_studente(self, email, nuovi_dati):
+        if not self._valida_dati_profilo(nuovi_dati):
+            logging.error(f"Dati del profilo studente non validi per email {email}")
+            flash("Errore: Dati non validi, aggiornamento non effettuato.", "message_profile_error")
+            return False
+
         try:
             studente_collection = self.db_manager.get_collection("Studente")
             result = studente_collection.update_one({"email": email}, {"$set": nuovi_dati})
@@ -38,6 +43,11 @@ class ProfiloControl:
             return False
 
     def carica_profilo_docente(self, email, nuovi_dati):
+        if not self._valida_dati_profilo(nuovi_dati):
+            logging.error(f"Dati del profilo docente non validi per email {email}")
+            flash("Errore: Dati non validi, aggiornamento non effettuato.", "message_profile_error")
+            return False
+
         try:
             docente_collection = self.db_manager.get_collection("Docente")
             result = docente_collection.update_one({"email": email}, {"$set": nuovi_dati})
@@ -46,13 +56,38 @@ class ProfiloControl:
             logging.error(f"Errore nell'aggiornamento del profilo docente per email {email}: {str(e)}")
             return False
 
+    def _valida_dati_profilo(self, dati):
+        # Regex per la convalida
+        email_regex = r"^[A-z0-9._%+-]+@[A-z0-9.-]+\.[A-z]{2,4}$"
+        nome_regex = r"^[A-ZÀ-ÖØ-Ý][a-zà-öø-ý]{2,}(?:['-][A-ZÀ-ÖØ-Ýa-zà-öø-ý]+)*$"
+        cognome_regex = r"^[A-ZÀ-ÖØ-Ý][a-zà-öø-ý]{2,}(?:['-][A-ZÀ-ÖØ-Ýa-zà-öø-ý]+)*$"
+        sda_regex = r"^[A-Za-z0-9À-ù'’\- ]{2,50}$"
+        cf_regex = r"^[A-Z]{6}[0-9]{2}[A-EHLMPR-T][0-9]{2}[A-Z0-9]{4}[A-Z]$"
+        data_nascita_regex = r"^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$"
+
+        # Controlli generali sui dati forniti
+        if 'email' in dati and not re.match(email_regex, dati['email']):
+            return False
+        if 'nome' in dati and not re.match(nome_regex, dati['nome']):
+            return False
+        if 'cognome' in dati and not re.match(cognome_regex, dati['cognome']):
+            return False
+        if 'sda' in dati and not re.match(sda_regex, dati['sda']):
+            return False
+        if 'cf' in dati and not re.match(cf_regex, dati['cf']):
+            return False
+        if 'data_nascita' in dati and not re.match(data_nascita_regex, dati['data_nascita']):
+            return False
+
+        return True
+
     def cambia_password_studente(self, vecchia_password, nuova_password):
-        return self._cambia_password("Studente", vecchia_password, nuova_password)
+        return self.cambia_password("Studente", vecchia_password, nuova_password)
 
     def cambia_password_docente(self, vecchia_password, nuova_password):
-        return self._cambia_password("Docente", vecchia_password, nuova_password)
+        return self.cambia_password("Docente", vecchia_password, nuova_password)
 
-    def _cambia_password(self, user_type, vecchia_password, nuova_password):
+    def cambia_password(self, user_type, vecchia_password, nuova_password):
         collection = self.db_manager.get_collection(user_type)
         email = session.get('email')
         if not email:
