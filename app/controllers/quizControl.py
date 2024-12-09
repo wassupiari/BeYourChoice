@@ -30,9 +30,9 @@ def genera_domande():
     """Genera domande per il quiz."""
     try:
         titolo = request.json.get("titolo")
-        tema = request.json.get("tema")
-        numero_domande = request.json.get("numero_domande")
-        modalita_risposta = request.json.get("modalita_risposta")
+        tema = request.json.get("argomento")
+        numero_domande = request.json.get("n_domande")
+        modalita_risposta = request.json.get("modalita_quiz")
         durata = request.json.get("durata")
 
         # Controlli di validazione
@@ -58,7 +58,6 @@ def genera_domande():
             tema=tema,
             numero_domande=int(numero_domande),
             modalita_risposta=modalita_risposta,
-            durata=durata,
             api_key=os.getenv("OPENAI_API_KEY")
         )
 
@@ -74,18 +73,24 @@ def genera_domande():
 @quiz_blueprint.route("/salva", methods=["POST"])
 @teacher_required
 def salva_quiz():
-    """Salva un quiz e le sue domande."""
+    print("Richiesta ricevuta per /salva")
     try:
         data = request.get_json()
+        print("Dati ricevuti:", data)
+
         id_classe = session.get("id_classe")
         if not id_classe:
-            return QuizView.mostra_errore("ID Classe mancante nella sessione", 400)
-        data["id_classe"] = id_classe
+            print("Errore: ID Classe mancante nella sessione.")
+            return jsonify({"error": "ID Classe mancante nella sessione."}), 403
 
+        data["id_classe"] = id_classe
         QuizModel.salva_quiz(data)
-        return QuizView.mostra_messaggio("Quiz salvato correttamente!")
+        print("Quiz salvato correttamente.")
+        return jsonify({"message": "Quiz salvato correttamente!"}), 200
     except Exception as e:
-        return QuizView.mostra_errore(f"Errore durante il salvataggio: {str(e)}")
+        print(f"Errore durante il salvataggio del quiz: {e}")
+        return jsonify({"error": f"Errore durante il salvataggio: {str(e)}"}), 500
+
 
 
 

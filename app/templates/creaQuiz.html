@@ -16,28 +16,28 @@
     <div id="error-message" style="color: red; display: none;"></div>
     <form id="quiz-form">
         <div>
-            <label for="topic">Titolo del Quiz:</label>
-            <input type="text" id="topic" name="topic" placeholder="Inserisci il titolo del quiz..." required>
+            <label for="titolo">Titolo del Quiz:</label>
+            <input type="text" id="titolo" name="titolo" placeholder="Inserisci il titolo del quiz..." required>
         </div>
 
         <div>
-            <label for="tema">Argomento:</label>
-            <input type="text" id="tema" name="tema" placeholder="Inserisci l'argomento..." required>
+            <label for="argomento">Argomento:</label>
+            <input type="text" id="argomento" name="argomento" placeholder="Inserisci l'argomento..." required>
         </div>
 
         <div>
-            <label for="numero_domande">Numero di Domande:</label>
-            <input type="number" id="numero_domande" name="numero_domande" min="5" max="20" value="5" required>
+            <label for="n_domande">Numero di Domande:</label>
+            <input type="number" id="n_domande" name="n_domande" min="5" max="20" value="5" required>
         </div>
 
         <div>
-            <label for="durata_quiz">Durata del Quiz (minuti):</label>
-            <input type="number" id="durata_quiz" name="durata_quiz" min="1" max="120" value="30" required>
+            <label for="durata">Durata del Quiz (minuti):</label>
+            <input type="number" id="durata" name="durata" min="1" max="120" value="30" required>
         </div>
 
         <div>
             <label>Modalità di Risposta:</label>
-            <select id="modalita_risposta" name="modalita_risposta" required>
+            <select id="modalita_quiz" name="modalita_quiz" required>
                 <option value="3_risposte">Scelta multipla con 3 risposte</option>
                 <option value="4_risposte">Scelta multipla con 4 risposte</option>
             </select>
@@ -56,7 +56,7 @@
 <script>
     // Regex per i controlli
     const titoloRegex = /^[A-Za-zÀ-ú0-9\s\-_']{2,255}$/;
-    const temaRegex = /^[A-Za-zÀ-ú0-9‘’',\.\(\)\s\/|\\{}\[\],\-!$%&?<>=^+°#*:']{2,255}$/;
+    const argomentoRegex = /^[A-Za-zÀ-ú0-9‘’',\.\(\)\s\/|\\{}\[\],\-!$%&?<>=^+°#*:']{2,255}$/;
 
     let generatedQuestions = [];
     let quizId = Math.floor(Math.random() * 1000) + 400;
@@ -66,7 +66,6 @@
         errorDiv.style.display = 'none';
 
         try {
-            console.log("Payload inviato:", payload);
             const response = await fetch('/genera', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
@@ -79,10 +78,8 @@
             }
 
             const data = await response.json();
-            console.log("Risposta dal server:", data);
             return data;
         } catch (error) {
-            console.error("Errore durante la richiesta:", error.message);
             errorDiv.innerText = error.message;
             errorDiv.style.display = 'block';
             return [];
@@ -97,26 +94,26 @@
         errorDiv.style.display = 'none';
         outputDiv.innerHTML = '';
 
-        const topic = document.getElementById('topic').value.trim();
-        const tema = document.getElementById('tema').value.trim();
-        const numeroDomande = parseInt(document.getElementById('numero_domande').value);
-        const durata = parseInt(document.getElementById('durata_quiz').value);
-        const modalitaRisposta = document.getElementById('modalita_risposta').value;
+        const titolo = document.getElementById('titolo').value.trim();
+        const argomento = document.getElementById('argomento').value.trim();
+        const nDomande = parseInt(document.getElementById('n_domande').value);
+        const durata = parseInt(document.getElementById('durata').value);
+        const modalitaQuiz = document.getElementById('modalita_quiz').value;
 
         // Validazione dei campi
-        if (!titoloRegex.test(topic)) {
+        if (!titoloRegex.test(titolo)) {
             errorDiv.innerText = "Titolo non valido (2-255 caratteri, formato corretto).";
             errorDiv.style.display = 'block';
             return;
         }
 
-        if (!temaRegex.test(tema)) {
+        if (!argomentoRegex.test(argomento)) {
             errorDiv.innerText = "Argomento non valido (2-255 caratteri, formato corretto).";
             errorDiv.style.display = 'block';
             return;
         }
 
-        if (numeroDomande < 5 || numeroDomande > 20) {
+        if (nDomande < 5 || nDomande > 20) {
             errorDiv.innerText = "Il numero di domande deve essere tra 5 e 20.";
             errorDiv.style.display = 'block';
             return;
@@ -131,20 +128,20 @@
         outputDiv.innerHTML = '<h2>Generazione in corso...</h2>';
 
         const payload = {
-            titolo: topic,
-            tema: tema,
-            numero_domande: numeroDomande,
-            modalita_risposta: modalitaRisposta,
+            titolo: titolo,
+            argomento: argomento,
+            n_domande: nDomande,
+            modalita_quiz: modalitaQuiz,
         };
 
         const domande = await fetchDomande(payload);
 
         if (domande.length > 0) {
             generatedQuestions = domande.map((domanda, index) => ({
-                ID_Domanda: Math.floor(Math.random() * 1000000),
-                Testo_Domanda: domanda.Testo_Domanda,
-                Opzioni_Risposte: domanda.Opzioni_Risposte,
-                Risposta_Corretta: domanda.Risposta_Corretta,
+                id_domanda: Math.floor(Math.random() * 1000000),
+                testo_domanda: domanda.testo_domanda,
+                opzioni_risposte: domanda.opzioni_risposte,
+                risposta_corretta: domanda.risposta_corretta,
             }));
 
             renderQuestions(outputDiv, generatedQuestions);
@@ -163,12 +160,12 @@
 
             const domandaText = document.createElement('p');
             domandaText.className = 'domanda-text';
-            domandaText.innerHTML = `<strong>${index + 1}. ${domanda.Testo_Domanda}</strong>`;
+            domandaText.innerHTML = `<strong>${index + 1}. ${domanda.testo_domanda}</strong>`;
 
             const options = document.createElement('div');
             options.className = 'options-container';
 
-            domanda.Opzioni_Risposte.forEach((opzione) => {
+            domanda.opzioni_risposte.forEach((opzione) => {
                 const optionContainer = document.createElement('div');
                 optionContainer.className = 'option-container';
 
@@ -196,10 +193,10 @@
         const errorDiv = document.getElementById('error-message');
         errorDiv.style.display = 'none';
 
-        const topic = document.getElementById('topic').value.trim();
-        const tema = document.getElementById('tema').value.trim();
-        const numeroDomande = parseInt(document.getElementById('numero_domande').value);
-        const durata = parseInt(document.getElementById('durata_quiz').value);
+        const titolo = document.getElementById('titolo').value.trim();
+        const argomento = document.getElementById('argomento').value.trim();
+        const nDomande = parseInt(document.getElementById('n_domande').value);
+        const durata = parseInt(document.getElementById('durata').value);
 
         if (!generatedQuestions || generatedQuestions.length === 0) {
             errorDiv.innerText = "Nessuna domanda generata, non è possibile salvare il quiz.";
@@ -208,17 +205,15 @@
         }
 
         const quiz = {
-            ID_Quiz: quizId,
-            Titolo: topic,
-            Argomento: tema,
-            N_Domande: numeroDomande,
-            Domande: generatedQuestions,
-            Modalità_Quiz: document.getElementById('modalita_risposta').value,
-            Durata: durata,
-            Data_Creazione: new Date().toISOString(),
+            id_quiz: quizId,
+            titolo: titolo,
+            argomento: argomento,
+            n_domande: nDomande,
+            domande: generatedQuestions,
+            modalita_quiz: document.getElementById('modalita_quiz').value,
+            durata: durata,
+            data_creazione: new Date().toISOString(),
         };
-
-        console.log("Payload inviato al backend:", JSON.stringify(quiz));
 
         try {
             const response = await fetch('/salva', {
