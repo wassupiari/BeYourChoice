@@ -17,59 +17,59 @@ class MaterialeControl:
         # Inserisce nel database
         self.collection.insert_one(materiale_model)
 
-    def modifica_materiale(self, material_id, updated_data):
+    def modifica_materiale(self, materiale_id, dati_caricati):
         self.collection.update_one(
-            {"_id": ObjectId(material_id)},
-            {"$set": updated_data}
+            {"_id": ObjectId(materiale_id)},
+            {"$set": dati_caricati}
         )
 
-    def delete_material(self, material_id):
-        materiale = self.collection.find_one({"_id": ObjectId(material_id)})
+    def rimuovi_materiale(self, materiale_id):
+        materiale = self.collection.find_one({"_id": ObjectId(materiale_id)})
         if materiale:
-            self.collection.delete_one({"_id": ObjectId(material_id)})
+            self.collection.delete_one({"_id": ObjectId(materiale_id)})
             return materiale
         return None
 
-    def visualizza_materiale(self, filter_criteria):
-        return self.collection.find_one(filter_criteria)
+    def visualizza_materiale(self, criterio_filtro):
+        return self.collection.find_one(criterio_filtro)
 
 
 
 
-    def insert_document(self, document):
-        return self.collection.insert_one(document)
+    def inserisci_documento(self, documento):
+        return self.collection.insert_one(documento)
 
-    def find_document(self, query):
+    def trova_documento(self, query):
         return self.collection.find_one(query)
 
-    def update_document(self, query, new_values):
-        return self.collection.update_one(query, {"$set": new_values})
+    def carica_documento(self, query, nuovi_valori):
+        return self.collection.update_one(query, {"$set": nuovi_valori})
 
-    def delete_document(self, query):
+    def rimuovi_documento(self, query):
         return self.collection.delete_one(query)
 
-    def elimina_materiale(self, material_id):
-        result = self.collection.delete_one({'_id': ObjectId(material_id)})
+    def elimina_materiale(self, materiale_id):
+        result = self.collection.delete_one({'_id': ObjectId(materiale_id)})
         return result.deleted_count == 1
 
     def count_documents(self, query):
         return self.collection.count_documents(query)
 
-    def get_all_materials(self):
-        materials = list(self.collection.find())
-        print(f"Materiali nel database: {materials}")
-        return materials
+    def get_tutti_materiali(self):
+        materiali = list(self.collection.find())
+        print(f"Materiali nel database: {materiali}")
+        return materiali
 
-    def get_material(self, query):
+    def get_materiale(self, query):
         return self.collection.find_one(query)
 
-    def get_material_by_id(self, material_id):
-        return self.collection.find_one({'_id': ObjectId(material_id)})
+    def get_materiale_tramite_id(self, materiale_id):
+        return self.collection.find_one({'_id': ObjectId(materiale_id)})
 
-    def update_material(self, materiale_id, updated_data):
-        return self.collection.update_one({'_id': ObjectId(materiale_id)}, {'$set': updated_data})
+    def carica_materiale(self, materiale_id, dati_caricati):
+        return self.collection.update_one({'_id': ObjectId(materiale_id)}, {'$set': dati_caricati})
 
-    def get_materials_by_id(self, ID_Classe):
+    def get_materiali_tramite_id_classe(self, ID_Classe):
         """Esegui una query MongoDB per ottenere i materiali per una specifica classe."""
         try:
             query = {"ID_Classe": ID_Classe}

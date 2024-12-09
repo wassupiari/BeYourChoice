@@ -30,16 +30,6 @@ class ClasseVirtuale:
         )
         return counter['sequence_value']
 
-    # def __del__(self):
-    # """Chiude la connessione al database quando l'oggetto viene distrutto."""
-    # self.close_connection()
-
-    # def close_connection(self):
-    #    """Chiude la connessione al database."""
-    #   if self.client:
-    #        self.client.close()
-    #       print("Connessione al database chiusa")
-
     def visualizza_tutti_studenti(self):
         """
         Recupera tutti gli studenti dal database e restituisce i dati completi,
@@ -67,14 +57,14 @@ class ClasseVirtuale:
         else:
             return "Nessuno studente trovato nel database."
 
-    def creazioneClasseVirtuale(self, NomeClasse, Descrizione, ID_Docente):
+    def creazione_classe_virtuale(self, nome_classe, descrizione, id_docente):
         """
         Crea una nuova classe virtuale, con verifica del formato e lunghezza per nome e descrizione.
 
         Args:
-            NomeClasse (str): Il nome della classe virtuale.
-            Descrizione (str): La descrizione della classe virtuale.
-            ID_Docente (str): L'ID del docente che crea la classe.
+            nome_classe (str): Il nome della classe virtuale.
+            descrizione (str): La descrizione della classe virtuale.
+            id_docente (str): L'ID del docente che crea la classe.
 
         Returns:
             bool: True se la creazione è avvenuta con successo, altrimenti False.
@@ -84,25 +74,25 @@ class ClasseVirtuale:
         """
         try:
             # Validazione del nome della classe
-            if not (2 <= len(NomeClasse) <= 20):
+            if not (2 <= len(nome_classe) <= 20):
                 raise ValueError("Lunghezza del nome della classe virtuale non corretta.")
-            if not re.match(r"^[A-Za-zÀ-ú‘’',\(\)\s0-9]{2,20}$", NomeClasse):
+            if not re.match(r"^[A-Za-zÀ-ú‘’',\(\)\s0-9]{2,20}$", nome_classe):
                 raise ValueError("Formato del nome della classe virtuale non corretto.")
 
             # Validazione della descrizione
-            if not (2 <= len(Descrizione) <= 255):
+            if not (2 <= len(descrizione) <= 255):
                 raise ValueError("Lunghezza della descrizione della classe virtuale non corretta.")
-            if not re.match(r"^[a-zA-Z0-9 ]{2,255}$", Descrizione):
+            if not re.match(r"^[a-zA-Z0-9 ]{2,255}$", descrizione):
                 raise ValueError("Formato della descrizione della classe virtuale non corretto.")
 
             # Creazione della classe virtuale
             collection = self.db_manager.get_collection('ClasseVirtuale')
-            ID_Classe = self.auto_increment_id  # Usa l'ID auto-incrementale
+            id_classe = self.auto_increment_id  # Usa l'ID auto-incrementale
             documento = {
-                'ID_Classe': ID_Classe,
-                'Nome_Classe': NomeClasse,
-                'Descrizione': Descrizione,
-                'ID_Docente': ID_Docente
+                'ID_Classe': id_classe,
+                'Nome_Classe': nome_classe,
+                'Descrizione': descrizione,
+                'ID_Docente': id_docente
             }
 
             # Inserisci il documento nella collezione
@@ -116,13 +106,13 @@ class ClasseVirtuale:
             print(f"Errore durante la creazione della classe: {e}")
             return False
 
-    def inserimentoClasseStudente(self, IdClasse, IdStudente):
+    def inserimento_classe_studente(self, id_classe, id_studente):
         """
         Aggiunge uno studente a una classe virtuale.
 
         Args:
-            IdClasse (int): L'ID della classe virtuale.
-            IdStudente (str): L'ID dello studente da aggiungere.
+            id_classe (int): L'ID della classe virtuale.
+            id_studente (str): L'ID dello studente da aggiungere.
 
         Returns:
             str: Messaggio di successo o errore.
@@ -134,29 +124,29 @@ class ClasseVirtuale:
         collection = self.db_manager.get_collection('ClasseVirtuale')
 
         # Verifica se la classe esiste
-        classe = collection.find_one({'ID_Classe': IdClasse})
+        classe = collection.find_one({'ID_Classe': id_classe})
         if not classe:
-            raise ValueError(f"Errore: Classe con ID '{IdClasse}' non trovata.")
+            raise ValueError(f"Errore: Classe con ID '{id_classe}' non trovata.")
 
         # Verifica se lo studente è già nella classe
-        if IdStudente in classe["studenti"]:
-            raise ValueError(f"Errore: Studente con ID '{IdStudente}' già presente nella classe '{IdClasse}'.")
+        if id_studente in classe["studenti"]:
+            raise ValueError(f"Errore: Studente con ID '{id_studente}' già presente nella classe '{id_classe}'.")
 
         # Aggiunge lo studente alla classe
         collection.update_one(
-            {'ID_Classe': IdClasse},
-            {'$push': {'studenti': IdStudente}}
+            {'ID_Classe': id_classe},
+            {'$push': {'studenti': id_studente}}
         )
 
-        return f"Studente con ID '{IdStudente}' aggiunto con successo alla classe '{IdClasse}'."
+        return f"Studente con ID '{id_studente}' aggiunto con successo alla classe '{id_classe}'."
 
-    def rimozioneClasseStudente(self, IdClasse, IdStudente):
+    def rimozione_classe_studente(self, id_classe, id_studente):
         """
         Rimuove uno studente da una classe virtuale.
 
         Args:
-            IdClasse(int): L'ID della classe virtuale.
-            IdStudente (str): L'ID dello studente da rimuovere.
+            id_classe(int): L'ID della classe virtuale.
+            id_studente (str): L'ID dello studente da rimuovere.
 
         Returns:
             str: Messaggio di successo o errore.
@@ -168,45 +158,45 @@ class ClasseVirtuale:
         collection = self.db_manager.get_collection('ClasseVirtuale')
 
         # Verifica se la classe esiste
-        classe = collection.find_one({'ID_Classe': IdClasse})
+        classe = collection.find_one({'ID_Classe': id_classe})
         if not classe:
-            raise ValueError(f"Errore: Classe con ID '{IdClasse}' non trovata.")
+            raise ValueError(f"Errore: Classe con ID '{id_classe}' non trovata.")
 
         # Verifica se lo studente è nella classe
-        if IdStudente not in classe["studenti"]:
-            raise ValueError(f"Errore: Studente con ID '{IdStudente}' non presente nella classe '{IdClasse}'.")
+        if id_studente not in classe["studenti"]:
+            raise ValueError(f"Errore: Studente con ID '{id_studente}' non presente nella classe '{id_classe}'.")
 
         # Rimuove lo studente dalla classe
         collection.update_one(
-            {'ID_Classe': IdClasse},
-            {'$pull': {'studenti': IdStudente}}
+            {'ID_Classe': id_classe},
+            {'$pull': {'studenti': id_studente}}
         )
 
-        return f"Studente con ID '{IdStudente}' rimosso con successo dalla classe '{IdClasse}'."
+        return f"Studente con ID '{id_studente}' rimosso con successo dalla classe '{id_classe}'."
 
-    def mostra_classe(self, ID_Classe):
+    def mostra_classe(self, id_classe):
         """
         Recupera gli studenti di una classe specifica in ordine alfabetico.
 
         Args:
-            ID_Classe (int): L'ID della classe virtuale.
+            id_classe (int): L'ID della classe virtuale.
 
         Returns:
             list[dict]: Lista di studenti con Nome, Cognome e Data di Nascita.
         """
         try:
-            print(f"Recupero gli studenti per la classe con ID: {ID_Classe}")  # Aggiunto per debugging
+            print(f"Recupero gli studenti per la classe con ID: {id_classe}")  # Aggiunto per debugging
             studente_collection = self.db_manager.get_collection("Studente")
 
             # Esegui la query per recuperare gli studenti della classe e ordina per 'Cognome' e 'Nome'
             studenti = list(
-                studente_collection.find({"ID_Classe": ID_Classe}).sort([("nome", 1), ("cognome", 1)])
+                studente_collection.find({"ID_Classe": id_classe}).sort([("nome", 1), ("cognome", 1)])
             )
 
             # Verifica se la query restituisce risultati
             if not studenti:
-                print(f"Nessun studente trovato per la classe con ID {ID_Classe}")  # Aggiunto per debugging
-                raise ValueError(f"Nessuno studente trovato per la classe con ID {ID_Classe}")
+                print(f"Nessun studente trovato per la classe con ID {id_classe}")  # Aggiunto per debugging
+                raise ValueError(f"Nessuno studente trovato per la classe con ID {id_classe}")
 
             # Logga il numero di studenti trovati
             print(f"Numero di studenti trovati: {len(studenti)}")  # Aggiunto per debugging
@@ -219,7 +209,6 @@ class ClasseVirtuale:
                     "Data_Nascita": studente.get("Data_Nascita", "N/A"),
                     "_id": studente["_id"]
                 })
-            print(mostraclasse)
             return mostraclasse
         except Exception as e:
             print(f"Errore durante il recupero degli studenti: {e}")  # Aggiunto per debugging
@@ -344,8 +333,6 @@ class ClasseVirtuale:
             studenti = list(collection.find({"ID_Classe": id_classe}))
         else:
             # Cerca studenti in base alla query (case-insensitive match)
-            print(id_classe)
-            print(query)
             studenti = list(collection.find({
                 "ID_Classe": id_classe,
                 "$or": [
@@ -367,7 +354,6 @@ class ClasseVirtuale:
         ]
 
     def cerca_studenti_istituto(self, query):
-        print("passp3")
         """
         Cerca gli studenti della classe specificata in base alla query.
 
@@ -380,10 +366,7 @@ class ClasseVirtuale:
         """
 
         sda = session.get('sda')
-        print("passo4")
         collection = self.db_manager.get_collection("Studente")
-        print("passo5")
-        print("prova del nove", sda)
         if not query:
             # Restituisci tutti gli studenti della classe
             studenti = list(collection.find({"sda": sda}))

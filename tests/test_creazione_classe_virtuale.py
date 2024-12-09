@@ -20,7 +20,7 @@ def test_nome_classe_lunghezza_non_valida(classe_virtuale_model, test_id):
         descrizione = "La miglior classe"
         id_docente = "121212"
         id_docente = "121212"
-        risultato = classe_virtuale_model.creazioneClasseVirtuale(nome_classe, descrizione, id_docente)
+        risultato = classe_virtuale_model.creazione_classe_virtuale(nome_classe, descrizione, id_docente)
         assert risultato is False, "Lunghezza del nome della classe virtuale non corretta"
 
 
@@ -30,7 +30,7 @@ def test_nome_classe_formato_non_valido(classe_virtuale_model, test_id):
         nome_classe = "Classe 5°D"
         descrizione = "La miglior classe"
         id_docente = "121212"
-        risultato = classe_virtuale_model.creazioneClasseVirtuale(nome_classe, descrizione, id_docente)
+        risultato = classe_virtuale_model.creazione_classe_virtuale(nome_classe, descrizione, id_docente)
         assert risultato is False, "Formato del nome della classe virtuale non corretta”."
 
 # Test 3: Descrizione con lunghezza non valida
@@ -39,7 +39,7 @@ def test_descrizione_lunghezza_non_valida(classe_virtuale_model, test_id):
         nome_classe = "Classe 5D"
         descrizione = "A"
         id_docente = "121212"
-        risultato = classe_virtuale_model.creazioneClasseVirtuale(nome_classe, descrizione, id_docente)
+        risultato = classe_virtuale_model.creazione_classe_virtuale(nome_classe, descrizione, id_docente)
         assert risultato is False, "Lunghezza della descrizione della classe virtuale non corretta."
 
 # Test 4: Descrizione con formato non valido
@@ -48,7 +48,7 @@ def test_descrizione_formato_non_valido(classe_virtuale_model, test_id):
     nome_classe = "Classe 5D"
     descrizione = "L§ mia classe"
     id_docente = "121212"
-    risultato = classe_virtuale_model.creazioneClasseVirtuale(nome_classe, descrizione, id_docente)
+    risultato = classe_virtuale_model.creazione_classe_virtuale(nome_classe, descrizione, id_docente)
     assert risultato is False, "Formato della descrizione della classe non corretto"
 
 
@@ -59,6 +59,6 @@ def test_creazione_classe_successo(classe_virtuale_model, test_id):
     descrizione = "La miglior classe"
     id_docente = "121212"
 
-    risultato = classe_virtuale_model.creazioneClasseVirtuale(nome_classe, descrizione, id_docente)
+    risultato = classe_virtuale_model.creazione_classe_virtuale(nome_classe, descrizione, id_docente)
     assert risultato is True, "Creazione della classe virtuale fallita"
     print(f"Test {test_id}: Classe virtuale creata")
