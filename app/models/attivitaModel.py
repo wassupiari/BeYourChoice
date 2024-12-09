@@ -18,7 +18,7 @@ class Attivita:
             quiz_collection = self.db_manager.get_collection("RisultatoQuiz")
 
             studenti = list(
-                studente_collection.find({"ID_Classe": id_classe}, {"_id": 0, "cf": 1, "nome": 1, "cognome": 1}))
+                studente_collection.find({"id_classe": id_classe}, {"_id": 0, "cf": 1, "nome": 1, "cognome": 1}))
             punteggi_totali = {studente["cf"]: {"PunteggioScenari": 0, "PunteggioQuiz": 0} for studente in studenti}
 
             scenari_punteggi = scenario_collection.aggregate([
@@ -88,12 +88,12 @@ class Attivita:
             dashboard_collection = self.db_manager.get_collection("Dashboard")
             attivita_risultati = list(dashboard_collection.find(
                 {"CF_Studente": cf_studente},
-                {"_id": 0, "ID_Attività": 1, "Data_Attività": 1, "Descrizione_Attività": 1, "punteggio_attività": 1}
+                {"_id": 0, "id_attivita": 1, "data_attivita": 1, "descrizione_attivita": 1, "punteggio_attivita": 1}
             ))
 
             for attivita in attivita_risultati:
-                if isinstance(attivita["Data_Attività"], datetime):
-                    attivita["Data_Attività"] = attivita["Data_Attività"].strftime("%d/%m/%Y %H:%M:%S")
+                if isinstance(attivita["data_attivita"], datetime):
+                    attivita["data_attivita"] = attivita["data_attivita"].strftime("%d/%m/%Y %H:%M:%S")
 
             return attivita_risultati
         except Exception as e:

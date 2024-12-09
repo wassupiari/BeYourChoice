@@ -29,11 +29,11 @@ class scenarioControl:
 
             # Crea un dizionario con i dati per lo scenario
             scenario_dict = {
-                'ID_Scenario': id,
-                "Titolo": titolo,
-                "Descrizione": descrizione,
-                "Argomento": argomento,
-                "Modalità": modalita
+                'id_scenario': id,
+                "titolo": titolo,
+                "descrizione": descrizione,
+                "argomento": argomento,
+                "modalità": modalita
             }
 
             print(scenario_dict)

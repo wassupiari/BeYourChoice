@@ -84,6 +84,36 @@ body {
   outline: none;
 }
 
+.password-container {
+    position: relative;
+    width: 100%; /* O una larghezza specifica */
+}
+
+.password-container input {
+
+    background-color: #eee;
+    border: none;
+    margin: 8px 0;
+    margin-left: -15px;
+
+    padding: 10px 10px;
+    font-size: 13px;
+    border-radius: 8px;
+    width: 103%;
+    outline: none;
+}
+
+.password-container i {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 18px;
+    color: #333;
+}
+
+
 .reg, .log {
   position: absolute;
   top: 0;

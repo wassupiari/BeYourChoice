@@ -25,8 +25,8 @@
                     {% for attivita in storico %}
                     <li>
                         <div>
-                            <p><strong>{{ attivita.Descrizione_Attività }}</strong></p>
-                            <p><strong>Punteggio: </strong>{{ attivita.Punteggio_Attività }}</p>
+                            <p><strong>{{ attivita.descrizione_attivta }}</strong></p>
+                            <p><strong>Punteggio: </strong>{{ attivita.punteggio_attivita }}</p>
                         </div>
                     </li>
                     {% endfor %}
@@ -41,7 +41,7 @@
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-item">
-                <a href="{{ url_for('classedocente.Classe_Docente', ID_Classe=session['ID_Classe']) }}">
+                <a href="{{ url_for('classedocente.classe_docente', id_classe=session['id_classe']) }}">
                     <i class="fa-solid fa-users-rectangle"></i>
                     <br>
                     <span>Gestione Classe</span>

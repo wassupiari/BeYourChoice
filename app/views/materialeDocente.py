@@ -1,14 +1,9 @@
-import os
-import re
 from bson import ObjectId
-from flask import Flask, render_template, request, redirect, url_for, flash, send_file, abort, send_from_directory, \
-    Blueprint, session
-from pymongo import collection
+from flask import render_template, request, redirect, url_for, Blueprint, session
 
 from databaseManager import DatabaseManager
-from app.models.materialeModel import MaterialeModel
 from app.controllers.materialeControl import MaterialeControl
-import uuid  # Per generare ID unici
+from app.models.materialeModel import MaterialeModel
 
 MAX_FILE_SIZE_MB = 2
 ALLOWED_EXTENSIONS = {'docx', 'pdf', 'jpeg', 'png', 'txt', 'jpg', 'mp4'}
@@ -20,7 +15,7 @@ db_manager = DatabaseManager()
 # Passa l'istanza di db_manager a MaterialeModel
 materiale_control = MaterialeControl(db_manager)
 materiale_model = MaterialeModel(db_manager)
-materiale_model.set_cartella_uploads('/public/uploads')
+materiale_control.set_cartella_uploads('/public/uploads')
 
 MaterialeDocente = Blueprint('MaterialeDocente', __name__)
 
@@ -33,23 +28,23 @@ def initialize_materiale_docente_blueprint(app: object) -> object:
     @MaterialeDocente.route('/materiale/docente')
     def visualizza_materiale_docente():
         ID_Classe = session.get('ID_Classe')
-        materiali = materiale_model.visualizza_materiali(ID_Classe)
+        materiali = materiale_control.visualizza_materiali(ID_Classe)
         return render_template('materialeDocente.html', materiali=materiali)
 
     @MaterialeDocente.route('/servi_file/<path:nomefile>')
     def servi_file(nomefile: str):
-        return materiale_model.servi_file(nomefile)
+        return materiale_control.servi_file(nomefile)
 
     @MaterialeDocente.route('/carica', methods=['GET', 'POST'])
     def carica_materiale():
         if request.method == 'POST':
-            return materiale_model.carica_materiale(request)
+            return materiale_control.carica_materiale(request)
         return render_template('caricamentoMateriale.html')
 
     @MaterialeDocente.route('/modifica/<string:materiale_id>', methods=['GET', 'POST'])
     def modifica_materiale(materiale_id):
         if request.method == 'POST':
-            return materiale_model.modifica_materiale(materiale_id, request)
+            return materiale_control.modifica_materiale(materiale_id, request)
 
         # Se GET, recupera il materiale per visualizzarlo nel form
         try:
@@ -68,6 +63,6 @@ def initialize_materiale_docente_blueprint(app: object) -> object:
 
     @MaterialeDocente.route('/rimuovi/<materiale_id>')
     def rimuovi_materiale(materiale_id):
-        return materiale_model.rimuovi_materiale(materiale_id)
+        return materiale_control.rimuovi_materiale(materiale_id)
 
     app.register_blueprint(MaterialeDocente)

@@ -125,7 +125,7 @@ def login():
                 session['sda'] = docente_scuola_appartenenza
                 session['cu'] = docente_codice_univoco
                 session['nome'] = nome_profilo
-                session['cf'] = docente.get("cf_docente")
+                session['cf'] = docente.get("cf")
                 session['role'] = 'docente'
 
                 flash("Login effettuato con successo", "success")

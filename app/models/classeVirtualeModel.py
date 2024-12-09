@@ -89,10 +89,10 @@ class ClasseVirtuale:
             collection = self.db_manager.get_collection('ClasseVirtuale')
             id_classe = self.auto_increment_id  # Usa l'ID auto-incrementale
             documento = {
-                'ID_Classe': id_classe,
-                'Nome_Classe': nome_classe,
-                'Descrizione': descrizione,
-                'ID_Docente': id_docente
+                'id_classe': id_classe,
+                'nome_classe': nome_classe,
+                'descrizione': descrizione,
+                'id_docente': id_docente
             }
 
             # Inserisci il documento nella collezione

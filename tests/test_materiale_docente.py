@@ -74,8 +74,8 @@ def initialize_materiale_docente_blueprint(app):
         return "Caricamento avvenuto con successo", 302
 
     @MaterialeDocente.route('/rimuovi/<materiale_id>', methods=['GET'])
-    def rimuovi(material_id):
-        if not ObjectId.is_valid(material_id):
+    def rimuovi(materiale_id):
+        if not ObjectId.is_valid(materiale_id):
             return "Materiale non trovato", 404
         return "Materiale rimosso con successo!", 200
 

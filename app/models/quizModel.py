@@ -41,9 +41,9 @@ class QuizModel:
             ]
 
             return {
-                "Testo_Domanda": testo_domanda,
-                "Opzioni_Risposte": opzioni_risposte,
-                "Risposta_Corretta": risposta_corretta
+                "testo_domanda": testo_domanda,
+                "opzioni_risposte": opzioni_risposte,
+                "risposta_corretta": risposta_corretta
             }
         except Exception as e:
             raise ValueError(f"Errore nel parsing della domanda: {e}")
@@ -94,33 +94,33 @@ class QuizModel:
         try:
             quiz_collection = QuizModel.db_manager.get_collection("Quiz")
             questions_collection = QuizModel.db_manager.get_collection("Domanda")
-            if "iq_quiz" not in data or quiz_collection.find_one({"id_quiz": data["ID_Quiz"]}):
-                data["ID_Quiz"] = str(uuid.uuid4())  # Genera un ID univoco
+            if "iq_quiz" not in data or quiz_collection.find_one({"id_quiz": data["id_quiz"]}):
+                data["id_quiz"] = str(uuid.uuid4())  # Genera un ID univoco
 
-            id_classe = session.get("ID_Classe")
+            id_classe = session.get("id_classe")
             if not id_classe:
                 raise ValueError("ID Classe mancante nella sessione.")
 
             quiz = {
-                "id_quiz": data["ID_Quiz"],
-                "titolo": data["Titolo"],
-                "argomento": data["Argomento"],
-                "n_domande": data["N_Domande"],
-                "domande": data["Domande"],
-                "modalita_quiz": data["Modalità_Quiz"],
-                "durata": data["Durata"],
-                "data_creazione": data["Data_Creazione"],
+                "id_quiz": data["id_quiz"],
+                "titolo": data["titolo"],
+                "argomento": data["argomento"],
+                "n_domande": data["n_domande"],
+                "domande": data["domande"],
+                "modalita_quiz": data["modalita_quiz"],
+                "durata": data["durata"],
+                "data_creazione": data["data_creazione"],
                 "id_classe": id_classe
             }
             quiz_collection.insert_one(quiz)
 
-            for domanda in data["Domande"]:
+            for domanda in data["domande"]:
                 question = {
-                    "id_domanda": domanda["ID_Domanda"],
-                    "testo_domanda": domanda["Testo_Domanda"],
-                    "opzioni_risposte": domanda["Opzioni_Risposte"],
-                    "risposta_corretta": domanda["Risposta_Corretta"],
-                    "id_quiz": data["ID_Quiz"]
+                    "id_domanda": domanda["id_domanda"],
+                    "testo_domanda": domanda["testo_domanda"],
+                    "opzioni_risposte": domanda["opzioni_risposte"],
+                    "risposta_corretta": domanda["risposta_corretta"],
+                    "id_quiz": data["id_quiz"]
                 }
                 questions_collection.insert_one(question)
         except Exception as e:
@@ -186,7 +186,7 @@ class QuizModel:
 
             completato = dashboard_collection.find_one({
                 "cf_studente": cf_studente,
-                "descrizione_attivita": {"$regex": f"Completamento Quiz: {ultimo_quiz['Titolo']}"}
+                "descrizione_attivita": {"$regex": f"Completamento Quiz: {ultimo_quiz['titolo']}"}
             })
 
             return None if completato else ultimo_quiz
@@ -236,7 +236,7 @@ class QuizModel:
 
         # Recupera la durata del quiz
         quiz = quiz_collection.find_one({"id_quiz": quiz_id})
-        durata_quiz = quiz["Durata"] if quiz else 30  # Default a 30 minuti
+        durata_quiz = quiz["durata"] if quiz else 30  # Default a 30 minuti
 
         # Calcola il tempo rimanente in secondi
         fine_quiz = ora_inizio + timedelta(minutes=durata_quiz)
@@ -265,7 +265,7 @@ class QuizModel:
             quiz = quiz_collection.find_one({"id_quiz": risultato_quiz["iq_quiz"]}, {"titolo": 1})
             if not quiz:
                 raise ValueError(f"Quiz con ID {risultato_quiz['id_quiz']} non trovato.")
-            titolo_quiz = quiz["Titolo"]
+            titolo_quiz = quiz["titolo"]
 
             # Genera l'attività svolta
             attività = {
