@@ -21,7 +21,7 @@
         <div class="search-container">
             <input type="text" id="search-bar" placeholder="Cerca studente" class="search-bar"
                    oninput="cercaStudente()">
-            <a href="{{ url_for('classedocente.Classe_Docente', ID_Classe=session['ID_Classe']) }}">
+            <a href="{{ url_for('classedocente.classe_docente', id_classe=session['ID_Classe']) }}">
                 <button class="annulla-button">Annulla</button>
             </a>
         </div>

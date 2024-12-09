@@ -60,7 +60,6 @@ class ClasseVirtualeControl:
             return {"error": "Si è verificato un errore nel recupero degli studenti."}
 
     def mostra_studenti_istituto(self, scuola_appartenenza):
-        print("2")
         """
         Recupera gli studenti della classe e prepara i dati per il rendering.
 
@@ -136,7 +135,6 @@ class ClasseVirtualeControl:
             return False
 
     def cerca_studenti_istituto(self, query):
-        print("passo2")
         try:
             return self.model.cerca_studenti_istituto(query)
         except Exception as e:

@@ -14,7 +14,6 @@ classe_control = ClasseVirtualeControl()
 def creazione_classe():
     if request.method == 'POST':
         codice_univoco_docent = session.get("CU")
-        print(codice_univoco_docent)
 
         nome_classe = request.form['nome-classe']
         descrizione = request.form['descrizione']
@@ -32,7 +31,6 @@ def creazione_classe():
 
             if doc is not None:
                 # Se è un docente, reindirizzalo alla dashboard docente
-                print("provola")
                 return redirect(url_for('dashboard.dashboard_docente'))
             else:
                 # Se non è né studente né docente, reindirizza alla home o login
