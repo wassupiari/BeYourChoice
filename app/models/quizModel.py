@@ -41,9 +41,9 @@ class QuizModel:
             ]
 
             return {
-                "Testo_Domanda": testo_domanda,
-                "Opzioni_Risposte": opzioni_risposte,
-                "Risposta_Corretta": risposta_corretta
+                "testo_domanda": testo_domanda,
+                "opzioni_risposte": opzioni_risposte,
+                "risposta_corretta": risposta_corretta
             }
         except Exception as e:
             raise ValueError(f"Errore nel parsing della domanda: {e}")
@@ -95,7 +95,7 @@ class QuizModel:
             quiz_collection = QuizModel.db_manager.get_collection("Quiz")
             questions_collection = QuizModel.db_manager.get_collection("Domanda")
             if "iq_quiz" not in data or quiz_collection.find_one({"id_quiz": data["id_quiz"]}):
-                data["ID_Quiz"] = str(uuid.uuid4())  # Genera un ID univoco
+                data["id_quiz"] = str(uuid.uuid4())  # Genera un ID univoco
 
             id_classe = session.get("id_classe")
             if not id_classe:
@@ -104,12 +104,12 @@ class QuizModel:
             quiz = {
                 "id_quiz": data["id_quiz"],
                 "titolo": data["titolo"],
-                "argomento": data["Argomento"],
-                "n_domande": data["n_Domande"],
+                "argomento": data["argomento"],
+                "n_domande": data["n_domande"],
                 "domande": data["domande"],
-                "modalita_quiz": data["modalità_quiz"],
-                "durata": data["qurata"],
-                "data_creazione": data["qata_Creazione"],
+                "modalita_quiz": data["modalita_quiz"],
+                "durata": data["durata"],
+                "data_creazione": data["data_creazione"],
                 "id_classe": id_classe
             }
             quiz_collection.insert_one(quiz)
