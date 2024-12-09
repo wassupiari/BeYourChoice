@@ -106,7 +106,7 @@ class Attivita:
         """
         try:
             collection = self.db_manager.get_collection("ClasseVirtuale")
-            return list(collection.find({"ID_Docente": id_docente}, {"_id": 0, "ID_Classe": 1, "Nome_Classe": 1}))
+            return list(collection.find({"id_docente": id_docente}, {"_id": 0, "id_classe": 1, "nome_classe": 1}))
         except Exception as e:
             print(f"Errore durante il recupero delle classi del docente: {e}")
             return []

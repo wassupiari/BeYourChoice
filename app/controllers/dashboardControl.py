@@ -12,7 +12,7 @@ class DashboardController:
     @dashboard_blueprint.route('/dashboard-docente', methods=['GET'])
     @teacher_required
     def dashboard_docente():
-        codice_univoco = session.get('CU')
+        codice_univoco = session.get('cu')
         if not codice_univoco:
             return TeacherDashboardView.render_errore("Codice univoco del docente non trovato", 404)
 
@@ -24,7 +24,7 @@ class DashboardController:
     @dashboard_blueprint.route('/classifica/<int:id_classe>', methods=['GET'])
     @teacher_required
     def classifica_classe(id_classe):
-        session['ID_Classe'] = id_classe
+        session['id_classe'] = id_classe
         model = Attivita()
         classifica = model.get_classifica_classe(id_classe)
         return TeacherDashboardView.render_classifica(classifica, id_classe)
@@ -45,7 +45,7 @@ class DashboardController:
         Mostra la dashboard dello studente con punteggio_attivita e storico.
         """
         cf_studente = session.get('cf')
-        id_classe = session.get('ID_Classe')
+        id_classe = session.get('id_classe')
 
         if not cf_studente:
             return StudentDashboardView.render_errore("Sessione non valida", 400)

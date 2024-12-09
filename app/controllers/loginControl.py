@@ -92,18 +92,18 @@ def login():
                 cf_studente = studente.get("cf")
                 nome_studente = studente.get("nome")
 
-                if studente.get("ID_Classe"):  # Se "ID_Classe" è presente e ha un valore
-                    id_classe = studente["ID_Classe"]
+                if studente.get("id_classe"):  # Se "ID_Classe" è presente e ha un valore
+                    id_classe = studente["id_classe"]
                 else:
                     # Se "ID_Classe" non esiste, assegniamo 0 (oppure il valore dalla sessione, se necessario)
-                    id_classe = session.get("ID_Classe", 0)
+                    id_classe = session.get("id_classe", 0)
 
                 print(id_classe)
 
 
                 session['cf'] = cf_studente
-                session['ID_Classe'] = id_classe
-                session['Nome'] = nome_studente
+                session['id_classe'] = id_classe
+                session['nome'] = nome_studente
                 session['role'] = 'studente'
                 flash("Login effettuato con successo", "success")
                 return redirect(url_for('dashboard.dashboard_studente'))  # Reindirizza al dashboard dopo il login
@@ -115,7 +115,7 @@ def login():
         elif docente:
             # Verifica la password per il docente
             if bcrypt.checkpw(password.encode('utf-8'), docente['password']):
-                docente_scuola_appartenenza = docente.get("SdA")
+                docente_scuola_appartenenza = docente.get("sda")
                 docente_codice_univoco = docente.get("codice_univoco")
                 nome_profilo = docente.get("nome")
 
@@ -123,8 +123,8 @@ def login():
                 session['email'] = email
                 session['session_token'] = session_token
                 session['sda'] = docente_scuola_appartenenza
-                session['CU'] = docente_codice_univoco
-                session['Nome'] = nome_profilo
+                session['cu'] = docente_codice_univoco
+                session['nome'] = nome_profilo
                 session['cf'] = docente.get("cf_docente")
                 session['role'] = 'docente'
 
@@ -150,7 +150,7 @@ def logout():
     if 'email' in session:
         # Pulisce la sessione e disconnette l'utente
         session.pop('email', None)
-        session.pop('ID_Classe',None)
+        session.pop('id_classe',None)
         session.pop('session_token', None)
 
         flash("Sei stato disconnesso", "success")

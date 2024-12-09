@@ -12,7 +12,7 @@ classe_virtuale_control = ClasseVirtualeControl()
 
 @inserimentostudente.route('/', methods=['GET', 'POST'])
 @teacher_required
-def Inserimento_Studente():
+def inserimento_studente():
     print("La route /InserimentoStudente stata chiamata!")  # Debug
     try:
         # Ottieni l'ID della classe dalla query string (se non è presente, usa 101 come default)

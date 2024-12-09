@@ -190,7 +190,7 @@ class ClasseVirtuale:
 
             # Esegui la query per recuperare gli studenti della classe e ordina per 'Cognome' e 'Nome'
             studenti = list(
-                studente_collection.find({"ID_Classe": id_classe}).sort([("nome", 1), ("cognome", 1)])
+                studente_collection.find({"id_classe": id_classe}).sort([("nome", 1), ("cognome", 1)])
             )
 
             # Verifica se la query restituisce risultati
@@ -206,7 +206,7 @@ class ClasseVirtuale:
                 mostraclasse.append({
                     "Nome": studente["nome"],
                     "Cognome": studente["cognome"],
-                    "Data_Nascita": studente.get("Data_Nascita", "N/A"),
+                    "Data_Nascita": studente.get("data_nascita", "N/A"),
                     "_id": studente["_id"]
                 })
             return mostraclasse
@@ -232,9 +232,9 @@ class ClasseVirtuale:
             # Query per recuperare studenti dell'istituto non assegnati a una classe
             studenti = list(
                 studente_collection.find({
-                    "SdA": scuola_appartenenza,
-                    "$or": [{"ID_Classe": {"$exists": False}}, {"ID_Classe": None}]
-                }).sort([("Nome", 1), ("Cognome", 1)])  # Ordina per Cognome e Nome
+                    "sda": scuola_appartenenza,
+                    "$or": [{"id_classe": {"$exists": False}}, {"id_classe": None}]
+                }).sort([("nome", 1), ("cognome", 1)])  # Ordina per Cognome e Nome
             )
 
             # Verifica se ci sono risultati
@@ -251,7 +251,7 @@ class ClasseVirtuale:
                 studenti_istituto.append({
                     "Nome": studente.get("nome", "N/A"),
                     "Cognome": studente.get("cognome", "N/A"),
-                    "Data_Nascita": studente.get("Data_Nascita", "N/A"),
+                    "Data_Nascita": studente.get("data_nascita", "N/A"),
                     "_id": str(studente["_id"])  # Converti ObjectId in stringa
                 })
 
@@ -274,7 +274,7 @@ class ClasseVirtuale:
             studente_collection = self.db_manager.get_collection("Studente")
             result = studente_collection.update_one(
                 {"_id": ObjectId(studente_id)},  # Filtra per l'ID dello studente
-                {"$set": {"ID_Classe": None}}  # Imposta ID_Classe a null
+                {"$set": {"id_classe": None}}  # Imposta ID_Classe a null
             )
             if result.modified_count == 0:
                 raise Exception("Nessuna modifica effettuata. Verifica l'ID dello studente.")
@@ -301,7 +301,7 @@ class ClasseVirtuale:
             # Filtra per l'ID dello studente e aggiungi l'ID della classe
             result = studente_collection.update_one(
                 {"_id": ObjectId(studente_id)},  # Filtra per l'ID dello studente
-                {"$set": {"ID_Classe": classe_id}}  # Imposta l'ID della classe
+                {"$set": {"id_classe": classe_id}}  # Imposta l'ID della classe
             )
 
             # Verifica se l'operazione è stata eseguita correttamente
@@ -326,18 +326,17 @@ class ClasseVirtuale:
         Returns:
             list[dict]: Studenti filtrati o tutti gli studenti se la query è vuota.
         """
+        print(query)
         collection = self.db_manager.get_collection("Studente")
-        print("prova del nove", id_classe)
         if not query:
             # Restituisci tutti gli studenti della classe
-            studenti = list(collection.find({"ID_Classe": id_classe}))
+            studenti = list(collection.find({"id_classe": id_classe}))
         else:
             # Cerca studenti in base alla query (case-insensitive match)
             studenti = list(collection.find({
-                "ID_Classe": id_classe,
+                "id_classe": id_classe,
                 "$or": [
-                    {"nome": {"$regex": query, "$options": "i"}},
-                    {"cognome": {"$regex": query, "$options": "i"}}
+                    {"cf": {"$regex": query, "$options": "i"}}
                 ]
             }))
         return [
@@ -345,7 +344,7 @@ class ClasseVirtuale:
 
                 "Nome": studente["nome"],
                 "Cognome": studente["cognome"],
-                "Data_Nascita": studente["Data_Nascita"],
+                "Data_Nascita": studente["data_nascita"],
                 "_id": str(studente["_id"])
             }
 
@@ -372,18 +371,17 @@ class ClasseVirtuale:
             studenti = list(collection.find({"sda": sda}))
         else:
             studenti = list(collection.find({
-                "SdA": sda,  # Controlla la scuola di appartenenza
+                "sda": sda,  # Controlla la scuola di appartenenza
                 "$and": [  # Usa l'operatore $and per combinare le condizioni
                     {
                         "$or": [  # Cerca studenti senza classe e che corrispondono alla query
-                            {"ID_Classe": {"$exists": False}},  # Studenti senza classe
-                            {"ID_Classe": None}  # Studenti con ID_Classe a None
+                            {"id_classe": {"$exists": False}},  # Studenti senza classe
+                            {"id_classe": None}  # Studenti con ID_Classe a None
                         ]
                     },
                     {
                         "$or": [  # Cerca per nome o cognome (case-insensitive)
-                            {"nome": {"$regex": query, "$options": "i"}},  # Ricerca per nome
-                            {"cognome": {"$regex": query, "$options": "i"}}  # Ricerca per cognome
+                            {"cf": {"$regex": query, "$options": "i"}}
                         ]
                     }
                 ]
@@ -393,7 +391,7 @@ class ClasseVirtuale:
 
                     "Nome": studente["nome"],
                     "Cognome": studente["cognome"],
-                    "Data_Nascita": studente["Data_Nascita"],
+                    "Data_Nascita": studente["data_nascita"],
                     "_id": str(studente["_id"])
                 }
 

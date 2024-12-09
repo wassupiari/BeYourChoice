@@ -51,6 +51,7 @@ class ClasseVirtualeControl:
         try:
             studenti = self.model.mostra_classe(id_classe)  # Chiama il metodo per recuperare gli studenti
             print(f"Studente recuperati: {len(studenti)}")
+
             return studenti
         except ValueError as e:
             print(f"Errore: {e}")
@@ -70,8 +71,7 @@ class ClasseVirtualeControl:
             list[dict]: Lista di studenti con Nome, Cognome e Data di Nascita.
         """
         try:
-            studenti = self.model.mostra_studenti_istituto(
-                scuola_appartenenza)  # Chiama il metodo per recuperare gli studenti
+            studenti = self.model.mostra_studenti_istituto(scuola_appartenenza)  # Chiama il metodo per recuperare gli studenti
             print(f"Studente recuperati: {len(studenti)}")
             return studenti
         except ValueError as e:
