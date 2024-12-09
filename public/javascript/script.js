@@ -161,4 +161,13 @@ function showPwd() {
    document.getElementById("togglePassword").classList.toggle("fa-eye-slash");
       }
 
+function showPwd2() {
+    const passwordField = document.getElementById("password2");
+    const type = passwordField.type === "password" ? "text" : "password";
+    passwordField.type = type;
+
+    // Cambia l'icona
+   document.getElementById("togglePassword2").classList.toggle("fa-eye-slash");
+      }
+
 
