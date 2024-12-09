@@ -152,4 +152,13 @@ window.onload = function() {
 
 };
 
+function showPwd() {
+    const passwordField = document.getElementById("password");
+    const type = passwordField.type === "password" ? "text" : "password";
+    passwordField.type = type;
+
+    // Cambia l'icona
+   document.getElementById("togglePassword").classList.toggle("fa-eye-slash");
+      }
+
 
