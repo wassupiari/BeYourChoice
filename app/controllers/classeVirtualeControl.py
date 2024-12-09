@@ -81,7 +81,7 @@ class ClasseVirtualeControl:
             print(f"Errore generale: {e}")
             return {"error": "Si è verificato un errore nel recupero degli studenti."}
 
-    def rimuovi_studente(self, studente_id):
+    def rimuovi_studente(self, id_studente):
 
         """
         Rimuove uno studente dalla classe impostando ID_Classe a null.
@@ -93,13 +93,13 @@ class ClasseVirtualeControl:
             bool: True se la rimozione ha successo, False altrimenti.
         """
         try:
-            self.model.rimuovi_studente(studente_id)
+            self.model.rimuovi_studente(id_studente)
             return True
         except Exception as e:
             print(f"Errore nel controller: {e}")
             return False
 
-    def aggiungi_studente(self, studente_id, classe_id):
+    def aggiungi_studente(self, id_studente, classe_id):
 
         """
         Rimuove uno studente dalla classe impostando ID_Classe a null.
@@ -111,7 +111,7 @@ class ClasseVirtualeControl:
             bool: True se la rimozione ha successo, False altrimenti.
         """
         try:
-            self.model.aggiungi_studente(studente_id, classe_id)
+            self.model.aggiungi_studente(id_studente, classe_id)
             return True
         except Exception as e:
             print(f"Errore nel controller: {e}")
