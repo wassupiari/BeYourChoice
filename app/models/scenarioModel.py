@@ -10,7 +10,7 @@ class ScenarioModel:
         scenario_collection.insert_one(scenario_dict)
         print("Scenario aggiunto con successo!")
 
-    def get_last_scenario_id(self):
+    def get_ultimo_scenario_id(self):
         # Get the collection of scenarios
         scenario_collection = self.db_manager.get_collection("ScenarioVirtuale")
 
