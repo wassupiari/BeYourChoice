@@ -49,7 +49,7 @@ class QuizModel:
             raise ValueError(f"Errore nel parsing della domanda: {e}")
 
     @staticmethod
-    def genera_domande(tema, numero_domande, modalita_risposta,durata, api_key):
+    def genera_domande(tema, numero_domande, modalita_risposta, api_key):
         """Genera domande utilizzando OpenAI GPT."""
         openai.api_key = api_key
         domande = []
@@ -127,11 +127,11 @@ class QuizModel:
             raise ValueError(f"Errore durante il salvataggio del quiz: {e}")
 
     @staticmethod
-    def recupera_domande(question_ids):
+    def recupera_domande(id_domanda):
         """Recupera le domande dal database in base agli ID."""
         try:
             questions_collection = QuizModel.db_manager.get_collection("Domanda")
-            return list(questions_collection.find({"id_domanda": {"$in": question_ids}}))
+            return list(questions_collection.find({"id_domanda": {"$in": id_domanda}}))
         except Exception as e:
             raise ValueError(f"Errore durante il recupero delle domande: {e}")
 
@@ -245,7 +245,7 @@ class QuizModel:
         return tempo_rimanente
 
     @staticmethod
-    def salva_risultato_quiz(quiz_result, cf_studente, punteggio):
+    def salva_risultato_quiz(risultato_quiz, cf_studente, punteggio):
         """
         Salva il risultato del quiz nel database e registra l'attività nella dashboard.
         :param quiz_result: Dati del risultato del quiz da salvare.
@@ -259,12 +259,12 @@ class QuizModel:
             quiz_collection = QuizModel.db_manager.get_collection("Quiz")
 
             # Salva il risultato del quiz
-            quiz_results_collection.insert_one(quiz_result)
+            quiz_results_collection.insert_one(risultato_quiz)
 
             # Recupera il titolo del quiz
-            quiz = quiz_collection.find_one({"id_quiz": quiz_result["iq_quiz"]}, {"titolo": 1})
+            quiz = quiz_collection.find_one({"id_quiz": risultato_quiz["iq_quiz"]}, {"titolo": 1})
             if not quiz:
-                raise ValueError(f"Quiz con ID {quiz_result['id_quiz']} non trovato.")
+                raise ValueError(f"Quiz con ID {risultato_quiz['id_quiz']} non trovato.")
             titolo_quiz = quiz["Titolo"]
 
             # Genera l'attività svolta
