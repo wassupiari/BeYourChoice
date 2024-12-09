@@ -21,13 +21,13 @@ class DashboardController:
         return TeacherDashboardView.render_dashboard(classi)
 
     @staticmethod
-    @dashboard_blueprint.route('/classifica/<int:ID_Classe>', methods=['GET'])
+    @dashboard_blueprint.route('/classifica/<int:id_classe>', methods=['GET'])
     @teacher_required
-    def classifica_classe(ID_Classe):
-        session['ID_Classe'] = ID_Classe
+    def classifica_classe(id_classe):
+        session['ID_Classe'] = id_classe
         model = Attivita()
-        classifica = model.get_classifica_classe(ID_Classe)
-        return TeacherDashboardView.render_classifica(classifica, ID_Classe)
+        classifica = model.get_classifica_classe(id_classe)
+        return TeacherDashboardView.render_classifica(classifica, id_classe)
 
     @staticmethod
     @dashboard_blueprint.route('/storico/<string:cf_studente>', methods=['GET'])
