@@ -45,7 +45,6 @@ class ProfiloControl:
     def carica_profilo_docente(self, email, nuovi_dati):
         if not self._valida_dati_profilo(nuovi_dati):
             logging.error(f"Dati del profilo docente non validi per email {email}")
-            flash("Errore: Dati non validi, aggiornamento non effettuato.", "message_profile_error")
             return False
 
         try:
@@ -67,18 +66,26 @@ class ProfiloControl:
 
         # Controlli generali sui dati forniti
         if 'email' in dati and not re.match(email_regex, dati['email']):
+            flash( "email non valida,devono essere usati solo caratteri alpha numerici,punti,tratti,undersxore perima del simbolo '@'", "message_profile_error")
             return False
         if 'nome' in dati and not re.match(nome_regex, dati['nome']):
+            flash(" Nome non valido. Assicurati che inizi con una lettera maiuscola seguita da almeno due lettere minuscole. Possono essere inclusi apostrofi o trattini se necessario.", "message_profile_error")
             return False
         if 'cognome' in dati and not re.match(cognome_regex, dati['cognome']):
+            flash(" Cognome non valido. Assicurati che inizi con una lettera maiuscola seguita da almeno due lettere minuscole. Possono essere inclusi apostrofi o trattini se necessario","message_profile_error")
             return False
         if 'sda' in dati and not re.match(sda_regex, dati['sda']):
+            flash(" Il campo SDA non è valido. Deve contenere tra 2 e 50 caratteri alfanumerici. Possono essere inclusi spazi, apostrofi e trattini.", "message_profile_error")
             return False
         if 'cf' in dati and not re.match(cf_regex, dati['cf']):
+            flash(" Codice fiscale non valido. Assicurati che sia composto da 16 caratteri, rispettando il formato italiano. Deve includere lettere e numeri secondo lo schema standard del codice fiscale italiano.", "message_profile_error")
             return False
         if 'data_nascita' in dati and not re.match(data_nascita_regex, dati['data_nascita']):
+            flash("Data di nascita non valida. Assicurati di inserire la data nel formato 'AAAA-MM-GG', dove l'anno è a quattro cifre, il mese è nel range da 01 a 12, e il giorno è nel range adeguato al mese scelto.", "message_profile_error")
             return False
 
+
+        flash("modifica profilo andata a buon fine", "message_profile_successo")
         return True
 
     def cambia_password_studente(self, vecchia_password, nuova_password):

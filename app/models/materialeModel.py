@@ -161,7 +161,7 @@ class MaterialeModel:
             if os.path.exists(full_file_path):
                 try:
                     os.remove(full_file_path)
-                    flash("Materiale rimosso con successo!", "success")
+                    flash("Materiale rimosso con successo!", "materiale_success")
                 except OSError as e:
                     flash(f"Errore durante l'eliminazione del file: {e}", "error")
             else:
