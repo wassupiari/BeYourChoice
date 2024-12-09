@@ -5,51 +5,51 @@ class ClasseVirtualeControl:
     def __init__(self):
         self.model = ClasseVirtuale()
 
-    def creazioneClasseVirtuale(self, NomeClasse, Descrizione, ID_Docente):
+    def creazione_classe_virtuale(self, nome_classe, descrizione, id_docente):
         """
         Crea una nuova classe virtuale.
         """
         try:
-            messaggio = self.model.creazioneClasseVirtuale(NomeClasse, Descrizione, ID_Docente)
+            messaggio = self.model.creazione_classe_virtuale(nome_classe, descrizione, id_docente)
             print(messaggio)
         except ValueError as e:
             print(f"Errore: {e}")
             raise
 
-    def inserisci_studente_classe(self, IdCasse, IdStudente):
+    def inserisci_studente_classe(self, id_casse, id_studente):
         """
         Inserisce uno studente in una classe virtuale.
         """
         try:
-            messaggio = self.model.inserimentoClasseStudente(IdCasse, IdStudente)
+            messaggio = self.model.inserimento_classe_studente(id_casse, id_studente)
             print(messaggio)
         except ValueError as e:
             print(f"Errore: {e}")
             raise
 
-    def rimozioneClasseStudente(self, IdClasse, IdStudente):
+    def rimozione_classe_studente(self, id_classe, id_studente):
         """
         Rimuove uno studente da una classe virtuale.
         """
         try:
-            messaggio = self.model.rimozioneClasseStudente(IdClasse, IdStudente)
+            messaggio = self.model.rimozione_classe_studente(id_classe, id_studente)
             print(messaggio)
         except ValueError as e:
             print(f"Errore: {e}")
             raise
 
-    def mostra_classe(self, ID_Classe):
+    def mostra_classe(self, id_classe):
         """
         Recupera gli studenti della classe e prepara i dati per il rendering.
 
         Args:
-            ID_Classe (int): L'ID della classe virtuale.
+            id_classe (int): L'ID della classe virtuale.
 
         Returns:
             list[dict]: Lista di studenti con Nome, Cognome e Data di Nascita.
         """
         try:
-            studenti = self.model.mostra_classe(ID_Classe)  # Chiama il metodo per recuperare gli studenti
+            studenti = self.model.mostra_classe(id_classe)  # Chiama il metodo per recuperare gli studenti
             print(f"Studente recuperati: {len(studenti)}")
             return studenti
         except ValueError as e:
@@ -60,7 +60,6 @@ class ClasseVirtualeControl:
             return {"error": "Si è verificato un errore nel recupero degli studenti."}
 
     def mostra_studenti_istituto(self, scuola_appartenenza):
-        print("2")
         """
         Recupera gli studenti della classe e prepara i dati per il rendering.
 
@@ -136,7 +135,6 @@ class ClasseVirtualeControl:
             return False
 
     def cerca_studenti_istituto(self, query):
-        print("passo2")
         try:
             return self.model.cerca_studenti_istituto(query)
         except Exception as e:

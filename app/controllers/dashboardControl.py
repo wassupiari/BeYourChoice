@@ -21,13 +21,13 @@ class DashboardController:
         return TeacherDashboardView.render_dashboard(classi)
 
     @staticmethod
-    @dashboard_blueprint.route('/classifica/<int:ID_Classe>', methods=['GET'])
+    @dashboard_blueprint.route('/classifica/<int:id_classe>', methods=['GET'])
     @teacher_required
-    def classifica_classe(ID_Classe):
-        session['ID_Classe'] = ID_Classe
+    def classifica_classe(id_classe):
+        session['ID_Classe'] = id_classe
         model = Attivita()
-        classifica = model.get_classifica_classe(ID_Classe)
-        return TeacherDashboardView.render_classifica(classifica, ID_Classe)
+        classifica = model.get_classifica_classe(id_classe)
+        return TeacherDashboardView.render_classifica(classifica, id_classe)
 
     @staticmethod
     @dashboard_blueprint.route('/storico/<string:cf_studente>', methods=['GET'])
@@ -42,7 +42,7 @@ class DashboardController:
     @student_required
     def dashboard_studente():
         """
-        Mostra la dashboard dello studente con punteggi e storico.
+        Mostra la dashboard dello studente con punteggio_attivita e storico.
         """
         cf_studente = session.get('cf')
         id_classe = session.get('ID_Classe')
@@ -51,14 +51,14 @@ class DashboardController:
             return StudentDashboardView.render_errore("Sessione non valida", 400)
 
         model = Attivita()
-        punteggi = model.get_punteggio_personale(cf_studente)
+        punteggio_attivita = model.get_punteggio_personale(cf_studente)
         classifica = model.get_classifica_classe(id_classe)
         storico = model.get_storico(cf_studente)
 
         return StudentDashboardView.render_dashboard(
             classifica=classifica,
-            punteggio_scenario=punteggi.get("PunteggioScenari"),
-            punteggio_quiz=punteggi.get("PunteggioQuiz", 0),
-            punteggio_totale=punteggi.get("PunteggioScenari", 0) + punteggi.get("PunteggioQuiz", 0),
+            punteggio_scenario=punteggio_attivita.get("PunteggioScenari"),
+            punteggio_quiz=punteggio_attivita.get("PunteggioQuiz", 0),
+            punteggio_totale=punteggio_attivita.get("PunteggioScenari", 0) + punteggio_attivita.get("PunteggioQuiz", 0),
             storico=storico
         )

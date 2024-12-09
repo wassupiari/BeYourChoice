@@ -1,0 +1,93 @@
+/* Stile generale */
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: 'open-sans', sans-serif;
+}
+
+/* Contenitore principale */
+.background-container {
+    position: fixed;
+    width: 100%;
+    height: 95%;
+    background: no-repeat center center;
+    background-size: cover;
+    display: flex;
+    flex-direction: column; /* Imposta il layout verticale */
+    justify-content: flex-end; /* Posiziona il contenuto in basso */
+    align-items: center; /* Centra il contenuto orizzontalmente */
+    padding-bottom: 200px; /* Spazio dal bordo inferiore */
+}
+
+/* Bottone */
+.button1 {
+    position: absolute; /* Posizionamento assoluto */
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background-color: #d75a3d;
+    color: white;
+    text-decoration: none; /* Rimuove la sottolineatura */
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.button1:hover {
+    background-color: #b94b32;
+    transform: scale(1.05);
+}
+/*fine bottone*/
+
+/* Contenuto (Scritta + Pallini) */
+.content {
+    text-align: center; /* Centra il contenuto */
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    width: 100%; /* Si estende sull'intero schermo */
+    max-width: 1200px; /* Imposta una larghezza massima */
+}
+
+.content h1 {
+    font-size: 3rem;
+    margin-bottom: 15px; /* Spazio tra la scritta e i pallini */
+    line-height: 1.2;
+    word-wrap: break-word; /* Garantisce che il testo non esca dai bordi */
+}
+
+/* Pallini di caricamento */
+.wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Spaziatura uniforme tra i pallini */
+    margin-bottom: 15px;
+}
+
+.circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #d75a3d;
+    animation: circle7124 0.5s alternate infinite ease;
+}
+
+@keyframes circle7124 {
+    0% {
+        transform: scale(0.7);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.circle:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.circle:nth-child(3) {
+    animation-delay: 0.3s;
+}
+/*fine caricamento*/

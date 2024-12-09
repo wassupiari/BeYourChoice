@@ -20,7 +20,7 @@ db_manager = DatabaseManager()
 # Passa l'istanza di db_manager a MaterialeModel
 materiale_control = MaterialeControl(db_manager)
 materiale_model = MaterialeModel(db_manager)
-materiale_model.set_upload_folder('/public/uploads')
+materiale_model.set_cartella_uploads('/public/uploads')
 
 MaterialeDocente = Blueprint('MaterialeDocente', __name__)
 
@@ -36,9 +36,9 @@ def initialize_materiale_docente_blueprint(app: object) -> object:
         materiali = materiale_model.visualizza_materiali(ID_Classe)
         return render_template('materialeDocente.html', materiali=materiali)
 
-    @MaterialeDocente.route('/serve_file/<path:filename>')
-    def serve_file(filename: str):
-        return materiale_model.serve_file(filename)
+    @MaterialeDocente.route('/servi_file/<path:nomefile>')
+    def servi_file(nomefile: str):
+        return materiale_model.servi_file(nomefile)
 
     @MaterialeDocente.route('/carica', methods=['GET', 'POST'])
     def carica_materiale():
