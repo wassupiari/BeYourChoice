@@ -1,9 +1,9 @@
 from flask import Flask, render_template, session, redirect, url_for
 import os
-from app.controllers.LoginControl import login_bp
-from app.controllers.QuizControl import quiz_blueprint
-from app.controllers.RegistrazioneControl import registrazione_bp
-from app.controllers.DashboardControl import dashboard_blueprint
+from app.controllers.loginControl import login_bp
+from app.controllers.quizControl import quiz_blueprint
+from app.controllers.registrazioneControl import registrazione_bp
+from app.controllers.dashboardControl import dashboard_blueprint
 from app.views.inserimentoStudente import inserimentostudente
 from app.views.classeDocente import classedocente
 from app.views.scenarioView import scenario_bp

@@ -1,4 +1,4 @@
-from app.controllers.ProfiloControl import ProfiloControl
+from app.controllers.profiloControl import ProfiloControl
 
 
 class ProfiloModel:

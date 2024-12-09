@@ -1,6 +1,6 @@
 from flask import *
-from app.controllers.ClasseVirtualeControl import ClasseVirtualeControl
-from app.controllers.LoginControl import teacher_required, student_required
+from app.controllers.classeVirtualeControl import ClasseVirtualeControl
+from app.controllers.loginControl import teacher_required, student_required
 
 # Crea il blueprint
 classedocente = Blueprint('classedocente', __name__)

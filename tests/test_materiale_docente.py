@@ -44,15 +44,15 @@ def initialize_materiale_docente_blueprint(app):
         file = request.files.get('file')
 
         # Validazione del titolo
-        if not titolo or len(titolo) < 3 or '@' in titolo:
+        if not titolo or len(titolo) < 2 or '@' in titolo:
             return "Formato titolo non supportato", 400
 
         # Validazione lunghezza titolo
-        if len(titolo) > 100:
+        if len(titolo) > 20:
             return "Lunghezza titolo non supportata", 400
 
         # Validazione tipo file
-        if tipo not in ['pdf', 'doc', 'jpeg']:
+        if tipo not in ['pdf', 'docx', 'jpeg', 'jpg', 'mp4', 'txt', 'png']:
             return "Tipo formato non supportato", 400
 
         # Validazione dimensione file
@@ -60,7 +60,7 @@ def initialize_materiale_docente_blueprint(app):
             return "File mancante", 400
         file_size = len(file.read())
         file.seek(0)  # Riposiziona il cursore all'inizio
-        if file_size > 5 * 1024 * 1024:  # 5 MB limite
+        if file_size > 6 * 1024 * 1024:  # 6 MB limite
             return "Dimensione file non supportata", 400
 
         # Validazione descrizione
@@ -68,12 +68,12 @@ def initialize_materiale_docente_blueprint(app):
             return "Formato descrizione non supportato", 400
 
         # Validazione lunghezza descrizione
-        if len(descrizione) > 500:
+        if len(descrizione) > 255:
             return "Lunghezza descrizione non supportata", 400
 
         return "Caricamento avvenuto con successo", 302
 
-    @MaterialeDocente.route('/rimuovi/<material_id>', methods=['GET'])
+    @MaterialeDocente.route('/rimuovi/<materiale_id>', methods=['GET'])
     def rimuovi(material_id):
         if not ObjectId.is_valid(material_id):
             return "Materiale non trovato", 404
@@ -103,7 +103,7 @@ def test_carica_materiale_dimensione_non_supportata(client, test_id):
         'titolo': 'FileTroppoGrande',
         'tipo': 'pdf',
         'descrizione': 'Descrizione valida',
-        'file': (io.BytesIO(b'a' * (6 * 1024 * 1024)), 'file.pdf')  # 6 MB
+        'file': (io.BytesIO(b'a' * (7 * 1024 * 1024)), 'file.pdf')  # 6 MB
     }
     response = client.post('/carica', data=data, content_type='multipart/form-data')
     assert "Dimensione file non supportata" in response.data.decode('utf-8')

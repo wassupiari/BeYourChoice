@@ -1,6 +1,6 @@
 import pytest
 from flask import Flask, session
-from app.controllers.RegistrazioneControl import registrazione_bp
+from app.controllers.registrazioneControl import registrazione_bp
 
 # Funzione per creare l'app Flask
 def create_app():
