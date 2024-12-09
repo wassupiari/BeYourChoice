@@ -21,7 +21,7 @@ class MaterialeModel:
         return bool(re.match(r'^[A-Za-z0-9 ]{2,20}$', titolo))
 
     def descrizione_valida(self, descrizione):
-        return 2 <= len(descrizione) <= 255
+        return bool(re.match(r'^[^§]{2,255}$', descrizione))
 
     def tipo_file_valido(self, nomefile):
         return '.' in nomefile and nomefile.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
