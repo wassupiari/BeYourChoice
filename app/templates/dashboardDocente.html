@@ -39,7 +39,7 @@
     <!-- Sidebar -->
     <aside class="sidebar">
         <div class="sidebar-item">
-            <a href="{{ url_for ('creazioneclasse.creazione_classe')}}">
+            <a href="{{ url_for ('creazioneclasse.creazione_classe', id_classe=session.get('id_classe'))}}">
                 <i class="fas fa-circle-plus"></i><br>
                 <span> Crea Classe Virtuale</span>
             </a>

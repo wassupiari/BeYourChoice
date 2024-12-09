@@ -1,11 +1,17 @@
-/*Foglio di stile utilizzato per l'header della piattaforma */
+/* Foglio di stile utilizzato per l'header della piattaforma */
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
 
-body {
-    font-family: 'Open Sans', sans-serif;
+html, body {
     margin: 0;
     padding: 0;
+    font-family: 'Open Sans', sans-serif;
     background-color: #f9f4f1; /* Sfondo neutro */
+    height: 100%;
+    overflow: hidden; /* Disabilita lo scrolling globale */
+}
+
+body {
+    overflow-y: auto; /* Abilita lo scrolling solo sul corpo */
 }
 
 .main-header {
@@ -16,8 +22,8 @@ body {
     top: 0;
     z-index: 1000;
     transition: box-shadow 0.3s ease-in-out;
-    height: 1%; /* Altezza ridotta per l'header */
-    padding: 5px 20px; /* Ridotto il padding */
+    height: 100px; /* Altezza fissa per l'header */
+    padding: 5px 20px;
 }
 
 .main-header:hover {
@@ -66,8 +72,7 @@ body {
     font-size: 30px;
 }
 
-.nav-link.active i
-{
+.nav-link.active i {
     color: #d75a3d;
     transform: scale(1.1); /* Leggero ingrandimento al passaggio del mouse */
 }
