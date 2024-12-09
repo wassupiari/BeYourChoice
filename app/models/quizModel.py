@@ -49,7 +49,7 @@ class QuizModel:
             raise ValueError(f"Errore nel parsing della domanda: {e}")
 
     @staticmethod
-    def genera_domande(tema, numero_domande, modalita_risposta, api_key):
+    def genera_domande(tema, numero_domande, modalita_risposta,durata, api_key):
         """Genera domande utilizzando OpenAI GPT."""
         openai.api_key = api_key
         domande = []
@@ -59,8 +59,6 @@ class QuizModel:
             prompt_base += "La domanda deve avere 3 opzioni di risposta: una corretta e due sbagliate."
         elif modalita_risposta == "4_risposte":
             prompt_base += "La domanda deve avere 4 opzioni di risposta: una corretta e tre sbagliate."
-        elif modalita_risposta == "vero_falso":
-            prompt_base += "La domanda deve essere nella modalità vero/falso con la risposta corretta specificata."
 
         while len(domande) < numero_domande:
             messages = [
@@ -84,7 +82,6 @@ class QuizModel:
                 parsed_domanda = QuizModel.parse_domanda(domanda)
                 domande.append(parsed_domanda)
             except ValueError as parse_error:
-                print(f"Errore nel parsing della domanda: {parse_error}")
                 continue
             except Exception as e:
                 print(f"Errore durante la richiesta OpenAI: {e}")
@@ -97,7 +94,7 @@ class QuizModel:
         try:
             quiz_collection = QuizModel.db_manager.get_collection("Quiz")
             questions_collection = QuizModel.db_manager.get_collection("Domanda")
-            if "ID_Quiz" not in data or quiz_collection.find_one({"ID_Quiz": data["ID_Quiz"]}):
+            if "iq_quiz" not in data or quiz_collection.find_one({"id_quiz": data["ID_Quiz"]}):
                 data["ID_Quiz"] = str(uuid.uuid4())  # Genera un ID univoco
 
             id_classe = session.get("ID_Classe")
@@ -105,25 +102,25 @@ class QuizModel:
                 raise ValueError("ID Classe mancante nella sessione.")
 
             quiz = {
-                "ID_Quiz": data["ID_Quiz"],
-                "Titolo": data["Titolo"],
-                "Argomento": data["Argomento"],
-                "N_Domande": data["N_Domande"],
-                "Domande": data["Domande"],
-                "Modalità_Quiz": data["Modalità_Quiz"],
-                "Durata": data["Durata"],
-                "Data_Creazione": data["Data_Creazione"],
-                "ID_Classe": id_classe
+                "id_quiz": data["ID_Quiz"],
+                "titolo": data["Titolo"],
+                "argomento": data["Argomento"],
+                "n_domande": data["N_Domande"],
+                "domande": data["Domande"],
+                "modalita_quiz": data["Modalità_Quiz"],
+                "durata": data["Durata"],
+                "data_creazione": data["Data_Creazione"],
+                "id_classe": id_classe
             }
             quiz_collection.insert_one(quiz)
 
             for domanda in data["Domande"]:
                 question = {
-                    "ID_Domanda": domanda["ID_Domanda"],
-                    "Testo_Domanda": domanda["Testo_Domanda"],
-                    "Opzioni_Risposte": domanda["Opzioni_Risposte"],
-                    "Risposta_Corretta": domanda["Risposta_Corretta"],
-                    "ID_Quiz": data["ID_Quiz"]
+                    "id_domanda": domanda["ID_Domanda"],
+                    "testo_domanda": domanda["Testo_Domanda"],
+                    "opzioni_risposte": domanda["Opzioni_Risposte"],
+                    "risposta_corretta": domanda["Risposta_Corretta"],
+                    "id_quiz": data["ID_Quiz"]
                 }
                 questions_collection.insert_one(question)
         except Exception as e:
@@ -134,7 +131,7 @@ class QuizModel:
         """Recupera le domande dal database in base agli ID."""
         try:
             questions_collection = QuizModel.db_manager.get_collection("Domanda")
-            return list(questions_collection.find({"ID_Domanda": {"$in": question_ids}}))
+            return list(questions_collection.find({"id_domanda": {"$in": question_ids}}))
         except Exception as e:
             raise ValueError(f"Errore durante il recupero delle domande: {e}")
 
@@ -143,7 +140,7 @@ class QuizModel:
         """Recupera un quiz in base al suo ID."""
         try:
             quiz_collection = QuizModel.db_manager.get_collection("Quiz")
-            quiz = quiz_collection.find_one({"ID_Quiz": quiz_id})
+            quiz = quiz_collection.find_one({"id_quiz": quiz_id})
             if not quiz:
                 raise ValueError("Quiz non trovato.")
             quiz["_id"] = str(quiz["_id"])  # Convert ObjectId to string
@@ -156,7 +153,7 @@ class QuizModel:
         """Recupera tutti i quiz per una classe specifica."""
         try:
             quiz_collection = QuizModel.db_manager.get_collection("Quiz")
-            quiz_list = list(quiz_collection.find({"ID_Classe": id_classe}))
+            quiz_list = list(quiz_collection.find({"id_classe": id_classe}))
             for quiz in quiz_list:
                 quiz["_id"] = str(quiz["_id"])  # Convert ObjectId
             return quiz_list
@@ -168,7 +165,7 @@ class QuizModel:
         """Recupera i risultati di un quiz."""
         try:
             risultati_collection = QuizModel.db_manager.get_collection("RisultatoQuiz")
-            return list(risultati_collection.find({"ID_Quiz": quiz_id}))
+            return list(risultati_collection.find({"id_quiz": quiz_id}))
         except Exception as e:
             raise ValueError(f"Errore durante il recupero dei risultati: {e}")
 
@@ -180,16 +177,16 @@ class QuizModel:
             dashboard_collection = QuizModel.db_manager.get_collection("Dashboard")
 
             ultimo_quiz = quiz_collection.find_one(
-                {"ID_Classe": id_classe},
-                sort=[("Data_Creazione", -1)]
+                {"id_classe": id_classe},
+                sort=[("data_creazione", -1)]
             )
 
             if not ultimo_quiz:
                 return None
 
             completato = dashboard_collection.find_one({
-                "CF_Studente": cf_studente,
-                "Descrizione_Attività": {"$regex": f"Completamento Quiz: {ultimo_quiz['Titolo']}"}
+                "cf_studente": cf_studente,
+                "descrizione_attivita": {"$regex": f"Completamento Quiz: {ultimo_quiz['Titolo']}"}
             })
 
             return None if completato else ultimo_quiz
@@ -201,7 +198,7 @@ class QuizModel:
         """Recupera tutti gli studenti di una classe."""
         try:
             studenti_collection = QuizModel.db_manager.get_collection("Studente")
-            return list(studenti_collection.find({"ID_Classe": id_classe}))
+            return list(studenti_collection.find({"id_classe": id_classe}))
         except Exception as e:
             raise ValueError(f"Errore durante il recupero degli studenti: {e}")
 
@@ -215,7 +212,7 @@ class QuizModel:
         try:
             dashboard_collection = QuizModel.db_manager.get_collection("Dashboard")
             return list(dashboard_collection.find({
-                "Descrizione_Attività": {"$regex": f"Completamento Quiz: {titolo_quiz}"}
+                "descrizione_attivita": {"$regex": f"Completamento Quiz: {titolo_quiz}"}
             }))
         except Exception as e:
             raise ValueError(f"Errore durante il recupero delle attività completate: {e}")
@@ -228,7 +225,7 @@ class QuizModel:
         quiz_collection = QuizModel.db_manager.get_collection("Quiz")
 
         # Recupera l'ora di inizio dal database o impostala
-        sessione = quiz_collection.find_one({"ID_Quiz": quiz_id, "CF_Studente": cf_studente})
+        sessione = quiz_collection.find_one({"id_quiz": quiz_id, "cf_studente": cf_studente})
         ora_attuale = datetime.utcnow()
 
         if not sessione:
@@ -238,7 +235,7 @@ class QuizModel:
             ora_inizio = sessione["Ora_Inizio"]
 
         # Recupera la durata del quiz
-        quiz = quiz_collection.find_one({"ID_Quiz": quiz_id})
+        quiz = quiz_collection.find_one({"id_quiz": quiz_id})
         durata_quiz = quiz["Durata"] if quiz else 30  # Default a 30 minuti
 
         # Calcola il tempo rimanente in secondi
@@ -265,18 +262,18 @@ class QuizModel:
             quiz_results_collection.insert_one(quiz_result)
 
             # Recupera il titolo del quiz
-            quiz = quiz_collection.find_one({"ID_Quiz": quiz_result["ID_Quiz"]}, {"Titolo": 1})
+            quiz = quiz_collection.find_one({"id_quiz": quiz_result["iq_quiz"]}, {"titolo": 1})
             if not quiz:
-                raise ValueError(f"Quiz con ID {quiz_result['ID_Quiz']} non trovato.")
+                raise ValueError(f"Quiz con ID {quiz_result['id_quiz']} non trovato.")
             titolo_quiz = quiz["Titolo"]
 
             # Genera l'attività svolta
             attività = {
-                "ID_Attività": attività_collection.count_documents({}) + 1,  # Genera un ID incrementale
-                "Data_Attività": datetime.utcnow(),
-                "Descrizione_Attività": f"Completamento Quiz: {titolo_quiz}",
-                "Punteggio_Attività": punteggio,
-                "CF_Studente": cf_studente
+                "id_attivita": attività_collection.count_documents({}) + 1,  # Genera un ID incrementale
+                "data_attivita": datetime.utcnow(),
+                "descrizione_attivita": f"Completamento Quiz: {titolo_quiz}",
+                "punteggio_attivita": punteggio,
+                "cf_studente": cf_studente
             }
 
             # Inserisce l'attività nella dashboard
@@ -292,9 +289,19 @@ class QuizModel:
         """
         try:
             risultati_collection = QuizModel.db_manager.get_collection("RisultatoQuiz")
-            risultato = risultati_collection.find_one({"ID_Quiz": quiz_id, "CF_Studente": cf_studente})
+            risultato = risultati_collection.find_one({"id_quiz": quiz_id, "cf_studente": cf_studente})
             return risultato is not None  # Restituisce True se il quiz è completato
         except Exception as e:
             print(f"ERRORE durante la verifica del completamento del quiz: {e}")
             return False
+
+    @staticmethod
+    def verifica_titolo(titolo):
+        """Verifica se il titolo del quiz esiste già nel database."""
+        try:
+            quiz_collection = QuizModel.db_manager.get_collection("Quiz")
+            # Cerca un documento con il titolo specificato
+            return quiz_collection.find_one({"titolo": titolo}) is not None
+        except Exception as e:
+            raise ValueError(f"Errore durante la verifica del titolo: {e}")
 

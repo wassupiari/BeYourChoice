@@ -76,10 +76,10 @@ def registra():
             docente_dict = {
                 "nome": nome,
                 "cognome": cognome,
-                "SdA": sda,
+                "sda": sda,
                 "email": email,
                 "cf": cf,
-                "Data_Nascita": data_nascita,
+                "data_nascita": data_nascita,
                 "password": password,
                 "codice_univoco": int(codice_univoco)
             }
@@ -87,21 +87,21 @@ def registra():
             docente_model = DocenteModel()
             docente_model.aggiungi_docente(docente_dict)
             session['email'] = email
-            return redirect(url_for('home'))
+            return redirect(url_for('dashboard.dashboard_docente'))
         else:  # Altrimenti, registra come studente
             studente_dict = {
                 "nome": nome,
                 "cognome": cognome,
-                "SdA": sda,
+                "sda": sda,
                 "email": email,
                 "cf": cf,
-                "Data_Nascita": data_nascita,
+                "data_nascita": data_nascita,
                 "password": password
             }
 
             studente_model.aggiungi_studente(studente_dict)
             session['email'] = email
-            return redirect(url_for('home'))
+            return redirect(url_for('dashboard.dashboard_studente'))
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500

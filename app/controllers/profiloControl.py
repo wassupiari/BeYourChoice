@@ -28,7 +28,7 @@ class ProfiloControl:
             logging.error(f"Errore nel recuperare il profilo del docente per email {email}: {str(e)}")
             return []
 
-    def update_profilo_studente(self, email, nuovi_dati):
+    def carica_profilo_studente(self, email, nuovi_dati):
         try:
             studente_collection = self.db_manager.get_collection("Studente")
             result = studente_collection.update_one({"email": email}, {"$set": nuovi_dati})
@@ -37,7 +37,7 @@ class ProfiloControl:
             logging.error(f"Errore nell'aggiornamento del profilo studente per email {email}: {str(e)}")
             return False
 
-    def update_profilo_docente(self, email, nuovi_dati):
+    def carica_profilo_docente(self, email, nuovi_dati):
         try:
             docente_collection = self.db_manager.get_collection("Docente")
             result = docente_collection.update_one({"email": email}, {"$set": nuovi_dati})

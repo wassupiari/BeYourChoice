@@ -1,12 +1,13 @@
 import pytest
 from flask import Flask, Blueprint, request, jsonify
+from unittest.mock import MagicMock
 
 
 # Funzione per creare l'app Flask
 def create_app():
     app = Flask(__name__)
     app.secret_key = "test_secret"
-    initialize_monitoraggio_blueprint(app)
+    initialize_quiz_blueprint(app)
     return app
 
 
@@ -20,102 +21,71 @@ def client():
         yield client
 
 
-# Inizializzazione del blueprint Monitoraggio
-def initialize_monitoraggio_blueprint(app):
-    monitoraggio_blueprint = Blueprint('monitoraggio', __name__)
+# Inizializzazione del blueprint Quiz
+def initialize_quiz_blueprint(app):
+    quiz_blueprint = Blueprint('quiz', __name__)
 
-    # Mock database
-    classifica_mock = {
-        101: [
-            {"Studente": "Mario Rossi", "Punti": 120},
-            {"Studente": "Luigi Bianchi", "Punti": 110}
+    # Simula la creazione del quiz
+    @quiz_blueprint.route('/genera', methods=['POST'])
+    def genera_quiz():
+        tema = request.json.get('tema')
+        numero_domande = int(request.json.get('numero_domande'))
+        modalita_risposta = request.json.get('modalita_risposta')
+
+        if not tema or numero_domande <= 0 or modalita_risposta not in ['3_risposte', '4_risposte', 'vero_falso']:
+            return "Parametri non validi", 400
+
+        return jsonify({"message": "Quiz generato con successo", "quiz_id": 1}), 200
+
+    # Simula il salvataggio dei risultati del quiz
+    @quiz_blueprint.route('/salva-risultato', methods=['POST'])
+    def salva_risultato():
+        data = request.json
+        if not data.get('CF_Studente') or not data.get('Punteggio_Quiz'):
+            return "Dati mancanti", 400
+
+        # Simuliamo il salvataggio del risultato
+        return jsonify({"message": "Risultato salvato correttamente!"}), 200
+
+    # Simula la visualizzazione dei risultati per un quiz
+    @quiz_blueprint.route('/quiz/<int:quiz_id>/risultati', methods=['GET'])
+    def visualizza_risultati_quiz(quiz_id):
+        # Mock per la visualizzazione dei risultati
+        risultati = [
+            {"CF_Studente": "CF12345", "Nome": "Mario", "Cognome": "Rossi", "Punteggio_Quiz": 80},
+            {"CF_Studente": "CF67890", "Nome": "Luigi", "Cognome": "Bianchi", "Punteggio_Quiz": 70}
         ]
-    }
+        return jsonify(risultati), 200
 
-    storico_mock = {
-        "RSSMRA80A01H501Z": [
-            {"Attivita": "Quiz Matematica", "Punti": 30, "Data": "2024-11-28"},
-            {"Attivita": "Esercizi Italiano", "Punti": 20, "Data": "2024-11-29"}
-        ],
-        "RSSFNC90B02C501X": [
-            {"Attivita": "Scenari Storia", "Punti": 40, "Data": "2024-11-27"}
-        ]
-    }
-
-    # Route per visualizzare la classifica
-    @monitoraggio_blueprint.route('/classifica/<int:ID_Classe>', methods=['GET'])
-    def classifica(ID_Classe):
-        classifica = classifica_mock.get(ID_Classe, [])
-        if not classifica:
-            return "Classe non trovata", 404
-        return jsonify({"Classifica": classifica}), 200
-
-    # Route per visualizzare lo storico
-    @monitoraggio_blueprint.route('/storico/<string:CF_Studente>', methods=['GET'])
-    def storico(CF_Studente):
-        storico = storico_mock.get(CF_Studente, [])
-        if not storico:
-            return "Studente non trovato", 404
-        return jsonify({"Storico": storico}), 200
-
-    # Route per aggiungere un nuovo quiz
-    @monitoraggio_blueprint.route('/aggiungi-quiz', methods=['POST'])
-    def aggiungi_quiz():
-        quiz_data = request.json
-        for studente in storico_mock:
-            storico_mock[studente].append({
-                "Attivita": quiz_data["Attivita"],
-                "Punti": quiz_data["Punti"],
-                "Data": quiz_data["Data"]
-            })
-        for studente in classifica_mock[quiz_data["ID_Classe"]]:
-            studente["Punti"] += quiz_data["Punti"]
-        return "Quiz aggiunto con successo", 200
-
-    app.register_blueprint(monitoraggio_blueprint)
+    app.register_blueprint(quiz_blueprint)
 
 
-# Test monitoraggio classifiche e storico
-def test_monitoraggio_classifiche_e_storico(client):
-    # Prima del nuovo quiz
-    response_classifica = client.get('/classifica/101')
-    assert response_classifica.status_code == 200
-    classifica_prima = response_classifica.json["Classifica"]
-    assert len(classifica_prima) == 2
-    assert classifica_prima[0]["Punti"] == 120
-    assert classifica_prima[1]["Punti"] == 110
-    print("Classifica prima dell'aggiunta:", classifica_prima)
+# Test 1: Creazione quiz con parametri validi
+@pytest.mark.parametrize("test_id", ["TC_GGDQ_1_1"])
+def test_creazione_quiz_successo(client, test_id):
+    data = {"tema": "Pollo", "numero_domande": 5, "modalita_risposta": "3_risposte", "durata": "00:30"}
+    response = client.post('/genera', json=data)
+    assert response.status_code == 200
+    assert "Quiz generato con successo" in response.json['message']
+    print(f"Test {test_id}: Creazione quiz riuscita!")
 
-    response_storico = client.get('/storico/RSSMRA80A01H501Z')
-    assert response_storico.status_code == 200
-    storico_prima = response_storico.json["Storico"]
-    assert len(storico_prima) == 2
-    print("Storico prima dell'aggiunta:", storico_prima)
 
-    # Aggiungi un nuovo quiz
-    nuovo_quiz = {
-        "ID_Classe": 101,
-        "Attivita": "Quiz Scienze",
-        "Punti": 10,
-        "Data": "2024-12-01"
-    }
-    response_aggiungi = client.post('/aggiungi-quiz', json=nuovo_quiz)
-    assert response_aggiungi.status_code == 200
-    assert "Quiz aggiunto con successo" in response_aggiungi.data.decode('utf-8')
-    print("Nuovo quiz aggiunto con successo")
+# Test 2: Salvataggio dei risultati del quiz
+@pytest.mark.parametrize("test_id", ["TC_GGDQ_2_1"])
+def test_salvataggio_risultati_quiz(client, test_id):
+    data = {"CF_Studente": "CF12345", "Punteggio_Quiz": 80, "Risposte": ["A", "B", "C"]}
+    response = client.post('/salva-risultato', json=data)
+    assert response.status_code == 200
+    assert "Risultato salvato correttamente!" in response.json['message']
+    print(f"Test {test_id}: Salvataggio risultato quiz riuscito!")
 
-    # Dopo il nuovo quiz
-    response_classifica = client.get('/classifica/101')
-    assert response_classifica.status_code == 200
-    classifica_dopo = response_classifica.json["Classifica"]
-    assert len(classifica_dopo) == 2
-    assert classifica_dopo[0]["Punti"] == 130  # Punti aggiornati
-    assert classifica_dopo[1]["Punti"] == 120
-    print("Classifica dopo l'aggiunta:", classifica_dopo)
 
-    response_storico = client.get('/storico/RSSMRA80A01H501Z')
-    assert response_storico.status_code == 200
-    storico_dopo = response_storico.json["Storico"]
-    assert len(storico_dopo) == 3
-    assert storico_dopo[-1]["Attivita"] == "Quiz Scienze"
-    print("Storico dopo l'aggiunta:", storico_dopo)
+# Test 3: Visualizzazione dei risultati del quiz
+@pytest.mark.parametrize("test_id", ["TC_GGDQ_3_1"])
+def test_visualizzazione_risultati_quiz(client, test_id):
+    quiz_id = 1  # L'ID del quiz per il quale vogliamo vedere i risultati
+    response = client.get(f'/quiz/{quiz_id}/risultati')
+    assert response.status_code == 200
+    assert len(response.json) > 0  # Verifica che ci siano dei risultati
+    print(f"Test {test_id}: Risultati del quiz visualizzati correttamente!")
+

@@ -1,112 +1,108 @@
 import pytest
-from flask import Flask, Blueprint, request
+from flask import session
+from unittest.mock import patch
+from app import create_app
 
 
-# Funzione per creare l'app Flask
-def create_app():
-    app = Flask(__name__)
-    app.secret_key = "test_secret"
-    initialize_quiz_blueprint(app)
-    return app
-
-
-# Fixture per il client di test
 @pytest.fixture
 def client():
+    """Crea un client di test per Flask"""
     app = create_app()
-    app.config['TESTING'] = True
+    app.testing = True
 
     with app.test_client() as client:
-        yield client
+        with app.app_context():
+            yield client
 
 
-# Inizializzazione del blueprint Quiz
-def initialize_quiz_blueprint(app):
-    quiz_blueprint = Blueprint('quiz', __name__)
-
-    @quiz_blueprint.route('/genera', methods=['POST'])
-    def genera_quiz():
-        tema = request.json.get('tema')
-        numero_domande = request.json.get('numero_domande')
-        modalita_risposta = request.json.get('modalita_risposta')
-        durata = request.json.get('durata')
-
-        # Validazioni
-        if not tema or len(tema) < 2:
-            return "Argomento non valido", 400
-
-        if '@' in tema:
-            return "Formato argomento non valido", 400
-
-        if numero_domande < 5:
-            return "Numero di domande non valido", 400
-
-        if modalita_risposta not in ['3_risposte', '4_risposte', 'vero_falso']:
-            return "Modalità risposta non valida", 400
-
-        if durata != "00:30":
-            return "Durata non valida", 400
-
-        return "Quiz generato con successo", 200
-
-    app.register_blueprint(quiz_blueprint)
+# Mock per bypassare il decoratore @teacher_required
+def bypass_teacher_required(func):
+    """Mock per ignorare il controllo della sessione per @teacher_required"""
+    return func
 
 
-# Test per argomento non valido (lunghezza < 2)
-@pytest.mark.parametrize("test_id", ["TC_GGDQ_1_1"])
-def test_genera_quiz_argomento_non_valido(client, test_id):
-    data = {"tema": "", "numero_domande": 5, "modalita_risposta": "3_risposte", "durata": "00:30"}
-    response = client.post('/genera', json=data)
-    assert response.status_code == 400
-    assert "Argomento non valido" in response.data.decode('utf-8')
-    print(f"Test {test_id}: Argomento non valido gestito correttamente!")
+@patch('app.controllers.LoginControl.teacher_required', bypass_teacher_required)
+@pytest.mark.parametrize("test_id, payload, expected_status, expected_error", [
+    (
+        "TC_GMD_1_1",  # Test ID: Creazione quiz con input validi
+        {
+            "titolo": "Quiz Test",
+            "tema": "Costituzione Italiana",
+            "numero_domande": 10,
+            "modalita_risposta": "4_risposte",
+            "durata": 30
+        },
+        200,
+        None
+    ),
+    (
+        "TC_GMD_1_2",  # Test ID: Titolo non valido
+        {
+            "titolo": "A",  # Titolo troppo corto
+            "tema": "Costituzione Italiana",
+            "numero_domande": 10,
+            "modalita_risposta": "4_risposte",
+            "durata": 30
+        },
+        400,
+        "Il titolo non è valido"
+    ),
+    (
+        "TC_GMD_1_3",  # Test ID: Argomento non valido
+        {
+            "titolo": "Quiz Test",
+            "tema": "A",  # Argomento troppo corto
+            "numero_domande": 10,
+            "modalita_risposta": "4_risposte",
+            "durata": 30
+        },
+        400,
+        "L'argomento non è valido"
+    ),
+    (
+        "TC_GMD_1_4",  # Test ID: Numero di domande non valido
+        {
+            "titolo": "Quiz Test",
+            "tema": "Costituzione Italiana",
+            "numero_domande": 25,  # Fuori range
+            "modalita_risposta": "4_risposte",
+            "durata": 30
+        },
+        400,
+        "Il numero di domande deve essere compreso tra 5 e 20"
+    ),
+    (
+        "TC_GMD_1_5",  # Test ID: Durata non valida
+        {
+            "titolo": "Quiz Test",
+            "tema": "Costituzione Italiana",
+            "numero_domande": 10,
+            "modalita_risposta": "4_risposte",
+            "durata": 150  # Durata troppo lunga
+        },
+        400,
+        "La durata deve essere compresa tra 1 e 120 minuti"
+    )
+])
+def test_creazione_quiz(client, test_id, payload, expected_status, expected_error):
+    """Esegue test parametrizzati per la creazione quiz"""
+    if test_id != "TC_GMD_1_6":  # Configura la sessione solo per test con sessione valida
+        with client.session_transaction() as sess:
+            sess['email'] = 'roccocione@gmail.com'
+            sess['session_token'] = 'i1kb4v1ik2v4jiubadu'
+            sess['role'] = 'docente'
+            sess['ID_Classe'] = 3
 
+    response = client.post("/genera", json=payload)
+    assert response.status_code == expected_status
 
-# Test per formato argomento non valido
-@pytest.mark.parametrize("test_id", ["TC_GGDQ_1_2"])
-def test_genera_quiz_formato_argomento_non_valido(client, test_id):
-    data = {"tema": "Argomento@", "numero_domande": 5, "modalita_risposta": "3_risposte", "durata": "00:30"}
-    response = client.post('/genera', json=data)
-    assert response.status_code == 400
-    assert "Formato argomento non valido" in response.data.decode('utf-8')
-    print(f"Test {test_id}: Formato argomento non valido gestito correttamente!")
-
-
-# Test per numero domande non valido
-@pytest.mark.parametrize("test_id", ["TC_GGDQ_1_3"])
-def test_genera_quiz_numero_domande_non_valido(client, test_id):
-    data = {"tema": "Costituzione", "numero_domande": 3, "modalita_risposta": "3_risposte", "durata": "00:30"}
-    response = client.post('/genera', json=data)
-    assert response.status_code == 400
-    assert "Numero di domande non valido" in response.data.decode('utf-8')
-    print(f"Test {test_id}: Numero di domande non valido gestito correttamente!")
-
-
-# Test per modalità risposta non valida
-@pytest.mark.parametrize("test_id", ["TC_GGDQ_1_4"])
-def test_genera_quiz_modalita_non_valida(client, test_id):
-    data = {"tema": "Costituzione", "numero_domande": 5, "modalita_risposta": "non_valida", "durata": "00:30"}
-    response = client.post('/genera', json=data)
-    assert response.status_code == 400
-    assert "Modalità risposta non valida" in response.data.decode('utf-8')
-    print(f"Test {test_id}: Modalità risposta non valida gestita correttamente!")
-
-
-# Test per durata non valida
-@pytest.mark.parametrize("test_id", ["TC_GGDQ_1_5"])
-def test_genera_quiz_durata_non_valida(client, test_id):
-    data = {"tema": "Costituzione", "numero_domande": 5, "modalita_risposta": "3_risposte", "durata": "00:20"}
-    response = client.post('/genera', json=data)
-    assert response.status_code == 400
-    assert "Durata non valida" in response.data.decode('utf-8')
-    print(f"Test {test_id}: Durata non valida gestita correttamente!")
-
-
-# Test per generazione quiz con successo
-@pytest.mark.parametrize("test_id", ["TC_GGDQ_1_6"])
-def test_genera_quiz_successo(client, test_id):
-    data = {"tema": "Costituzione", "numero_domande": 5, "modalita_risposta": "3_risposte", "durata": "00:30"}
-    response = client.post('/genera', json=data)
-    assert response.status_code == 200
-    assert "Quiz generato con successo" in response.data.decode('utf-8')
-    print(f"Test {test_id}: Generazione quiz riuscita!")
+    if expected_error:
+        data = response.get_json()
+        assert expected_error in data["error"]
+    else:
+        data = response.get_json()
+        assert len(data) == payload["numero_domande"]
+        for domanda in data:
+            assert "Testo_Domanda" in domanda
+            assert "Opzioni_Risposte" in domanda
+            assert "Risposta_Corretta" in domanda

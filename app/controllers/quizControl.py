@@ -1,9 +1,9 @@
-from datetime import datetime, timedelta
+import os
+import re
 from flask import Blueprint, request, session, jsonify
 from app.models.quizModel import QuizModel
 from app.views.quizView import QuizView
-from app.controllers.LoginControl import teacher_required, student_required
-import os
+from app.controllers.loginControl import teacher_required, student_required
 from dotenv import load_dotenv
 
 # Carica le variabili d'ambiente
@@ -22,32 +22,53 @@ def index():
     return QuizView.mostra_crea_quiz(id_classe)
 
 
+
+
 @quiz_blueprint.route("/genera", methods=["POST"])
 @teacher_required
 def genera_domande():
     """Genera domande per il quiz."""
     try:
+        titolo = request.json.get("titolo")
         tema = request.json.get("tema")
-        numero_domande = int(request.json.get("numero_domande"))
+        numero_domande = request.json.get("numero_domande")
         modalita_risposta = request.json.get("modalita_risposta")
+        durata = request.json.get("durata")
 
-        id_classe = session.get("ID_Classe")
-        if not id_classe:
-            return QuizView.mostra_errore("ID Classe mancante nella sessione", 400)
+        # Controlli di validazione
+        if not titolo or not re.match(r"^[A-Za-zÀ-ú0-9\s\-_']{2,255}$", titolo):
+            return jsonify({"error": "Il titolo non è valido (2-255 caratteri, formato corretto)."}), 400
 
-        if not tema or numero_domande <= 0 or modalita_risposta not in ["3_risposte", "4_risposte", "vero_falso"]:
-            return QuizView.mostra_errore("Parametri non validi", 400)
+        if QuizModel.verifica_titolo(titolo):
+            return jsonify({"error": "Il titolo esiste già nel database."}), 400
 
+        if not tema or not re.match(r"^[A-Za-zÀ-ú0-9‘’',\.\(\)\s\/|\\{}\[\],\-!$%&?<>=^+°#*:']{2,255}$", tema):
+            return jsonify({"error": "L'argomento non è valido (2-255 caratteri, formato corretto)."}), 400
+
+        if not numero_domande or not (5 <= int(numero_domande) <= 20):
+            return jsonify({"error": "Il numero di domande deve essere compreso tra 5 e 20."}), 400
+
+        if modalita_risposta not in ["3_risposte", "4_risposte", "vero_falso"]:
+            return jsonify({"error": "Modalità di risposta non valida."}), 400
+
+
+
+        # Genera domande
         domande = QuizModel.genera_domande(
             tema=tema,
-            numero_domande=numero_domande,
+            numero_domande=int(numero_domande),
             modalita_risposta=modalita_risposta,
+            durata=durata,
             api_key=os.getenv("OPENAI_API_KEY")
         )
 
-        return QuizView.mostra_domande_generate(domande)
+        return jsonify(domande), 200
     except Exception as e:
-        return QuizView.mostra_errore(f"Errore durante la generazione: {str(e)}")
+        return jsonify({"error": f"Errore durante la generazione: {str(e)}"}), 500
+
+
+
+
 
 
 @quiz_blueprint.route("/salva", methods=["POST"])
