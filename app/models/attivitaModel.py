@@ -88,7 +88,7 @@ class Attivita:
             dashboard_collection = self.db_manager.get_collection("Dashboard")
             attivita_risultati = list(dashboard_collection.find(
                 {"CF_Studente": cf_studente},
-                {"_id": 0, "ID_Attività": 1, "Data_Attività": 1, "Descrizione_Attività": 1, "Punteggio_Attività": 1}
+                {"_id": 0, "ID_Attività": 1, "Data_Attività": 1, "Descrizione_Attività": 1, "punteggio_attività": 1}
             ))
 
             for attivita in attivita_risultati:

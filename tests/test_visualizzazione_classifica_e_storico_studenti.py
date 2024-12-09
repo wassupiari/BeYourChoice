@@ -32,7 +32,7 @@ def initialize_quiz_blueprint(app):
         numero_domande = int(request.json.get('numero_domande'))
         modalita_risposta = request.json.get('modalita_risposta')
 
-        if not tema or numero_domande <= 0 or modalita_risposta not in ['3_risposte', '4_risposte', 'vero_falso']:
+        if not tema or numero_domande <= 0 or modalita_risposta not in ['3_risposte', '4_risposte']:
             return "Parametri non validi", 400
 
         return jsonify({"message": "Quiz generato con successo", "quiz_id": 1}), 200
