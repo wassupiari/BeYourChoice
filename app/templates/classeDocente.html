@@ -93,15 +93,15 @@
 </main>
 </body>
 <script>
-    function rimuoviStudente(studenteId) {
-     console.log('ID studente da rimuovere:', studenteId);  // Debug
+    function rimuoviStudente(studente) {
+     console.log('ID studente da rimuovere:', studente);  // Debug
 
      fetch('/classedocente/rimuovi-studente', {
          method: 'POST',
          headers: {
              'Content-Type': 'application/json',
          },
-         body: JSON.stringify({ studente_id: studenteId }),
+         body: JSON.stringify({ id_studente: studente }),
      })
      .then(response => response.json())
      .then(data => {
