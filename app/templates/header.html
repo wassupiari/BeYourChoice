@@ -12,7 +12,7 @@
     <header class="main-header">
         <div class="container">
             <div class="logo">
-                <a href="{{url_for('classedocente.LogoAction')}}">
+                <a href="{{url_for('classedocente.logo_action')}}">
                     <img src="{{ url_for('static', filename='img/Logo.png') }}" width="20%" >
                 </a>
             </div>
@@ -25,11 +25,11 @@
                     <i class="fas fa-cubes"></i><br>
                     <span>Dashboard</span>
                 </a>
-                <a href="{{ url_for('classedocente.Manutenzione') }}" class="nav-link">
+                <a href="{{ url_for('classedocente.manutenzione') }}" class="nav-link">
                     <i class="fas fa-bell"></i><br>
                     <span>Notifiche</span>
                 </a>
-                <a href="{{ url_for('classedocente.Manutenzione') }}" class="nav-link">
+                <a href="{{ url_for('classedocente.manutenzione') }}" class="nav-link">
                     <i class="fas fa-comments"></i><br>
                     <span>Chat</span>
                 </a>
