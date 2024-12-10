@@ -82,7 +82,7 @@ body {
     margin-top: 10px;
 }
 
-i {
+.azioni i {
     font-size: 30px; /* Dimensione delle icone  */
     margin-bottom: 10px; /* Spazio tra l'icona e il testo */
     color: #000000; /* Colore delle icone */
@@ -104,6 +104,7 @@ i {
     height: 100%; /* Si adatta alla dimensione dell'elemento */
     font-size: 18px;
     font-weight: bold;
+    margin-top: 10px;
 }
 
 .azioni a {

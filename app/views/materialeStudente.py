@@ -1,3 +1,12 @@
+"""
+
+Questo modulo definisce le route per gestire il materiale didattico
+lato studente. Permette l'accesso alla visualizzazione e il download
+dei materiali associati alla classe dello studente.
+
+Autore: [il tuo nome]
+Data di creazione: [data di creazione]
+"""
 from flask import Blueprint, render_template, redirect, url_for, abort, session
 
 from app.controllers.materialeControl import MaterialeControl
@@ -15,18 +24,27 @@ materiale_control.set_cartella_uploads('/public/uploads')
 
 
 def initialize_materiale_studente_blueprint(app: object) -> object:
+    """
+   Inizializza il blueprint per le operazioni dello studente sui materiali.
+
+   :param app: L'applicazione Flask su cui registrare il blueprint.
+   :return: None
+   """
     @MaterialeStudente.route('/')
     def index():
+        """
+        Redirige alla visualizzazione del materiale studente.
+        """
         return redirect(url_for('MaterialeStudente.visualizza_materiale_studente'))
 
     @MaterialeStudente.route('/materiale/studente')
     def visualizza_materiale_studente():
         """Vista per visualizzare tutti i materiali disponibili per gli studenti."""
         id_classe = session.get('id_classe')
-        cf_studente = session.get('cf_studente')
+        cf_studente = session.get('cf')
 
         if cf_studente:
-            session['cf_studente'] = cf_studente
+            session['cf'] = cf_studente
         else:
             abort(400, 'Parametro cf_studente mancante')
 
@@ -39,7 +57,12 @@ def initialize_materiale_studente_blueprint(app: object) -> object:
 
     @MaterialeStudente.route('/servi_file/<path:nomefile>')
     def servi_file(nomefile: str):
-        """Servizio per servire i file agli studenti."""
+        """
+       Serve un file richiesto dallo studente.
+
+       :param nomefile: Nome del file da servire.
+       :return: Risposta del file servito.
+       """
         return materiale_control.servi_file(nomefile)
 
     app.register_blueprint(MaterialeStudente)

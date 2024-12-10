@@ -1,7 +1,8 @@
 /*Foglio di stile utilizzato per la pagina della creazione dello scenario virtuale*/
 /* Layout principale */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
 .main-content {
-  font-family: 'open-sans';
+  font-family: 'Open Sans', sans-serif;
   display: flex;
   flex-direction: row; /* Disposizione orizzontale: dashboard a sinistra, sidebar a destra */
   gap: 20px; /* Spazio tra dashboard e sidebar */
@@ -360,8 +361,10 @@ a
 
 .carousel-item__details .carousel-item__details--title,
 .carousel-item__details--subtitle {
+    font-family: 'Open Sans', sans-serif;
   color: #fff;
   margin: 5px 0;
+
 }
 /*fine carosello*/
 
@@ -370,7 +373,7 @@ a
   display: flex;
   justify-content: center;
   align-items: center;
-  max-width: 263px;
+  max-width: 280px;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -417,7 +420,7 @@ a
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100px;
+  width: 110px;
   min-height: 80px;
   border-radius: 0.5rem;
   border: 2px solid #b5bfd9;

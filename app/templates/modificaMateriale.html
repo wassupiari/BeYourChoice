@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -30,23 +30,23 @@
         <form action="{{ url_for('MaterialeDocente.modifica_materiale', materiale_id=materiale['_id']) }}" method="POST" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="titolo">Titolo</label>
-                <input type="text" id="titolo" name="titolo" value="{{ materiale['Titolo'] }}" required>
+                <input type="text" id="titolo" name="titolo" value="{{ materiale['titolo'] }}" required>
             </div>
 
             <div class="form-group">
                 <label for="descrizione">Descrizione</label>
-                <textarea id="descrizione" name="descrizione" required>{{ materiale['Descrizione'] }}</textarea>
+                <textarea id="descrizione" name="descrizione" required>{{ materiale['descrizione'] }}</textarea>
             </div>
 
-            {% if materiale['Tipo'] == 'txt' %}
+            {% if materiale['tipo'] == 'txt' %}
                 <div class="form-group">
                     <label for="contenuto">Contenuto del File (txt)</label>
                     <textarea id="contenuto" name="contenuto" rows="10">{{ contenuto }}</textarea>
                 </div>
             {% endif %}
 
-            <button type="submit">Salva Modifiche</button>
-            <a href="{{ url_for('MaterialeDocente.visualizza_materiale_docente') }}" class="btn btn-cancel">Annulla</a>
+            <button type="submit" class="salvaModifiche">Salva Modifiche</button>
+            <a href="{{ url_for('MaterialeDocente.visualizza_materiale_docente') }}" class="btn-cancel">Annulla</a>
         </form>
     {% else %}
         <p>Il materiale non è stato trovato.</p>

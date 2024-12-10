@@ -152,6 +152,11 @@ def logout():
         session.pop('email', None)
         session.pop('id_classe',None)
         session.pop('session_token', None)
+        session.pop('sda', None)
+        session.pop('cu', None)
+        session.pop('nome', None)
+        session.pop('cf', None)
+        session.pop('role', None)
 
         flash("Sei stato disconnesso", "success")
         return redirect(url_for('login.login'))

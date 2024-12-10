@@ -12,22 +12,22 @@
 {% include 'header.html' %}
 
 <main class="main-container">
-    <h1>Domande del Quiz: {{ quiz.Titolo }}</h1>
+    <h1>Domande del Quiz: {{ quiz.titolo }}</h1>
     <div class="domande-container">
-    <p><strong>Argomento:</strong> {{ quiz.Argomento }}</p>
-    <p><strong>Numero di domande:</strong> {{ quiz.N_Domande }}</p>
+    <p><strong>Argomento:</strong> {{ quiz.argomento }}</p>
+    <p><strong>Numero di domande:</strong> {{ quiz.n_domande }}</p>
 
     <div class="question-list">
         {% for domanda in domande %}
             <div class="question">
-                <h2>{{ loop.index }}. {{ domanda.Testo_Domanda }}</h2>
-                {% for opzione in domanda.Opzioni_Risposte %}
+                <h2>{{ loop.index }}. {{ domanda.testo_domanda }}</h2>
+                {% for opzione in domanda.opzioni_risposte %}
                     <div class="option">
                         <input type="checkbox" disabled>
                         <label>{{ opzione }}</label>
                     </div>
                 {% endfor %}
-                <p><strong>Risposta corretta:</strong> {{ domanda.Risposta_Corretta }}</p>
+                <p><strong>Risposta corretta:</strong> {{ domanda.risposta_corretta }}</p>
             </div>
         {% endfor %}
         <a href="{{ url_for('quiz.visualizza_quiz_classe', id_classe=id_classe) }}">

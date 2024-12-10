@@ -90,19 +90,22 @@ class QuizModel:
 
     @staticmethod
     def salva_quiz(data):
-        """Salva un quiz e le sue domande nel database."""
+        """Salva un quiz e le sue domande nel database, generando un ID decimale."""
         try:
             quiz_collection = QuizModel.db_manager.get_collection("Quiz")
             questions_collection = QuizModel.db_manager.get_collection("Domanda")
-            if "iq_quiz" not in data or quiz_collection.find_one({"id_quiz": data["id_quiz"]}):
-                data["id_quiz"] = str(uuid.uuid4())  # Genera un ID univoco
+
+            # Genera un ID numerico decimale basato sull'ultimo ID nel database
+            ultimo_quiz = quiz_collection.find_one(sort=[("id_quiz", -1)])
+            nuovo_id = float(ultimo_quiz["id_quiz"] + 1) if ultimo_quiz else 1.0
 
             id_classe = session.get("id_classe")
             if not id_classe:
                 raise ValueError("ID Classe mancante nella sessione.")
 
+            # Prepara il documento del quiz
             quiz = {
-                "id_quiz": data["id_quiz"],
+                "id_quiz": nuovo_id,
                 "titolo": data["titolo"],
                 "argomento": data["argomento"],
                 "n_domande": data["n_domande"],
@@ -112,26 +115,35 @@ class QuizModel:
                 "data_creazione": data["data_creazione"],
                 "id_classe": id_classe
             }
+
+            # Inserisci il quiz nel database
             quiz_collection.insert_one(quiz)
 
+            # Inserisci ogni domanda associata al quiz
             for domanda in data["domande"]:
+                risposta_corretta = domanda["risposta_corretta"].split(")", 1)[-1].strip()
                 question = {
                     "id_domanda": domanda["id_domanda"],
                     "testo_domanda": domanda["testo_domanda"],
                     "opzioni_risposte": domanda["opzioni_risposte"],
-                    "risposta_corretta": domanda["risposta_corretta"],
-                    "id_quiz": data["id_quiz"]
+                    "risposta_corretta": risposta_corretta,
+                    "id_quiz": nuovo_id  # Associa l'ID del quiz
                 }
                 questions_collection.insert_one(question)
         except Exception as e:
             raise ValueError(f"Errore durante il salvataggio del quiz: {e}")
 
     @staticmethod
-    def recupera_domande(id_domanda):
-        """Recupera le domande dal database in base agli ID."""
+    def recupera_domande(lista_id_domande):
+        """Recupera le domande dalla Collection `Domanda` in base agli ID."""
         try:
             questions_collection = QuizModel.db_manager.get_collection("Domanda")
-            return list(questions_collection.find({"id_domanda": {"$in": id_domanda}}))
+            domande = list(questions_collection.find({"id_domanda": {"$in": lista_id_domande}}))
+            # Verifica che le opzioni di risposta siano presenti
+            for domanda in domande:
+                if "opzioni_risposta" not in domanda:
+                    domanda["opzioni_risposta"] = []  # Fallback per evitare errori
+            return domande
         except Exception as e:
             raise ValueError(f"Errore durante il recupero delle domande: {e}")
 
@@ -143,7 +155,6 @@ class QuizModel:
             quiz = quiz_collection.find_one({"id_quiz": quiz_id})
             if not quiz:
                 raise ValueError("Quiz non trovato.")
-            quiz["_id"] = str(quiz["_id"])  # Convert ObjectId to string
             return quiz
         except Exception as e:
             raise ValueError(f"Errore durante il recupero del quiz: {e}")
@@ -153,9 +164,18 @@ class QuizModel:
         """Recupera tutti i quiz per una classe specifica."""
         try:
             quiz_collection = QuizModel.db_manager.get_collection("Quiz")
+
+            # Debug per verificare id_classe
+            print(f"DEBUG: id_classe = {id_classe}, tipo = {type(id_classe)}")
+
+            # Effettua la query
             quiz_list = list(quiz_collection.find({"id_classe": id_classe}))
+
+            # Converti _id in stringa per compatibilità
             for quiz in quiz_list:
-                quiz["_id"] = str(quiz["_id"])  # Convert ObjectId
+                if "_id" in quiz:
+                    quiz["_id"] = str(quiz["_id"])
+
             return quiz_list
         except Exception as e:
             raise ValueError(f"Errore durante il recupero dei quiz: {e}")
@@ -262,7 +282,7 @@ class QuizModel:
             quiz_results_collection.insert_one(risultato_quiz)
 
             # Recupera il titolo del quiz
-            quiz = quiz_collection.find_one({"id_quiz": risultato_quiz["iq_quiz"]}, {"titolo": 1})
+            quiz = quiz_collection.find_one({"id_quiz": risultato_quiz["id_quiz"]}, {"titolo": 1})
             if not quiz:
                 raise ValueError(f"Quiz con ID {risultato_quiz['id_quiz']} non trovato.")
             titolo_quiz = quiz["titolo"]

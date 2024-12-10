@@ -18,12 +18,12 @@
             <div class="materiali-lista">
                 {% for materiale in materiali %}
                     <div class="materiale-item">
-                        <h3>{{ materiale['Titolo'] }}</h3>
-                        <p>{{ materiale['Descrizione'] }}</p>
-                        <p><strong>Tipo:</strong> {{ materiale['Tipo'] }}</p>
+                        <h3>{{ materiale['titolo'] }}</h3>
+                        <p>{{ materiale['descrizione'] }}</p>
+                        <p><strong>Tipo:</strong> {{ materiale['tipo'] }}</p>
                         <div class="azioni">
                             <!-- Visualizza il materiale con il link corretto -->
-                           <a href="{{ url_for('MaterialeDocente.servi_file', nomefile=materiale['File_Path']) }}" target="_blank"><i class="fa-solid fa-folder-open"></i></a>
+                           <a href="{{ url_for('MaterialeDocente.servi_file', nomefile=materiale['file_path']) }}" target="_blank"><i class="fa-solid fa-folder-open"></i></a>
                         </div>
                     </div>
                 {% endfor %}

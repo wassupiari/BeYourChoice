@@ -58,7 +58,7 @@ class DashboardController:
         return StudentDashboardView.render_dashboard(
             classifica=classifica,
             punteggio_scenario=punteggio_attivita.get("PunteggioScenari"),
-            punteggio_quiz=punteggio_attivita.get("PunteggioQuiz", 0),
-            punteggio_totale=punteggio_attivita.get("PunteggioScenari", 0) + punteggio_attivita.get("PunteggioQuiz", 0),
+            punteggio_quiz=punteggio_attivita.get("punteggio_quiz"),
+            punteggio_totale=punteggio_attivita.get("PunteggioScenari", 0) + punteggio_attivita.get("punteggio_quiz", 0),
             storico=storico
         )

@@ -140,15 +140,15 @@ function aggiornaTabella(studenti) {
     }
 }
 
-    function aggiungiStudente(studenteId, classeId) {
+    function aggiungiStudente(studente, classe) {
         fetch('/classedocente/aggiungi-studente', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                studente_id: studenteId,
-                classe_id: classeId
+                id_studente: studente,
+                id_classe: classe
             }),
         })
         .then(response => response.json())
