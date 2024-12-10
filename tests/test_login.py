@@ -34,13 +34,13 @@ def docente_model(mongo_client):
 
 # Test combinazioni per il login studente
 @pytest.mark.parametrize("test_id, email, password, expected_success", [
-    ("TC_GA_1_1", "a@b.c", "Augusto9@", False),  # LE1: Errore
-    ("TC_GA_1_2", "test@", "Augusto9@", False),  # LE2, FE1: Errore
-    ("TC_GA_1_3", "test@student.com", "Augusto9@", False),  # LE2, FE2, EE1: Errore
-    ("TC_GA_1_4", "augusto@studenti.it", "Pass1@", False),  # LE2, FE2, EE2, LP1: Errore
-    ("TC_GA_1_5", "augusto@studenti.it", "Augusto9", False),  # LE2, FE2, EE2, LP2, FP1: Errore
-    ("TC_GA_1_6", "augusto@studenti.it", "Augusto9!", False),  # LE2, FE2, EE2, LP2, FP2, EP1: Errore
-    ("TC_GA_1_7", "augusto@studenti.it", "Augusto9@", True),  # LE2, FE2, EE2, LP2, FP2, EP2: Successo
+    ("TC_GAR_1_1", "a@b.c", "Augusto9@", False),  # LE1: Errore
+    ("TC_GAR_1_2", "test@", "Augusto9@", False),  # LE2, FE1: Errore
+    ("TC_GAR_1_3", "test@student.com", "Augusto9@", False),  # LE2, FE2, EE1: Errore
+    ("TC_GAR_1_4", "augusto@studenti.it", "Pass1@", False),  # LE2, FE2, EE2, LP1: Errore
+    ("TC_GAR_1_5", "augusto@studenti.it", "Augusto9", False),  # LE2, FE2, EE2, LP2, FP1: Errore
+    ("TC_GAR_1_6", "augusto@studenti.it", "Augusto9!", False),  # LE2, FE2, EE2, LP2, FP2, EP1: Errore
+    ("TC_GAR_1_7", "augusto@studenti.it", "Augusto9@", True),  # LE2, FE2, EE2, LP2, FP2, EP2: Successo
 ])
 def test_combinazioni_login_studente(studente_model, mongo_client, test_id, email, password, expected_success):
     """
@@ -69,13 +69,13 @@ def test_combinazioni_login_studente(studente_model, mongo_client, test_id, emai
 
 # Test combinazioni per il login docente
 @pytest.mark.parametrize("test_id, emaildoc, passworddoc, expected_success", [
-    ("TC_GA_1_1", "a@b.c", "Roccocione03@", False),  # LE1: Errore
-    ("TC_GA_1_2", "test@", "Roccocione03@", False),  # LE2, FE1: Errore
-    ("TC_GA_1_3", "test@docent.com", "Roccocione03@", False),  # LE2, FE2, EE1: Errore
-    ("TC_GA_1_4", "roccocione@gmail.com", "Rocc1@", False),  # LE2, FE2, EE2, LP1: Errore
-    ("TC_GA_1_5", "roccocione@gmail.com", "Roccocione03", False),  # LE2, FE2, EE2, LP2, FP1: Errore
-    ("TC_GA_1_6", "roccocione@gmail.com", "Roccocione03!", False),  # LE2, FE2, EE2, LP2, FP2, EP1: Errore
-    ("TC_GA_1_7", "roccocione@gmail.com", "Roccocione3@", True),  # LE2, FE2, EE2, LP2, FP2, EP2: Successo
+    ("TC_GAR_1_1", "a@b.c", "Roccocione03@", False),  # LE1: Errore
+    ("TC_GAR_1_2", "test@", "Roccocione03@", False),  # LE2, FE1: Errore
+    ("TC_GAR_1_3", "test@docent.com", "Roccocione03@", False),  # LE2, FE2, EE1: Errore
+    ("TC_GAR_1_4", "roccocione@gmail.com", "Rocc1@", False),  # LE2, FE2, EE2, LP1: Errore
+    ("TC_GAR_1_5", "roccocione@gmail.com", "Roccocione03", False),  # LE2, FE2, EE2, LP2, FP1: Errore
+    ("TC_GAR_1_6", "roccocione@gmail.com", "Roccocione03!", False),  # LE2, FE2, EE2, LP2, FP2, EP1: Errore
+    ("TC_GAR_1_7", "roccocione@gmail.com", "Roccocione3@", True),  # LE2, FE2, EE2, LP2, FP2, EP2: Successo
 ])
 
 # Test di login per il docente (senza inserimento, solo ricerca)
