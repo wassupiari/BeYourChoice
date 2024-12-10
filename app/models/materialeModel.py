@@ -23,18 +23,8 @@ class MaterialeModel:
             {"$set": dati_caricati}
         )
 
-    def rimuovi_materiale(self, materiale_id):
-        materiale = self.collection.find_one({"_id": ObjectId(materiale_id)})
-        if materiale:
-            self.collection.delete_one({"_id": ObjectId(materiale_id)})
-            return materiale
-        return None
-
     def visualizza_materiale(self, criterio_filtro):
         return self.collection.find_one(criterio_filtro)
-
-
-
 
     def inserisci_documento(self, documento):
         return self.collection.insert_one(documento)
