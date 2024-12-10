@@ -59,7 +59,7 @@ input[type="text"], textarea, select, input[type="file"] {
 }
 
 /* Pulsante di invio */
-button[type="submit"] {
+.carica{
   padding: 10px 20px;
   background-color: #f9f4f1;
   color: #000000;
@@ -72,7 +72,7 @@ button[type="submit"] {
   transition: box-shadow 0.3s ease, transform 0.3s ease; /* Effetti al passaggio del mouse */
 }
 
-button[type="submit"]:hover {
+.carica:hover{
     background-color: #d75a3d;
     transform: scale(1.05);
     color: #ffffff;
@@ -126,13 +126,11 @@ form div {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Effetto ombra */
     cursor: pointer;
     transition: box-shadow 0.3s ease, transform 0.3s ease; /* Effetti al passaggio del mouse */
-}
-a
-{
-    font-size 14px;
+     font-size 14px;
     text-decoration: none;
     text-align: center;
 }
+
 .btn-cancel:hover {
    background-color: #d75a3d;
   color: #ffffff;
