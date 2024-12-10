@@ -79,13 +79,13 @@ class ClasseVirtuale:
             print(f"Errore durante la creazione della classe: {e}")
             return False
 
-    def rimuovi_studente_classe(self, studente_id):
+    def rimuovi_studente_classe(self, id_studente):
         """
 
             Imposta il campo ID_Classe dello studente a null.
 
         Args:
-            studente_id (str): ID dello studente da rimuovere.
+            id_studente (str): ID dello studente da rimuovere.
 
         Raises:
             Exception: In caso di errore durante l'aggiornamento.
@@ -93,7 +93,7 @@ class ClasseVirtuale:
         try:
             studente_collection = self.db_manager.get_collection("Studente")
             result = studente_collection.update_one(
-                {"_id": ObjectId(studente_id)},  # Filtra per l'ID dello studente
+                {"_id": ObjectId(id_studente)},  # Filtra per l'ID dello studente
                 {"$set": {"id_classe": None}}  # Imposta ID_Classe a null
             )
             if result.modified_count == 0:
@@ -105,13 +105,12 @@ class ClasseVirtuale:
     from bson import ObjectId
 
     def aggiungi_studente_classe(self, id_studente, id_classe):
-        print("aaaa")
         """
             Aggiunge uno studente alla classe, impostando l'ID della classe nel documento dello studente.
 
         Args:
-            studente_id (str): L'ID dello studente.
-            classe_id (str): L'ID della classe alla quale associare lo studente.
+            id_studente (str): L'ID dello studente.
+            id_classe (str): L'ID della classe alla quale associare lo studente.
 
         Returns:
             bool: Se l'operazione è riuscita o meno.
