@@ -1,3 +1,14 @@
+"""
+profiloControl.py
+
+Questo modulo gestisce le operazioni sui profili degli utenti, come
+il recupero e l'aggiornamento dei profili per studenti e docenti.
+Include anche la funzionalità per il cambio password.
+
+Autore: [il tuo nome]
+Data di creazione: [data di creazione]
+"""
+
 import logging
 import re
 import bcrypt
@@ -5,11 +16,27 @@ from flask import session, flash, redirect, url_for
 
 
 class ProfiloControl:
+
+    """
+    Classe che gestisce l'accesso ai profili utente nel database
+    e le operazioni di aggiornamento su di essi.
+    """
+
     def __init__(self, db_manager):
+        """
+        Inizializza un'istanza di ProfiloControl.
+
+        :param db_manager: Gestore del database per accedere ai dati degli utenti.
+        """
         self.db_manager = db_manager
 
     def get_profilo_studente(self, email):
-        # Recupero profilo studente
+        """
+       Recupera il profilo dello studente tramite l'email.
+
+       :param email: L'email dello studente.
+       :return: Lista dei documenti corrispondenti al profilo studente.
+       """
         try:
             studente_collection = self.db_manager.get_collection("Studente")
             query = {"email": email}
@@ -19,7 +46,12 @@ class ProfiloControl:
             return []
 
     def get_profilo_docente(self, email):
-        # Recupero profilo docente
+        """
+        Recupera il profilo del docente tramite l'email.
+
+        :param email: L'email del docente.
+        :return: Lista dei documenti corrispondenti al profilo docente.
+        """
         try:
             docente_collection = self.db_manager.get_collection("Docente")
             query = {"email": email}
@@ -29,6 +61,13 @@ class ProfiloControl:
             return []
 
     def carica_profilo_studente(self, email, nuovi_dati):
+        """
+        Aggiorna il profilo dello studente con nuovi dati.
+
+        :param email: L'email dello studente da aggiornare.
+        :param nuovi_dati: Dizionario contenente i nuovi dati del profilo.
+        :return: True se l'aggiornamento ha avuto successo, False altrimenti.
+        """
         if not self._valida_dati_profilo(nuovi_dati):
             logging.error(f"Dati del profilo studente non validi per email {email}")
             flash("Errore: Dati non validi, aggiornamento non effettuato.", "message_profile_error")
@@ -43,6 +82,14 @@ class ProfiloControl:
             return False
 
     def carica_profilo_docente(self, email, nuovi_dati):
+        """
+       Aggiorna il profilo del docente con nuovi dati.
+
+       :param email: L'email del docente da aggiornare.
+       :param nuovi_dati: Dizionario contenente i nuovi dati del profilo.
+       :return: True se l'aggiornamento ha avuto successo, False altrimenti.
+       """
+
         if not self._valida_dati_profilo(nuovi_dati):
             logging.error(f"Dati del profilo docente non validi per email {email}")
             return False
@@ -56,7 +103,13 @@ class ProfiloControl:
             return False
 
     def _valida_dati_profilo(self, dati):
-        # Regex per la convalida
+        """
+        Valida i dati del profilo ricevuti.
+
+        :param dati: Dizionario con i dati del profilo da validare.
+        :return: True se i dati sono validi, False altrimenti.
+        """
+
         email_regex = r"^[A-z0-9._%+-]+@[A-z0-9.-]+\.[A-z]{2,4}$"
         nome_regex = r"^[A-ZÀ-ÖØ-Ý][a-zà-öø-ý]{2,}(?:['-][A-ZÀ-ÖØ-Ýa-zà-öø-ý]+)*$"
         cognome_regex = r"^[A-ZÀ-ÖØ-Ý][a-zà-öø-ý]{2,}(?:['-][A-ZÀ-ÖØ-Ýa-zà-öø-ý]+)*$"
@@ -89,12 +142,34 @@ class ProfiloControl:
         return True
 
     def cambia_password_studente(self, vecchia_password, nuova_password):
+        """
+        Cambia la password dello studente.
+
+        :param vecchia_password: Vecchia password dello studente.
+        :param nuova_password: Nuova password da impostare.
+        :return: Risultato del cambiamento password.
+        """
         return self.cambia_password("Studente", vecchia_password, nuova_password)
 
     def cambia_password_docente(self, vecchia_password, nuova_password):
+        """
+        Cambia la password del docente.
+
+        :param vecchia_password: Vecchia password del docente.
+        :param nuova_password: Nuova password da impostare.
+        :return: Risultato del cambiamento password.
+        """
         return self.cambia_password("Docente", vecchia_password, nuova_password)
 
     def cambia_password(self, user_type, vecchia_password, nuova_password):
+        """
+        Cambia la password per un tipo di utente specificato.
+
+        :param user_type: Tipo di utente (Studente o Docente).
+        :param vecchia_password: Vecchia password dell'utente.
+        :param nuova_password: Nuova password da impostare.
+        :return: Redirect alla gestione profilo con risultato dell'operazione.
+        """
         collection = self.db_manager.get_collection(user_type)
         email = session.get('email')
         if not email:

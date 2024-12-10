@@ -1,3 +1,15 @@
+"""
+materialeControl.py
+
+Questo modulo gestisce le operazioni sui materiali didattici, inclusi
+il caricamento, la modifica, la visualizzazione e la rimozione. Si
+interfaccia con il database e gestisce i file presenti nel filesystem.
+
+Autore: [il tuo nome]
+Data di creazione: [data di creazione]
+"""
+
+
 import os
 import re
 from bson import ObjectId
@@ -10,27 +22,76 @@ ALLOWED_EXTENSIONS = {'docx', 'pdf', 'jpeg', 'png', 'txt', 'jpg', 'mp4'}
 
 
 class MaterialeControl:
+
+    """
+    Classe che gestisce i materiali didattici.
+
+    Fornisce metodi per gestire l'interazione con il database e il sistema di file
+    per le operazioni di creazione, lettura, aggiornamento e cancellazione.
+    """
+
     def __init__(self, db_manager):
+
+        """
+       Inizializza un'istanza di MaterialeControl.
+
+       :param db_manager: Gestore del database per le operazioni sui materiali.
+       """
+
         self.control = MaterialeModel(db_manager)
         self.cartella_uploads = None
 
     def set_cartella_uploads(self, path_cartella):
+        """
+       Imposta la cartella di destinazione per i file caricati.
+
+       :param path_cartella: Percorso della cartella.
+       """
         self.cartella_uploads = path_cartella
 
     def titolo_valido(self, titolo):
+        """
+        Verifica la validità del titolo.
+
+        :param titolo: Il titolo da verificare.
+        :return: True se il titolo è valido, altrimenti False.
+        """
         return bool(re.match(r'^[A-Za-z0-9 ]{2,20}$', titolo))
 
     def descrizione_valida(self, descrizione):
+        """
+        Verifica la validità della descrizione.
+
+        :param descrizione: La descrizione da verificare.
+        :return: True se la descrizione è valida, altrimenti False.
+        """
         return bool(re.match(r'^[^§]{2,255}$', descrizione))
 
     def tipo_file_valido(self, nomefile):
+        """
+       Verifica la validità del tipo di file.
+
+       :param nomefile: Nome del file.
+       :return: True se il tipo di file è consentito, altrimenti False.
+       """
         return '.' in nomefile and nomefile.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
     def grandezza_file_valido(self, file):
+        """
+        Verifica la dimensione del file.
+
+        :param file: Oggetto file da verificare.
+        :return: True se la dimensione è nei limiti, altrimenti False.
+        """
         return file.content_length <= MAX_FILE_SIZE_MB * 1024 * 1024
 
     def carica_materiale(self, request):
-        """Gestisce il caricamento del materiale didattico."""
+
+        """ Gestisce il caricamento del materiale didattico.
+        :param request: Oggetto di richiesta HTTP contenente i dati di caricamento.
+        :return: Redirect alla pagina di visualizzazione del docente.
+        """
+
         titolo = request.form['titolo']
         descrizione = request.form['descrizione']
         tipo = request.form['tipo']
@@ -82,6 +143,13 @@ class MaterialeControl:
         return redirect(url_for('MaterialeDocente.visualizza_materiale_docente'))
 
     def modifica_materiale(self, materiale_id, request):
+        """
+       Modifica un materiale esistente nel database.
+
+       :param materiale_id: ID del materiale da modificare.
+       :param request: Oggetto della richiesta HTTP con i dati aggiornati.
+       :return: Redirect alla pagina di visualizzazione del docente.
+       """
         try:
             materiale_id_obj = ObjectId(materiale_id)
         except Exception:
@@ -135,7 +203,12 @@ class MaterialeControl:
             return redirect(url_for('MaterialeDocente.visualizza_materiale_docente'))
 
     def rimuovi_materiale(self, materiale_id):
-        """Gestisce la rimozione di un materiale didattico."""
+        """
+        Rimuove un materiale didattico dal database e dal filesystem dove possibile.
+
+        :param materiale_id: ID del materiale da rimuovere.
+        :return: Redirect alla pagina di visualizzazione del docente.
+        """
         try:
             materiale_id_obj = ObjectId(materiale_id)
         except Exception as e:
@@ -170,12 +243,22 @@ class MaterialeControl:
         return redirect(url_for('MaterialeDocente.visualizza_materiale_docente'))
 
     def visualizza_materiali(self, id_classe):
-        """Recupera e visualizza i materiali per una specifica classe."""
+        """
+        Visualizza i materiali di una classe specifica.
+
+        :param id_classe: ID della classe di cui recuperare i materiali.
+        :return: Lista di materiali.
+        """
         materiali = self.control.get_materiali_tramite_id_classe(id_classe)
         return materiali
 
     def servi_file(self, nomefile):
-        """Serve un file dal filesystem."""
+        """
+        Serve un file su richiesta.
+
+        :param nomefile: Nome del file da servire.
+        :return: Risposta con il file da inviato o un errore 404 se non trovato.
+        """
         filepath = os.path.join(self.cartella_uploads, nomefile)
         if os.path.exists(filepath):
             return send_file(filepath)

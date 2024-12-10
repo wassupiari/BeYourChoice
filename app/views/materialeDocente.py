@@ -1,3 +1,13 @@
+"""
+
+Questo modulo definisce le route per gestire il materiale didattico
+lato docente. Permette operazioni di visualizzazione, caricamento,
+modifica e rimozione di materiali.
+
+Autore: [il tuo nome]
+Data di creazione: [data di creazione]
+"""
+
 from bson import ObjectId
 from flask import render_template, request, redirect, url_for, Blueprint, session
 
@@ -21,28 +31,54 @@ MaterialeDocente = Blueprint('MaterialeDocente', __name__)
 
 collezione_materiali = db_manager.get_collection('MaterialeDidattico')
 def initialize_materiale_docente_blueprint(app: object) -> object:
+    """
+    Inizializza il blueprint per le operazioni del docente sui materiali.
+
+    :param app: L'applicazione Flask su cui registrare il blueprint.
+    :return: None
+    """
     @MaterialeDocente.route('/')
     def index():
+        """
+        Redireziona alla visualizzazione del materiale docente.
+        """
         return redirect(url_for('MaterialeDocente.visualizza_materiale_docente'))
 
     @MaterialeDocente.route('/materiale/docente')
     def visualizza_materiale_docente():
+        """
+       Mostra i materiali associati alla classe corrente del docente.
+       """
         ID_Classe = session.get('ID_Classe')
         materiali = materiale_control.visualizza_materiali(ID_Classe)
         return render_template('materialeDocente.html', materiali=materiali)
 
     @MaterialeDocente.route('/servi_file/<path:nomefile>')
     def servi_file(nomefile: str):
+        """
+        Serve un file all'utente dato il nome del file richiesto.
+
+        :param nomefile: Nome del file da servire.
+        :return: Risposta del file servito.
+        """
         return materiale_control.servi_file(nomefile)
 
     @MaterialeDocente.route('/carica', methods=['GET', 'POST'])
     def carica_materiale():
+        """
+       Gestisce il caricamento di nuovi materiali.
+       """
         if request.method == 'POST':
             return materiale_control.carica_materiale(request)
         return render_template('caricamentoMateriale.html')
 
     @MaterialeDocente.route('/modifica/<string:materiale_id>', methods=['GET', 'POST'])
     def modifica_materiale(materiale_id):
+        """
+       Modifica un materiale già esistente.
+
+       :param materiale_id: ID del materiale da modificare.
+       """
         if request.method == 'POST':
             return materiale_control.modifica_materiale(materiale_id, request)
 
@@ -63,6 +99,11 @@ def initialize_materiale_docente_blueprint(app: object) -> object:
 
     @MaterialeDocente.route('/rimuovi/<materiale_id>')
     def rimuovi_materiale(materiale_id):
+        """
+        Rimuove un materiale dalla base dati e dal file system se presente.
+
+        :param materiale_id: ID del materiale da rimuovere.
+        """
         return materiale_control.rimuovi_materiale(materiale_id)
 
     app.register_blueprint(MaterialeDocente)

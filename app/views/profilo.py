@@ -1,3 +1,13 @@
+"""
+
+Questo modulo definisce le route per la gestione del profilo
+degli utenti, inclusi studenti e docenti. Supporta la visualizzazione,
+aggiornamento e cambio password.
+
+Autore: [il tuo nome]
+Data di creazione: [data di creazione]
+"""
+
 from flask import render_template, request, flash, Blueprint, session, redirect, url_for
 from app.models.profiloModel import ProfiloModel
 from databaseManager import DatabaseManager
@@ -9,8 +19,17 @@ profilo = Blueprint('profilo', __name__)
 
 
 def initialize_profilo_blueprint(app):
+    """
+   Inizializza il blueprint per la gestione dei profili utente.
+
+   :param app: L'applicazione Flask su cui registrare il blueprint.
+   :return: None
+   """
     @profilo.route('/cambia_password_docente', methods=['POST'])
     def cambia_password_docente():
+        """
+       Cambia la password del docente.
+       """
         vecchia_password = request.form.get('vecchia_password')
         nuova_password = request.form.get('nuova_password')
 
@@ -26,6 +45,9 @@ def initialize_profilo_blueprint(app):
 
     @profilo.route('/cambia_password_studente', methods=['POST'])
     def cambia_password_studente():
+        """
+        Cambia la password dello studente.
+        """
         vecchia_password = request.form.get('vecchia_password')
         nuova_password = request.form.get('nuova_password')
 
@@ -41,6 +63,9 @@ def initialize_profilo_blueprint(app):
 
     @profilo.route('/gestione', methods=['GET', 'POST'])
     def gestione_profilo():
+        """
+        Gestisce la visualizzazione e modifica del profilo utente.
+        """
         email = session.get('email')
         if not email:
             app.logger.info('Nessuna email trovata nella sessione.')
