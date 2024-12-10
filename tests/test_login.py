@@ -75,7 +75,7 @@ def test_combinazioni_login_studente(studente_model, mongo_client, test_id, emai
     ("TC_GA_1_4", "roccocione@gmail.com", "Rocc1@", False),  # LE2, FE2, EE2, LP1: Errore
     ("TC_GA_1_5", "roccocione@gmail.com", "Roccocione03", False),  # LE2, FE2, EE2, LP2, FP1: Errore
     ("TC_GA_1_6", "roccocione@gmail.com", "Roccocione03!", False),  # LE2, FE2, EE2, LP2, FP2, EP1: Errore
-    ("TC_GA_1_7", "roccocione@gmail.com", "Roccocione03@", True),  # LE2, FE2, EE2, LP2, FP2, EP2: Successo
+    ("TC_GA_1_7", "roccocione@gmail.com", "Roccocione3@", True),  # LE2, FE2, EE2, LP2, FP2, EP2: Successo
 ])
 
 # Test di login per il docente (senza inserimento, solo ricerca)
