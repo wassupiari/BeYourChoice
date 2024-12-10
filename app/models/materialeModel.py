@@ -48,8 +48,8 @@ class MaterialeModel:
 
         from uuid import uuid4
         # Assegna un nuovo ID unico al materiale
-        if 'ID_MaterialeDidattico' not in materiale_model or materiale_model['ID_MaterialeDidattico'] is None:
-            materiale_model['ID_MaterialeDidattico'] = str(uuid4())
+        if 'id_materiale_didattico' not in materiale_model or materiale_model['id_materiale_didattico'] is None:
+            materiale_model['id_materiale_didattico'] = str(uuid4())
 
         # Inserisce nel database
         self.collection.insert_one(materiale_model)
@@ -120,7 +120,7 @@ class MaterialeModel:
     def get_materiali_tramite_id_classe(self, ID_Classe):
         """Esegui una query MongoDB per ottenere i materiali per una specifica classe."""
         try:
-            query = {"ID_Classe": ID_Classe}
+            query = {"id_classe": ID_Classe}
             print(f"Eseguendo query con ID_Classe: {ID_Classe}")
             materiali_della_classe = list(self.collection.find(query))
             if not materiali_della_classe:

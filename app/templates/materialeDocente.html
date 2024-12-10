@@ -31,11 +31,11 @@
             <div class="materiali-lista">
                 {% for materiale in materiali %}
                     <div class="materiale-item">
-                        <h3>{{ materiale['Titolo'] }}</h3>
-                        <p>{{ materiale['Descrizione'] }}</p>
-                        <p><strong>Tipo:</strong> {{ materiale['Tipo'] }}</p>
+                        <h3>{{ materiale['titolo'] }}</h3>
+                        <p>{{ materiale['descrizione'] }}</p>
+                        <p><strong>Tipo:</strong> {{ materiale['tipo'] }}</p>
                         <div class="azioni">
-                            <a class="collegamenti" href="{{ url_for('MaterialeDocente.servi_file', nomefile=materiale['File_Path']) }}" target="_blank"><i class="fa-solid fa-folder-open"></i></a>
+                            <a class="collegamenti" href="{{ url_for('MaterialeDocente.servi_file', nomefile=materiale['file_path']) }}" target="_blank"><i class="fa-solid fa-folder-open"></i></a>
                             <a class="collegamenti" href="{{ url_for('MaterialeDocente.modifica_materiale', materiale_id=materiale['_id']) }}"><i class="fa-solid fa-file-signature"></i></a>
                             <a class="collegamenti" href="{{ url_for('MaterialeDocente.rimuovi_materiale', materiale_id=materiale['_id']) }}" onclick="return confirm('Sei sicuro di voler eliminare questo materiale?');"><i class="fa-solid fa-file-circle-minus"></i></a>
                         </div>
