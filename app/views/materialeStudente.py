@@ -41,10 +41,10 @@ def initialize_materiale_studente_blueprint(app: object) -> object:
     def visualizza_materiale_studente():
         """Vista per visualizzare tutti i materiali disponibili per gli studenti."""
         id_classe = session.get('id_classe')
-        cf_studente = session.get('cf_studente')
+        cf_studente = session.get('cf')
 
         if cf_studente:
-            session['cf_studente'] = cf_studente
+            session['cf'] = cf_studente
         else:
             abort(400, 'Parametro cf_studente mancante')
 
