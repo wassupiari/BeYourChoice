@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request
 
+from app.controllers.loginControl import teacher_required
 from app.controllers.scenarioControl import scenarioControl
 from app.models.scenarioModel import ScenarioModel
 
@@ -7,6 +8,7 @@ from app.models.scenarioModel import ScenarioModel
 scenario_bp = Blueprint('scenario_bp', __name__)
 
 @scenario_bp.route('/scenarioVirtuale',methods=['GET', 'POST'])
+@teacher_required
 def scenario_virtuale():
     scenarioModel = ScenarioModel()
     id = scenarioModel.get_ultimo_scenario_id()
@@ -20,6 +22,7 @@ def scenario_virtuale():
     return scenarioControl.registra_scenario(id,titolo, descrizione, modalita, argomento)
 
 @scenario_bp.route('/postAssociazione')
+@teacher_required
 def postAssociazione():
     return render_template("scenarioVirtuale.html")
 

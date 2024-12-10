@@ -69,7 +69,7 @@ def initialize_profilo_blueprint(app):
         email = session.get('email')
         if not email:
             app.logger.info('Nessuna email trovata nella sessione.')
-            return redirect(url_for('login'))
+            return redirect(url_for('login.login'))
 
         if request.method == 'POST':
             nuovi_dati = request.form.to_dict()

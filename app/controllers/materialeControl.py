@@ -96,7 +96,7 @@ class MaterialeControl:
         descrizione = request.form['descrizione']
         tipo = request.form['tipo']
         file = request.files['file']
-        ID_Classe = session.get('ID_Classe')
+        ID_Classe = session.get('id_classe')
 
         if not self.titolo_valido(titolo):
             flash("Il titolo non è valido. Deve essere tra 2 e 20 caratteri e contenere solo lettere e numeri.",
@@ -131,12 +131,12 @@ class MaterialeControl:
         id_MaterialeDidattico = uuid.uuid4().hex
 
         nuovo_materiale = {
-            "ID_Materiale": id_MaterialeDidattico,
-            "Titolo": titolo,
-            "Descrizione": descrizione,
-            "File_Path": filepath,
-            "Tipo": tipo,
-            "ID_Classe": ID_Classe
+            "id_materiale": id_MaterialeDidattico,
+            "titolo": titolo,
+            "descrizione": descrizione,
+            "file_path": filepath,
+            "tipo": tipo,
+            "id_classe": ID_Classe
         }
         self.control.carica_materiali(nuovo_materiale)
         flash("Materiale caricato con successo!", "materiale_success")
@@ -188,12 +188,12 @@ class MaterialeControl:
 
                 filepath = file.filename
                 file.save(os.path.join(self.cartella_uploads, filepath))
-                materiale['File_Path'] = filepath
+                materiale['file_path'] = filepath
 
             dati_caricati = {
-                "Titolo": titolo,
-                "Descrizione": descrizione,
-                "File_Path": materiale.get('File_Path')
+                "titolo": titolo,
+                "descrizione": descrizione,
+                "file_path": materiale.get('file_path')
             }
 
             print(f"Debug: Modifica del materiale con ID: {materiale_id_obj} con i dati aggiornati: {dati_caricati}")
@@ -228,7 +228,7 @@ class MaterialeControl:
             flash("Errore durante la rimozione del materiale dal database.", "error")
             return redirect(url_for('MaterialeDocente.visualizza_materiale_docente'))
 
-        file_path = materiale.get('File_Path')
+        file_path = materiale.get('file_path')
         if file_path:
             full_file_path = os.path.join(self.cartella_uploads, file_path)
             if os.path.exists(full_file_path):
