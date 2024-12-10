@@ -56,9 +56,6 @@ class MaterialeModel:
     def get_materiale_tramite_id(self, materiale_id):
         return self.collection.find_one({'_id': ObjectId(materiale_id)})
 
-    def carica_materiale(self, materiale_id, dati_caricati):
-        return self.collection.update_one({'_id': ObjectId(materiale_id)}, {'$set': dati_caricati})
-
     def get_materiali_tramite_id_classe(self, ID_Classe):
         """Esegui una query MongoDB per ottenere i materiali per una specifica classe."""
         try:
