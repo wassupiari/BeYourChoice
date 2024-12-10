@@ -102,7 +102,7 @@ class ProfiloControl:
             logging.error(f"Errore nell'aggiornamento del profilo docente per email {email}: {str(e)}")
             return False
 
-    def _valida_dati_profilo(self, dati):
+    def valida_dati_profilo(self, dati):
         """
         Valida i dati del profilo ricevuti.
 
@@ -110,6 +110,7 @@ class ProfiloControl:
         :return: True se i dati sono validi, False altrimenti.
         """
 
+        # Regex per la convalida
         email_regex = r"^[A-z0-9._%+-]+@[A-z0-9.-]+\.[A-z]{2,4}$"
         nome_regex = r"^[A-ZÀ-ÖØ-Ý][a-zà-öø-ý]{2,}(?:['-][A-ZÀ-ÖØ-Ýa-zà-öø-ý]+)*$"
         cognome_regex = r"^[A-ZÀ-ÖØ-Ý][a-zà-öø-ý]{2,}(?:['-][A-ZÀ-ÖØ-Ýa-zà-öø-ý]+)*$"
