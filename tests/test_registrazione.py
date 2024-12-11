@@ -14,8 +14,8 @@ def docente_model():
 # Test combinazioni per la registrazione studente
 @pytest.mark.parametrize("test_id, nome, cognome, scuola, email, cf, data_nascita, password, expected_success", [
     # Casistiche di errore
-    ("TC_GAR_2_1", "A", "R", "Uni", "a@b.c", "ABCDEF01A01H123", "2000-01-01", "WeakP@", False),  # LN1
-    ("TC_GAR_2_2", "Marco", "R", "Uni", "a@b.c", "ABCDEF01A01H123", "2000-01-01", "WeakP@", False),  # FN1
+    ("TC_GAR_2_1", "A", "R", "Università", "a@b.c", "ABCDEF01A01H123", "2000-01-01", "WeakP@", False),  # LN1
+    ("TC_GAR_2_2", "Marco", "R", "Università", "a@b.c", "ABCDEF01A01H123", "2000-01-01", "WeakP@", False),  # FN1
     ("TC_GAR_2_3", "Marco", "Rossi", "U", "a@b.c", "ABCDEF01A01H123", "2000-01-01", "WeakP@", False),  # LC1
     ("TC_GAR_2_4", "Marco", "Rossi", "Università", "a@b.c", "ABCDEF01A01H123", "2000-01-01", "WeakP@", False),  # FC1
     ("TC_GAR_2_5", "Marco", "Rossi", "Università", "a@b.c", "1234567890", "2000-01-01", "WeakP@", False),  # LSDA1
@@ -54,7 +54,7 @@ def test_registrazione_studente(test_id, nome, cognome, scuola, email, cf, data_
     fc_ok = bool(re.match(r"^[A-ZÀ-ÖØ-Ý][a-zà-öø-ý]{2,}(?:['-][A-ZÀ-ÖØ-Ýa-zà-öø-ý]+)*$", cognome))
 
     lsda_ok = 2 <= len(scuola) <= 50
-    fsda_ok = bool(re.match(r"^[A-Za-z0-9À-ù'’\- ]{2,50}$", scuola))
+    fsda_ok = bool(re.match(r"^[A-Za-z0-9À-ù'’\- ]{10,50}$", scuola))
 
     le_ok = len(email) >= 6
     fe_ok = bool(re.match(r"^[A-z0-9._%+-]+@[A-z0-9.-]+\.[A-z]{2,4}$", email))
@@ -99,8 +99,8 @@ def test_registrazione_studente(test_id, nome, cognome, scuola, email, cf, data_
 
 @pytest.mark.parametrize("test_id_doc, nome_doc, cognome_doc, scuola_doc, email_doc, cf_doc, codice_univoco_doc, password_doc, data_nascita_doc, expected_success_doc", [
     # Casistiche di errore
-    ("TC_GAR_3_1", "A", "Bianchi", "Uni", "x@y.z", "RSSMRC85M01H123", "12345", "WeakP@", "2000-01-01", False),  # LN1
-    ("TC_GAR_3_2", "Luc§", "Bianchi", "Uni", "x@y.z", "RSSMRC85M01H123", "12345", "WeakP@", "2000-01-01", False),  # FN1
+    ("TC_GAR_3_1", "A", "Bianchi", "Università", "x@y.z", "RSSMRC85M01H123", "12345", "WeakP@", "2000-01-01", False),  # LN1
+    ("TC_GAR_3_2", "Luc§", "Bianchi", "Università", "x@y.z", "RSSMRC85M01H123", "12345", "WeakP@", "2000-01-01", False),  # FN1
     ("TC_GAR_3_3", "Luca", "B", "U", "x@y.z", "RSSMRC85M01H123", "12345", "WeakP@", "2000-01-01", False),  # LC1
     ("TC_GAR_3_4", "Luca", "Bi§nchi", "Università", "x@y.z", "RSSMRC85M01H123", "12345", "WeakP@", "2000-01-01", False),  # FC1
     ("TC_GAR_3_5", "Luca", "Bianchi", "U", "new@docente.com", "RSSMRC85M01H123", "12345", "WeakP@", "2000-01-01", False),  # LSDA1
@@ -131,7 +131,7 @@ def test_registrazione_docente(test_id_doc, nome_doc, cognome_doc, scuola_doc, e
     fc_ok = bool(re.match(r"^[A-ZÀ-ÖØ-Ý][a-zà-öø-ý]{2,}(?:['-][A-ZÀ-ÖØ-Ýa-zà-öø-ý]+)*$", cognome_doc))
 
     lsda_ok = 2 <= len(scuola_doc) <= 50
-    fsda_ok = bool(re.match(r"^[A-Za-z0-9À-ù'’\- ]{2,50}$", scuola_doc))
+    fsda_ok = bool(re.match(r"^[A-Za-z0-9À-ù'’\- ]{10,50}$", scuola_doc))
 
     le_ok = len(email_doc) >= 6
     fe_ok = bool(re.match(r"^[A-z0-9._%+-]+@[A-z0-9.-]+\.[A-z]{2,4}$", email_doc))
