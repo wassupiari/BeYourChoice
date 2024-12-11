@@ -106,11 +106,47 @@ class Attivita:
 
     def get_classi_docente(self, id_docente):
         """
-        Recupera le classi associate a un docente.
+        Recupera le classi associate a un docente e calcola il punteggio totale di ogni classe.
         """
         try:
             collection = self.db_manager.get_collection("ClasseVirtuale")
-            return list(collection.find({"id_docente": id_docente}, {"_id": 0, "id_classe": 1, "nome_classe": 1}))
+            studente_collection = self.db_manager.get_collection("Studente")
+            quiz_collection = self.db_manager.get_collection("RisultatoQuiz")
+            scenario_collection = self.db_manager.get_collection("PunteggioScenario")
+
+            # Recupera tutte le classi del docente
+            classi = list(collection.find({"id_docente": id_docente}, {"_id": 0, "id_classe": 1, "nome_classe": 1}))
+
+            for classe in classi:
+                id_classe = classe["id_classe"]
+
+                # Recupera gli studenti della classe
+                studenti = list(studente_collection.find({"id_classe": id_classe}, {"cf": 1}))
+
+                # Calcola il punteggio totale dei quiz per la classe
+                cf_studenti = [studente["cf"] for studente in studenti]
+
+                punteggio_quiz = quiz_collection.aggregate([
+                    {"$match": {"cf_studente": {"$in": cf_studenti}}},
+                    {"$group": {"_id": None, "totale_quiz": {"$sum": "$punteggio_quiz"}}}
+                ])
+                punteggio_quiz_totale = next(punteggio_quiz, {}).get("totale_quiz", 0)
+
+                # Calcola il punteggio totale degli scenari per la classe
+                punteggio_scenario = scenario_collection.aggregate([
+                    {"$match": {"CF_Studente": {"$in": cf_studenti}}},
+                    {"$group": {"_id": None, "totale_scenario": {"$sum": "$Punteggio_Scenario"}}}
+                ])
+                punteggio_scenario_totale = next(punteggio_scenario, {}).get("totale_scenario", 0)
+
+                # Somma i punteggi totali
+                classe["punteggio_totale"] = punteggio_quiz_totale + punteggio_scenario_totale
+
+            # Ordina le classi per punteggio totale in ordine decrescente
+            classi.sort(key=lambda x: x["punteggio_totale"], reverse=True)
+
+            return classi
         except Exception as e:
             print(f"Errore durante il recupero delle classi del docente: {e}")
             return []
+
