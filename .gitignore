@@ -1,5 +1,6 @@
 # Ignora l'ambiente virtuale
 venv/*
+.venv/*
 
 # Ignora i file di configurazione di PyCharm/IntelliJ IDEA
 .idea/
