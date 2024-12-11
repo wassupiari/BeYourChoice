@@ -9,11 +9,11 @@ Data di creazione: [data di creazione]
 """
 
 from flask import render_template, request, flash, Blueprint, session, redirect, url_for
-from app.models.profiloModel import ProfiloModel
+from app.controllers.profiloControl import ProfiloControl
 from databaseManager import DatabaseManager
 
 db_manager = DatabaseManager()
-profilo_model = ProfiloModel(db_manager)
+profilo_control = ProfiloControl(db_manager)
 
 profilo = Blueprint('profilo', __name__)
 
@@ -41,7 +41,7 @@ def initialize_profilo_blueprint(app):
             flash("Le password non devono essere vuote", "message_profile_error")
             return redirect(url_for('profilo.gestione_profilo'))
 
-        return profilo_model.cambia_password_docente(vecchia_password, nuova_password)
+        return profilo_control.cambia_password_docente(vecchia_password, nuova_password)
 
     @profilo.route('/cambia_password_studente', methods=['POST'])
     def cambia_password_studente():
@@ -59,7 +59,7 @@ def initialize_profilo_blueprint(app):
             flash("Le password non devono essere vuote", "message_profile_error")
             return redirect(url_for('profilo.gestione_profilo'))
 
-        return profilo_model.cambia_password_studente(vecchia_password, nuova_password)
+        return profilo_control.cambia_password_studente(vecchia_password, nuova_password)
 
     @profilo.route('/gestione', methods=['GET', 'POST'])
     def gestione_profilo():
@@ -76,15 +76,15 @@ def initialize_profilo_blueprint(app):
             ruolo = request.form.get('ruolo', 'studente')
             successo = False
             if ruolo == 'docente':
-                successo = profilo_model.carica_profilo_docente(email, nuovi_dati)
+                successo = profilo_control.carica_profilo_docente(email, nuovi_dati)
             else:
-                successo = profilo_model.carica_profilo_studente(email, nuovi_dati)
+                successo = profilo_control.carica_profilo_studente(email, nuovi_dati)
 
             flash('Profilo aggiornato con successo!' if successo else 'Errore nell\'aggiornamento del profilo.',
                   'successo' if successo else 'error')
 
-        profilo_studente = profilo_model.get_profilo_studente(email)
-        profilo_docente = profilo_model.get_profilo_docente(email)
+        profilo_studente = profilo_control.get_profilo_studente(email)
+        profilo_docente = profilo_control.get_profilo_docente(email)
 
         return render_template(
             'gestioneProfilo.html',

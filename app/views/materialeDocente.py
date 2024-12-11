@@ -51,19 +51,19 @@ def initialize_materiale_docente_blueprint(app: object) -> object:
         """
        Mostra i materiali associati alla classe corrente del docente.
        """
-        ID_Classe = session.get('id_classe')
-        materiali = materiale_control.visualizza_materiali(ID_Classe)
+        id_classe = session.get('id_classe')
+        materiali = materiale_control.visualizza_materiali(id_classe)
         return render_template('materialeDocente.html', materiali=materiali)
 
-    @MaterialeDocente.route('/servi_file/<path:nomefile>')
-    def servi_file(nomefile: str):
+    @MaterialeDocente.route('/servi_file/<path:nome_file>')
+    def servi_file(nome_file: str):
         """
         Serve un file all'utente dato il nome del file richiesto.
 
-        :param nomefile: Nome del file da servire.
+        :param nome_file: Nome del file da servire.
         :return: Risposta del file servito.
         """
-        return materiale_control.servi_file(nomefile)
+        return materiale_control.servi_file(nome_file)
 
     @MaterialeDocente.route('/carica', methods=['GET', 'POST'])
     @teacher_required
@@ -75,25 +75,25 @@ def initialize_materiale_docente_blueprint(app: object) -> object:
             return materiale_control.carica_materiale(request)
         return render_template('caricamentoMateriale.html')
 
-    @MaterialeDocente.route('/modifica/<string:materiale_id>', methods=['GET', 'POST'])
+    @MaterialeDocente.route('/modifica/<string:id_materiale>', methods=['GET', 'POST'])
     @teacher_required
-    def modifica_materiale(materiale_id):
+    def modifica_materiale(id_materiale):
         """
        Modifica un materiale già esistente.
 
-       :param materiale_id: ID del materiale da modificare.
+       :param id_materiale: ID del materiale da modificare.
        """
         if request.method == 'POST':
-            return materiale_control.modifica_materiale(materiale_id, request)
+            return materiale_control.modifica_materiale(id_materiale, request)
 
         # Se GET, recupera il materiale per visualizzarlo nel form
         try:
-            materiale_obj_id = ObjectId(materiale_id)
-            print(f"Recupero materiale con ID: {materiale_obj_id}")
+            id_materiale_obj = ObjectId(id_materiale)
+            print(f"Recupero materiale con ID: {id_materiale_obj}")
 
-            materiale = collezione_materiali.find_one({"_id": materiale_obj_id})
+            materiale = collezione_materiali.find_one({"_id": id_materiale_obj})
             if materiale is None:
-                print(f"Nessun materiale trovato con ID: {materiale_obj_id}")
+                print(f"Nessun materiale trovato con ID: {id_materiale_obj}")
                 return render_template('modificaMateriale.html', messaggio="Il materiale non è stato trovato.")
 
             return render_template('modificaMateriale.html', materiale=materiale)
@@ -101,14 +101,14 @@ def initialize_materiale_docente_blueprint(app: object) -> object:
             print(f"Errore nel recupero del materiale: {str(e)}")
             return render_template('modificaMateriale.html', messaggio="Errore nel recupero del materiale.")
 
-    @MaterialeDocente.route('/rimuovi/<materiale_id>')
+    @MaterialeDocente.route('/rimuovi/<id_materiale>')
     @teacher_required
-    def rimuovi_materiale(materiale_id):
+    def rimuovi_materiale(id_materiale):
         """
         Rimuove un materiale dalla base dati e dal file system se presente.
 
-        :param materiale_id: ID del materiale da rimuovere.
+        :param id_materiale: ID del materiale da rimuovere.
         """
-        return materiale_control.rimuovi_materiale(materiale_id)
+        return materiale_control.rimuovi_materiale(id_materiale)
 
     app.register_blueprint(MaterialeDocente)

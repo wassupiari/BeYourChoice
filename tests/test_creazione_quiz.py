@@ -91,7 +91,7 @@ def test_creazione_quiz(client, test_id, payload, expected_status, expected_erro
             sess['email'] = 'roccocione@gmail.com'
             sess['session_token'] = 'i1kb4v1ik2v4jiubadu'
             sess['role'] = 'docente'
-            sess['ID_Classe'] = 3
+            sess['id_classe'] = 3
 
     response = client.post("/genera", json=payload)
     assert response.status_code == expected_status

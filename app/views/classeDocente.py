@@ -71,7 +71,7 @@ def classe_studente(id_classe):
     print("La route /ClasseStudente è stata chiamata!")  # Debug
     print(id_classe)
     if id_classe == 0:
-        # Se ID_Classe è 0, reindirizza alla pagina noclasse
+        # Se id_classe è 0, reindirizza alla pagina noclasse
         return redirect(url_for('classedocente.no_classe'))
 
     try:

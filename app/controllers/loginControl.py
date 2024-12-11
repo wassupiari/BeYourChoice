@@ -92,10 +92,10 @@ def login():
                 cf_studente = studente.get("cf")
                 nome_studente = studente.get("nome")
 
-                if studente.get("id_classe"):  # Se "ID_Classe" è presente e ha un valore
+                if studente.get("id_classe"):  # Se "id_classe" è presente e ha un valore
                     id_classe = studente["id_classe"]
                 else:
-                    # Se "ID_Classe" non esiste, assegniamo 0 (oppure il valore dalla sessione, se necessario)
+                    # Se "id_classe" non esiste, assegniamo 0 (oppure il valore dalla sessione, se necessario)
                     id_classe = session.get("id_classe", 0)
 
                 print(id_classe)
