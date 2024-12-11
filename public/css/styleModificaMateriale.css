@@ -1,0 +1,146 @@
+/*Foglio di stile utilizzato per la pagina della modifica del materiale didattico
+Stile generale per il corpo della pagina */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Open Sans', sans-serif;
+    background-color: #f9f4f1; /* Sfondo neutro */
+    height: 100%;
+    overflow: hidden; /* Disabilita lo scrolling globale */
+}
+
+/* Contenitore principale */
+.principal{
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Titolo della pagina */
+.principal h2 {
+    font-size: 24px;
+    color: 333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Form e gruppi di input */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Stile per ogni gruppo del modulo */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Label */
+label {
+    font-size: 14px;
+    font-weight: bold;
+    color:  #333;
+}
+
+/* Input e textarea */
+input[type="text"], textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: #f9f9f9;
+}
+
+/* Focus sugli input */
+input[type="text"]:focus, textarea:focus {
+    border-color: #333;
+    outline: none;
+    background-color: #ffffff;
+}
+
+/* Pulsanti */
+.btn-cancel {
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Pulsante Salva Modifiche */
+.salvaModifiche {
+  padding: 10px 20px;
+  background-color: #f9f4f1;
+  color: #000000;
+  font-weight: 600;
+  border: none;
+  border-radius: 5px;
+  border: 1px solid #ccc; /* Bordi visibili */
+  border-radius: 8px; /* Leggera arrotondatura degli angoli */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Effetto ombra */
+  cursor: pointer;
+  transition: box-shadow 0.3s ease, transform 0.3s ease; /* Effetti al passaggio del mouse */
+}
+
+.salvaModifiche:hover {
+  background-color: #d75a3d;
+  color: #ffffff;
+  transform: scale(1.05); /* Leggero ingrandimento al passaggio del mouse */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Ombra più intensa su hover */
+}
+
+/* Pulsante Annulla */
+.btn-cancel {
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 10px 20px;
+  background-color: #f9f4f1;
+  color: #000000;
+  font-weight: 600;
+  border: none;
+  border-radius: 5px;
+  border: 1px solid #ccc; /* Bordi visibili */
+  border-radius: 8px; /* Leggera arrotondatura degli angoli */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Effetto ombra */
+  cursor: pointer;
+  transition: box-shadow 0.3s ease, transform 0.3s ease; /* Effetti al passaggio del mouse */
+}
+
+.btn-cancel:hover {
+   background-color: #d75a3d;
+  color: #ffffff;
+  transform: scale(1.05); /* Leggero ingrandimento al passaggio del mouse */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Ombra più intensa su hover */
+}
+
+.error-message {
+    font-size: 18px;
+    color: red;
+    margin-top: 5px;
+}
+.flashes {
+       list-style-type: none;
+       padding: 0;
+   }
+   .flashes li.error {
+       color: red;
+   }
+   .flashes li.success {
+       color:green;
+}

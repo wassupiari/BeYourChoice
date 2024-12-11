@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classe</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleClasse.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/favicon-32x32.png') }}">
+</head>
+
+<body>
+<!-- Inclusione dell'header -->
+{% include 'header.html' %}
+
+<main class="main-container">
+    <!-- Contenitore centrale -->
+    <div class="classe-container">
+        <h1>Classe</h1>
+
+        <!-- Barra di ricerca -->
+        <div class="search-container">
+            <input type="text" id="search-bar" placeholder="Cerca studente" class="search-bar"
+                   oninput="cercaStudente()"> <!-- Evento input -->
+            <a href="{{ url_for('inserimentostudente.inserimento_studente') }}">
+                <button class="add-student-button">Aggiungi</button>
+            </a>
+        </div>
+
+
+        <!-- Tabella studenti -->
+        <div class="table-wrapper">
+            <table class="student-table" style="width:100%">
+                <thead>
+                <tr>
+                    <th style="width:2%">#</th>
+                    <th style="width:30%">Nome</th>
+                    <th style="width:30%">Cognome</th>
+                    <th style="width:40%">Data di nascita</th>
+                    <th></th> <!-- Colonna per i pulsanti -->
+                </tr>
+                </thead>
+                <tbody id="student-table-body">
+                {% for studente in classe %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ studente.Nome }}</td>
+                    <td>{{ studente.Cognome }}</td>
+                    <td>{{ studente.Data_Nascita }}</td>
+                    <td class="action-cell">
+                        <button class="delete-button" onclick="rimuoviStudente('{{ studente._id }}')">
+                            <i class="fas fa-user-times"></i>
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+
+
+            </table>
+        </div>
+    </div>
+
+    <!-- Barra laterale -->
+    <aside class="sidebar">
+        <div class="sidebar-item">
+            <a href="{{ url_for('MaterialeDocente.visualizza_materiale_docente') }}">
+                <i class="fas fa-file-alt"></i>
+                <span>Materiale didattico</span>
+            </a>
+        </div>
+        <div class="sidebar-item">
+            <a href="{{ url_for('quiz.visualizza_quiz_classe', id_classe=id_classe) }}">
+                <i class="fas fa-question-circle"></i>
+                <span>Quiz</span>
+            </a>
+        </div>
+
+        <div class="sidebar-item">
+            <a href="{{ url_for('scenario_bp.postAssociazione') }}">
+                <i class="fas fa-globe"></i>
+                <span>Scenari</span>
+            </a>
+        </div>
+        <div class="sidebar-item">
+            <a href="{{ url_for('classedocente.manutenzione') }}">
+                <i class="fas fa-trophy"></i>
+                <span>Achievement</span>
+            </a>
+        </div>
+    </aside>
+</main>
+</body>
+<script>
+    function rimuoviStudente(studente) {
+     console.log('ID studente da rimuovere:', studente);  // Debug
+
+     fetch('/classedocente/rimuovi-studente', {
+         method: 'POST',
+         headers: {
+             'Content-Type': 'application/json',
+         },
+         body: JSON.stringify({ id_studente: studente }),
+     })
+     .then(response => response.json())
+     .then(data => {
+         if (data.success) {
+             alert('Studente rimosso con successo!');
+             location.reload(); // Ricarica la pagina per aggiornare la tabella
+         } else {
+             alert(`Errore: ${data.error}`);
+         }
+     })
+     .catch(error => {
+         console.error('Errore:', error);
+         alert('Errore nella rimozione dello studente.');
+     });
+ }
+
+  let timer;  // Timer per il debounce
+function cercaStudente() {
+    clearTimeout(timer); // Cancella il timer precedente
+    const query = document.getElementById("search-bar").value.trim();
+
+    // Se la barra di ricerca è vuota, ricarica la pagina
+    if (query === "") {
+        location.reload();
+        return;
+    }
+
+    // Debounce: aspetta 300ms dopo l'ultimo input prima di inviare la richiesta
+    timer = setTimeout(() => {
+        fetch(`/classedocente/cerca-studente?query=${encodeURIComponent(query)}`)
+            .then(response => response.json())
+            .then(data => {
+                aggiornaTabella(data); // Aggiorna la tabella con i risultati
+            })
+            .catch(error => {
+                console.error("Errore nella ricerca:", error);
+                alert("Errore durante la ricerca dello studente.");
+            });
+    }, 300);
+}
+
+
+
+function aggiornaTabella(studenti) {
+    const tableBody = document.getElementById("student-table-body");
+    tableBody.innerHTML = ""; // Svuota il contenuto della tabella
+
+    if (studenti.length > 0) {
+        studenti.forEach((studente, index) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${studente.Nome}</td>
+                <td>${studente.Cognome}</td>
+                <td>${studente.Data_Nascita}</td>
+                <td class="action-cell">
+                    <button class="delete-button" onclick="rimuoviStudente('${studente._id}')">
+                        <i class="fas fa-user-times"></i>
+                    </button>
+                </td>
+            `;
+            tableBody.appendChild(row);
+        });
+    } else {
+        const noResultsRow = document.createElement("tr");
+        noResultsRow.innerHTML = "<td colspan='5'>Nessuno studente trovato.</td>";
+        tableBody.appendChild(noResultsRow);
+    }
+}
+
+</script>
+</html>

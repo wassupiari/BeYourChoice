@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Materiale Studente</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleMaterialeDidattico.css') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/favicon-32x32.png') }}">
+</head>
+<body>
+    {% include 'header.html' %}
+
+    <div class="principal-content">
+        <h2>MATERIALE DIDATTICO</h2>
+
+        {% if materiali %}
+            <div class="materiali-lista">
+                {% for materiale in materiali %}
+                    <div class="materiale-item">
+                        <h3>{{ materiale['titolo'] }}</h3>
+                        <p>{{ materiale['descrizione'] }}</p>
+                        <p><strong>Tipo:</strong> {{ materiale['tipo'] }}</p>
+                        <div class="azioni">
+                            <!-- Visualizza il materiale con il link corretto -->
+                           <a href="{{ url_for('MaterialeDocente.servi_file', nome_file=materiale['file_path']) }}" target="_blank"><i class="fa-solid fa-folder-open"></i></a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="empty-message">Nessun materiale presente.</p>
+        {% endif %}
+
+    </div>
+</body>
+</html>

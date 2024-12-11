@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>404 page</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/favicon-32x32.png') }}">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+            height: 100vh; /* Altezza al 100% della finestra */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* Previene la comparsa delle barre di scorrimento */
+        }
+
+        .LogoAction {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            width: 100%;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-size: 50px;
+            font-weight: 700;
+            margin: 10px 0;
+            background: #000000;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-top: 20px;
+        }
+
+        .img1 {
+            width: 1550px; /* Regola la larghezza dell'immagine */
+            height: auto; /* Mantieni proporzioni */
+            display: block; /* Assicura che si comporti come un elemento block */
+            margin-left: 0; /* Centra l'immagine orizzontalmente */
+        }
+    </style>
+    <script>
+        // Reindirizza alla pagina precedente dopo 5 secondi
+        setTimeout(function() {
+            window.history.back();
+        }, 2000);
+    </script>
+</head>
+<body>
+<section class="LogoAction">
+    <h1> BeYourChoice </h1>
+    <img src="{{ url_for('static', filename='img/logoaction.jpg') }}" class="img1" alt="Logo">
+</section>
+</body>
+</html>

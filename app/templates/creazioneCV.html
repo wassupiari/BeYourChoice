@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Creazione Classe Virtuale</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleClasseVirtuale.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/favicon-32x32.png') }}">
+</head>
+<body>
+<!-- Inclusione dell'header -->
+{% include 'header.html' %}
+
+<!-- Contenuto principale -->
+<main>
+    <div class="form-container">
+        <h1>Creazione classe virtuale</h1>
+
+        <form action="{{ url_for('creazioneclasse.creazione_classe') }}" method="POST">
+            <label for="nome-classe">Nome Classe</label>
+            <input type="text" id="nome-classe" name="nome-classe" required>
+
+            <label for="descrizione">Descrizione</label>
+            <textarea id="descrizione" name="descrizione" rows="5" required></textarea>
+
+            <!-- Pulsante per annullare -->
+            <button type="button" class="annulla"
+                    onclick="window.location.href='{{ url_for('dashboard.dashboard_docente') }}'">
+                Annulla
+            </button>
+
+            <!-- Pulsante per salvare -->
+            <button type="submit" class="annulla">Salva</button>
+        </form>
+    </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Associazione al visore</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleVisore.css') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/favicon-32x32.png') }}">
+</head>
+<body>
+    <div class="background-container" style="background-image: url('{{ url_for('static', filename='img/vr.png') }}');">
+        <a class="button1" href="/">TERMINA ASSOCIAZIONE</a>
+        <div class="content">
+            <h1>Connessione ai visori in corso</h1>
+            <div class="wrapper">
+                <div class="circle"></div>
+                <div class="circle"></div>
+                <div class="circle"></div>
+                <div class="shadow"></div>
+                <div class="shadow"></div>
+                <div class="shadow"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

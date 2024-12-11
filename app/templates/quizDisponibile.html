@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz Disponibile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleQuizDisponibili.css') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/favicon-32x32.png') }}">
+</head>
+<body>
+    {% include 'header.html' %}
+
+    <div class="container2">
+        <h1>Quiz Disponibile</h1>
+        {% if quiz %}
+            <div class="quiz-card">
+                <div class="quiz-info">
+                    <h2>{{ quiz.titolo }}</h2>
+                    <p>Durata del quiz: <span>{{ quiz.durata }} min</span></p>
+                    <p>Numero domande quiz: <span>{{ quiz.n_domande }}</span></p>
+                </div>
+                <div class="quiz-button">
+                    <a href="{{ url_for('quiz.visualizza_quiz', quiz_id=quiz.id_quiz) }}">
+                        <button>Inizia Quiz &#9658;</button>
+                    </a>
+                </div>
+            </div>
+        {% else %}
+            <p>Nessun quiz disponibile al momento o quiz già completato.</p>
+        {% endif %}
+        <a href="{{ url_for('dashboard.dashboard_studente') }}">
+            <button class="back-button"></button>
+        </a>
+    </div>
+</body>
+</html>

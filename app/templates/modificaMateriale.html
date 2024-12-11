@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modifica Materiale Didattico</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleModificaMateriale.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+{% include 'header.html' %}
+
+<div class="principal">
+    <h2>Modifica Materiale Didattico</h2>
+
+      <div class="error-message">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flashes">
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    </div>
+
+    {% if materiale %}
+        <form action="{{ url_for('MaterialeDocente.modifica_materiale', id_materiale=materiale['_id']) }}" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="titolo">Titolo</label>
+                <input type="text" id="titolo" name="titolo" value="{{ materiale['titolo'] }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="descrizione">Descrizione</label>
+                <textarea id="descrizione" name="descrizione" required>{{ materiale['descrizione'] }}</textarea>
+            </div>
+
+            {% if materiale['tipo'] == 'txt' %}
+                <div class="form-group">
+                    <label for="contenuto">Contenuto del File (txt)</label>
+                    <textarea id="contenuto" name="contenuto" rows="10">{{ contenuto }}</textarea>
+                </div>
+            {% endif %}
+
+            <button type="submit" class="salvaModifiche">Salva Modifiche</button>
+            <a href="{{ url_for('MaterialeDocente.visualizza_materiale_docente') }}" class="btn-cancel">Annulla</a>
+        </form>
+    {% else %}
+        <p>Il materiale non è stato trovato.</p>
+    {% endif %}
+</div>
+</body>
+</html>

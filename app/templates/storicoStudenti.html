@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storico dello Studente</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleDashboardDoc.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/favicon-32x32.png') }}">
+</head>
+<body>
+    {% include 'header.html' %}
+    <div class="main-content">
+        <!-- Storico dello studente -->
+        <div class="dashboard">
+            <h2>Storico dello Studente</h2>
+
+            <!-- Storico delle Attività -->
+            <ul>
+                <li>
+                    <h3>Attività Svolte</h3>
+                </li>
+                {% if storico %}
+                    {% for attivita in storico %}
+                    <li>
+                        <div>
+                            <p><strong>{{ attivita.descrizione_attivita }}</strong></p>
+                            <p><strong>Punteggio: </strong>{{ attivita.punteggio_attivita }}</p>
+                        </div>
+                    </li>
+                    {% endfor %}
+                {% else %}
+                    <li>
+                        <p>Nessuna attività trovata.</p>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-item">
+                <a href="{{ url_for('classedocente.classe_docente', id_classe=session['id_classe']) }}">
+                    <i class="fa-solid fa-users-rectangle"></i>
+                    <br>
+                    <span>Gestione Classe</span>
+                </a>
+            </div>
+        </aside>
+    </div>
+</body>
+</html>

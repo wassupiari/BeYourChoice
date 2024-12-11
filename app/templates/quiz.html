@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ quiz.argomento }} - Quiz</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleQuiz.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/favicon-32x32.png') }}">
+</head>
+<body>
+    <header class="main-header">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='img/Logo.png') }}" width="20%">
+        </div>
+        <div class="user-info">
+            <span style="font-size: 1.2rem;">Ciao, <strong>{{ session.get("nome") }}</strong></span>
+            <form action="{{ url_for('login.logout') }}" method="POST" style="display:inline;">
+                <button type="submit" class="logout-button" style="background: none; border: none; cursor: pointer;">
+                    <i class="fa-solid fa-person-walking-luggage"></i><br>
+                    <span>Logout</span>
+                </button>
+            </form>
+        </div>
+    </header>
+    <div class="container">
+        <h1>{{ quiz.argomento }}</h1>
+        <p><strong>Durata:</strong> {{ quiz.durata }} minuti</p>
+        <p><strong>Tempo rimanente:</strong>
+            <span id="timer-minutes">{{ tempo_rimanente // 60 }}</span> minuti e
+            <span id="timer-seconds">{{ tempo_rimanente % 60 }}</span> secondi
+        </p>
+
+        <form id="quiz-form">
+            {% for question in questions %}
+                <div class="card">
+                    <p><strong>{{ loop.index }}. {{ question.testo_domanda }}</strong></p>
+                    <div class="options-container">
+                        {% for option in question.opzioni_risposte %}
+                        <div class="option-container">
+                            <input type="radio" id="q{{ question.id_domanda }}_{{ loop.index }}"
+                                   name="q{{ question.id_domanda }}" value="{{ option }}">
+                            <label for="q{{ question.id_domanda }}_{{ loop.index }}">{{ option }}</label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+
+            <button type="submit" id="submit-btn" class="btn">Invia Risposte</button>
+        </form>
+    </div>
+
+    <!-- Modale per il risultato -->
+    <div id="result-modal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); z-index: 1000;">
+        <h2>Risultato del Quiz</h2>
+        <p id="result-message"></p>
+        <button id="close-modal" class="btn" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">Chiudi</button>
+    </div>
+    <div id="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 999;"></div>
+
+    <script>
+        const timerMinutesElement = document.getElementById('timer-minutes');
+        const timerSecondsElement = document.getElementById('timer-seconds');
+        const quizForm = document.getElementById('quiz-form');
+        const statusMessage = document.getElementById('result-message');
+        let timerInterval;
+
+        // Imposta la durata del quiz in secondi
+        const quizDuration = {{ quiz.durata }} * 60;
+
+        // Recupera l'ora di inizio dal localStorage o imposta l'ora di inizio
+        let quizStartTime = localStorage.getItem('quizStartTime');
+        if (!quizStartTime) {
+            quizStartTime = Date.now();
+            localStorage.setItem('quizStartTime', quizStartTime);
+        }
+
+        // Calcola il tempo trascorso
+        function calculateRemainingTime() {
+            const elapsedTime = Math.floor((Date.now() - quizStartTime) / 1000);
+            return Math.max(quizDuration - elapsedTime, 0);
+        }
+
+        // Aggiorna il timer sullo schermo
+        function updateTimer() {
+            const remainingTime = calculateRemainingTime();
+            const minutes = Math.floor(remainingTime / 60);
+            const seconds = remainingTime % 60;
+
+            timerMinutesElement.textContent = minutes;
+            timerSecondsElement.textContent = seconds.toString().padStart(2, '0');
+
+            // Termina il quiz se il tempo è scaduto
+            if (remainingTime <= 0) {
+                clearInterval(timerInterval);
+                autoSaveQuiz();
+            }
+        }
+
+        // Aggiorna il timer ogni secondo
+        timerInterval = setInterval(updateTimer, 1000);
+        updateTimer(); // Aggiorna subito il timer all'avvio
+
+        // Salva le risposte quando il tempo scade
+        async function autoSaveQuiz() {
+            const formData = new FormData(quizForm);
+            const jsonData = {};
+            formData.forEach((value, key) => jsonData[key] = value);
+
+            try {
+                const response = await fetch("{{ url_for('quiz.valuta_quiz') }}", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(jsonData)
+                });
+
+                const result = await response.json();
+                if (result.error) {
+                    statusMessage.textContent = "Errore durante il salvataggio automatico.";
+                    showModal();
+                    return;
+                }
+
+                statusMessage.textContent = "Salvataggio automatico completato.";
+                showModal();
+
+                setTimeout(() => {
+                    window.location.href = "{{ url_for('quiz.visualizza_ultimo_quiz') }}";
+                }, 3000);
+            } catch (error) {
+                statusMessage.textContent = "Errore durante il salvataggio automatico.";
+                console.error("Errore:", error);
+            } finally {
+                // Pulisci i dati del timer al termine
+                localStorage.removeItem('quizStartTime');
+            }
+        }
+
+        // Aggiungi logica per rimuovere il timer quando il quiz è terminato manualmente
+        quizForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            clearInterval(timerInterval);
+            localStorage.removeItem('quizStartTime'); // Rimuovi il timer alla conclusione del quiz
+            submitQuiz();
+        });
+
+        async function submitQuiz() {
+            const formData = new FormData(quizForm);
+            const jsonData = {};
+            formData.forEach((value, key) => jsonData[key] = value);
+
+            try {
+                const response = await fetch("{{ url_for('quiz.valuta_quiz') }}", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(jsonData)
+                });
+
+                const result = await response.json();
+                if (result.error) {
+                    statusMessage.textContent = result.error;
+                    showModal();
+                    return;
+                }
+
+                statusMessage.textContent = result.message;
+                showModal();
+
+                setTimeout(() => {
+                    window.location.href = "{{ url_for('quiz.visualizza_ultimo_quiz') }}";
+                }, 3000);
+            } catch (error) {
+                alert("Errore durante l'invio delle risposte. Riprova.");
+                console.error("Errore:", error);
+            }
+        }
+
+        // Funzione per mostrare la modale dei risultati
+        function showModal() {
+            document.getElementById('result-modal').style.display = 'block';
+            document.getElementById('modal-overlay').style.display = 'block';
+        }
+
+        document.getElementById('close-modal').addEventListener('click', function () {
+            document.getElementById('result-modal').style.display = 'none';
+            document.getElementById('modal-overlay').style.display = 'none';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizzazione Profilo</title>
+    <link rel="stylesheet" href="styleProfilo.css">
+</head>
+
+<body>
+    <main>
+        <section class="profile-view">
+            <h2>Informazioni Anagrafiche</h2>
+            <p><strong>Nome:</strong> {{ profilo['nome'] }}</p>
+            <p><strong>Cognome:</strong> {{ profilo['cognome'] }}</p>
+            <p><strong>Struttura di Afferenza (SdA):</strong> {{ profilo['sda'] }}</p>
+            <p><strong>Email:</strong> {{ profilo['email'] }}</p>
+            <p><strong>Codice Fiscale:</strong> {{ profilo['cf'] }}</p>
+            <p><strong>Data di Nascita:</strong> {{ profilo.get('Data_Nascita', profilo.get('data_nascita')) }}</p>
+        </section>
+        <section class="profile-edit">
+            <h2>Modifica Profilo</h2>
+            <form method="POST" action="{{ url_for('profilo.modifica_profilo', cf=profilo['cf']) }}">
+                <label for="nome">Nome:</label>
+                <input type="text" id="nome" name="nome" value="{{ profilo['nome'] }}">
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="{{ profilo['email'] }}">
+
+                <!-- Aggiunta di campi per cambiare la password -->
+                <h2>Modifica Password</h2>
+                <label for="password">Nuova Password:</label>
+                <input type="password" id="password" name="password">
+
+                <label for="confirm-password">Conferma Password:</label>
+                <input type="password" id="confirm-password" name="confirm-password">
+
+                <button type="submit">Salva Modifiche</button>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

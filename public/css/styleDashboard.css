@@ -1,0 +1,140 @@
+/*Foglio di stile utilizzato per la creazione della dashboard lato studente*/
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard {
+  padding: 20px;
+  flex: 1;
+}
+
+.section {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.box {
+  border-radius: 8px; /* Angoli arrotondati */
+  padding: 20px 20px 15px 20px; /* Padding con maggiore spazio sopra */
+  position: relative;
+  flex: 1; /* Box flessibile */
+  height: 250px;
+  margin: 10px;
+  background-color: #fff;
+}
+
+.box.tall-box {
+  height: calc(100vh - 2%); /* Altezza dinamica */
+}
+
+.box.half-width {
+  flex: 1.5;
+}
+
+.box-title {
+  position: absolute;
+  top: -15px;
+  left: 20px;
+  padding: 0 10px;
+  background: #fff;
+  font-size: 18px;
+  color: #000;
+  font-weight: bold;
+  border: 2px solid #000;
+  border-radius: 4px;
+  width: calc(100% - 40px);
+  text-align: center;
+}
+
+.box ul {
+  list-style: none; /* Nessun marker per gli elementi della lista */
+  padding: 0;
+  margin-top: 25px; /* Distanza dal titolo */
+}
+
+.box li {
+  margin-bottom: 10px;
+  font-size: 16px;
+  display: flex; /* Usato per allineare gli elementi */
+  justify-content: space-between; /* Distribuisce gli elementi tra sinistra e destra */
+}
+
+.box li span {
+  font-weight: bold;
+  text-align: right; /* Allinea a destra solo il testo in grassetto */
+  width: 50%; /* Controlla la larghezza per l'allineamento */
+}
+
+.box li span + span {
+  text-align: left; /* Allinea a sinistra il testo che non è in grassetto */
+}
+/* Barra laterale */
+.sidebar {
+    width: 160px; /* Larghezza fissa della sidebar */
+    display: flex;
+    flex-direction: column; /* Disposizione verticale */
+    align-items: center; /* Centrare i contenuti */
+    gap: 10px; /* Spazio tra i quadrati */
+}
+
+/* Quadrati della barra laterale */
+.sidebar-item {
+    width: 165px; /* Larghezza dei quadrati */
+    height: 165px; /* Altezza dei quadrati */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 18px; /* Testo più piccolo */
+    font-weight: bold;
+    background-color: #ffffff;
+    color: #000000; /* Colore del testo */
+    border: 1px solid #ccc; /* Bordi visibili */
+    border-radius: 8px; /* Leggera arrotondatura degli angoli */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Effetto ombra */
+    cursor: pointer;
+    transition: box-shadow 0.3s ease, transform 0.3s ease; /* Effetti al passaggio del mouse */
+}
+
+.sidebar-item i {
+    font-size: 40px; /* Dimensione delle icone  */
+    margin-bottom: 10px; /* Spazio tra l'icona e il testo */
+    color: #000000; /* Colore delle icone */
+}
+
+.sidebar-item:hover {
+    transform: scale(1.05); /* Leggero ingrandimento al passaggio del mouse */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Ombra più intensa su hover */
+    background-color: #d75a3d;
+    color: #ffffff;
+}
+
+.sidebar-item:hover i {
+    color: #ffffff; /* Colore delle icone su hover */
+}
+.sidebar-item a {
+    display: flex;
+    flex-direction: column; /* Testo sotto l'icona */
+    justify-content: center;
+    align-items: center;
+    text-decoration: none; /* Rimuove la sottolineatura */
+    color: inherit; /* Mantiene il colore del genitore */
+    width: 100%; /* Si adatta alla dimensione dell'elemento */
+    height: 100%; /* Si adatta alla dimensione dell'elemento */
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.sidebar-item a:hover {
+    color: #ffffff; /* Cambia colore su hover */
+}

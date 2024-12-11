@@ -2,36 +2,47 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Header</title>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel = "stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleheader.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleHeader.css') }}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
     <header class="main-header">
         <div class="container">
-            <div class="logo"><img src="{{ url_for('static', filename='img/Logo.png') }}" width="100"></div>
-            <div class="navigation">
-                <a href="" class="nav-link">
+            <div class="logo">
+                <a href="{{url_for('classedocente.logo_action')}}">
+                    <img src="{{ url_for('static', filename='img/Logo.png') }}" width="20%" >
+                </a>
+            </div>
+            <nav class="navigation">
+                <a href="{{ url_for('profilo.gestione_profilo') }}" class="nav-link">
                     <i class="fas fa-user"></i><br>
                     <span>Profilo</span>
                 </a>
-                <a href="" class="nav-link">
+                <a href="{{ url_for('dashboard.dashboard_docente') if session.get('role') == 'docente' else url_for('dashboard.dashboard_studente') }}" class="nav-link">
                     <i class="fas fa-cubes"></i><br>
                     <span>Dashboard</span>
                 </a>
-                <a href="" class="nav-link">
+                <a href="{{ url_for('classedocente.manutenzione') }}" class="nav-link">
                     <i class="fas fa-bell"></i><br>
                     <span>Notifiche</span>
                 </a>
-                <a href="" class="nav-link">
+                <a href="{{ url_for('classedocente.manutenzione') }}" class="nav-link">
                     <i class="fas fa-comments"></i><br>
-                    <span>chat</span>
+                    <span>Chat</span>
                 </a>
-            </div>
+            </nav>
             <div class="user-info">
-                <span>Ciao, <strong>{}</strong></span>
-                <button class="logout-button">Logout</button>
+                <span style="font-size: 1.2rem;">Ciao, <strong>{{ session.get("nome") }}</strong></span>
+                <!-- Form per il logout -->
+                <form action="{{ url_for('login.logout') }}" method="POST" style="display:inline;">
+                    <button type="submit" class="logout-button" style="background: none; border: none; cursor: pointer;">
+                        <i class="fa-solid fa-person-walking-luggage"></i><br>
+                        <span>Logout</span>
+                    </button>
+                </form>
             </div>
         </div>
     </header>

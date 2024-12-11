@@ -1,0 +1,139 @@
+/*9Foglio di stile utilizzato per il caricamento del materiale didattico
+ Stile generale per il corpo della pagina */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
+body {
+    font-family: "Open Sans", sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+
+/* Contenitore principale */
+.principal {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Titolo della pagina */
+h2 {
+    font-size: 24px;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Form e gruppi di input */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Stile per ogni gruppo del modulo */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* Label */
+label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Input, textarea, select */
+input[type="text"], textarea, select, input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: #f9f9f9;
+}
+
+/* Pulsante di invio */
+.carica{
+  padding: 10px 20px;
+  background-color: #f9f4f1;
+  color: #000000;
+  border: none;
+  border-radius: 5px;
+  border: 1px solid #ccc; /* Bordi visibili */
+  border-radius: 8px; /* Leggera arrotondatura degli angoli */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Effetto ombra */
+  cursor: pointer;
+  transition: box-shadow 0.3s ease, transform 0.3s ease; /* Effetti al passaggio del mouse */
+}
+
+.carica:hover{
+    background-color: #d75a3d;
+    transform: scale(1.05);
+    color: #ffffff;
+}
+
+/* Effetto focus per i campi di input */
+input[type="text"]:focus, textarea:focus, select:focus, input[type="file"]:focus {
+    border-color: #007bff;
+    outline: none;
+    background-color: #fff;
+}
+
+/* Stile per il file input */
+input[type="file"] {
+    font-size: 14px;
+    padding: 8px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Spaziatura interna del modulo */
+form div {
+    margin-bottom: 15px;
+}
+
+.error-message {
+    font-size: 18px;
+    color: red;
+    margin-top: 5px;
+}
+.flashes {
+       list-style-type: none;
+       padding: 0;
+   }
+   .flashes li.error {
+       color: red;
+   }
+   .flashes li.success {
+       color:green;
+}
+.btn-cancel {
+    padding: 10px 20px;
+    background-color: #f9f4f1;
+    color: #000000;
+    border: none;
+    border-radius: 5px;
+    border: 1px solid #ccc; /* Bordi visibili */
+    border-radius: 8px; /* Leggera arrotondatura degli angoli */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Effetto ombra */
+    cursor: pointer;
+    transition: box-shadow 0.3s ease, transform 0.3s ease; /* Effetti al passaggio del mouse */
+     font-size 14px;
+    text-decoration: none;
+    text-align: center;
+}
+
+.btn-cancel:hover {
+   background-color: #d75a3d;
+  color: #ffffff;
+  transform: scale(1.05); /* Leggero ingrandimento al passaggio del mouse */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Ombra più intensa su hover */
+}

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Domande del Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleDomandePrecedenti.css') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/favicon-32x32.png') }}">
+</head>
+<body>
+{% include 'header.html' %}
+
+<main class="main-container">
+    <h1>Domande del Quiz: {{ quiz.titolo }}</h1>
+    <div class="domande-container">
+    <p><strong>Argomento:</strong> {{ quiz.argomento }}</p>
+    <p><strong>Numero di domande:</strong> {{ quiz.n_domande }}</p>
+
+    <div class="question-list">
+        {% for domanda in domande %}
+            <div class="question">
+                <h2>{{ loop.index }}. {{ domanda.testo_domanda }}</h2>
+                {% for opzione in domanda.opzioni_risposte %}
+                    <div class="option">
+                        <input type="checkbox" disabled>
+                        <label>{{ opzione }}</label>
+                    </div>
+                {% endfor %}
+                <p><strong>Risposta corretta:</strong> {{ domanda.risposta_corretta }}</p>
+            </div>
+        {% endfor %}
+        <a href="{{ url_for('quiz.visualizza_quiz_classe', id_classe=id_classe) }}">
+        <button type="submit" id="submit-btn" class="btn">Torna indietro</button>
+        </a>
+    </div>
+    </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,149 @@
+/*Foglio di stile utilizzato per la dashboard del docente*/
+/* Layout principale */
+.main-content {
+  display: flex;
+  flex-direction: row; /* Disposizione orizzontale: dashboard a sinistra, sidebar a destra */
+  gap: 20px; /* Spazio tra dashboard e sidebar */
+  margin: 20px; /* Margine attorno all'intero contenitore */
+  align-items: flex-start; /* Allinea in alto la dashboard e la sidebar */
+}
+
+/* Dashboard */
+.dashboard {
+  flex: 1; /* Occupa tutto lo spazio disponibile a sinistra */
+  padding: 1.5%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 6px rgba(215, 90, 61, 0.3);
+  height: calc(100vh - 210px); /* Altezza dinamica considerando header e margini */
+  overflow-y: auto;
+}
+
+/* Lista e pulsanti */
+ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 25px;
+}
+
+li {
+  margin-bottom: 10px;
+  font-size: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.dashboard li span {
+  font-weight: bold;
+  color: #000000;
+  text-align: right;
+  width: 50%;
+}
+
+.dashboard li span + span {
+  text-align: left;
+}
+
+.bottone {
+  padding: 10px 20px;
+  background-color: #f9f4f1;
+  color: #000000;
+  font-weight: 600;
+  border: none;
+  border-radius: 5px;
+  border: 1px solid #ccc; /* Bordi visibili */
+  border-radius: 8px; /* Leggera arrotondatura degli angoli */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Effetto ombra */
+  cursor: pointer;
+  transition: box-shadow 0.3s ease, transform 0.3s ease; /* Effetti al passaggio del mouse */
+}
+
+.bottone:hover {
+  background-color: #d75a3d;
+  color: #ffffff;
+  transform: scale(1.05); /* Leggero ingrandimento al passaggio del mouse */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Ombra più intensa su hover */
+}
+
+/* Sidebar */
+.sidebar {
+  width: 160px; /* Larghezza fissa della sidebar */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px; /* Spazio tra i quadrati */
+  position: sticky; /* Fissa la posizione della sidebar mentre si scrolla */
+  top: 20px; /* Margine dall'alto per evitare sovrapposizioni con l'header */
+}
+
+/* Quadrati della barra laterale */
+.sidebar-item {
+  width: 165px; /* Larghezza dei quadrati */
+  height: 165px; /* Altezza dei quadrati */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 18px; /* Testo più piccolo */
+  font-weight: bold;
+  background-color: #ffffff;
+  color: #000000; /* Colore del testo */
+  border: 1px solid #ccc; /* Bordi visibili */
+  border-radius: 8px; /* Leggera arrotondatura degli angoli */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Effetto ombra */
+  cursor: pointer;
+  transition: box-shadow 0.3s ease, transform 0.3s ease; /* Effetti al passaggio del mouse */
+}
+
+.sidebar-item i {
+  font-size: 40px; /* Dimensione delle icone  */
+  margin-bottom: 10px; /* Spazio tra l'icona e il testo */
+  color: #000000; /* Colore delle icone */
+}
+
+.sidebar-item:hover {
+  transform: scale(1.05); /* Leggero ingrandimento al passaggio del mouse */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Ombra più intensa su hover */
+  background-color: #d75a3d;
+  color: #ffffff;
+}
+
+.sidebar-item:hover i {
+  color: #ffffff; /* Colore delle icone su hover */
+}
+
+/* Link */
+a {
+  color: #000000;
+  text-decoration: none;
+}
+a:hover {
+  color: #ffffff;
+  text-decoration: none;
+}
+/* Stile per il link dello studente */
+.studente {
+  color: #000000;
+  text-decoration: none; /* Rimuove la sottolineatura di default */
+  transition: color 0.3s ease; /* Aggiunge un'animazione sul colore */
+  cursor: pointer; /* Cambia il cursore in "pointer" */
+}
+
+.studente:hover {
+  color: #d75a3d; /* Cambia il colore al passaggio del mouse */
+  text-decoration: none; /* Mantiene la sottolineatura assente anche su hover */
+}
+
+
+.pulsante {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.text-left {
+    text-align: left;
+    margin-left: 1px;
+    width: 45%;
+}
