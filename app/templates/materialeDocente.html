@@ -6,26 +6,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styleMaterialeDidattico.css') }}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
 </head>
 <body>
 {% include 'header.html' %}
      <div class="principal-content">
         <h2>MATERIALE DIDATTICO</h2>
+    <div id="toast-container"></div>
 
-        <div class="error-message">
-          {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    <ul class="flashes">
-        {% for category, message in messages %}
-            {% if category in ['materiale_success'] %}
-                <li class="{{ category }}">{{ message }}</li>
-            {% endif %}
-        {% endfor %}
-    </ul>
-                {% endif %}
-            {% endwith %}
-    </div>
 
         {% if materiali %}
             <div class="materiali-lista">
@@ -51,4 +42,44 @@
             <a class="collegamenti" href="{{ url_for('MaterialeDocente.carica_materiale') }}"><i class="fa-solid fa-file-arrow-up"></i>Aggiungi Materiale Didattico</a>
         </div>
     </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                // Mapping delle categorie a Toastr
+                {% if category == "materiale_success" %}
+                    showToast("success", "{{ message }}");
+                {% elif category == "error" %}
+                    showToast("error", "{{ message }}");
+                {% elif category == "info" %}
+                    showToast("info", "{{ message }}");
+                {% elif category == "warning" %}
+                    showToast("warning", "{{ message }}");
+                {% endif %}
+            {% endfor %}
+        {% endwith %}
+    });
+
+    function showToast(type, message) {
+        toastr.options = {
+        "closeButton": true,
+            "debug": false,
+            "newestOnTop": true,
+            "progressBar": true,
+            "positionClass": "toast-bottom-center", // Posiziona in basso al centro
+            "preventDuplicates": true,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+        toastr[type](message);
+    }
+</script>
+
 </body>

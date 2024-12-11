@@ -26,7 +26,7 @@ db_manager = DatabaseManager()
 # Passa l'istanza di db_manager a MaterialeModel
 materiale_control = MaterialeControl(db_manager)
 materiale_model = MaterialeModel(db_manager)
-materiale_control.set_cartella_uploads('../public/uploads')
+materiale_control.set_cartella_uploads('public/uploads')
 
 MaterialeDocente = Blueprint('MaterialeDocente', __name__)
 

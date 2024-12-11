@@ -45,7 +45,7 @@
                         {% endfor %}
                     </div>
                 </div>
-                {% endfor %}
+            {% endfor %}
 
             <button type="submit" id="submit-btn" class="btn">Invia Risposte</button>
         </form>
@@ -64,36 +64,84 @@
         const timerSecondsElement = document.getElementById('timer-seconds');
         const quizForm = document.getElementById('quiz-form');
         const statusMessage = document.getElementById('result-message');
-        const submitButton = document.getElementById('submit-btn');
-        let isTimeUp = false;
+        let timerInterval;
 
-        let minutesRemaining = parseInt(timerMinutesElement.textContent);
-        let secondsRemaining = parseInt(timerSecondsElement.textContent);
+        // Imposta la durata del quiz in secondi
+        const quizDuration = {{ quiz.durata }} * 60;
 
-        const timerInterval = setInterval(() => {
-            if (minutesRemaining <= 0 && secondsRemaining <= 0) {
+        // Recupera l'ora di inizio dal localStorage o imposta l'ora di inizio
+        let quizStartTime = localStorage.getItem('quizStartTime');
+        if (!quizStartTime) {
+            quizStartTime = Date.now();
+            localStorage.setItem('quizStartTime', quizStartTime);
+        }
+
+        // Calcola il tempo trascorso
+        function calculateRemainingTime() {
+            const elapsedTime = Math.floor((Date.now() - quizStartTime) / 1000);
+            return Math.max(quizDuration - elapsedTime, 0);
+        }
+
+        // Aggiorna il timer sullo schermo
+        function updateTimer() {
+            const remainingTime = calculateRemainingTime();
+            const minutes = Math.floor(remainingTime / 60);
+            const seconds = remainingTime % 60;
+
+            timerMinutesElement.textContent = minutes;
+            timerSecondsElement.textContent = seconds.toString().padStart(2, '0');
+
+            // Termina il quiz se il tempo è scaduto
+            if (remainingTime <= 0) {
                 clearInterval(timerInterval);
-                isTimeUp = true;
-                timerMinutesElement.textContent = "0";
-                timerSecondsElement.textContent = "0";
-                statusMessage.textContent = "Tempo scaduto! Salvataggio automatico in corso...";
                 autoSaveQuiz();
-            } else {
-                if (secondsRemaining === 0) {
-                    minutesRemaining -= 1;
-                    secondsRemaining = 59;
-                } else {
-                    secondsRemaining -= 1;
+            }
+        }
+
+        // Aggiorna il timer ogni secondo
+        timerInterval = setInterval(updateTimer, 1000);
+        updateTimer(); // Aggiorna subito il timer all'avvio
+
+        // Salva le risposte quando il tempo scade
+        async function autoSaveQuiz() {
+            const formData = new FormData(quizForm);
+            const jsonData = {};
+            formData.forEach((value, key) => jsonData[key] = value);
+
+            try {
+                const response = await fetch("{{ url_for('quiz.valuta_quiz') }}", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(jsonData)
+                });
+
+                const result = await response.json();
+                if (result.error) {
+                    statusMessage.textContent = "Errore durante il salvataggio automatico.";
+                    showModal();
+                    return;
                 }
 
-                timerMinutesElement.textContent = minutesRemaining;
-                timerSecondsElement.textContent = secondsRemaining.toString().padStart(2, '0');
-            }
-        }, 1000);
+                statusMessage.textContent = "Salvataggio automatico completato.";
+                showModal();
 
-        quizForm.addEventListener('submit', async function (event) {
+                setTimeout(() => {
+                    window.location.href = "{{ url_for('quiz.visualizza_ultimo_quiz') }}";
+                }, 3000);
+            } catch (error) {
+                statusMessage.textContent = "Errore durante il salvataggio automatico.";
+                console.error("Errore:", error);
+            } finally {
+                // Pulisci i dati del timer al termine
+                localStorage.removeItem('quizStartTime');
+            }
+        }
+
+        // Aggiungi logica per rimuovere il timer quando il quiz è terminato manualmente
+        quizForm.addEventListener('submit', (event) => {
             event.preventDefault();
-            clearInterval(timerInterval); // Ferma il timer
+            clearInterval(timerInterval);
+            localStorage.removeItem('quizStartTime'); // Rimuovi il timer alla conclusione del quiz
             submitQuiz();
         });
 
@@ -128,37 +176,7 @@
             }
         }
 
-        async function autoSaveQuiz() {
-            const formData = new FormData(quizForm);
-            const jsonData = {};
-            formData.forEach((value, key) => jsonData[key] = value);
-
-            try {
-                const response = await fetch("{{ url_for('quiz.valuta_quiz') }}", {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(jsonData)
-                });
-
-                const result = await response.json();
-                if (result.error) {
-                    statusMessage.textContent = "Errore durante il salvataggio automatico.";
-                    showModal();
-                    return;
-                }
-
-                statusMessage.textContent = "Salvataggio automatico completato.";
-                showModal();
-
-                setTimeout(() => {
-                    window.location.href = "{{ url_for('quiz.visualizza_ultimo_quiz') }}";
-                }, 3000);
-            } catch (error) {
-                statusMessage.textContent = "Errore durante il salvataggio automatico.";
-                console.error("Errore:", error);
-            }
-        }
-
+        // Funzione per mostrare la modale dei risultati
         function showModal() {
             document.getElementById('result-modal').style.display = 'block';
             document.getElementById('modal-overlay').style.display = 'block';

@@ -105,7 +105,6 @@ def login():
                 session['id_classe'] = id_classe
                 session['nome'] = nome_studente
                 session['role'] = 'studente'
-                flash("Login effettuato con successo", "success")
                 return redirect(url_for('dashboard.dashboard_studente'))  # Reindirizza al dashboard dopo il login
 
             else:
@@ -128,7 +127,6 @@ def login():
                 session['cf'] = docente.get("cf")
                 session['role'] = 'docente'
 
-                flash("Login effettuato con successo", "success")
                 return redirect(url_for('dashboard.dashboard_docente'))  # Reindirizza al dashboard dopo il login
 
             else:

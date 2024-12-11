@@ -12,6 +12,18 @@ body {
     background: #f4f4f9;
     overflow: hidden;
 }
+#toast-container {
+    position: fixed;
+    bottom: 20px; /* Distanza dal fondo */
+    left: 50%; /* Centra orizzontalmente */
+    transform: translateX(-50%);
+    z-index: 1050; /* Assicurati che sia sopra gli altri elementi */
+    pointer-events: none; /* Evita che interferisca con i clic */
+}
+
+#toast-container .toast {
+    pointer-events: auto; /* Consenti interazioni sui singoli toast */
+}
 
 
 .container {
