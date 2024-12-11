@@ -23,15 +23,15 @@
 /* Lista e pulsanti */
 ul {
   list-style: none;
-  padding: 0;
-  margin-top: 25px;
+  padding: 20px 0px;
+  margin-top: 20px;
 }
 
 li {
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   font-size: 20px;
   display: flex;
-  justify-content: space-between;
+  justify-content: right;
 }
 
 .dashboard li span {
