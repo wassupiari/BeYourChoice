@@ -68,7 +68,7 @@ class ProfiloControl:
         :param nuovi_dati: Dizionario contenente i nuovi dati del profilo.
         :return: True se l'aggiornamento ha avuto successo, False altrimenti.
         """
-        if not self._valida_dati_profilo(nuovi_dati):
+        if not self.valida_dati_profilo(nuovi_dati):
             logging.error(f"Dati del profilo studente non validi per email {email}")
             flash("Errore: Dati non validi, aggiornamento non effettuato.", "message_profile_error")
             return False
@@ -90,7 +90,7 @@ class ProfiloControl:
        :return: True se l'aggiornamento ha avuto successo, False altrimenti.
        """
 
-        if not self._valida_dati_profilo(nuovi_dati):
+        if not self.valida_dati_profilo(nuovi_dati):
             logging.error(f"Dati del profilo docente non validi per email {email}")
             return False
 
