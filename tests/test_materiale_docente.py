@@ -74,8 +74,8 @@ def initialize_materiale_docente_blueprint(app):
         return "Caricamento avvenuto con successo", 302
 
     @MaterialeDocente.route('/rimuovi/<id_materiale>', methods=['GET'])
-    def rimuovi(materiale_id):
-        if not ObjectId.is_valid(materiale_id):
+    def rimuovi(id_materiale):
+        if not ObjectId.is_valid(id_materiale):
             return "Materiale non trovato", 404
         return "Materiale rimosso con successo!", 200
 
@@ -183,8 +183,8 @@ def test_carica_materiale_successo(client, test_id):
 # Test per rimuovere materiale con ID valido
 @pytest.mark.parametrize("test_id", ["TC_GMD_2_2"])
 def test_rimuovi_materiale_valido(client, test_id):
-    materiale_id = str(ObjectId())
-    response = client.get(f'/rimuovi/{materiale_id}')
+    id_materiale= str(ObjectId())
+    response = client.get(f'/rimuovi/{id_materiale}')
     assert "Materiale rimosso con successo!" in response.data.decode('utf-8')
     print(f"Test {test_id}: Rimozione materiale valida gestita correttamente!")
 
