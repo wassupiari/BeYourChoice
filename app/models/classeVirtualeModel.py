@@ -82,7 +82,7 @@ class ClasseVirtuale:
     def rimuovi_studente_classe(self, id_studente):
         """
 
-            Imposta il campo ID_Classe dello studente a null.
+            Imposta il campo id_classe dello studente a null.
 
         Args:
             id_studente (str): ID dello studente da rimuovere.
@@ -94,7 +94,7 @@ class ClasseVirtuale:
             studente_collection = self.db_manager.get_collection("Studente")
             result = studente_collection.update_one(
                 {"_id": ObjectId(id_studente)},  # Filtra per l'ID dello studente
-                {"$set": {"id_classe": None}}  # Imposta ID_Classe a null
+                {"$set": {"id_classe": None}}  # Imposta id_classe a null
             )
             if result.modified_count == 0:
                 raise Exception("Nessuna modifica effettuata. Verifica l'ID dello studente.")
@@ -287,7 +287,7 @@ class ClasseVirtuale:
                     {
                         "$or": [  # Cerca studenti senza classe e che corrispondono alla query
                             {"id_classe": {"$exists": False}},  # Studenti senza classe
-                            {"id_classe": None}  # Studenti con ID_Classe a None
+                            {"id_classe": None}  # Studenti con id_classe a None
                         ]
                     },
                     {

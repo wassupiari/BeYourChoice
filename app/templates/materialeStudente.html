@@ -23,7 +23,7 @@
                         <p><strong>Tipo:</strong> {{ materiale['tipo'] }}</p>
                         <div class="azioni">
                             <!-- Visualizza il materiale con il link corretto -->
-                           <a href="{{ url_for('MaterialeDocente.servi_file', nomefile=materiale['file_path']) }}" target="_blank"><i class="fa-solid fa-folder-open"></i></a>
+                           <a href="{{ url_for('MaterialeDocente.servi_file', nome_file=materiale['file_path']) }}" target="_blank"><i class="fa-solid fa-folder-open"></i></a>
                         </div>
                     </div>
                 {% endfor %}

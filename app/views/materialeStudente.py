@@ -55,14 +55,14 @@ def initialize_materiale_studente_blueprint(app: object) -> object:
         materiali = materiale_control.visualizza_materiali(id_classe)
         return render_template('materialeStudente.html', ID_Classe=id_classe, materiali=materiali)
 
-    @MaterialeStudente.route('/servi_file/<path:nomefile>')
-    def servi_file(nomefile: str):
+    @MaterialeStudente.route('/servi_file/<path:nome_file>')
+    def servi_file(nome_file: str):
         """
        Serve un file richiesto dallo studente.
 
-       :param nomefile: Nome del file da servire.
+       :param nome_file: Nome del file da servire.
        :return: Risposta del file servito.
        """
-        return materiale_control.servi_file(nomefile)
+        return materiale_control.servi_file(nome_file)
 
     app.register_blueprint(MaterialeStudente)

@@ -67,14 +67,14 @@ class MaterialeControl:
         """
         return bool(re.match(r'^[^§]{2,255}$', descrizione))
 
-    def tipo_file_valido(self, nomefile):
+    def tipo_file_valido(self, nome_file):
         """
        Verifica la validità del tipo di file.
 
-       :param nomefile: Nome del file.
+       :param nome_file: Nome del file.
        :return: True se il tipo di file è consentito, altrimenti False.
        """
-        return '.' in nomefile and nomefile.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+        return '.' in nome_file and nome_file.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
     def grandezza_file_valido(self, file):
         """
@@ -96,7 +96,7 @@ class MaterialeControl:
         descrizione = request.form['descrizione']
         tipo = request.form['tipo']
         file = request.files['file']
-        ID_Classe = session.get('id_classe')
+        id_classe = session.get('id_classe')
 
         if not self.titolo_valido(titolo):
             flash("Il titolo non è valido. Deve essere tra 2 e 20 caratteri e contenere solo lettere e numeri.",
@@ -128,39 +128,39 @@ class MaterialeControl:
         filepath = file.filename
         file.save(os.path.join(self.cartella_uploads, filepath))
 
-        id_MaterialeDidattico = uuid.uuid4().hex
+        id_materiale_didattico = uuid.uuid4().hex
 
         nuovo_materiale = {
-            "id_materiale": id_MaterialeDidattico,
+            "id_materiale": id_materiale_didattico,
             "titolo": titolo,
             "descrizione": descrizione,
             "file_path": filepath,
             "tipo": tipo,
-            "id_classe": ID_Classe
+            "id_classe": id_classe
         }
         self.control.carica_materiali(nuovo_materiale)
         flash("Materiale caricato con successo!", "materiale_success")
         return redirect(url_for('MaterialeDocente.visualizza_materiale_docente'))
 
-    def modifica_materiale(self, materiale_id, request):
+    def modifica_materiale(self, id_materiale, request):
         """
        Modifica un materiale esistente nel database.
 
-       :param materiale_id: ID del materiale da modificare.
+       :param id_materiale: ID del materiale da modificare.
        :param request: Oggetto della richiesta HTTP con i dati aggiornati.
        :return: Redirect alla pagina di visualizzazione del docente.
        """
         try:
-            materiale_id_obj = ObjectId(materiale_id)
+            id_materiale_obj = ObjectId(id_materiale)
         except Exception:
             flash("ID del materiale non valido.", "error")
             print("Debug: ID del materiale non valido.")
             return redirect(url_for('MaterialeDocente.visualizza_materiale_docente'))
 
-        materiale = self.control.get_materiale_tramite_id(materiale_id_obj)
+        materiale = self.control.get_materiale_tramite_id(id_materiale_obj)
         if materiale is None:
             flash("Errore: Materiale non trovato.", "error")
-            print(f"Debug: Nessun materiale trovato con ID: {materiale_id_obj}")
+            print(f"Debug: Nessun materiale trovato con ID: {id_materiale_obj}")
             return redirect(url_for('MaterialeDocente.visualizza_materiale_docente'))
 
         if request.method == 'POST':
@@ -196,33 +196,33 @@ class MaterialeControl:
                 "file_path": materiale.get('file_path')
             }
 
-            print(f"Debug: Modifica del materiale con ID: {materiale_id_obj} con i dati aggiornati: {dati_caricati}")
-            self.control.modifica_materiale(materiale_id_obj, dati_caricati)
+            print(f"Debug: Modifica del materiale con ID: {id_materiale_obj} con i dati aggiornati: {dati_caricati}")
+            self.control.modifica_materiale(id_materiale_obj, dati_caricati)
             flash("Materiale modificato con successo!", "materiale_success")
             print("Debug: Materiale modificato con successo.")
             return redirect(url_for('MaterialeDocente.visualizza_materiale_docente'))
 
-    def rimuovi_materiale(self, materiale_id):
+    def rimuovi_materiale(self, id_materiale):
         """
         Rimuove un materiale didattico dal database e dal filesystem dove possibile.
 
-        :param materiale_id: ID del materiale da rimuovere.
+        :param id_materiale: ID del materiale da rimuovere.
         :return: Redirect alla pagina di visualizzazione del docente.
         """
         try:
-            materiale_id_obj = ObjectId(materiale_id)
+            id_materiale_obj = ObjectId(id_materiale)
         except Exception as e:
             flash("ID del materiale non valido: " + str(e), "error")
             return redirect(url_for('MaterialeDocente.visualizza_materiale_docente'))
 
-        materiale = self.control.visualizza_materiale({"_id": materiale_id_obj})
+        materiale = self.control.visualizza_materiale({"_id": id_materiale_obj})
 
         if materiale is None:
             flash("Materiale non trovato.", "error")
             return redirect(url_for('MaterialeDocente.visualizza_materiale_docente'))
 
         # Prova ad eliminare il materiale
-        successo_rimozione = self.control.elimina_materiale(materiale_id_obj)
+        successo_rimozione = self.control.elimina_materiale(id_materiale_obj)
 
         if not successo_rimozione:
             flash("Errore durante la rimozione del materiale dal database.", "error")
@@ -252,15 +252,15 @@ class MaterialeControl:
         materiali = self.control.get_materiali_tramite_id_classe(id_classe)
         return materiali
 
-    def servi_file(self, nomefile):
+    def servi_file(self, nome_file):
         """
         Serve un file su richiesta.
 
-        :param nomefile: Nome del file da servire.
+        :param nome_file: Nome del file da servire.
         :return: Risposta con il file da inviato o un errore 404 se non trovato.
         """
-        filepath = os.path.join(self.cartella_uploads, nomefile)
-        if os.path.exists(filepath):
-            return send_file(filepath)
+        file_path = os.path.join(self.cartella_uploads, nome_file)
+        if os.path.exists(file_path):
+            return send_file(file_path)
         else:
             abort(404)
