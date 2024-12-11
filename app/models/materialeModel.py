@@ -54,17 +54,17 @@ class MaterialeModel:
         # Inserisce nel database
         self.collection.insert_one(materiale_model)
 
-    def modifica_materiale(self, materiale_id, dati_caricati):
+    def modifica_materiale(self, id_materiale, dati_caricati):
 
         """
         Aggiorna un materiale esistente nel database.
 
-        :param materiale_id: ID del materiale da aggiornare.
+        :param id_materiale: ID del materiale da aggiornare.
         :param dati_caricati: Dizionario dei dati aggiornati.
         """
 
         self.collection.update_one(
-            {"_id": ObjectId(materiale_id)},
+            {"_id": ObjectId(id_materiale)},
             {"$set": dati_caricati}
         )
 
@@ -91,8 +91,8 @@ class MaterialeModel:
     def rimuovi_documento(self, query):
         return self.collection.delete_one(query)
 
-    def elimina_materiale(self, materiale_id):
-        result = self.collection.delete_one({'_id': ObjectId(materiale_id)})
+    def elimina_materiale(self, id_materiale):
+        result = self.collection.delete_one({'_id': ObjectId(id_materiale)})
         return result.deleted_count == 1
 
     def count_documents(self, query):
@@ -106,26 +106,26 @@ class MaterialeModel:
     def get_materiale(self, query):
         return self.collection.find_one(query)
 
-    def get_materiale_tramite_id(self, materiale_id):
+    def get_materiale_tramite_id(self, id_materiale):
 
         """
         Esegue una query per ottenere i materiali di una specifica classe.
 
-        :param ID_Classe: ID della classe di cui ottenere i materiali.
+        :param id_classe: ID della classe di cui ottenere i materiali.
         :return: Lista di materiali appartenenti alla classe.
         """
 
-        return self.collection.find_one({'_id': ObjectId(materiale_id)})
+        return self.collection.find_one({'_id': ObjectId(id_materiale)})
 
-    def get_materiali_tramite_id_classe(self, ID_Classe):
+    def get_materiali_tramite_id_classe(self, id_classe):
         """Esegui una query MongoDB per ottenere i materiali per una specifica classe."""
         try:
-            query = {"id_classe": ID_Classe}
-            print(f"Eseguendo query con ID_Classe: {ID_Classe}")
+            query = {"id_classe": id_classe}
+            print(f"Eseguendo query con ID_Classe: {id_classe}")
             materiali_della_classe = list(self.collection.find(query))
             if not materiali_della_classe:
-                print(f"Nessun materiale trovato per la classe {ID_Classe}.")
+                print(f"Nessun materiale trovato per la classe {id_classe}.")
             return materiali_della_classe
         except Exception as e:
-            print(f"Errore nel recuperare i materiali per la classe {ID_Classe}: {str(e)}")
+            print(f"Errore nel recuperare i materiali per la classe {id_classe}: {str(e)}")
             return []

@@ -1,5 +1,5 @@
 //click su accedi e registrati nel container con immagine
-    document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () => {
     const container = document.getElementById("container");
     const registerBtn = document.getElementById("register");
     const loginBtn = document.getElementById("login");
@@ -16,74 +16,75 @@
 });
 
 // Funzione per calcolare la data limite (12 anni fa) e impostarla come massimo
-        document.addEventListener('DOMContentLoaded', function() {
-            const dataInput = document.getElementById('data');
-            const today = new Date();
+document.addEventListener('DOMContentLoaded', function () {
+    const dataInput = document.getElementById('data');
+    const today = new Date();
 
-            // Calcola la data di 12 anni fa
-            const twelveYearsAgo = new Date();
-            twelveYearsAgo.setFullYear(today.getFullYear() - 12);
+    // Calcola la data di 12 anni fa
+    const twelveYearsAgo = new Date();
+    twelveYearsAgo.setFullYear(today.getFullYear() - 12);
 
-            // Formatta la data nel formato 'yyyy-mm-dd' per il campo input
-            const maxDate = twelveYearsAgo.toISOString().split('T')[0];
+    // Formatta la data nel formato 'yyyy-mm-dd' per il campo input
+    const maxDate = twelveYearsAgo.toISOString().split('T')[0];
 
-            // Imposta l'attributo max dell'input date
-            dataInput.setAttribute('max', maxDate);
-        });
+    // Imposta l'attributo max dell'input date
+    dataInput.setAttribute('max', maxDate);
+});
 
 //controllo password
-document.getElementById('registrazioneForm').addEventListener('submit', function(event) {
-            const password = document.getElementById('password').value;
+document.getElementById('registrazioneForm').addEventListener('submit', function (event) {
+    const password = document.getElementById('password').value;
 
-            // Condizioni da verificare
-            const conditions = [
-                { regex: /[a-z]/, message: "Almeno una lettera minuscola." },
-                { regex: /[A-Z]/, message: "Almeno una lettera maiuscola." },
-                { regex: /\d/, message: "Almeno un numero." },
-                { regex: /[^\w\s]/, message: "Almeno un carattere speciale." },
-                { regex: /^.{8,20}$/, message: "Lunghezza tra 8 e 20 caratteri." }
-            ];
+    // Condizioni da verificare
+    const conditions = [
+        {regex: /[a-z]/, message: "Almeno una lettera minuscola."},
+        {regex: /[A-Z]/, message: "Almeno una lettera maiuscola."},
+        {regex: /\d/, message: "Almeno un numero."},
+        {regex: /[^\w\s]/, message: "Almeno un carattere speciale."},
+        {regex: /^.{8,20}$/, message: "Lunghezza tra 8 e 20 caratteri."}
+    ];
 
-            // Raccoglie i messaggi di errore
-            let errorMessages = [];
-            conditions.forEach(condition => {
-                if (!condition.regex.test(password)) {
-                    errorMessages.push(condition.message);
-                }
-            });
-
-            // Se ci sono condizioni non soddisfatte, mostra il pop-up e blocca l'invio
-            if (errorMessages.length > 0) {
-                event.preventDefault(); // Blocca l'invio del modulo
-                alert("Condizioni non soddisfatte:\n\n" + errorMessages.join("\n"));
-            }
-        });
-// Funzione per rendere la prima lettera maiuscola nei campi nome, cognome e SDA
-        function capitalizeFirstLetter(element) {
-            element.value = element.value.charAt(0).toUpperCase() + element.value.slice(1).toLowerCase();
+    // Raccoglie i messaggi di errore
+    let errorMessages = [];
+    conditions.forEach(condition => {
+        if (!condition.regex.test(password)) {
+            errorMessages.push(condition.message);
         }
+    });
 
-        // Event listener per i campi nome, cognome e SDA
-        document.getElementById('nome').addEventListener('input', function() {
-            capitalizeFirstLetter(this);
-        });
-        document.getElementById('cognome').addEventListener('input', function() {
-            capitalizeFirstLetter(this);
-        });
-        document.getElementById('sda').addEventListener('input', function() {
-            capitalizeFirstLetter(this);
-        });
+    // Se ci sono condizioni non soddisfatte, mostra il pop-up e blocca l'invio
+    if (errorMessages.length > 0) {
+        event.preventDefault(); // Blocca l'invio del modulo
+        alert("Condizioni non soddisfatte:\n\n" + errorMessages.join("\n"));
+    }
+});
 
-        // Event listener per il campo Codice Fiscale (CF) - tutto maiuscolo
-        document.getElementById('cf').addEventListener('input', function() {
-            // Trasforma il testo in maiuscolo
-            this.value = this.value.toUpperCase();
+// Funzione per rendere la prima lettera maiuscola nei campi nome, cognome e SDA
+function capitalizeFirstLetter(element) {
+    element.value = element.value.charAt(0).toUpperCase() + element.value.slice(1).toLowerCase();
+}
 
-            // Limita la lunghezza massima a 16 caratteri
-            if (this.value.length > 16) {
-                this.value = this.value.slice(0, 16);
-            }
-        });
+// Event listener per i campi nome, cognome e SDA
+document.getElementById('nome').addEventListener('input', function () {
+    capitalizeFirstLetter(this);
+});
+document.getElementById('cognome').addEventListener('input', function () {
+    capitalizeFirstLetter(this);
+});
+document.getElementById('sda').addEventListener('input', function () {
+    capitalizeFirstLetter(this);
+});
+
+// Event listener per il campo Codice Fiscale (CF) - tutto maiuscolo
+document.getElementById('cf').addEventListener('input', function () {
+    // Trasforma il testo in maiuscolo
+    this.value = this.value.toUpperCase();
+
+    // Limita la lunghezza massima a 16 caratteri
+    if (this.value.length > 16) {
+        this.value = this.value.slice(0, 16);
+    }
+});
 
 //campo codice univoco disattivato
 document.addEventListener("DOMContentLoaded", () => {
@@ -111,46 +112,83 @@ document.addEventListener("DOMContentLoaded", () => {
     toggleCodiceUnivoco();
 });
 
-window.onload = function() {
-    // Verifica se l'URL contiene il parametro "error=password"
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('error') === 'password') {
-        // Mostra il pop-up
-        alert("Credenziali errate. Riprova.");
-    }
-    if (urlParams.get('error') === 'formatoEmail') {
-        alert("Il formato dell'email è errato. Riprova.");
-    }
-    else if (urlParams.get('error') === 'formatoNome') {
-        alert("Il formato del nome è errato. Riprova.");
-    }
-    else if (urlParams.get('error') === 'formatoCognome') {
-        alert("Il formato del cognome è errato. Riprova.");
-    }
-    else if (urlParams.get('error') === 'formatoSDA') {
-        alert("Il formato del codice SDA è errato. Riprova.");
-    }
-    else if (urlParams.get('error') === 'formatocf') {
-        alert("Il formato del codice fiscale è errato. Riprova.");
-    }
-    else if (urlParams.get('error') === 'formatoDataNascita') {
-        alert("Il formato della data di nascita è errato. Riprova.");
-    }
-    else if (urlParams.get('error') === 'formatoPassword') {
-        alert("Il formato della password è errato. Riprova.");
-    }
-    else if (urlParams.get('error') === 'formatoCU') {
-        alert("Il formato del codice univoco è errato. Riprova.");
-    }
-    else if (urlParams.get('error') === 'alreadyRegistered') {
-        alert("Utente già registrato. Riprova.");
-        const url = new URL(window.location.href);
-        url.searchParams.delete('error');  // Rimuove il parametro 'error'
-        window.history.replaceState({}, '', url);  // Aggiorna la URL senza il parametro
-        window.location.replace('/login');  // Reindirizza alla pagina di login
-    }
 
+window.onload = function () {
+    // Verifica se l'URL contiene il parametro "error"
+    const urlParams = new URLSearchParams(window.location.search);
+    const errorType = urlParams.get('error');
+
+    if (errorType) {
+        // Configurazione delle notifiche Toastr
+
+                toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": true,
+        "progressBar": true,
+        "positionClass": "toast-bottom-center", // Posiziona in basso al centro
+        "preventDuplicates": true,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    };
+
+
+
+
+        // Mostra il messaggio in base al tipo di errore
+        switch (errorType) {
+            case 'password':
+                toastr.error("Credenziali errate. Riprova.");
+                break;
+            case 'formatoEmail':
+                toastr.error("Il formato dell'email è errato. Riprova.");
+                break;
+            case 'formatoNome':
+                toastr.error("Il formato del nome è errato. Riprova.");
+                break;
+            case 'formatoCognome':
+                toastr.error("Il formato del cognome è errato. Riprova.");
+                break;
+            case 'formatoSDA':
+                toastr.error("Il formato del codice SDA è errato. Riprova.");
+                break;
+            case 'formatocf':
+                toastr.error("Il formato del codice fiscale è errato. Riprova.");
+                break;
+            case 'formatoDataNascita':
+                toastr.error("Il formato della data di nascita è errato. Riprova.");
+                break;
+            case 'formatoPassword':
+                toastr.error("Il formato della password è errato. Riprova.");
+                break;
+            case 'formatoCU':
+                toastr.error("Il formato del codice univoco è errato. Riprova.");
+                break;
+            case 'alreadyRegistered':
+                toastr.info("Utente già registrato. Reindirizzamento alla pagina di login...");
+                // Rimuove il parametro 'error' dalla URL
+                const url = new URL(window.location.href);
+                url.searchParams.delete('error');
+                window.history.replaceState({}, '', url);
+                // Reindirizza alla pagina di login
+                setTimeout(() => {
+                    window.location.replace('/login');
+                }, 3000); // Attendi 3 secondi prima del reindirizzamento
+                break;
+            default:
+                toastr.error("Errore sconosciuto. Riprova.");
+        }
+    }
 };
+
+
 
 function showPwd() {
     const passwordField = document.getElementById("password");
@@ -158,8 +196,8 @@ function showPwd() {
     passwordField.type = type;
 
     // Cambia l'icona
-   document.getElementById("togglePassword").classList.toggle("fa-eye-slash");
-      }
+    document.getElementById("togglePassword").classList.toggle("fa-eye-slash");
+}
 
 function showPwd2() {
     const passwordField = document.getElementById("password2");
@@ -167,28 +205,28 @@ function showPwd2() {
     passwordField.type = type;
 
     // Cambia l'icona
-   document.getElementById("togglePassword2").classList.toggle("fa-eye-slash");
-      }
+    document.getElementById("togglePassword2").classList.toggle("fa-eye-slash");
+}
 
 
 function showToast(type, message) {
     toastr.options = {
-    "closeButton": true,
-    "debug": false,
-    "newestOnTop": true,
-    "progressBar": true,
-    "positionClass": "toast-bottom-center", // Posiziona in basso al centro
-    "preventDuplicates": true,
-    "onclick": null,
-    "showDuration": "300",
-    "hideDuration": "1000",
-    "timeOut": "5000",
-    "extendedTimeOut": "1000",
-    "showEasing": "swing",
-    "hideEasing": "linear",
-    "showMethod": "fadeIn",
-    "hideMethod": "fadeOut"
-};
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": true,
+        "progressBar": true,
+        "positionClass": "toast-bottom-center", // Posiziona in basso al centro
+        "preventDuplicates": true,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    };
 
     toastr[type](message);
 }

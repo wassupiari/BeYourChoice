@@ -6,6 +6,9 @@
     <title>Gestione Profilo</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styleProfilo.css') }}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='img/favicon-32x32.png') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <style>
         input[readonly] {
             background-color: #f0f0f0;
@@ -17,17 +20,6 @@
     <main>
         <section class="profile-view">
             <h2>Gestione Profilo</h2>
-                 {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    <ul class="flashes">
-        {% for category, message in messages %}
-            {% if category in ['message_profile_successo', 'message_profile_error'] %}
-                <li class="{{ category }}">{{ message }}</li>
-            {% endif %}
-        {% endfor %}
-    </ul>
-                {% endif %}
-            {% endwith %}
             <form method="POST" id="profiloForm">
                 {% if profilo_studente %}
                     <input type="hidden" name="ruolo" value="studente">
@@ -66,7 +58,6 @@
                         <label for="cf"><strong>Codice Fiscale:</strong></label>
                         <input type="text" id="cf" name="cf" value="{{ profilo_docente.get('cf') or profilo_docente.get('CF', '') }}" readonly>
                     </div>
-
                     <!-- Aggiungi altri campi per il profilo docente se necessario -->
                 {% endif %}
                 <button type="button" id="editButton" class="button1">Modifica Profilo</button>
@@ -75,37 +66,61 @@
         </section>
 
         <section class="profile-view">
-    <h2>Cambia Password</h2>
-    {% if profilo_studente %}
-    <form method="POST" action="{{ url_for('profilo.cambia_password_studente') }}" id="changePasswordFormStudente">
-        <div>
-            <label for="vecchiaPasswordStudente"><strong>Vecchia Password:</strong></label>
-            <input type="password" id="vecchiaPasswordStudente" name="vecchia_password" placeholder="Vecchia Password" required>
-        </div>
-        <div>
-            <label for="nuovaPasswordStudente"><strong>Nuova Password:</strong></label>
-            <input type="password" id="nuovaPasswordStudente" name="nuova_password" placeholder="Nuova Password" required>
-        </div>
-        <button type="submit">Cambia Password</button>
-    </form>
-    {% elif profilo_docente %}
-    <form method="POST" action="{{ url_for('profilo.cambia_password_docente') }}" id="changePasswordFormDocente">
-        <div>
-            <label for="vecchiaPasswordDocente"><strong>Vecchia Password:</strong></label>
-            <input type="password" id="vecchiaPasswordDocente" name="vecchia_password" placeholder="Vecchia Password" required>
-        </div>
-        <div>
-            <label for="nuovaPasswordDocente"><strong>Nuova Password:</strong></label>
-            <input type="password" id="nuovaPasswordDocente" name="nuova_password" placeholder="Nuova Password" required>
-        </div>
-        <button type="submit" class="button1">Cambia Password</button>
-    </form>
-    {% endif %}
-</section>
+            <h2>Cambia Password</h2>
+            {% if profilo_studente %}
+            <form method="POST" action="{{ url_for('profilo.cambia_password_studente') }}" id="changePasswordFormStudente">
+                <div>
+                    <label for="vecchiaPasswordStudente"><strong>Vecchia Password:</strong></label>
+                    <input type="password" id="vecchiaPasswordStudente" name="vecchia_password" placeholder="Vecchia Password" required>
+                </div>
+                <div>
+                    <label for="nuovaPasswordStudente"><strong>Nuova Password:</strong></label>
+                    <input type="password" id="nuovaPasswordStudente" name="nuova_password" placeholder="Nuova Password" required>
+                </div>
+                <button type="submit">Cambia Password</button>
+            </form>
+            {% elif profilo_docente %}
+            <form method="POST" action="{{ url_for('profilo.cambia_password_docente') }}" id="changePasswordFormDocente">
+                <div>
+                    <label for="vecchiaPasswordDocente"><strong>Vecchia Password:</strong></label>
+                    <input type="password" id="vecchiaPasswordDocente" name="vecchia_password" placeholder="Vecchia Password" required>
+                </div>
+                <div>
+                    <label for="nuovaPasswordDocente"><strong>Nuova Password:</strong></label>
+                    <input type="password" id="nuovaPasswordDocente" name="nuova_password" placeholder="Nuova Password" required>
+                </div>
+                <button type="submit" class="button1">Cambia Password</button>
+            </form>
+            {% endif %}
+        </section>
     </main>
 
-
     <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                    {% if category == 'message_profile_successo' %}
+                        showToast("success", "{{ message }}");
+                    {% elif category == 'message_profile_error' %}
+                        showToast("error", "{{ message }}");
+                    {% endif %}
+                {% endfor %}
+            {% endwith %}
+        });
+
+        function showToast(type, message) {
+            toastr.options = {
+                "closeButton": true,
+                "progressBar": true,
+                "positionClass": "toast-bottom-center",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+            toastr[type](message);
+        }
+
         document.getElementById('editButton').addEventListener('click', function() {
             const form = document.getElementById('profiloForm');
             const inputs = form.querySelectorAll('input:not([type="hidden"])');
@@ -120,16 +135,6 @@
                 document.getElementById('saveButton').style.display = 'block';
             }
         });
-
-        // Aggiunge il controllo di visibilità della password
-        function togglePasswordVisibility(elementId) {
-            const input = document.getElementById(elementId);
-            if (input.type === 'password') {
-                input.type = 'text';
-            } else {
-                input.type = 'password';
-            }
-        }
     </script>
 </body>
 </html>
