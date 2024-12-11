@@ -16,12 +16,9 @@
     <div class="dashboard">
         <h2>Classifica di tutte le classi</h2>
         <ul>
-
-            {% for classe in classi %}
-            <span><strong>{{ classe.nome_classe }}
-            - Punteggio Totale: {{ classe.punteggio_totale }}</strong></span>
-
-        <li>
+    {% for classe in classi %}
+    <li>
+        <strong>{{ classe.nome_classe }} - Punteggio Totale: {{ classe.punteggio_totale }}</strong>
         <span>
             <a class="pulsante"
                href="{{ url_for('dashboard.classifica_classe', id_classe=classe.id_classe) }}">
@@ -32,7 +29,7 @@
                 <button class="bottone">Gestione classe</button>
             </a>
         </span>
-        </li>
+    </li>
     {% endfor %}
 </ul>
 

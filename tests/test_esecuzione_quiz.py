@@ -1,17 +1,12 @@
+import re
 import pytest
-from flask import Flask, jsonify
+from flask import Flask, session
 from app.models.quizModel import QuizModel
-from app.controllers.QuizControl import visualizza_quiz
+from app.controllers.quizControl import quiz_blueprint
+from unittest.mock import MagicMock
 from databaseManager import DatabaseManager
 
-# Fixture per creare un'app Flask per il contesto di test
-@pytest.fixture(scope='module')
-def test_app():
-    app = Flask(__name__)
-    app.secret_key = "test_secret"  # Chiave segreta necessaria per gestire la sessione
-    yield app
-
-# Fixture per configurare il database
+# Fixture per la connessione al database MongoDB usando DatabaseManager
 @pytest.fixture(scope='module')
 def mongo_client():
     db_manager = DatabaseManager(
@@ -21,50 +16,50 @@ def mongo_client():
     yield db_manager
     db_manager.close_connection()
 
-@pytest.fixture(scope="function")
+# Fixture per la configurazione del client Flask
+@pytest.fixture(scope='module')
+def test_client():
+    app = Flask(__name__)
+    app.secret_key = "test_secret_key"  # Necessario per gestire la sessione
+    app.register_blueprint(quiz_blueprint, url_prefix="/quiz")
+    app.testing = True
+
+    with app.test_client() as client:
+        with app.app_context():
+            yield client
+
+# Fixture per il mock di QuizModel con connessione al database
+@pytest.fixture(scope='function')
 def quiz_model(mongo_client):
     quiz_model = QuizModel()
-    quiz_model.db_manager.db = mongo_client.db  # Configura il database del modello
+    quiz_model.db_manager.db = mongo_client.db  # Imposta il db di test nel modello
     yield quiz_model
 
-# Funzione mock per simulare il comportamento del controller
-def mock_visualizza_quiz(quiz_id, premuto_bottone=False):
+# Test combinazioni per l'esecuzione del quiz
+@pytest.mark.parametrize("test_id, id_quiz, session_data, expected_success", [
+    ("TC_QZ_1_1", 6,  {"id_classe": "10448", "cf": "BZZMMM29S01F549D"}, True),  # Test se il pulsante viene premuto correttamente
+])
+def test_combinazioni_esecuzione_quiz(test_client, quiz_model, test_id, id_quiz, session_data, expected_success):
     """
-    Simula il comportamento del controller visualizza_quiz.
+    Test per le combinazioni di esecuzione quiz, basati sui casi forniti nel documento.
+    Ogni caso è denominato con il relativo ID del test case (es. TC_QZ_1_1).
     """
-    if quiz_id == "99999":  # Quiz inesistente
-        return jsonify({"error": "Quiz non trovato"}), 404
-    elif quiz_id == "12345":  # Quiz trovato ma non avviato
-        if not premuto_bottone:
-            return jsonify({"message": "Premi il bottone per avviare il quiz"}), 400
-        else:
-            return jsonify({
-                "quiz": {
-                    "ID_Quiz": quiz_id,
-                    "Titolo": "Quiz di Prova",
-                    "Domande": [{"ID_Domanda": "d1", "Testo": "Domanda esempio"}],
-                }
-            }), 200
-    else:
-        return jsonify({"error": "Caso non gestito"}), 500
+    with test_client.session_transaction() as sess:
+        sess.update(session_data)  # Simula i dati di sessione
 
-# Test per i diversi casi del quiz
-def test_visualizza_quiz_cases(test_app):
-    with test_app.test_request_context():
-        # Test Case 1: Quiz non trovato
-        response = mock_visualizza_quiz("99999")
-        assert response[1] == 404, "Il risultato dovrebbe essere 404 per un quiz inesistente"
-        assert response[0].json["error"] == "Quiz non trovato", "Il messaggio di errore dovrebbe indicare che il quiz non è stato trovato"
+    # Simula la richiesta POST per avviare il quiz
+    response = test_client.post("./quiz/6", json={"id_quiz": id_quiz})
 
-        # Test Case 2: Quiz trovato ma non avviato
-        response = mock_visualizza_quiz("918", premuto_bottone=False)
-        assert response[1] == 500, "Il risultato dovrebbe essere 400 se il quiz non è stato avviato"
-        assert response[0].json["message"] == "Premi il bottone per avviare il quiz", "Il messaggio dovrebbe indicare di premere il bottone"
+    # Output per debug
+    print(f"Test ID: {test_id}")
+    print(f"Status Code: {response.status_code}, Expected Success: {expected_success}")
 
-        # Test Case 3: Quiz trovato e avviato
-        response = mock_visualizza_quiz("918", premuto_bottone=True)
-        assert response[1] == 200, "Il risultato dovrebbe essere 200 per un quiz avviato correttamente"
-        response_data = response[0].json
-        assert response_data["quiz"]["ID_Quiz"] == "918", "L'ID del quiz nella risposta dovrebbe corrispondere"
-        assert response_data["quiz"]["Titolo"] == "Quiz di Prova", "Il titolo del quiz dovrebbe essere corretto"
-        assert len(response_data["quiz"]["Domande"]) > 0, "Il quiz dovrebbe contenere almeno una domanda"
+    # Validazione del successo atteso
+    actual_success = response.status_code == 200
+    print(f"Actual Success: {actual_success}")
+    assert actual_success == expected_success, (
+        f"{test_id}: Esito inatteso! Atteso: {expected_success}, Ottenuto: {actual_success}"
+    )
+
+    # Debug finale
+    print(f"{test_id}: Test concluso con successo atteso={expected_success}")
