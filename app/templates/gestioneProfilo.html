@@ -86,7 +86,7 @@
             <label for="nuovaPasswordStudente"><strong>Nuova Password:</strong></label>
             <input type="password" id="nuovaPasswordStudente" name="nuova_password" placeholder="Nuova Password" required>
         </div>
-        <button type="submit">Cambia Password</button>
+        <button type="submit" class="button1">Cambia Password</button>
     </form>
     {% elif profilo_docente %}
     <form method="POST" action="{{ url_for('profilo.cambia_password_docente') }}" id="changePasswordFormDocente">
