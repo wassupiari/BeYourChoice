@@ -80,8 +80,13 @@ def initialize_profilo_blueprint(app):
             else:
                 successo = profilo_control.carica_profilo_studente(email, nuovi_dati)
 
-            flash('Profilo aggiornato con successo!' if successo else 'Errore nell\'aggiornamento del profilo.',
-                  'successo' if successo else 'error')
+            # Se il profilo è stato aggiornato con successo, aggiorna anche la sessione
+            if successo:
+                for key, value in nuovi_dati.items():
+                    session[key] = value  # Aggiorna ogni campo nella sessione
+                flash('Profilo aggiornato con successo!', 'successo')
+            else:
+                flash('Errore nell\'aggiornamento del profilo.', 'error')
 
         profilo_studente = profilo_control.get_profilo_studente(email)
         profilo_docente = profilo_control.get_profilo_docente(email)
