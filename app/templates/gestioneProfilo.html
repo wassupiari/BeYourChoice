@@ -32,8 +32,16 @@
                         <input type="text" id="cognome" name="cognome" value="{{ profilo_studente.get('cognome', '') }}" readonly>
                     </div>
                     <div>
-                        <label for="email"><strong>Email:</strong></label>
-                        <input type="email" id="email" name="email" value="{{ profilo_studente.get('email', '') }}" readonly>
+                        <label for="sda_studente"><strong>Scuola di appartenenza:</strong></label>
+                        <input type="text" id="sda_studente" name="sda" value="{{ profilo_studente.get('sda') or profilo_studente.get('SdA', '') }}" readonly>
+                    </div>
+                    <div>
+                        <label for="email_studente"><strong>Email:</strong></label>
+                        <input type="email" id="email_studente" name="email" value="{{ profilo_studente.get('email', '') }}" readonly>
+                    </div>
+                    <div>
+                        <label for="cf_studente"><strong>Codice Fiscale:</strong></label>
+                        <input type="text" id="cf_studente" name="cf" value="{{ profilo_studente.get('cf') or profilo_studente.get('CF', '') }}" readonly>
                     </div>
                     <!-- Aggiungi altri campi per il profilo studente se necessario -->
                 {% elif profilo_docente %}
@@ -47,11 +55,11 @@
                         <input type="text" id="cognome_docente" name="cognome" value="{{ profilo_docente.get('cognome', '') }}" readonly>
                     </div>
                     <div>
-                        <label for="sda"><strong>Scuola di appartenenza:</strong></label>
-                        <input type="text" id="sda" name="sda" value="{{ profilo_docente.get('sda') or profilo_docente.get('SdA', '') }}" readonly>
+                        <label for="sda_docente"><strong>Scuola di appartenenza:</strong></label>
+                        <input type="text" id="sda_docente" name="sda" value="{{ profilo_docente.get('sda') or profilo_docente.get('SdA', '') }}" readonly>
                     </div>
                     <div>
-                        <label for="email"><strong>Email:</strong></label>
+                        <label for="email_docente"><strong>Email:</strong></label>
                         <input type="email" id="email_docente" name="email" value="{{ profilo_docente.get('email', '') }}" readonly>
                     </div>
                     <div>
