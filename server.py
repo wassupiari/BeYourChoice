@@ -1,4 +1,6 @@
-from flask import Flask, render_template, session, redirect, url_for
+from flask import Flask, render_template, session, redirect, url_for,request
+import logging
+import time
 import os
 from app.controllers.loginControl import login_bp
 from app.controllers.quizControl import quiz_blueprint
@@ -15,11 +17,19 @@ from app.views.materialeDocente import initialize_materiale_docente_blueprint
 from app.views.materialeStudente import initialize_materiale_studente_blueprint
 from app.views.profilo import initialize_profilo_blueprint
 
-
+logging.basicConfig(level=logging.INFO)
 # Crea l'applicazione Flask
 app = Flask(__name__, template_folder='app/templates', static_folder="public")
-# Imposta il percorso dei template
 
+@app.before_request
+def start_timer():
+    request.start_time = time.time()
+
+@app.after_request
+def log_response_time(response):
+    duration = time.time() - request.start_time
+    logging.info(f"Request to {request.path} took {duration:.2f} seconds")
+    return response
 # Definisci una route per la homepage
 @app.route('/')
 def home():
