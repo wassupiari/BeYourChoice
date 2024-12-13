@@ -108,6 +108,7 @@ class Attivita:
         """
         Recupera le classi associate a un docente e calcola il punteggio totale di ogni classe.
         """
+        print("prova")
         try:
             collection = self.db_manager.get_collection("ClasseVirtuale")
             studente_collection = self.db_manager.get_collection("Studente")
