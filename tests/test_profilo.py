@@ -1,115 +1,145 @@
+"""
+test_profilo.py
+
+Questo file contiene i test per le funzionalità definite nel modulo `profilo`.
+Utilizza pytest per eseguire i test e mock per simulare il comportamento dei database.
+
+Autore: [il tuo nome]
+Data di creazione: [data di creazione]
+"""
+
 import pytest
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 from flask import Flask
-from app.views.profilo import initialize_profilo_blueprint
+
+from app.controllers.profiloControl import ProfiloControl
+from server import initialize_profilo_blueprint
 
 
-# Funzione per creare l'app Flask senza ripetere la registrazione del blueprint
-def create_app():
-    app = Flask(__name__)
-    app.config['TESTING'] = True  # Configura l'app in modalità di testing
-    return app
-
-
-# Fixture per creare l'app Flask con il blueprint inizializzato
+# Fixture per creare una nuova app Flask per ogni test
 @pytest.fixture
 def app():
-    app = create_app()  # Usa direttamente create_app senza inizializzare nuovamente il blueprint
+    app = Flask(__name__)
+    app.secret_key = 'test_secret'
+
+    db_manager = MagicMock()
+    profilo_control = ProfiloControl(db_manager)
+
+    # Registra il Blueprint una sola volta su una nuova istanza dell'app
+    initialize_profilo_blueprint(app)
     return app
 
 
-# Fixture per il client di test Flask
+# Fixture per il test client di Flask
 @pytest.fixture
 def client(app):
-    with app.test_client() as client:
-        yield client
+    return app.test_client()
 
 
-# Fixture per il mock del database
-@pytest.fixture
-def mock_db_manager(mocker):
-    db_manager = MagicMock()
-    mocker.patch('app.views.profilo.db_manager', db_manager)
-    return db_manager
+# Test per la modifica del profilo (TCS_GP_1)
+def test_modifica_profilo_nome_lunghezza_errata(client):
+    with client.session_transaction() as sess:
+        sess['email'] = 'test@example.com'
 
-
-# Test per modifica profilo con nome non valido (nome troppo corto)
-@pytest.mark.parametrize("test_id", ["TC_GP_1_1"])
-def test_modifica_profilo_nome_non_valido(client, test_id):
-    data = {
-        'nome': 'A',  # Nome troppo corto
+    response = client.post('/profilo/gestione', data={
+        'nome': 'M',
         'cognome': 'Rossi',
-        'email': 'testuser@example.com',
-        'sda': 'Scuola di Test'
-    }
-    response = client.post('/profilo/gestione', data=data)
-    assert "Nome non valido" in response.data.decode('utf-8')
-    print(f"Test {test_id}: Nome non valido gestito correttamente!")
+        'email': 'test@example.com',
+        'ruolo': 'studente'
+    })
+    assert b"Lunghezza nome non corretta" in response.data
 
 
-# Test per modifica profilo con cognome non valido (caratteri speciali)
-@pytest.mark.parametrize("test_id", ["TC_GP_1_2"])
-def test_modifica_profilo_cognome_non_valido(client, test_id):
-    data = {
-        'nome': 'Mario',
-        'cognome': 'R@ssi',  # Cognome con caratteri non validi
-        'email': 'testuser@example.com',
-        'sda': 'Scuola di Test'
-    }
-    response = client.post('/profilo/gestione', data=data)
-    assert "Cognome non valido" in response.data.decode('utf-8')
-    print(f"Test {test_id}: Cognome non valido gestito correttamente!")
+def test_modifica_profilo_nome_formato_errato(client):
+    with client.session_transaction() as sess:
+        sess['email'] = 'test@example.com'
 
-
-# Test per modifica profilo con email non valida
-@pytest.mark.parametrize("test_id", ["TC_GP_1_3"])
-def test_modifica_profilo_email_non_valida(client, test_id):
-    data = {
-        'nome': 'Mario',
+    response = client.post('/profilo/gestione', data={
+        'nome': 'M4rc00',
         'cognome': 'Rossi',
-        'email': 'email-non-valida',  # Email non valida
-        'sda': 'Scuola di Test'
-    }
-    response = client.post('/profilo/gestione', data=data)
-    assert "Email non valida" in response.data.decode('utf-8')
-    print(f"Test {test_id}: Email non valida gestita correttamente!")
+        'email': 'test@example.com',
+        'ruolo': 'studente'
+    })
+    assert b"Formato nome non corretto" in response.data
 
 
-# Test per modifica password con vecchia password non corretta
-@pytest.mark.parametrize("test_id", ["TC_GP_2_1"])
-def test_modifica_password_vecchia_password_non_valida(client, test_id):
-    data = {
+def test_modifica_profilo_cognome_lunghezza_errata(client):
+    with client.session_transaction() as sess:
+        sess['email'] = 'test@example.com'
+
+    response = client.post('/profilo/gestione', data={
+        'nome': 'Marco',
+        'cognome': 'A',
+        'email': 'test@example.com',
+        'ruolo': 'docente'
+    })
+    assert b"Lunghezza cognome non corretta" in response.data
+
+
+def test_modifica_profilo_email_formato_errato(client):
+    with client.session_transaction() as sess:
+        sess['email'] = 'test@example.com'
+
+    response = client.post('/profilo/gestione', data={
+        'nome': 'Marco',
+        'cognome': 'Rossi',
+        'email': 'marcoacierno@@gmail.com',
+        'ruolo': 'studente'
+    })
+    assert b"Formato email non corretto" in response.data
+
+
+def test_modifica_profilo_dati_validi(client):
+    with client.session_transaction() as sess:
+        sess['email'] = 'test@example.com'
+
+    response = client.post('/profilo/gestione', data={
+        'nome': 'Marco',
+        'cognome': 'Rossi',
+        'email': 'marco.acierno@gmail.com',
+        'sda': 'ITIS Dorso',
+        'ruolo': 'studente'
+    })
+    assert b"Dati modificati" in response.data
+
+
+# Test per il cambio password (TCS_GP_2)
+@patch('app.models.profiloModel.bcrypt.checkpw')
+def test_cambio_password_vecchia_password_errata(mock_checkpw, client):
+    mock_checkpw.return_value = False
+    with client.session_transaction() as sess:
+        sess['email'] = 'test@example.com'
+
+    response = client.post('/profilo/cambia_password_studente', data={
         'vecchia_password': 'wrongpassword',
-        'nuova_password': 'NuovaPassword123!',
-        'conferma_password': 'NuovaPassword123!'
-    }
-    response = client.post('/profilo/cambia_password_docente', data=data)
-    assert "Vecchia password non corretta" in response.data.decode('utf-8')
-    print(f"Test {test_id}: Vecchia password non corretta gestita correttamente!")
+        'nuova_password': 'Password123!'
+    })
+    assert b"Vecchia password errata" in response.data
 
 
-# Test per modifica password con nuova password non valida (troppo corta)
-@pytest.mark.parametrize("test_id", ["TC_GP_2_2"])
-def test_modifica_password_nuova_password_troppo_corta(client, test_id):
-    data = {
-        'vecchia_password': 'CorrectPassword123!',
-        'nuova_password': '123',
-        'conferma_password': '123'
-    }
-    response = client.post('/profilo/cambia_password_docente', data=data)
-    assert "Nuova password non valida" in response.data.decode('utf-8')
-    print(f"Test {test_id}: Nuova password troppo corta gestita correttamente!")
+@patch('app.models.profiloModel.bcrypt.checkpw')
+def test_cambio_password_nuova_password_formato_errato(mock_checkpw, client):
+    mock_checkpw.return_value = True
+    with client.session_transaction() as sess:
+        sess['email'] = 'test@example.com'
+
+    response = client.post('/profilo/cambia_password_studente', data={
+        'vecchia_password': 'CorrectPassword1!',
+        'nuova_password': 'abc'
+    })
+    assert b"Formato Nuova Password errato" in response.data
 
 
-# Test per modifica password con successo
-@pytest.mark.parametrize("test_id", ["TC_GP_2_3"])
-def test_modifica_password_successo(client, test_id):
-    data = {
-        'vecchia_password': 'CorrectPassword123!',
-        'nuova_password': 'NuovaPassword123!',
-        'conferma_password': 'NuovaPassword123!'
-    }
-    response = client.post('/profilo/cambia_password_docente', data=data)
-    assert response.status_code == 200
-    assert "Password cambiata con successo" in response.data.decode('utf-8')
-    print(f"Test {test_id}: Modifica password avvenuta con successo!")
+@patch('app.models.profiloModel.bcrypt.hashpw')
+@patch('app.models.profiloModel.bcrypt.checkpw')
+def test_cambio_password_successo(mock_checkpw, mock_hashpw, client):
+    mock_checkpw.return_value = True
+    mock_hashpw.return_value = b'hashedpassword'
+    with client.session_transaction() as sess:
+        sess['email'] = 'test@example.com'
+
+    response = client.post('/profilo/cambia_password_studente', data={
+        'vecchia_password': 'CorrectPassword1!',
+        'nuova_password': 'Password123!'
+    })
+    assert b"Password aggiornata con successo!" in response.data
