@@ -23,7 +23,14 @@ def svuota_collection():
         db("Docente").delete_many({})
         db("Studente").delete_many({})
         db("ClasseVirtuale").delete_many({})
-        print("Collection Docente, Studente e ClasseVirtuale svuotate con successo!")
+        db("Dashboard").delete_many({})
+        db("Domanda").delete_many({})
+        db("RisultatoQuiz").delete_many({})
+        db("ScenarioVirtuale").delete_many({})
+        db("MaterialeDidattico").delete_many({})
+        db("PunteggioScenario").delete_many({})
+        db("Quiz").delete_many({})
+        print("Le Collection del db sono state svuotate con successo!")
     except Exception as e:
         print(f"Errore durante la pulizia delle collection: {e}")
 
@@ -32,13 +39,13 @@ def ripopola_database():
     try:
         # Inserisce il docente
         docente = {
-            "nome": "Giovanni",
+            "nome": "Giovanni'",
             "cognome": "Verdi",
             "email": "giovanni.verdi@docente.com",
             "password": hash_password("Rocco03@"),  # Hash della password come byte
             "codice_univoco": 123456,
             "id_classe": 200,
-            "sda": "Scuola Innovativa",
+            "sda": "Liceo Classico Dante Alighieri",
         }
         docente_id = db("Docente").insert_one(docente).inserted_id
         print("Docente inserito con successo!")
