@@ -94,14 +94,16 @@ def salva_quiz():
 
 
 
-@quiz_blueprint.route('/quiz/<int:quiz_id>', methods=['GET'])
+@quiz_blueprint.route('/quiz/<int:quiz_id>', methods=['POST','GET'])
 @student_required
 def visualizza_quiz(quiz_id):
     """
     Mostra la pagina del quiz solo se lo studente non lo ha già completato.
     """
     try:
+
         cf_studente = session.get('cf')
+        print(cf_studente)
         if not cf_studente:
             return QuizView.mostra_errore("CF dello studente non trovato nella sessione", 403)
 
