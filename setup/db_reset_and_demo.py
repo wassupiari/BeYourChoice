@@ -42,6 +42,7 @@ def ripopola_database():
             "nome": "Giovanni'",
             "cognome": "Verdi",
             "email": "giovanni.verdi@docente.com",
+            "cf": "RRZBBF67A66L325B",
             "password": hash_password("Rocco03@"),  # Hash della password come byte
             "codice_univoco": 123456,
             "data_nascita": "1999-01-01",

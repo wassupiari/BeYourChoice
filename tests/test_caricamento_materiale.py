@@ -1,23 +1,36 @@
 import io
 from unittest.mock import MagicMock
 
+
 import pytest
-from bson import ObjectId
+
 from flask import Flask, Blueprint, request
 
+from server import initialize_materiale_docente_blueprint
 
 # Funzione per creare l'app Flask
 def create_app():
     app = Flask(__name__)
-    initialize_materiale_docente_blueprint(app)
-    return app
+    initialize_materiale_docente_blueprint.initialize_materiale_docente_blueprint(app, mockDbManager=None)
+
+    materiale_docente_blueprint = initialize_materiale_docente_blueprint(app)
+    app.register_blueprint(materiale_docente_blueprint, url_prefix='/materialedocente')
 
 
 # Fixture per il client di test
 @pytest.fixture
-def client():
-    app = create_app()
+def app(mockDbManager):
+    app = Flask(__name__)
+    materiale_docente_blueprint = initialize_materiale_docente_blueprint(app, mockDbManager)
+    app.register_blueprint(materiale_docente_blueprint, url_prefix='/materialedocente')
+    return app
+
+@pytest.fixture
+def client(mockDbManager):
+    app = Flask(__name__)
     app.config['TESTING'] = True
+    materiale_docente_blueprint = initialize_materiale_docente_blueprint(app, mockDbManager)
+    app.register_blueprint(materiale_docente_blueprint, url_prefix='/materialedocente')
 
     with app.test_client() as client:
         yield client
@@ -33,10 +46,9 @@ def mockDbManager():
 
 
 # Inizializzazione del blueprint MaterialeDocente
-def initialize_materiale_docente_blueprint(app):
-    MaterialeDocente = Blueprint('MaterialeDocente', __name__)
-
-    @MaterialeDocente.route('/carica', methods=['POST'])
+def initialize_materiale_docente_blueprint(app, mockDbManager=None):
+    materiale_docente_blueprint = Blueprint(f'materialedocente_{id(app)}', __name__)
+    @materiale_docente_blueprint.route('/carica', methods=['POST'])
     def carica():
         titolo = request.form.get('titolo')
         tipo = request.form.get('tipo')
@@ -72,7 +84,7 @@ def initialize_materiale_docente_blueprint(app):
             return "Lunghezza descrizione non supportata", 400
 
         return "Caricamento avvenuto con successo", 302
-
+    return materiale_docente_blueprint
 
 # Test per tipo non supportato
 @pytest.mark.parametrize("test_id", ["TC_GMD_1_1"])
@@ -81,9 +93,10 @@ def test_carica_materiale_tipo_non_supportato(client, test_id):
         'titolo': 'FileNonSupportato',
         'tipo': 'mp3',
         'descrizione': 'Descrizione valida',
+
         'file': (io.BytesIO(b'contenuto file'), 'file.mp3')
     }
-    response = client.post('/carica', data=data, content_type='multipart/form-data')
+    response = client.post('/materialedocente/carica', data=data, content_type='multipart/form-data')
     assert "Tipo formato non supportato" in response.data.decode('utf-8')
     print(f"Test {test_id}: Tipo file non supportato gestito correttamente!")
 
@@ -97,7 +110,7 @@ def test_carica_materiale_dimensione_non_supportata(client, test_id):
         'descrizione': 'Descrizione valida',
         'file': (io.BytesIO(b'a' * (7 * 1024 * 1024)), 'file.pdf')  # 6 MB
     }
-    response = client.post('/carica', data=data, content_type='multipart/form-data')
+    response = client.post('/materialedocente/carica', data=data, content_type='multipart/form-data')
     assert "Dimensione file non supportata" in response.data.decode('utf-8')
     print(f"Test {test_id}: Dimensione file non supportata gestita correttamente!")
 
@@ -111,7 +124,7 @@ def test_carica_materiale_formato_titolo_non_supportato(client, test_id):
         'descrizione': 'Descrizione valida',
         'file': (io.BytesIO(b'contenuto file'), 'file.pdf')
     }
-    response = client.post('/carica', data=data, content_type='multipart/form-data')
+    response = client.post('/materialedocente/carica', data=data, content_type='multipart/form-data')
     assert "Formato titolo non supportato" in response.data.decode('utf-8')
     print(f"Test {test_id}: Formato titolo non supportato gestito correttamente!")
 
@@ -125,7 +138,7 @@ def test_carica_materiale_lunghezza_titolo_non_supportata(client, test_id):
         'descrizione': 'Descrizione valida',
         'file': (io.BytesIO(b'contenuto file'), 'file.pdf')
     }
-    response = client.post('/carica', data=data, content_type='multipart/form-data')
+    response = client.post('/materialedocente/carica', data=data, content_type='multipart/form-data')
     assert "Lunghezza titolo non supportata" in response.data.decode('utf-8')
     print(f"Test {test_id}: Lunghezza titolo non supportata gestita correttamente!")
 
@@ -139,7 +152,7 @@ def test_carica_materiale_formato_descrizione_non_supportato(client, test_id):
         'descrizione': 'Descrizione§Errata',
         'file': (io.BytesIO(b'contenuto file'), 'file.pdf')
     }
-    response = client.post('/carica', data=data, content_type='multipart/form-data')
+    response = client.post('/materialedocente/carica', data=data, content_type='multipart/form-data')
     assert "Formato descrizione non supportato" in response.data.decode('utf-8')
     print(f"Test {test_id}: Formato descrizione non supportato gestito correttamente!")
 
@@ -153,7 +166,7 @@ def test_carica_materiale_lunghezza_descrizione_non_supportata(client, test_id):
         'descrizione': 'D' * 501,  # 501 caratteri
         'file': (io.BytesIO(b'contenuto file'), 'file.pdf')
     }
-    response = client.post('/carica', data=data, content_type='multipart/form-data')
+    response = client.post('/materialedocente/carica', data=data, content_type='multipart/form-data')
     assert "Lunghezza descrizione non supportata" in response.data.decode('utf-8')
     print(f"Test {test_id}: Lunghezza descrizione non supportata gestita correttamente!")
 
@@ -167,7 +180,7 @@ def test_carica_materiale_successo(client, test_id):
         'descrizione': 'Descrizione valida',
         'file': (io.BytesIO(b'contenuto file'), 'file.pdf')
     }
-    response = client.post('/carica', data=data, content_type='multipart/form-data')
+    response = client.post('/materialedocente/carica', data=data, content_type='multipart/form-data')
     assert response.status_code == 302
     print(f"Test {test_id}: Caricamento avvenuto con successo!")
 
