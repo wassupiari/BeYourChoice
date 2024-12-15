@@ -140,7 +140,7 @@ def test_generazione_quiz(client, test_id, payload, expected_status, expected_er
 
             # Configura la sessione simulata
             with client.session_transaction() as sess:
-                sess['email'] = 'roccocione@gmail.com'
+                sess['email'] = 'giovanni.verdi@docente.com'
                 sess['session_token'] = 'i1kb4v1ik2v4jiubadu'
                 sess['role'] = 'docente'
                 sess['id_classe'] = 3
