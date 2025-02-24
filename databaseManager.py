@@ -20,7 +20,7 @@ class DatabaseManager:
         :param db_name: Nome del database.
         """
         try:
-            self.client = MongoClient(uri or "mongodb+srv://rcione3:rcione3@beyourchoice.yqzo6.mongodb.net/?retryWrites=true&w=majority&appName=BeYourChoice",
+            self.client = MongoClient(uri or "", # url db
                                       tls=True, tlsInsecure=True,
                                       serverSelectionTimeoutMS=5000)
             self.db = self.client[db_name or "BeYourChoice;"]
